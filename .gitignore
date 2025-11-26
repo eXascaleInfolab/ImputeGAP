@@ -15,3 +15,14 @@ imputegap/datasets/fmri-objectviewing.txt
 imputegap/datasets/pollution.txt
 imputegap/datasets/test-large.txt
 *checkpoint.pth
+# Data and outputs (do NOT add large files)
+data/
+output_deepmvi/
+plots/
+*.npy
+*.npz
+*.zip
+*.tar.gz
+checkpoints/
+venv/
+__pycache__/
