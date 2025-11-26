@@ -1,0 +1,9 @@
+{
+  "id": "DeepMVI",
+  "name": "Deep Multivariate Imputer",
+  "language": "python",
+  "entry_point": "imputegap/wrapper/AlgoPython/DeepMVI/deepmvi_wrapper.py",
+  "non_destructive": true,
+  "description": "Wrapper for DeepMVI multivariate imputer. Provides standardized outputs for ImputeGAP evaluation.",
+  "notes": "Requires DeepMVI outputs to already exist in output_deepmvi/<dataset>/imputed.npy"
+}
