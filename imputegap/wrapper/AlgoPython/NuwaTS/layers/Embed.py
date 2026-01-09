@@ -1,15 +1,7 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/Chengyui/NuwaTS/tree/master
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://arxiv.org/pdf/2405.15317
-# ===============================================================================================================
-
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+from torch.nn.utils import weight_norm
 import math
 
 

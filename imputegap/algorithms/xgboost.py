@@ -2,6 +2,7 @@ import time
 
 import numpy as np
 import pandas as pd
+from imputegap.tools import utils
 
 from xgboost import XGBRegressor
 

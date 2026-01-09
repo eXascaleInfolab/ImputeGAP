@@ -8,7 +8,6 @@
 # https://ieeexplore.ieee.org/document/8979178
 # ===============================================================================================================
 
-
 # Copyright (c) [2021] [wlicsnju]
 # [HKMF-T] is licensed under Mulan PSL v2.
 # You can use this software according to the terms and conditions of the Mulan PSL v2. 
@@ -25,8 +24,10 @@ import matplotlib.pyplot as plt
 
 from typing import Union
 
-from imputegap.wrapper.AlgoPython.hkmft.dataloder import DataLoader
-from imputegap.wrapper.AlgoPython.hkmft.dataloder import Dataset
+from imputegap.wrapper.AlgoPython.HKMFT.dataloder import DataLoader
+from imputegap.wrapper.AlgoPython.HKMFT.dataloder_imputegap import DataLoaderImputeGAP
+from imputegap.wrapper.AlgoPython.HKMFT.dataloder import Dataset
+from imputegap.wrapper.AlgoPython.HKMFT.dataloder_imputegap import DatasetImputeGAP
 
 
 def show_gt_rs(gt: np.ndarray, rs: np.ndarray, begin_idx, end_idx, method_name: str = 'HKMF-T') -> None:
@@ -68,19 +69,23 @@ def lens_to_list(lens: Union[int, str]) -> Union[list, None]:
     return lens_list
 
 
-def dataset_load(dataset: str) -> Union[DataLoader, None]:
+def dataset_load(dataset) -> Union[DataLoader, None]:
     ds = None
-    for d in Dataset:
-        if dataset == d.name:
-            ds = d
-            break
-    if ds is None:
-        logging.error(f'dataset {dataset} do not exist!', ValueError)
-        return None
-    return DataLoader(ds)
 
-def dataset_imputegap(dataset, tags, data_names, mask_train, mask_test, mask_val, verbose=True) -> Union[DataLoader, None]:
-    return DataLoader(dataset, tags=tags, data_names=data_names, mask_train=mask_train, mask_test=mask_test, mask_val=mask_val, verbose=verbose)
+    if isinstance(dataset, str):
+        for d in Dataset:
+            if dataset == d.name:
+                ds = d
+                break
+        if ds is None:
+            logging.error(f'dataset {dataset} do not exist!', ValueError)
+            return None
+
+        return DataLoader(ds)
+
+def dataset_load_imputegap(dataset, strategy="full", seq_len=7, tags=None, verbose=True, deep_verbose=False) -> Union[DataLoaderImputeGAP, None]:
+    ds = None
+    return DataLoaderImputeGAP(dataset, time_window=None, strategy=strategy, seq_len=seq_len, tags=tags, verbose=verbose, deep_verbose=deep_verbose)
 
 
 

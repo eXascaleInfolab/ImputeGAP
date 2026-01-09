@@ -1,17 +1,9 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/chenxiaodanhit/BiTGraph
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://openreview.net/pdf?id=O9nZCwdGcG
-# ===============================================================================================================
-
 from imputegap.wrapper.AlgoPython.BiTGraph.models.BiaTCGNet.BiaTCGNet_layer import *
 import torch.nn as nn
 import torch
+#from torch.nn.utils import weight_norm
 from torch.nn.utils.parametrizations import weight_norm
+
 
 class Model(nn.Module):
     def __init__(self, gcn_true, buildA_true, gcn_depth, num_nodes,kernel_set, device, predefined_A=None, static_feat=None, dropout=0.3, subgraph_size=5, node_dim=40, dilation_exponential=1, conv_channels=32, residual_channels=32, skip_channels=64, end_channels=128, seq_length=12, in_dim=2, out_len=12, out_dim=1, layers=3, propalpha=0.05, tanhalpha=3, layer_norm_affline=True):
@@ -30,12 +22,12 @@ class Model(nn.Module):
         self.gconv2 = nn.ModuleList()
         self.norm = nn.ModuleList()
         self.output_dim=out_dim
+        self.device = device
         self.start_conv = nn.Conv2d(in_channels=in_dim, #1
                                     out_channels=residual_channels, #16
                                     kernel_size=(1, 1))
         self.gc = graph_constructor(num_nodes, subgraph_size, node_dim, device, alpha=tanhalpha, static_feat=static_feat)
         self.seq_length = seq_length
-        self.device = device
         kernel_size = self.kernel_set[-1]#7
         if dilation_exponential>1:
             self.receptive_field = int(1+(kernel_size-1)*(dilation_exponential**layers-1)/(dilation_exponential-1))
@@ -54,6 +46,11 @@ class Model(nn.Module):
                     rf_size_j = int(rf_size_i + (kernel_size-1)*(dilation_exponential**j-1)/(dilation_exponential-1))
                 else:
                     rf_size_j = rf_size_i+j*(kernel_size-1)
+
+                #print(f"{seq_length = }")
+                #print(f"{kernel_size = }")
+                #print(f"{j = }")
+                #print(f"{(kernel_size-1)*j = }")
                 assert (seq_length-(kernel_size-1)*j) >0, 'Please decrease the kernel size or increase the input length'
                 dilationsize.append(seq_length-(kernel_size-1)*j)
 
@@ -72,8 +69,8 @@ class Model(nn.Module):
                                                     kernel_size=(1, self.receptive_field-rf_size_j+1)))
 
                 if self.gcn_true:
-                    self.gconv1.append(mixprop(conv_channels, residual_channels, gcn_depth, dropout, propalpha,dilationsize[j-1],num_nodes,self.seq_length,out_len))
-                    self.gconv2.append(mixprop(conv_channels, residual_channels, gcn_depth, dropout, propalpha,dilationsize[j-1],num_nodes,self.seq_length,out_len))
+                    self.gconv1.append(mixprop(conv_channels, residual_channels, gcn_depth, dropout, propalpha,dilationsize[j-1],num_nodes,self.seq_length,out_len,self.device))
+                    self.gconv2.append(mixprop(conv_channels, residual_channels, gcn_depth, dropout, propalpha,dilationsize[j-1],num_nodes,self.seq_length,out_len,self.device))
 
                 if self.seq_length>self.receptive_field: #
                     self.norm.append(LayerNorm((residual_channels, num_nodes,self.seq_length - rf_size_j + 1),elementwise_affine=layer_norm_affline))

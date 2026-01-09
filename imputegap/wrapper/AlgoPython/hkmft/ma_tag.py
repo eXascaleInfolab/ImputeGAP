@@ -19,7 +19,7 @@ import logging
 
 import numpy as np
 
-from imputegap.wrapper.AlgoPython.hkmft.hankel_methods import find_max_continue_0
+from imputegap.wrapper.AlgoPython.HKMFT.hankel_methods import find_max_continue_0
 
 
 class MATag(object):
@@ -63,7 +63,7 @@ class MATag(object):
         blackout_l = np.sum(self._mask == 0)
         idx = np.arange(self._data.shape[1])
 
-        moving_average = np.zeros(self._data.shape, dtype=np.float64)
+        moving_average = np.zeros(self._data.shape, dtype=float)
         for d in range(self._dim):
             for i in range(self._data.shape[1]):
                 sum_val = 0.0
@@ -92,7 +92,7 @@ class MATag(object):
             if len(est_x) > 0:
                 moving_average[d, self._mask <= 0] = np.interp(est_x, xp, fp)
 
-        rs = np.zeros((self._dim, blackout_l), dtype=np.float64)
+        rs = np.zeros((self._dim, blackout_l), dtype=float)
         for d in range(self._dim):
             j = 0
             for i, m in enumerate(self._mask):

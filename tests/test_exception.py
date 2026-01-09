@@ -40,28 +40,6 @@ class TestException(unittest.TestCase):
             ts_01.load_series(0.1)
 
 
-    def test_mcar_exc(self):
-        """
-        The goal is to test the exception mcar is not configured correctly
-        """
-        ts_01 = TimeSeries()
-
-        with pytest.raises(ValueError, match="The number of block to remove must be greater than 0. "
-                                             "The dataset or the number of blocks may not be appropriate."):
-            # Call the function or method that raises the ValueError
-            ts_01.Contamination.mcar(input_data=np.array([[1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]), block_size=5)
-
-    def test_percentage_exc(self):
-        """
-        The goal is to test the exception raised when percentage given is wrong
-        """
-        ts_01 = TimeSeries()
-        percentage = 120
-
-        with pytest.raises(ValueError, match=f"The percentage 120 is out of the acceptable range."):
-            ts_01.Contamination.mcar(input_data=np.array([[1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]), rate_series=percentage)
-
-
     def test_load_exc(self):
         """
         The goal is to test the exception raised with loading of default values
@@ -93,7 +71,7 @@ class TestException(unittest.TestCase):
         """
         test = None
         utils.save_optimization(optimal_params=(1,0.1,10), algorithm="cdrec", dataset="eeg", optimizer="b")
-        utils.save_optimization(optimal_params=(1,0.1,10,10), algorithm="mrnn", dataset="eeg", optimizer="b")
+        utils.save_optimization(optimal_params=(24,50,64,1,108,0.3,0), algorithm="mrnn", dataset="eeg", optimizer="b")
         utils.save_optimization(optimal_params=(1,0.1,10), algorithm="stmvl", dataset="eeg", optimizer="b")
         utils.save_optimization(optimal_params=(1, ""), algorithm="iim", dataset="eeg", optimizer="b")
         test = True

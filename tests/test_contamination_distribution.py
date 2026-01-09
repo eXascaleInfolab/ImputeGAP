@@ -6,17 +6,22 @@ from scipy.stats import norm
 
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 
 class TestContaminationDistribution(unittest.TestCase):
 
 
-    def load_probabilities(self, data, std_dev=0.2):
+    def load_probabilities(self, data, std_dev=0.2, transpose=False):
         probabilities_final = []
-        for series in range(0, data.shape[0]):
+
+
+        for series in range(0, data.shape[1]):
+            d = data[:, series]
             S = int(series)
-            N = len(data[0])
-            P = int(N * 0.1)
+            N = d.shape[0]
+            P = math.ceil(N * 0.1)
             W = int(N * 0.2)
             R = np.arange(P, N)
 
@@ -31,6 +36,8 @@ class TestContaminationDistribution(unittest.TestCase):
 
             probabilities_final.append(probabilities)
 
+        #probabilities_final = np.array(probabilities_final).T
+
         return probabilities_final
 
 
@@ -40,20 +47,21 @@ class TestContaminationDistribution(unittest.TestCase):
         the goal is to test if the number of NaN values expected are provided in the contamination output
         """
 
-        datasets = ["drift", "chlorine", "eeg-alcohol", "fmri-stoptask", "fmri-stoptask"]
+        datasets = ["test-logic-llm.txt", "drift", "chlorine", "eeg-alcohol"]
         series_impacted = [0.1, 0.5, 1]  # percentage of series impacted
         missing_rates = [0.1, 0.5, 0.9]  # percentage of missing values with NaN
-        P = 0.1  # offset zone
+
 
         for dataset in datasets:
             ts = TimeSeries()
             ts.load_series(utils.search_path(dataset))
-            M, N = ts.data.shape  # series, values
-
+            P = math.ceil(ts.data.shape[0] * 0.1)
+            print(f"{P=}")
             for S in series_impacted:
                 for R in missing_rates:
                     D = self.load_probabilities(ts.data)
-                    incomp_data = ts.Contamination.distribution(input_data=ts.data, rate_dataset=S, rate_series=R, probabilities_list=D, offset=P)
+                    incomp_data = GenGap.distribution(input_data=ts.data, rate_dataset=S, rate_series=R, probabilities_list=D, offset=P)
+                    N, M = incomp_data.data.shape
 
                     n_nan = np.isnan(incomp_data).sum()
                     expected_nan_series = math.ceil(S * M)
@@ -73,7 +81,7 @@ class TestContaminationDistribution(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("drift"))
+        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
 
         series_impacted = [0.4, 0.8]
         missing_rates = [0.1, 0.4, 0.6]
@@ -83,11 +91,9 @@ class TestContaminationDistribution(unittest.TestCase):
             for missing_rate in missing_rates:
 
                 D = self.load_probabilities(ts_1.data)
-                ts_contaminate = ts_1.Contamination.distribution(input_data=ts_1.data,
-                                                                 rate_dataset=series_sel,
-                                                                 rate_series=missing_rate, probabilities_list=D, offset=0.1)
+                ts_contaminate = GenGap.distribution(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, probabilities_list=D, offset=0.1)
 
-                if np.isnan(ts_contaminate[:, :ten_percent_index]).any():
+                if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
                     check_position = False
                 else:
                     check_position = True
@@ -119,17 +125,16 @@ class TestContaminationDistribution(unittest.TestCase):
                     for std_dev in std_devs:
                         # Generate contamination with the current standard deviation
                         D = self.load_probabilities(ts.data, std_dev=std_dev)
-                        contaminated_data = ts.Contamination.distribution(input_data=ts.data, rate_dataset=S, rate_series=R,
-                                                                          probabilities_list=D, offset=P)
+                        contaminated_data = GenGap.distribution(input_data=ts.data, rate_dataset=S, rate_series=R, probabilities_list=D, offset=P)
 
                         # Calculate positions of NaN values
                         nan_positions = np.where(np.isnan(contaminated_data))
 
                         # Center of the time series (considering offset zone)
-                        center = int((ts.data.shape[1] + (ts.data.shape[1] * P)) // 2)
+                        center = int((ts.data.shape[0] + (ts.data.shape[1] * P)) // 2)
 
                         # Compute average distances of NaN positions from the center
-                        density = np.abs(nan_positions[1] - center).mean()
+                        density = np.abs(nan_positions[0] - center).mean()
                         densities[std_dev] = density
 
                     self.assertLess(densities[0.2], densities[0.5],
@@ -141,7 +146,7 @@ class TestContaminationDistribution(unittest.TestCase):
         """
         Test if the size of the missing percentage in a contaminated time series meets the expected number defined by the user.
         """
-        datasets = ["drift", "chlorine", "eeg-alcohol", "fmri-stoptask"]
+        datasets = ["drift", "chlorine", "eeg-alcohol"]
         series_impacted = [0.4, 0.8]
         missing_rates = [0.2, 0.6]
         offset, std_dev = 0.1, 0.2
@@ -149,17 +154,15 @@ class TestContaminationDistribution(unittest.TestCase):
         for dataset in datasets:
             ts_1 = TimeSeries()
             ts_1.load_series(utils.search_path(dataset))
-            M, N = ts_1.data.shape
-
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
                     D = self.load_probabilities(ts_1.data, std_dev=std_dev)
-                    ts_contaminate = ts_1.Contamination.distribution(input_data=ts_1.data, rate_series=missing_rate,
-                                                                     rate_dataset=series_sel, probabilities_list=D,
-                                                                     offset=offset, seed=True)
+                    ts_contaminate = GenGap.distribution(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, probabilities_list=D, offset=offset, seed=True)
+                    N, M = ts_contaminate.data.shape
 
                     nbr_series_contaminated = 0
-                    for inx, current_series in enumerate(ts_contaminate):
+                    for inx in range(ts_contaminate.shape[1]):
+                        current_series = ts_contaminate[:, inx]
 
                         if np.isnan(current_series).any():
                             nbr_series_contaminated = nbr_series_contaminated + 1
@@ -170,16 +173,13 @@ class TestContaminationDistribution(unittest.TestCase):
                             print(f"\t\tNUMBR OF VALUES for series #{inx} : {num_missing_values}")
                             print(f"\t\tEXPECTED VALUES for series #{inx} : {expected_num_missing}\n")
 
-                            self.assertEqual(num_missing_values, expected_num_missing,
-                                             msg=f"Dataset '{dataset}', Series Index {current_series}: "
-                                                 f"Expected {expected_num_missing} missing values, but found {num_missing_values}.")
+                            self.assertEqual(num_missing_values, expected_num_missing, msg=f"Dataset '{dataset}', Series Index {current_series}: " f"Expected {expected_num_missing} missing values, but found {num_missing_values}.")
 
                             percentage = (expected_num_missing / N) * 100
                             print(f"\t\tPERCENTAGE VALUES for series #{inx} : {percentage}")
                             print(f"\t\tEXPECTED % VALUES for series #{inx} : {missing_rate * 100}\n")
 
-                            self.assertAlmostEqual(percentage, missing_rate * 100, delta=1,
-                                                       msg=f"Dataset '{dataset}': Expected {missing_rate * 100}%, but found {percentage}%.")
+                            self.assertAlmostEqual(percentage, missing_rate * 100, delta=1, msg=f"Dataset '{dataset}': Expected {missing_rate * 100}%, but found {percentage}%.")
 
                             print("\n\n\n===============================\n\n")
 

@@ -1,7 +1,10 @@
+import math
 import unittest
 import numpy as np
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 
 class TestContaminationDisjoint(unittest.TestCase):
@@ -11,29 +14,34 @@ class TestContaminationDisjoint(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
 
-        series_impacted = [0.4, 0.8]
-        ten_percent_index = int(ts_1.data.shape[1] * 0.1)
+        series_impacted = [0.4, 0.9]
+        ten_percent_index = int(ts_1.data.shape[0] * 0.1)
 
         for series_sel in series_impacted:
-
-            ts_contaminate = ts_1.Contamination.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=0.1)
-
-            if np.isnan(ts_contaminate[:, :ten_percent_index]).any():
+            ts_contaminate = GenGap.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=0.1)
+            if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
                 check_position = False
             else:
                 check_position = True
+            ts_contaminate = GenGap.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=4)
+            if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
+                check_position_2 = False
+            else:
+                check_position_2 = True
 
             self.assertTrue(check_position, True)
+            self.assertTrue(check_position_2, True)
 
 
     def get_last_nan_series_index(self, matrix):
         last_nan_index = None  # Initialize the variable to store the result
         all_nan = True  # Assume all series have NaN values initially
 
-        for i in range(matrix.shape[0]):  # Iterate in reverse
-            if np.isnan(matrix[i]).any():  # Check if any NaN exists in the series
+        for i in range(matrix.shape[1]):  # Iterate in reverse
+            d = matrix[:, i]
+            if np.isnan(d).any():  # Check if any NaN exists in the series
                 last_nan_index = i + 1  # Update the variable with the index + 1
             else:
                 all_nan = False  # Found a series without NaN, update the flag
@@ -49,7 +57,7 @@ class TestContaminationDisjoint(unittest.TestCase):
         of the previous series and continuing without overlap.
         """
 
-        datasets = ["test.txt", "chlorine", "eeg-alcohol", "fmri-stoptask"]
+        datasets = ["test-logic-llm.txt", "chlorine", "eeg-alcohol"]
         series_rate = [0.2, 0.5, 0.8]  # Percentage of series impacted
         P = 0.1  # Offset zone
 
@@ -59,16 +67,19 @@ class TestContaminationDisjoint(unittest.TestCase):
 
             for S in series_rate:
                 # Generate disjoint contamination
-                ts_miss = ts.Contamination.disjoint(input_data=ts.data, rate_series=S, limit=1, offset=P)
-
-                M, _ = ts.data.shape
+                ts_miss = GenGap.disjoint(input_data=ts.data, rate_series=S, limit=1, offset=P)
+                N, M = ts.data.shape
 
                 INC = 0  # Incremental counter to track contamination shifts
-                X = int(len(ts.data[0]) * P)
+                X = math.ceil(ts.data.shape[0] * P)
                 FINAL_LIMIT = self.get_last_nan_series_index(ts_miss)
 
+                print(f"{X = }")
+                print(f"{FINAL_LIMIT = }")
 
-                for series_index, series in enumerate(ts_miss):
+
+                for series_index in range(ts_miss.shape[1]):
+                    series = ts_miss[:, series_index]
                     N = len(series)  # Total number of values in the series
                     O = int(N * P)  # Values to protect at the beginning of the series
                     W = int(N * S)  # Number of data points to remove

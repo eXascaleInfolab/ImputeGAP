@@ -1,5 +1,5 @@
 # ===============================================================================================================
-# SOURCE: https://github.com/zjuwuyy-DL/Generative-Semi-supervised-Learning-for-Multivariate-Time-Series-Imputation
+# SOURCE: https://github.com/KoheiObata/MissNet/
 #
 # THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
 #   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
@@ -10,8 +10,13 @@
 
 import numpy as np
 import collections
-import warnings
 
+try:
+    from collections.abc import Mapping
+except ImportError:  # very old Python
+    from collections import Mapping
+
+import warnings
 
 def empirical_covariance(X, assume_centered=False):
     X = np.asarray(X)
@@ -59,7 +64,7 @@ def squared_norm(x):
     """
     x = np.ravel(x, order='K')
     if np.issubdtype(x.dtype, np.integer):
-        warnings.warn('\t\t\t\tArray type is integer, np.dot may overflow. '
+        warnings.warn('Array type is integer, np.dot may overflow. '
                       'Data should be float type to avoid this issue',
                       UserWarning)
     return np.dot(x, x)
@@ -86,16 +91,13 @@ def init_precision(emp_cov, mode='empirical'):
 
 def namedtuple_with_defaults(typename, field_names, default_values=()):
     T = collections.namedtuple(typename, field_names)
-    T.__new__.__defaults__ = (None,) * len(T._fields)
-
-    if isinstance(default_values, collections.abc.Mapping):  # ✅ Updated
+    T.__new__.__defaults__ = (None, ) * len(T._fields)
+    if isinstance(default_values, Mapping):
         prototype = T(**default_values)
     else:
         prototype = T(*default_values)
-
     T.__new__.__defaults__ = tuple(prototype)
     return T
-
 
 convergence = namedtuple_with_defaults(
     'convergence', 'obj rnorm snorm e_pri e_dual precision')
@@ -312,9 +314,6 @@ def time_graphical_lasso(
         U_2 *= rho / rho_new
         rho = rho_new
 
-    else:
-        warnings.warn("\t\t\t\tObjective did not converge.")
-
 
     covariance_ = np.array([np.linalg.pinv(x, hermitian=True) for x in Z_0])
     return_list = [Z_0, covariance_]
@@ -376,6 +375,9 @@ class TVGL():
         """
 
         self.classes_, n_samples = np.unique(y, return_counts=True)
+
+
+
         if X.ndim==3:
             # n_samples*=X.shape[1]
             pass

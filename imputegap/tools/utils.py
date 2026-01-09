@@ -1,5 +1,7 @@
 import ctypes
 import os
+
+import numpy as np
 import toml
 import importlib.resources
 import numpy as __numpy_import
@@ -19,6 +21,7 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
     dataset : str, optional
         Name of the dataset (default is "chlorine").
     optimizer : str, optional
+    optimizer : str, optional
         Optimizer type for optimal parameters (default is "b").
     path : str, optional
         Custom file path for the TOML file (default is None).
@@ -30,6 +33,8 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
     tuple
         A tuple containing the loaded parameters for the given algorithm.
     """
+
+
     if query == "default":
         if path is None:
             filepath = importlib.resources.files('imputegap.env').joinpath("./default_values.toml")
@@ -41,15 +46,15 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
                 filepath = "./env/default_values.toml"
 
     elif query == "optimal":
+        algorithm = algorithm.lower().replace("-", "").replace("_", "")
+        dataset = dataset.lower().replace("-", "").replace("_", "")
+
         if path is None:
-            filename = "./optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
-            filepath = importlib.resources.files('imputegap.params').joinpath(filename)
-            if not filepath.is_file():
-                filepath = "./params/optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
+            here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            s = "optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
+            filepath = os.path.join(here, "imputegap_assets/params", s)
         else:
             filepath = path
-            if not os.path.exists(filepath):
-                filepath = "./params/optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
 
     else:
         filepath = None
@@ -57,8 +62,13 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
 
     if not os.path.exists(filepath):
         filepath = "./params/optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
-        if not os.path.exists(filepath):
-            filepath = filepath[1:]
+
+        if not os.path.exists(filepath):  # test
+            here = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            s = "optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
+            filepath = os.path.join(here, "tests/imputegap_assets/params", s)
+
+        print(f"file not found: {filepath}, load the default folder.\n")
 
     with open(filepath, "r") as _:
         config = toml.load(filepath)
@@ -84,14 +94,14 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         else:
             return (learning_neighbors,)
     elif algorithm == "mrnn":
-        hidden_dim = int(config[algorithm]['hidden_dim'])
-        learning_rate = float(config[algorithm]['learning_rate'])
-        iterations = int(config[algorithm]['iterations'])
-        if query == "default":
-            sequence_length = int(config[algorithm]['sequence_length'])
-            return (hidden_dim, learning_rate, iterations, sequence_length)
-        else:
-            return (hidden_dim, learning_rate, iterations)
+        seq_len = int(config[algorithm]['seq_len'])
+        epochs = int(config[algorithm]['epochs'])
+        batch_size = int(config[algorithm]['batch_size'])
+        sliding_windows = int(config[algorithm]['sliding_windows'])
+        hidden_layers = int(config[algorithm]['hidden_layers'])
+        impute_weight = float(config[algorithm]['impute_weight'])
+        num_workers = int(config[algorithm]['num_workers'])
+        return (seq_len, epochs, batch_size, sliding_windows, hidden_layers, impute_weight, num_workers)
     elif algorithm == "iterative_svd":
         truncation_rank = int(config[algorithm]['rank'])
         return (truncation_rank)
@@ -125,34 +135,26 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         max_epoch = int(config[algorithm]['max_epoch'])
         patience = int(config[algorithm]['patience'])
         lr = float(config[algorithm]['lr'])
-        return (max_epoch, patience, lr)
+        batch_size = int(config[algorithm]['batch_size'])
+        return (max_epoch, patience, lr, batch_size)
     elif algorithm == "brits":
         model = str(config[algorithm]['model'])
-        epoch = int(config[algorithm]['epoch'])
+        seq_len = int(config[algorithm]['seq_len'])
+        epochs = int(config[algorithm]['epochs'])
         batch_size = int(config[algorithm]['batch_size'])
-        nbr_features = int(config[algorithm]['nbr_features'])
+        sliding_windows = int(config[algorithm]['sliding_windows'])
         hidden_layers = int(config[algorithm]['hidden_layers'])
+        impute_weight = float(config[algorithm]['impute_weight'])
         num_workers = int(config[algorithm]['num_workers'])
-        return (model, epoch, batch_size, nbr_features, hidden_layers, num_workers)
+        return (model, seq_len, epochs, batch_size, sliding_windows, hidden_layers, impute_weight, num_workers)
     elif algorithm == "mpin":
-        incre_mode = str(config[algorithm]['incre_mode'])
         window = int(config[algorithm]['window'])
-        k = int(config[algorithm]['k'])
-        learning_rate = float(config[algorithm]['learning_rate'])
-        weight_decay = float(config[algorithm]['weight_decay'])
+        incre_mode = str(config[algorithm]['incre_mode'])
+        base = str(config[algorithm]['base'])
         epochs = int(config[algorithm]['epochs'])
         num_of_iteration = int(config[algorithm]['num_of_iteration'])
-        threshold = float(config[algorithm]['threshold'])
-        base = str(config[algorithm]['base'])
-        return (incre_mode, window, k, learning_rate, weight_decay, epochs, num_of_iteration, threshold, base)
-    elif algorithm == "pristi":
-        target_strategy = str(config[algorithm]['target_strategy'])
-        unconditional = bool(config[algorithm]['unconditional'])
-        batch_size = int(config[algorithm]['batch_size'])
-        embedding = int(config[algorithm]['embedding'])
-        num_workers = int(config[algorithm]['num_workers'])
-        seed = int(config[algorithm]['seed'])
-        return (target_strategy, unconditional, batch_size, embedding, num_workers, seed)
+        k = int(config[algorithm]['k'])
+        return (window, incre_mode, base, epochs, num_of_iteration, k)
     elif algorithm == "knn" or algorithm == "knn_impute":
         k = int(config[algorithm]['k'])
         weights = str(config[algorithm]['weights'])
@@ -188,30 +190,30 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         seed = int(config[algorithm]['seed'])
         return (n_estimators, seed)
     elif algorithm == "miss_net":
+        n_components = int(config[algorithm]['n_components'])
         alpha = float(config[algorithm]['alpha'])
         beta = float(config[algorithm]['beta'])
-        L = int(config[algorithm]['L'])
         n_cl = int(config[algorithm]['n_cl'])
         max_iter = int(config[algorithm]['max_iter'])
         tol = float(config[algorithm]['tol'])
         random_init = bool(config[algorithm]['random_init'])
-        return (alpha, beta, L, n_cl, max_iter, tol, random_init)
+        return (n_components, alpha, beta, n_cl, max_iter, tol, random_init)
     elif algorithm == "gain":
         batch_size = int(config[algorithm]['batch_size'])
-        hint_rate = float(config[algorithm]['hint_rate'])
+        epochs = int(config[algorithm]['epochs'])
         alpha = int(config[algorithm]['alpha'])
-        epoch = int(config[algorithm]['epoch'])
-        return (batch_size, hint_rate, alpha, epoch)
+        hint_rate = float(config[algorithm]['hint_rate'])
+        return (batch_size, epochs, alpha, hint_rate)
     elif algorithm == "grin":
-        d_hidden = int(config[algorithm]['d_hidden'])
-        lr = float(config[algorithm]['lr'])
+        seq_len = int(config[algorithm]['seq_len'])
+        sim_type = str(config[algorithm]['sim_type'])
+        epochs = int(config[algorithm]['epochs'])
         batch_size = int(config[algorithm]['batch_size'])
-        window = int(config[algorithm]['window'])
+        sliding_windows = int(config[algorithm]['sliding_windows'])
         alpha = int(config[algorithm]['alpha'])
         patience = int(config[algorithm]['patience'])
-        epochs = int(config[algorithm]['epochs'])
-        workers = int(config[algorithm]['workers'])
-        return (d_hidden, lr, batch_size, window, alpha, patience, epochs, workers)
+        num_workers = int(config[algorithm]['num_workers'])
+        return (seq_len, sim_type, epochs, batch_size, sliding_windows, alpha, patience, num_workers)
     elif algorithm == "bay_otide":
         K_trend = int(config[algorithm]['K_trend'])
         K_season = int(config[algorithm]['K_season'])
@@ -221,53 +223,75 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         a0 = float(config[algorithm]['a0'])
         b0 = float(config[algorithm]['b0'])
         v = float(config[algorithm]['v'])
-        num_workers = int(config[algorithm]['num_workers'])
-        tr_ratio = float(config[algorithm]['tr_ratio'])
-        return (K_trend, K_season, n_season, K_bias, time_scale, a0, b0, v, num_workers, tr_ratio)
+        num_fold = int(config[algorithm]['num_fold'])
+        return (K_trend, K_season, n_season, K_bias, time_scale, a0, b0, v, num_fold)
     elif algorithm == "hkmf_t":
         tags = config[algorithm]['tags']
-        data_names = config[algorithm]['data_names']
-        epoch = int(config[algorithm]['epoch'])
-        return (tags, data_names, epoch)
-    elif algorithm == "nuwats":
-        seq_length = int(config[algorithm]['seq_length'])
-        patch_size = int(config[algorithm]['patch_size'])
-        batch_size = int(config[algorithm]['batch_size'])
-        pred_length = int(config[algorithm]['pred_length'])
-        label_length = int(config[algorithm]['label_length'])
-        enc_in = int(config[algorithm]['enc_in'])
-        dec_in = int(config[algorithm]['dec_in'])
-        c_out = int(config[algorithm]['c_out'])
-        gpt_layers = int(config[algorithm]['gpt_layers'])
-        num_workers = int(config[algorithm]['num_workers'])
-        seed = int(config[algorithm]['seed'])
-        return (seq_length, patch_size, batch_size, pred_length, label_length, enc_in, dec_in, c_out, gpt_layers, num_workers, seed)
-    elif algorithm == "gpt4ts":
-        seq_length = int(config[algorithm]['seq_length'])
-        patch_size = int(config[algorithm]['patch_size'])
-        batch_size = int(config[algorithm]['batch_size'])
-        pred_length = int(config[algorithm]['pred_length'])
-        label_length = int(config[algorithm]['label_length'])
-        enc_in = int(config[algorithm]['enc_in'])
-        dec_in = int(config[algorithm]['dec_in'])
-        c_out = int(config[algorithm]['c_out'])
-        gpt_layers = int(config[algorithm]['gpt_layers'])
-        num_workers = int(config[algorithm]['num_workers'])
-        seed = int(config[algorithm]['seed'])
-        return (seq_length, patch_size, batch_size, pred_length, label_length, enc_in, dec_in, c_out, gpt_layers, num_workers, seed)
-    elif algorithm == "bit_graph":
-        node_number = int(config[algorithm]['node_number'])
-        kernel_set = config[algorithm]['kernel_set']
-        dropout = float(config[algorithm]['dropout'])
-        subgraph_size = int(config[algorithm]['subgraph_size'])
-        node_dim = int(config[algorithm]['node_dim'])
         seq_len = int(config[algorithm]['seq_len'])
-        lr = float(config[algorithm]['lr'])
+        blackouts_begin = int(config[algorithm]['blackouts_begin'])
+        blackouts_end = int(config[algorithm]['blackouts_end'])
+        epochs = int(config[algorithm]['epochs'])
+        return (tags, seq_len, blackouts_begin, blackouts_end, epochs)
+    elif algorithm == "nuwats":
+        seq_len = int(config[algorithm]['seq_len'])
         batch_size = int(config[algorithm]['batch_size'])
-        epoch = int(config[algorithm]['epoch'])
+        epochs = int(config[algorithm]['epochs'])
+        gpt_layers = int(config[algorithm]['gpt_layers'])
         num_workers = int(config[algorithm]['num_workers'])
         seed = int(config[algorithm]['seed'])
-        return (node_number, kernel_set, dropout, subgraph_size, node_dim, seq_len, lr, batch_size, epoch, num_workers, seed)
+        return (seq_len, batch_size, epochs,gpt_layers, num_workers, seed)
+    elif algorithm == "gpt4ts":
+        seq_len = int(config[algorithm]['seq_len'])
+        batch_size = int(config[algorithm]['batch_size'])
+        epochs = int(config[algorithm]['epochs'])
+        gpt_layers = int(config[algorithm]['gpt_layers'])
+        num_workers = int(config[algorithm]['num_workers'])
+        seed = int(config[algorithm]['seed'])
+        return (seq_len, batch_size, epochs, gpt_layers, num_workers, seed)
+    elif algorithm == "pristi":
+        seq_len = int(config[algorithm]['seq_len'])
+        batch_size = int(config[algorithm]['batch_size'])
+        epochs = int(config[algorithm]['epochs'])
+        sliding_windows = int(config[algorithm]['sliding_windows'])
+        target_strategy = str(config[algorithm]['target_strategy'])
+        nsamples = int(config[algorithm]['nsamples'])
+        num_workers = int(config[algorithm]['num_workers'])
+        return (seq_len, batch_size, epochs, sliding_windows, target_strategy, nsamples, num_workers)
+    elif algorithm == "csdi":
+        seq_len = int(config[algorithm]['seq_len'])
+        batch_size = int(config[algorithm]['batch_size'])
+        epochs = int(config[algorithm]['epochs'])
+        sliding_windows = int(config[algorithm]['sliding_windows'])
+        target_strategy = str(config[algorithm]['target_strategy'])
+        nsamples = int(config[algorithm]['nsamples'])
+        num_workers = int(config[algorithm]['num_workers'])
+        return (seq_len, batch_size, epochs, sliding_windows, target_strategy, nsamples, num_workers)
+    elif algorithm == "timesnet":
+        seq_len = int(config[algorithm]['seq_len'])
+        batch_size = int(config[algorithm]['batch_size'])
+        epochs = int(config[algorithm]['epochs'])
+        gpt_layers = int(config[algorithm]['gpt_layers'])
+        num_workers = int(config[algorithm]['num_workers'])
+        seed = int(config[algorithm]['seed'])
+        return (seq_len, batch_size, epochs, gpt_layers, num_workers, seed)
+    elif algorithm == "bit_graph":
+        seq_len = int(config[algorithm]['seq_len'])
+        sliding_windows = int(config[algorithm]['sliding_windows'])
+        kernel_size = int(config[algorithm]['kernel_size'])
+        kernel_set = config[algorithm]['kernel_set']
+        epochs = int(config[algorithm]['epochs'])
+        batch_size = int(config[algorithm]['batch_size'])
+        subgraph_size = int(config[algorithm]['subgraph_size'])
+        num_workers = int(config[algorithm]['num_workers'])
+        return (seq_len, sliding_windows, kernel_size, kernel_set, epochs, batch_size, subgraph_size, num_workers)
+    elif algorithm == "saits":
+        seq_len = int(config[algorithm]['seq_len'])
+        batch_size = int(config[algorithm]['batch_size'])
+        epochs = int(config[algorithm]['epochs'])
+        sliding_windows = int(config[algorithm]['sliding_windows'])
+        n_head = int(config[algorithm]['n_head'])
+        num_workers = int(config[algorithm]['num_workers'])
+        return (seq_len, batch_size, epochs, sliding_windows, n_head, num_workers)
     elif algorithm == "greedy":
         n_calls = int(config[algorithm]['n_calls'])
         metrics = config[algorithm]['metrics']
@@ -425,6 +449,9 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
     elif algorithm == "colors":
         colors = config[algorithm]['plot']
         return colors
+    elif algorithm == "colors_blacks":
+        colors = config[algorithm]['plot']
+        return colors
     elif algorithm == "other":
         return config
 
@@ -502,7 +529,7 @@ def config_impute_algorithm(incomp_data, algorithm, verbose=True):
     elif alg == "mpin":
         imputer = Imputation.DeepLearning.MPIN(incomp_data)
     elif alg == "pristi":
-        imputer = Imputation.DeepLearning.PRISTI(incomp_data)
+        imputer = Imputation.DeepLearning.PriSTI(incomp_data)
 
     # 3rd generation
     elif alg == "knn" or alg == "knnimpute":
@@ -532,7 +559,7 @@ def config_impute_algorithm(incomp_data, algorithm, verbose=True):
     elif alg == "bayotide":
         imputer = Imputation.DeepLearning.BayOTIDE(incomp_data)
     elif alg == "hkmft":
-        imputer = Imputation.DeepLearning.HKMF_T(incomp_data)
+        imputer = Imputation.DeepLearning.HKMFT(incomp_data)
     elif alg == "bitgraph":
         imputer = Imputation.DeepLearning.BitGraph(incomp_data)
     elif alg == "meanimpute":
@@ -544,11 +571,18 @@ def config_impute_algorithm(incomp_data, algorithm, verbose=True):
     elif alg == "gpt4ts":
         imputer = Imputation.LLMs.GPT4TS(incomp_data)
 
+    # 5th generation
+    elif alg == "saits":
+        imputer = Imputation.DeepLearning.SAITS(incomp_data)
+    elif alg == "timesnet":
+        imputer = Imputation.DeepLearning.TimesNet(incomp_data)
+    elif alg == "csdi":
+        imputer = Imputation.DeepLearning.CSDI(incomp_data)
+
     # your own implementation #contributing
     #
     #elif alg == "your_algo_name":
     #    imputer = Imputation.MyFamily.NewAlg(incomp_data)
-
     else:
         raise ValueError(f"(IMP) Algorithm '{algorithm}' not recognized, please choose your algorithm from this list:\n\t{TimeSeries().algorithms}")
         imputer = None
@@ -559,7 +593,7 @@ def config_impute_algorithm(incomp_data, algorithm, verbose=True):
     return imputer
 
 
-def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="b", file_name=None):
+def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="b", file_name=None, verbose=True):
     """
     Save the optimization parameters to a TOML file for later use without recomputing.
 
@@ -580,26 +614,38 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
     -------
     None
     """
-    if file_name is None:
-        file_name = "./imputegap_assets/params/optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
-    else:
-        file_name += "optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
 
-    dir_name = os.path.dirname(file_name)
+    algorithm = algorithm.lower().replace("-", "").replace("_", "")
+    dataset = dataset.lower().replace("-", "").replace("_", "")
+
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    s = "optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
+    dir_name = os.path.join(here, "imputegap_assets/params")
+    file_name = os.path.join(here, "imputegap_assets/params", s)
+
+    if isinstance(optimal_params, dict):
+        optimal_params = tuple(optimal_params.values())
+
+    dir_name = os.path.dirname(dir_name)
     if dir_name and not os.path.exists(dir_name):
         os.makedirs(dir_name)
 
-    if algorithm == "cdrec" or algorithm == "CDRec":
+
+    if algorithm == "cdrec":
         params_to_save = {
             "rank": int(optimal_params[0]),
-            "eps": optimal_params[1],
-            "iters": int(optimal_params[2])
+            "epsilon": optimal_params[1],
+            "iteration": int(optimal_params[2])
     }
     elif algorithm == "mrnn" or algorithm == "MRNN":
-        params_to_save = { "hidden_dim": int(optimal_params[0]),
-            "learning_rate": optimal_params[1],
-            "num_iter": int(optimal_params[2]),
-            "seq_len": 7  # Default value
+        params_to_save = {
+            "seq_len": int(optimal_params[0]),
+            "epoch": int(optimal_params[1]),
+            "batch_size": int(optimal_params[2]),
+            "sliding_windows": int(optimal_params[3]),
+            "hidden_layers": int(optimal_params[4]),
+            "impute_weight": float(optimal_params[5]),
+            "num_workers": int(optimal_params[6])
         }
     elif algorithm == "stmvl" or algorithm == "STMVL" or algorithm == "ST-MVL":
         params_to_save = {
@@ -612,7 +658,7 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
             "learning_neighbors": int(optimal_params[0])
         }
 
-    elif algorithm == "iterative_svd" or algorithm == "IterativeSVD":
+    elif algorithm == "iterative_svd" or algorithm == "iterativesvd":
         params_to_save = {
             "rank": int(optimal_params[0])
         }
@@ -625,7 +671,7 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
             "rank": int(optimal_params[0]),
             "regularization": optimal_params[1]
         }
-    elif algorithm == "soft_impute" or algorithm == "SoftImpute":
+    elif algorithm == "soft_impute" or algorithm == "softimpute":
         params_to_save = {
             "max_rank": int(optimal_params[0])
         }
@@ -654,37 +700,29 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
     elif algorithm == "brits":
         params_to_save = {
             "model": optimal_params[0],
-            "epoch": int(optimal_params[1]),
-            "batch_size": int(optimal_params[2]),
-            "hidden_layers": int(optimal_params[3]),
-            "num_workers": int(optimal_params[4])
+            "seq_len": int(optimal_params[1]),
+            "epoch": int(optimal_params[2]),
+            "batch_size": int(optimal_params[3]),
+            "sliding_windows": int(optimal_params[4]),
+            "hidden_layers": int(optimal_params[5]),
+            "impute_weight": float(optimal_params[6]),
+            "num_workers": int(optimal_params[7])
         }
-    elif algorithm == "deep_mvi":
+    elif algorithm == "deep_mvi" or algorithm == "deepmvi":
         params_to_save = {
             "max_epoch": int(optimal_params[0]),
             "patience": int(optimal_params[1]),
-            "lr": float(optimal_params[2])
+            "lr": float(optimal_params[2]),
+            "batch_size": float(optimal_params[3])
         }
     elif algorithm == "mpin":
         params_to_save = {
-            "incre_mode": optimal_params[0],
-            "window": int(optimal_params[1]),
-            "k": int(optimal_params[2]),
-            "learning_rate": optimal_params[3],
-            "weight_decay": optimal_params[4],
-            "epochs": int(optimal_params[5]),
-            "num_of_iteration": int(optimal_params[6]),
-            "threshold": optimal_params[7],
-            "base": optimal_params[8]
-        }
-    elif algorithm == "pristi":
-        params_to_save = {
-            "target_strategy": optimal_params[0],
-            "unconditional": bool(optimal_params[1]),
-            "batch_size": bool(optimal_params[2]),
-            "embedding": bool(optimal_params[3]),
-            "num_workers": bool(optimal_params[4]),
-            "seed": 42,  # Default seed
+            "window": int(optimal_params[0]),
+            "incre_mode": optimal_params[1],
+            "base": optimal_params[2],
+            "epochs": int(optimal_params[3]),
+            "num_of_iteration": int(optimal_params[4]),
+            "k": int(optimal_params[5])
         }
     elif algorithm == "knn" or algorithm == "knn_impute":
         params_to_save = {
@@ -703,7 +741,7 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
             "initial_strategy": str(optimal_params[2]),
             "seed": 42
         }
-    elif algorithm == "miss_forest":
+    elif algorithm == "miss_forest" or algorithm == "missforest":
         params_to_save = {
             "n_estimators": int(optimal_params[0]),
             "max_iter": int(optimal_params[1]),
@@ -715,35 +753,35 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
             "n_estimators": int(optimal_params[0]),
             "seed": 42
         }
-    elif algorithm == "miss_net":
+    elif algorithm == "miss_net" or algorithm == "missnet":
         params_to_save = {
-            "alpha": float(optimal_params[0]),
-            "beta": float(optimal_params[1]),
-            "L": int(optimal_params[2]),
+            "n_components": int(optimal_params[0]),
+            "alpha": float(optimal_params[1]),
+            "beta": float(optimal_params[2]),
             "n_cl": int(optimal_params[3]),
             "max_iter": int(optimal_params[4]),
             "tol": float(optimal_params[5]),
             "random_init": bool(optimal_params[6])
-        }
+    }
     elif algorithm == "gain":
         params_to_save = {
             "batch_size": int(optimal_params[0]),
-            "hint_rate": float(optimal_params[1]),
+            "epochs": int(optimal_params[1]),
             "alpha": int(optimal_params[2]),
-            "epoch": int(optimal_params[3])
+            "hint_rate": float(optimal_params[3]),
         }
     elif algorithm == "grin":
         params_to_save = {
-            "d_hidden": int(optimal_params[0]),
-            "lr": float(optimal_params[1]),
-            "batch_size": int(optimal_params[2]),
-            "window": int(optimal_params[3]),
-            "alpha": int(optimal_params[4]),
-            "patience": int(optimal_params[5]),
-            "epochs": int(optimal_params[6]),
-            "workers": int(optimal_params[7])
+            "seq_len": int(optimal_params[0]),
+            "sim_type": int(optimal_params[1]),
+            "epochs": int(optimal_params[2]),
+            "batch_size": int(optimal_params[3]),
+            "sliding_windows": int(optimal_params[4]),
+            "alpha": int(optimal_params[5]),
+            "patience": int(optimal_params[6]),
+            "num_workers": int(optimal_params[7])
         }
-    elif algorithm == "bay_otide":
+    elif algorithm == "bay_otide" or algorithm == "bayotide":
         params_to_save = {
             "K_trend": int(optimal_params[0]),
             "K_season": int(optimal_params[1]),
@@ -753,57 +791,83 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
             "a0": float(optimal_params[5]),
             "b0": float(optimal_params[6]),
             "v": float(optimal_params[7]),
-            "tr_ratio": float(optimal_params[8])
+            "num_fold": int(optimal_params[8]),
         }
-    elif algorithm == "hkmf_t":
+    elif algorithm == "hkmf_t" or algorithm == "hkmft":
         params_to_save = {
             "tags": optimal_params[0],
-            "data_names": optimal_params[1],
-            "epoch": int(optimal_params[2]),
+            "seq_len": optimal_params[1],
+            "blackouts_begin": int(optimal_params[2]),
+            "blackouts_end": int(optimal_params[3]),
+            "epochs": int(optimal_params[4]),
         }
-    elif algorithm == "bit_graph":
+    elif algorithm == "bit_graph" or algorithm == "bitgraph":
         params_to_save = {
-            "node_number": int(optimal_params[0]),
-            "kernel_set": optimal_params[1],
-            "dropout": float(optimal_params[2]),
-            "subgraph_size": int(optimal_params[3]),
-            "node_dim": int(optimal_params[4]),
-            "seq_len": int(optimal_params[5]),
-            "lr": float(optimal_params[6]),
-            "batch_size": float(optimal_params[7]),
-            "epoch": int(optimal_params[8]),
-            "num_workers": int(optimal_params[9]),
-            "seed": int(optimal_params[10]),
+            "seq_len": int(optimal_params[0]),
+            "sliding_windows": int(optimal_params[1]),
+            "kernel_size": int(optimal_params[2]),
+            "kernel_set": optimal_params[3],
+            "epochs": int(optimal_params[4]),
+            "batch_size": int(optimal_params[5]),
+            "subgraph_size": int(optimal_params[6]),
+            "num_workers": int(optimal_params[7])
         }
     elif algorithm == "nuwats" or algorithm == "NUWATS":
         params_to_save = {
-            "seq_length": int(optimal_params[0]),
-            "patch_size": optimal_params[1],
-            "batch_size": float(optimal_params[2]),
-            "pred_length": int(optimal_params[3]),
-            "label_length": int(optimal_params[4]),
-            "enc_in": int(optimal_params[5]),
-            "dec_in": float(optimal_params[6]),
-            "c_out": float(optimal_params[7]),
-            "gpt_layers": int(optimal_params[8]),
-            "num_workers": int(optimal_params[9]),
-            "seed": int(optimal_params[10]),
+            "seq_len": int(optimal_params[0]),
+            "batch_size": float(optimal_params[1]),
+            "epochs": int(optimal_params[2]),
+            "gpt_layers": int(optimal_params[3]),
+            "num_workers": int(optimal_params[4]),
+            "seed": int(optimal_params[5]),
         }
     elif algorithm == "gpt4ts" or algorithm == "GPT4TS":
         params_to_save = {
-            "seq_length": int(optimal_params[0]),
-            "patch_size": optimal_params[1],
-            "batch_size": float(optimal_params[2]),
-            "pred_length": int(optimal_params[3]),
-            "label_length": int(optimal_params[4]),
-            "enc_in": int(optimal_params[5]),
-            "dec_in": float(optimal_params[6]),
-            "c_out": float(optimal_params[7]),
-            "gpt_layers": int(optimal_params[8]),
-            "num_workers": int(optimal_params[9]),
-            "seed": int(optimal_params[10]),
+            "seq_len": int(optimal_params[0]),
+            "batch_size": float(optimal_params[1]),
+            "epochs": int(optimal_params[2]),
+            "gpt_layers": int(optimal_params[3]),
+            "num_workers": int(optimal_params[4]),
+            "seed": int(optimal_params[5]),
         }
-
+    elif algorithm == "timesnet" or algorithm == "TimesNet":
+        params_to_save = {
+            "seq_len": int(optimal_params[0]),
+            "batch_size": float(optimal_params[1]),
+            "epochs": int(optimal_params[2]),
+            "gpt_layers": int(optimal_params[3]),
+            "num_workers": int(optimal_params[4]),
+            "seed": int(optimal_params[5]),
+        }
+    elif algorithm == "pristi":
+        params_to_save = {
+            "seq_len": int(optimal_params[0]),
+            "batch_size": float(optimal_params[1]),
+            "epochs": int(optimal_params[2]),
+            "sliding_windows": int(optimal_params[3]),
+            "target_strategy": str(optimal_params[4]),
+            "nsamples": int(optimal_params[5]),
+            "num_workers": int(optimal_params[6]),
+        }
+    elif algorithm == "csdi" or algorithm == "CSDI":
+        params_to_save = {
+            "seq_len": int(optimal_params[0]),
+            "batch_size": float(optimal_params[1]),
+            "epochs": int(optimal_params[2]),
+            "sliding_windows": int(optimal_params[3]),
+            "target_strategy": str(optimal_params[4]),
+            "nsamples": int(optimal_params[5]),
+            "num_workers": int(optimal_params[6]),
+        }
+    elif algorithm == "saits" or algorithm == "SAITS":
+        params_to_save = {
+            "seq_len": int(optimal_params[0]),
+            "batch_size": int(optimal_params[1]),
+            "epochs": int(optimal_params[2]),
+            "sliding_windows": int(optimal_params[3]),
+            "n_head": int(optimal_params[4]),
+            "num_workers": int(optimal_params[5])
+        }
 
     # Your own optimal save parameters #contributing
     #
@@ -819,26 +883,89 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
         print(f"\n\t\t(SYS) Algorithm {algorithm} is not recognized.")
         return
 
+    toml_payload = {algorithm: params_to_save}
+
     try:
         with open(file_name, 'w') as file:
-            toml.dump(params_to_save, file)
+            toml.dump(toml_payload, file)
         print(f"\n(SYS) Optimization parameters successfully saved to {file_name}")
     except Exception as e:
         print(f"\n(SYS) An error occurred while saving the file: {e}")
 
+    return file_name
 
-def check_family(family, algorithm):
-    # Normalize input
+
+def check_family(family="DeepLearning", algorithm=""):
+    """
+    Check whether a given algorithm belongs to a specified family.
+
+    Parameters
+    ----------
+    family : str, optional
+        Name of the algorithm family to check against (e.g. ``"DeepLearning"``).
+        Defaults to ``"DeepLearning"``.
+    algorithm : str
+        Name of the algorithm to check for membership in the given family.
+        Matching is case-insensitive and ignores underscores and hyphens.
+
+    Returns
+    -------
+    bool
+        ``True`` if an algorithm with the given name exists within the
+        specified family, ``False`` otherwise.
+    """
     norm_input = algorithm.lower().replace("_", "").replace("-", "")
 
     for full_name in list_of_algorithms_with_families():
-        if full_name.startswith("DeepLearning."):
+        if full_name.startswith(family+"."):
             suffix = full_name.split(".", 1)[1]
             norm_suffix = suffix.lower().replace("_", "").replace("-", "")
 
             if norm_input == norm_suffix:
                 return True
     return False
+
+def sets_splitter_based_on_training(tr, split=0.66667, verbose=False):
+    """
+    Compute test and validation split ratios based on a given training ratio.
+
+    Ensures that the sum of training, validation, and test ratios equals 1.0
+    after rounding to one decimal place. Raises a ValueError if the resulting
+    ratios do not sum to 1.0 within tolerance.
+
+    Parameters
+    ----------
+    tr : float
+        Training ratio (between 0 and 1).
+
+    split : float, optional
+         Percentage of test set. Default is 2/3.
+
+    verbose : bool, optional
+        If True, prints the computed ratios for verification. Default is False.
+
+    Returns
+    -------
+    - test_ratio : Fraction of data allocated to the test set.
+    - val_ratio : Fraction of data allocated to the validation set.
+
+    Raises
+    ------
+    ValueError
+        If the computed ratios do not sum to 1.0 (after rounding).
+    """
+    test_len = round((1 - tr) * (split), 1)
+    val_len = round(1 - tr - test_len, 1)
+
+    total = round(tr + test_len + val_len, 1)
+    if total != 1.0:
+        raise ValueError(f"Ratios do not sum to 1.0 (train={tr}, test={test_len}, val={val_len}, total={total})")
+
+    if verbose:
+        print(f"\ntraining ratio: {tr}, validation ratio: {val_len}, test ratio: {test_len}")
+        print(f"\tsum of ratios: {total}\n")
+
+    return test_len, val_len
 
 
 def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_size=10, offset=0.1, seed=True, limit=1, shift=0.05, std_dev=0.5, explainer=False, probabilities=None, verbose=True):
@@ -862,27 +989,29 @@ def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_s
         TimeSeries object containing contaminated data.
     """
 
+
+    from imputegap.recovery.contamination import GenGap
     from imputegap.recovery.manager import TimeSeries
 
     pattern_low = pattern.lower()
     ptn = pattern_low.replace('_', '').replace('-', '')
 
     if ptn == "mcar" or ptn == "missing_completely_at_random":
-        incomp_data = ts.Contamination.mcar(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, block_size=block_size, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.mcar(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, block_size=block_size, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
     elif ptn == "mp" or ptn == "missingpercentage" or ptn == "aligned":
-        incomp_data = ts.Contamination.aligned(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.aligned(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, explainer=explainer, verbose=verbose)
     elif ptn == "ps" or ptn == "percentageshift" or ptn == "scattered" or ptn == "scatter":
-        incomp_data = ts.Contamination.scattered(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.scattered(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
     elif ptn == "disjoint":
-        incomp_data = ts.Contamination.disjoint(input_data=ts.data, rate_series=dataset_rate, limit=1, offset=offset, verbose=verbose)
+        incomp_data = GenGap.disjoint(input_data=ts.data, rate_series=dataset_rate, limit=1, offset=offset, verbose=verbose)
     elif ptn == "overlap":
-        incomp_data = ts.Contamination.overlap(input_data=ts.data, rate_series=dataset_rate, limit=limit, shift=shift, offset=offset, verbose=verbose)
+        incomp_data = GenGap.overlap(input_data=ts.data, rate_series=dataset_rate, limit=limit, shift=shift, offset=offset, verbose=verbose)
     elif ptn == "gaussian":
-        incomp_data = ts.Contamination.gaussian(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, std_dev=std_dev, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.gaussian(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, std_dev=std_dev, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
     elif ptn == "distribution" or pattern == "dist":
-        incomp_data = ts.Contamination.distribution(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, probabilities_list=probabilities, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.distribution(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, probabilities_list=probabilities, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
     elif ptn == "blackout":
-        incomp_data = ts.Contamination.blackout(input_data=ts.data, series_rate=dataset_rate, offset=offset, verbose=verbose)
+        incomp_data = GenGap.blackout(input_data=ts.data, series_rate=dataset_rate, offset=offset, verbose=verbose)
     else:
         raise ValueError(f"\n(CONT) Pattern '{pattern}' not recognized, please choose your algorithm on this list :\n\t{TimeSeries().patterns}\n")
         incomp_data = None
@@ -942,7 +1071,7 @@ def config_forecaster(model, params):
         elif mdl == "arima":
             from sktime.forecasting.arima import AutoARIMA
             forecaster = AutoARIMA(**params)
-        elif mdl == "sf-arima":
+        elif mdl == "sf-arima" or mdl == "sfarima":
             from sktime.forecasting.statsforecast import StatsForecastAutoARIMA
             forecaster = StatsForecastAutoARIMA(**params)
             forecaster.set_config(warnings='off')
@@ -969,6 +1098,273 @@ def config_forecaster(model, params):
             forecaster = None
 
         return forecaster
+
+
+
+def get_resuts_unit_tests(algo_name, loader, verbose=True):
+    """
+    Returns (dataset, rmse, mae) for the given algo name
+    from loader.toml.
+    """
+    try:
+        import tomllib  # Python 3.11+
+    except ImportError:
+        import toml as tomllib  # pip install toml
+
+    with open(loader, "rb") as f:
+        config = tomllib.load(f)
+
+    section = config[algo_name]
+
+    dataset = section["dataset"]
+    rmse = section["rmse"]
+    mae = section["mae"]
+
+    if verbose:
+        print(f"\nloaded for {algo_name}: {dataset = }, {rmse = }, {mae = }\n")
+
+    return dataset, rmse, mae
+
+
+def window_truncation(feature_vectors, seq_len, stride=None, info="", verbose=True, deep_verbose=False):
+    """
+    Segment a sequence of feature vectors into fixed-length windows.
+
+    The code was inspired by: https://dl.acm.org/doi/10.1016/j.eswa.2023.119619
+
+    Parameters
+    ----------
+    feature_vectors : np.ndarray
+        Input array of feature vectors. Windowing is applied along the
+        first axis (typically the time or sequence dimension).
+
+    seq_len : int
+        Length of each window (number of time steps per segment).
+
+    stride : int, optional
+        Step size between the starting indices of consecutive windows.
+        Defaults to ``seq_len`` (non-overlapping windows).
+
+    info : str, optional
+        Additional descriptive string to include in the verbose log output.
+        Defaults to an empty string.
+
+    verbose : bool, optional
+        If True, prints a summary of the computed windows (shape and
+        configuration). Defaults to True.
+
+    deep_verbose : bool, optional
+        If True, prints the raw start indices used to generate the
+        windows. Useful for debugging. Defaults to False.
+
+
+    Returns
+    -------
+    np.ndarray
+        Array of shape ``(num_windows, seq_len, features)`` containing the
+        extracted windows, cast to ``float32``.
+    """
+
+    stride = seq_len if stride is None else stride
+    values = feature_vectors.shape[0]
+    start_indices = np.asarray(range(values // stride)) * stride
+
+    if deep_verbose:
+        print(f"{start_indices = }")
+
+    sample_collector = []
+    for idx in start_indices:
+        if (idx + seq_len) > values: break
+        sample_collector.append(feature_vectors[idx: idx + seq_len])
+
+    dataset_strat_windows = np.asarray(sample_collector).astype('float32')
+    if verbose:
+        print(f"\t{info} windows have been computed ({seq_len=} | {stride=}): {dataset_strat_windows.shape}")
+
+    return dataset_strat_windows
+
+
+def dataset_add_dimensionality(matrix, seq_length=24, reshapable=True, adding_nans=True, three_dim=True, window=False, verbose=False, deep_verbose=False):
+    """
+    Prepare a 2D matrix for sequence-based models (sample strategy) by padding and optional reshaping to 3D.
+
+    Parameters
+    ----------
+    matrix : np.ndarray
+        Input 2D array of shape ``(N, M)``, where ``N`` is the number of
+        time steps (rows) and ``M`` is the number of features (columns).
+
+    seq_length : int, optional
+        Target sequence length (number of time steps per segment). Used
+        for padding and reshaping. Default is 24.
+
+    reshapable : bool, optional
+        If True, the matrix is padded (if needed) so that its number of
+        rows is divisible by ``seq_length``. If False, sequences are
+        extracted in non-overlapping chunks of length ``seq_length``
+        without padding. Default is True.
+
+    adding_nans : {True, False, None}, optional
+        Controls the padding values:
+        - None: pad with zeros.
+        - True: pad with NaNs.
+        - False: pad with per-column means (ignoring NaNs).
+        Default is True (pad with NaNs).
+
+    three_dim : bool, optional
+        If True and ``reshapable`` is True, the padded matrix is reshaped
+        to a 3D array of shape ``(num_sequences, seq_length, M)``.
+        If False, the function returns the padded 2D matrix.
+        Ignored when ``window=True`` or ``reshapable=False``.
+        Default is True.
+
+    window : bool, optional
+        If True, the function only appends a block of ``seq_length`` rows
+        (using the chosen padding strategy) and returns the resulting 2D
+        matrix without reshaping. Default is False.
+
+    verbose : bool, optional
+        If True, prints information about padding and the resulting
+        shape(s). Default is False.
+
+    deep_verbose : bool, optional
+        If True and ``three_dim`` is True, prints the full reshaped
+        3D matrix for inspection. Default is False.
+
+    Returns
+    -------
+    np.ndarray
+          3D array of shape ``(N_padded // seq_length, seq_length, features)``.
+    """
+    if verbose:
+        print(f"\ndataset is  pre-processed for 3 dimensionality, with a sequence length of {seq_length}.")
+
+    N, M = matrix.shape
+
+    if window:
+        pad_len = seq_length
+        if adding_nans is None:
+            pad_block = np.full((pad_len, M), 0)
+        else:
+            pad_block = np.full((pad_len, M), np.nan)
+
+        matrix = np.vstack([matrix, pad_block])
+        if verbose:
+            print(f"\tThe new shape is {matrix.shape}\n")
+        return matrix
+
+    if reshapable:
+        # How many rows needed to make it divisible?
+        remainder = N % seq_length
+        if remainder != 0:
+            pad_len = seq_length - remainder
+
+            if adding_nans is None:
+                if verbose:
+                    print(f"the algorithm has added {pad_len} rows of NaNs")
+                pad_block = np.full((pad_len, M), 0)  # fill with NaNs
+            else:
+                if adding_nans:
+                    if verbose:
+                        print(f"the algorithm has added {pad_len} rows of NaNs")
+                    pad_block = np.full((pad_len, M), np.nan)  # fill with NaNs
+                else:
+                    col_mean = np.nanmean(matrix, axis=0)
+                    if verbose:
+                        print(f"the algorithm has added {pad_len} rows of {col_mean}")
+                    pad_block = np.tile(col_mean, (pad_len, 1))  # repeat row of averages
+
+            matrix = np.vstack([matrix, pad_block])
+            N = matrix.shape[0]
+
+        if not three_dim:
+            if verbose:
+                print(f"\tThe new shape is {matrix.shape}\n")
+            return matrix
+
+        # Now safe to reshape
+        new_m = matrix.reshape(N // seq_length, seq_length, M)
+
+        if verbose:
+            print(f"\tThe new shape is {new_m.shape}\n")
+
+        if deep_verbose:
+            print(f"\tnew matrix : {new_m}\n")
+
+        return new_m
+
+    else:
+        new_m = np.array([
+            matrix[i:i + seq_length]
+            for i in range(0, N - seq_length + 1, seq_length)  # step = seq_length for non-overlap
+        ])
+
+        if verbose:
+            print(f"\ntThe new shape is {new_m.shape}\n")
+
+        return new_m
+        
+
+
+def dataset_reverse_dimensionality(matrix, expected_n: int, verbose: bool = True):
+    """
+    Convert (1, N, T, L) -> (N*T, L) or (N, T, L) -> (N*T, L), then trim to expected_n rows.
+
+    Steps:
+      1) If ndim==4, squeeze axis 0 (requires S==1).
+      2) Reshape first two dims together -> (N*T, L).
+      3) Drop the last (N*T - expected_n) rows.
+
+    Args:
+        matrix: np.ndarray of shape (1, N, T, L) or (N, T, L)
+        expected_n: final number of rows after trimming (e.g., 1000)
+        verbose: print shapes and removed-row count
+
+    Returns:
+        np.ndarray of shape (expected_n, L)
+    """
+    if not isinstance(matrix, np.ndarray):
+        raise TypeError(f"'matrix' must be a numpy array, got {type(matrix)}")
+
+    if verbose:
+        print("\nThe dataset will be reverse back to its original dimensionality...")
+    # 1) Optional squeeze if 4D
+    if matrix.ndim == 4:
+        S, N, T, L = matrix.shape
+        if verbose:
+            print(f"\tinput: {matrix.shape} (S={S}, N={N}, T={T}, L={L})")
+        if S != 1:
+            raise ValueError(f"\tCannot squeeze: expected S==1 on the first dim, got S={S}")
+        imp = np.squeeze(matrix, axis=0)     # (N, T, L)
+        if verbose:
+            print(f"\tafter squeeze -> {imp.shape}")
+    elif matrix.ndim == 3:
+        N, T, L = matrix.shape
+        if verbose:
+            print(f"\tinput: {matrix.shape} (N={N}, T={T}, L={L})")
+        imp = matrix
+    else:
+        raise ValueError(f"\tExpected a 3D or 4D array, got {matrix.ndim}D with shape {matrix.shape}")
+
+    # 2) Reshape (N, T, L) -> (N*T, L)
+    imp = imp.reshape(N * T, L)
+    if verbose:
+        print(f"\tafter reshape -> {imp.shape} (N*T={N*T}, L={L})")
+
+    # 3) Trim to expected_n rows
+    total_rows = N * T
+    if expected_n < 0:
+        raise ValueError(f"\texpected_n must be non-negative, got {expected_n}")
+    if expected_n > total_rows:
+        raise ValueError(f"\texpected_n ({expected_n}) > total rows ({total_rows}) after reshape")
+
+    removed = total_rows - expected_n
+    if removed > 0:
+        imp = imp[:-removed, :]
+    if verbose:
+        print(f"\tafter trim -> {imp.shape} (removed {removed} rows)")
+
+    return imp
 
 
 
@@ -1042,6 +1438,318 @@ def display_title(title="Master Thesis", aut="Quentin Nater", lib="ImputeGAP", u
     print("=" * 100)
 
 
+def auto_seq_llms(data_x, goal="seq", subset=False, high_limit=200, exception=False, b=None, verbose=True, deep_verbose=False):
+    """
+    Brute-force search for nice (seq_len, batch_size) pairs.
+
+    If subset is False:
+        data_x: array of shape (T, ...)
+
+    If subset is True:
+        We internally split T into train / test / val using 0.7 / 0.2 / 0.1
+        and ensure that batch_size is <= num_windows for *each* subset.
+
+    Returns:
+        (seq_len, batch_size)
+    """
+
+    T = data_x.shape[0]
+    F = data_x.shape[1]
+    max_batch = T // 2
+
+    if b is not None:
+        max_batch = F//2
+
+    if high_limit > T*0.1 and not exception:
+        high_limit = int(T*0.1)
+
+    if T > 50:
+        start_batch = 8
+    else:
+        start_batch = 2
+    if b is not None:
+        start_batch = 2
+
+    if subset:
+        Tr = int(T * 0.7)
+        sizes = [T, Tr]
+    else:
+        Tr = T//3
+        sizes = [T, Tr]
+
+    starting_point = max(2, (T // 2) - 1)
+    starting_point = min(starting_point, high_limit)
+
+    candidates = []
+
+    for seq_len in range(starting_point, 1, -1):
+        list_windows = []
+        valid_seq = True
+
+        if seq_len % 2 == 1:
+            if seq_len != 1:
+                continue
+
+        for s in sizes:
+            num_windows = s - seq_len + 1
+            if num_windows < 2:
+                valid_seq = False
+                break
+            list_windows.append(num_windows)
+
+        if not valid_seq:
+            continue
+
+        for batch_size in range(start_batch, max_batch + 1):
+            # *** FIX: iterate over list_windows, not max_possible_batch ***
+            remainders=[]
+            for nw in list_windows:
+                r = nw % batch_size
+                nbr = nw // batch_size
+                if nbr > 1:
+                    nbr = 0
+                if nbr == 1:
+                    nbr = 1
+                r = r + nbr
+                remainders.append(r)
+
+            total_remainder = sum(remainders)
+
+            if deep_verbose:
+                print(f"{seq_len = } | {batch_size = }: {total_remainder = }")
+
+            # ------- scoring logic -------
+            if goal == "seq":
+                # prefer perfect match first, then larger seq_len
+                score = 1000 * (total_remainder > 0) - (2*seq_len) + abs(seq_len - batch_size)
+            elif goal == "batch":
+                # prefer perfect match first, then larger batch_size
+                score = 1000 * (total_remainder > 0) - (2*batch_size) + abs(seq_len - batch_size)
+            else:  # "balance"
+                # keep original spirit, but on aggregated remainder
+                score = total_remainder + abs(seq_len - batch_size) * 0.1
+
+            # store a copy of list_windows for this candidate
+            candidates.append((score, seq_len, batch_size, list_windows.copy()))
+
+    if not candidates:
+        if verbose:
+            print("\ncompute pre-processor → No valid (seq_len, batch_size) combinations found.\n")
+        return None, None
+
+    # pick the combination with the lowest score
+    candidates.sort(key=lambda x: x[0])
+    best = candidates[0]
+    score, seq_len, batch_size, best_windows = best
+
+    if verbose:
+        if subset:
+            print(f"\ncompute pre-processor {score=} → Best seq_len={seq_len}, batch_size={batch_size}, num_windows_per_subset={best_windows}\n")
+        else:
+            num_windows = best_windows[0]
+            print(f"\ncompute pre-processor {score=} → Best seq_len={seq_len}, batch_size={batch_size} (num_windows={num_windows})\n")
+
+    return seq_len, batch_size
+
+
+def auto_seq_sample(matrix, tr_ratio, high_val=98, verbose=True):
+    """
+    Automatically select a suitable sequence length and batch size
+    based on the dataset size and a predefined batch-size table.
+
+    The function iteratively searches for an even `seq_len`, starting from
+    `high_val` and decreasing by 2, until it is less than or equal to
+    `small_set`, where:
+
+        small_set = int(T * (1 - tr_ratio)) // 2
+
+    with `T` being the number of time steps (rows) in `matrix`.
+    If the search goes below 2, `seq_len` is clamped to 2.
+
+    Once `seq_len` is found, the batch size is chosen from a fixed
+    table `[2, 4, 8, 16, 32, 64, 96]` as the value closest to `seq_len`.
+
+    Parameters
+    ----------
+    matrix : np.ndarray
+        Input 2D array of shape (T, F), where T is the number of time steps
+        and F the number of features.
+
+    tr_ratio : float
+        Training ratio in [0, 1]. Used to compute the size of the
+        "smallest set" (typically validation/test portion) that `seq_len`
+        should not exceed.
+
+    high_val : int, optional
+        Initial (maximum) candidate sequence length from which the search
+        starts and decreases by 2. Default is 98.
+
+    verbose : bool, optional
+        If True, prints the selected `seq_len`, `batch_size` and
+        the computed `small_set`. Default is True.
+
+
+    Returns
+    -------
+    seq_len : int
+        Selected sequence length, guaranteed to be at least 2 and
+        less than or equal to `small_set`.
+    batch_size : int
+        Selected batch size from the fixed table `[2, 4, 8, 16, 32, 64, 96]`
+        that is closest (in absolute difference) to `seq_len`.
+    """
+    T, F = matrix.shape
+    found = False
+
+
+    batch_table = [2, 4, 8, 16, 32, 64, 96]
+
+    small_set = int(T*(1-tr_ratio))//2
+
+    if small_set <= 1000:
+        high_val = 50
+        batch_table = [2, 4, 8, 16, 32]
+    if small_set <= 200:
+        high_val = 26
+        batch_table = [2, 4, 8, 16]
+
+    seq_len = high_val
+
+    while found is False:
+        seq_len = seq_len - 2
+        if seq_len <= small_set:
+            found = True
+        if seq_len <= 2:
+            seq_len = 2
+            break
+
+    batch_size = min(batch_table, key=lambda b: abs(b - seq_len))
+
+    if verbose:
+        print(f"\nthe seq_len found is {seq_len}, and the batch_size {batch_size}, to match with the smallest set {small_set}\n")
+
+    return seq_len, batch_size
+
+
+def reconstruction_windowd_based(preds, nbr_timestamps, sliding_windows=1, verbose=True, deep_verbose=False):
+    """
+    Reconstruct a full time series from window-based imputation.
+
+    Parameters
+    ----------
+    preds : torch.Tensor
+        Predicted windows of shape ``(N, L, F)``, where:
+        - ``N`` is the number of windows,
+        - ``L`` is the window length (sequence length),
+        - ``F`` is the number of features per time step.
+
+    nbr_timestamps : int
+        Target length ``T`` of the reconstructed time series along the
+        time dimension (number of time steps).
+
+    sliding_windows : int, optional
+        Step size between the starting indices of consecutive windows in
+        the original time series. The i-th window is placed starting at
+        index ``i * sliding_windows``. Default is 1.
+
+    verbose : bool, optional
+        If True, prints a summary of the reconstruction process and basic
+        completeness statistics. Default is True.
+
+    deep_verbose : bool, optional
+        If True, prints detailed information about the index ranges used
+        for each window and the internal count matrix. Useful for
+        debugging. Default is False.
+
+    Returns
+    -------
+    torch.Tensor
+        Reconstructed time series of shape ``(T, D)``, where
+        overlapping windows have been averaged at each time step.
+    """
+    import torch
+    N, L, F = preds.shape
+    T = nbr_timestamps
+
+    if verbose:
+        print(f"\nreconstruction of the windows shaped matrix...\n\tsetup : {N =}, {L =}, {F =} -> {T = } : ", sep=" ", end=" ")
+    recons = torch.zeros(T, F)
+    counts = torch.zeros(T, F)
+    for i in range(N):
+        start = i * sliding_windows
+        seq = (start + (preds[i].shape[0]))
+        if deep_verbose:
+            print(f"{i}-{seq - 1}|", sep="", end="")
+        recons[start:seq] += preds[i]
+        counts[start:seq] += 1
+
+    if deep_verbose:
+        print(f"{counts = }")
+
+    mask_l = counts > 0
+    recons[mask_l] = recons[mask_l] / counts[mask_l]
+    # =test===================================================================================================
+    row_sums = recons.sum(dim=1)  # if recons is also a torch.Tensor
+    mask_nonzero = ~torch.isclose(row_sums, torch.tensor(0.0))
+    full = mask_nonzero.all().item()
+
+    rows_all_at_least_one = (counts >= 1).all(dim=1)
+    num_bad_rows = (~rows_all_at_least_one).sum().item()
+    bad_values = (~mask_nonzero).sum().item()
+
+    if verbose:
+        if full and num_bad_rows == 0:
+            print(f"the reconstruction has been done successfully, full recovery matrix.\n"
+                f"\tnumber of time steps reconstructed: {nbr_timestamps - num_bad_rows}/{nbr_timestamps}, "
+                f"number of values not handled: {bad_values}")
+        else:
+            print(f"the reconstruction has been done successfully, full recovery matrix.\n"
+                f"\tnumber of time steps reconstructed: {nbr_timestamps - num_bad_rows}/{nbr_timestamps}, "
+                f"number of values not handled: {bad_values}")
+    # ======================================================================================================
+    return recons
+
+def check_contamination_series(ts_m, algo="the algorithm", verbose=True):
+    """
+    Verify whether the input time series matrix meets the contamination constraints
+    required by uni-dimensional algorithms (such as SPIRIT).
+
+    Specifically, this function checks if only the first series (column 0) contains
+    missing (NaN) values. If any other series is contaminated, it reports an
+    imputation error (optionally printing a message) and returns `True` to signal
+    that an issue exists.
+
+    Parameters
+    ----------
+    ts_m : np.ndarray
+        A 2D NumPy array representing the time series matrix, where each column
+        corresponds to a separate series.
+    algo : str, optional
+        The name of the algorithm being validated. Used only for logging in
+        the printed error message. Default is "the algorithm".
+    verbose : bool, optional
+        If True, prints an error message when contamination is detected outside
+        of series 0. Default is True.
+
+    Returns
+    -------
+    bool
+        False if only series 0 is contaminated (valid input).
+        True if contamination exists in any other series (invalid input).
+    """
+    nan_counts_per_col = np.sum(np.isnan(ts_m), axis=0)
+    cols_with_nans = np.where(nan_counts_per_col > 0)[0].shape[0]
+
+    if nan_counts_per_col[0] > 0 and np.sum(nan_counts_per_col > 0) == 1:
+        return False
+    else:
+        if verbose:
+            print(f"(IMPUTATION-ERROR) {algo} is a uni-dimensional algorithm and can only operate when series 0 is the sole contaminated one.\n\tThe provided matrix contains {cols_with_nans} contaminated series.\n")
+        return True
+
+
+
+
 def search_path(set_name="test"):
     """
     Find the accurate path for loading test files.
@@ -1060,10 +1768,12 @@ def search_path(set_name="test"):
     if set_name in list_of_datasets():
         return set_name + ".txt"
     else:
-        filepath = "../imputegap/datasets/" + set_name
-
+        here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        filepath = os.path.join(here, "datasets/" + set_name)
         if not os.path.exists(filepath):
-            filepath = filepath[1:]
+            filepath = "../imputegap/datasets/" + set_name
+            if not os.path.exists(filepath):
+                filepath = filepath[1:]
         return filepath
 
 
@@ -1092,7 +1802,7 @@ def get_missing_ratio(incomp_data):
     return missing_ratio
 
 
-def verification_limitation(percentage, low_limit=0.01, high_limit=1.0):
+def verification_limitation(percentage, low_limit=0.001, high_limit=1.0):
     """
     Format and verify that the percentage given by the user is within acceptable bounds.
 
@@ -1382,7 +2092,7 @@ def split_mask_bwt_test_valid(data_matrix, test_rate=0.8, valid_rate=0.2, nan_va
     return mask_test, mask_valid, n_nan
 
 
-def generate_random_mask(gt, mask_test, mask_valid, droprate=0.2, offset=None, verbose=False, seed=42):
+def generate_random_mask(gt, mask_test, mask_valid, droprate=0.2, offset=None, series_like=True, verbose=False, seed=42):
     """
     Generate a random training mask over the non-NaN entries of gt, excluding positions
     already present in the test and validation masks.
@@ -1397,6 +2107,8 @@ def generate_random_mask(gt, mask_test, mask_valid, droprate=0.2, offset=None, v
         Binary mask indicating validation positions.
     droprate : float
         Proportion of eligible entries to include in the training mask.
+    series_like : bool
+        The mask must be set on free series
     offset : float
         Protect of not the offset of the dataset
     verbose : bool
@@ -1416,20 +2128,28 @@ def generate_random_mask(gt, mask_test, mask_valid, droprate=0.2, offset=None, v
     if seed is not None:
         np.random.seed(seed)
 
+    mask_test_tmp =  mask_test.astype(int)
+    mask_valid_tmp =  mask_valid.astype(int)
 
     # Valid positions: non-NaN and not in test/valid masks
     num_offset = 0
     mask_offset = np.zeros_like(gt, dtype=np.uint8)
+
+    # just the cell must be free to be picked
     if offset is not None:
         if offset > droprate:
             offset = droprate
         mask_offset[:, :int(offset * gt.shape[1])] = 1
         num_offset = np.sum(mask_offset)
 
+    if series_like:
+        row_test = mask_test_tmp.any(axis=1)
+        row_valid = mask_valid_tmp.any(axis=1)
+        mask_test_tmp[row_test, :] = 1
+        mask_valid_tmp[row_valid, :] = 1
 
-    occupied_mask = (mask_test + mask_valid + mask_offset).astype(bool)
+    occupied_mask = (mask_test_tmp + mask_valid_tmp + mask_offset).astype(bool)
     eligible_mask = (~np.isnan(gt)) & (~occupied_mask)
-
     eligible_indices = np.argwhere(eligible_mask)
 
     n_train = int(len(eligible_indices) * droprate) + int(num_offset*droprate)
@@ -1540,31 +2260,59 @@ def prepare_testing_set(incomp_m, original_missing_ratio, block_selection=True, 
     return new_m, new_mask, error
 
 
-
-def compute_rank_check(M, rank, verbose=True):
+def set_dic_position_dl(mask_test, split_idx, verbose=False):
     """
-    Validates and adjusts the rank used in matrix operations based on the number of time series.
+    Build a mapping from original row index to (split, index_within_split) for
+    deterministic reconstruction of an imputed matrix.
 
     Parameters
     ----------
-    M : int
-        Number of series
-    rank : int
-        The desired rank (e.g., for matrix factorization or low-rank approximation).
-    verbose : bool
-        Print the error or not
+    mask_test : array-like of shape (N,), bool
+        Row-wise boolean mask where True marks rows that belong to the 'test' split
+        (e.g., rows with any missing values in the test mask). If you start from a
+        2D mask, pass `mask_test.any(axis=1)` to obtain this 1D array.
+    split_idx : int
+        Number of NON-TEST rows to assign to the 'train' split. The first `split_idx`
+        non-test rows go to 'train'; the remaining non-test rows go to 'val'.
 
     Returns
     -------
-    rank: int
-        A valid rank value, adjusted to avoid exceeding the number of available series.
+    position_dic_imputegap : dict[int, tuple[str, int]]
+        Dictionary mapping each original row index to a tuple
+        (split_label, index_within_split), where split_label ∈ {"train","val","test"}
+        and index_within_split is 0-based within its respective split, assigned in
+        the order rows are encountered.
+
+    Notes
+    -----
+        position_dic_imputegap: e.g. {0: ("test",0), 1: ("test",1), 2: ("train",0), ...}
+
     """
-    if rank >= M-1:
-        if verbose:
-            print(f"ERROR: Rank choosen to high for the number of series: {rank} >= {M}.\n\tRank reduced to 2.")
-        return 2
-    else:
-        return rank
+    position_dic_imputegap = {}  # {original_row_index: "train"|"val"|"test"}
+    non_test_seen = 0  # position among NON-TEST rows
+    inc_tr = 0
+    inc_val = 0
+    inc_test = 0
+    for i, is_test in enumerate(mask_test):
+        if is_test:
+            position_dic_imputegap[i] = ("test", inc_test)
+            inc_test += 1
+        else:
+            if non_test_seen < split_idx:
+                position_dic_imputegap[i] = ("train", inc_tr)
+                inc_tr += 1
+            else:
+                position_dic_imputegap[i] = ("val", inc_val)
+                inc_val += 1
+            non_test_seen += 1
+
+    if verbose:
+        print("\nIndices ImputeGAP Deep Learning Training with Patterns:")
+        for k, v in position_dic_imputegap.items():
+            set, inc = v
+            print(f"\t{k}\t{set}\t{inc}")
+
+    return position_dic_imputegap
 
 
 def compute_seq_length(M):
@@ -1657,7 +2405,7 @@ def compute_batch_size(data, min_size=4, max_size=16, divisor=2, verbose=True):
 
 
 
-def load_share_lib(name="lib_cdrec", lib=True, verbose=True):
+def load_share_lib(name="lib_cdrec", verbose=True):
     """
     Load the shared library based on the operating system.
 
@@ -1676,31 +2424,135 @@ def load_share_lib(name="lib_cdrec", lib=True, verbose=True):
         The loaded shared library object.
     """
     system = platform.system()
-    if system == "Windows":
-        ext = ".so"
-    elif system == "Darwin":
-        ext = ".dylib"  # macOS uses .dylib for dynamic libraries
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # mac os ===========================================================================================================
+    if system == "Darwin":
+        lib_path = importlib.resources.files('imputegap.algorithms.lib').joinpath("./" + str(name) + ".dylib")
+
+        try:  # try inner file C++
+            cpp_wrapper = ctypes.CDLL(lib_path)
+            if verbose:
+                print(f"\n(SYS) Wrapper files loaded for C++ : ", {lib_path}, "\n")
+        except:
+            try:
+                lib_path = importlib.resources.files('imputegap.algorithms.lib').joinpath("./" + str(name) + "_new.dylib")
+                cpp_wrapper = ctypes.CDLL(lib_path)
+                print(f"(SYS-UPD) C++ shared object linked with new version of armadillo: {lib_path}\n")
+            except:
+                lib_path = os.path.join(here, 'algorithms/lib/' + name + ".dylib")
+                cpp_wrapper = ctypes.CDLL(lib_path)
+                print(f"(SYS-UPD) C++ shared object linked with the user  path : {lib_path}\n")
+    # other ===========================================================================================================
     else:
-        ext = ".so"
+        lib_path = importlib.resources.files('imputegap.algorithms.lib').joinpath("./" + str(name) + ".so")
 
-    if lib:
-        lib_path = importlib.resources.files('imputegap.algorithms.lib').joinpath("./" + str(name) + ext)
+        try:  # try inner file C++
+            cpp_wrapper = ctypes.CDLL(lib_path)
+            if verbose:
+                print(f"\n(SYS) Wrapper files loaded for C++ : ", {lib_path}, "\n")
+        except:
+            lib_path = os.path.join(here, 'algorithms/lib/' + name + ".so")
+            cpp_wrapper = ctypes.CDLL(lib_path)
+            print(f"(SYS-UPD) C++ shared object linked with the user path : {lib_path}\n")
+
+    return cpp_wrapper
+
+
+
+def control_boundaries(rank, boundary, algorithm="Algorithm", reduction=1):
+    """
+    Ensure that the rank does not exceed the boundary limit.
+
+    Parameters
+    ----------
+    rank : int
+        The input rank, typically representing the number of components or factors.
+    boundary : int
+        The maximum allowed value, usually corresponding to the number of available series.
+    algorithm : str, optional
+        The name of the algorithm using this control check (default is "Algorithm").
+    reduction : int, optional
+        The amount to reduce the boundary by if the rank exceeds it (default is 1).
+
+    Returns
+    -------
+    int
+        The adjusted rank value. If the input rank is valid, it is returned unchanged.
+        If it exceeds the boundary, a reduced value is returned. If no valid reduction is
+        possible, returns 1.
+    """
+
+    if rank >= boundary:
+        new_estimator = boundary-reduction
+        print(f"(ERROR) {algorithm}\n\trank {rank} is higher than the number of series {boundary}. Reduce to {new_estimator}.\n")
+
+        if new_estimator > 0:
+            return new_estimator
+        else:
+            print(f"(ERROR) {algorithm}\n\tNot enough series to impute with this algorithm {boundary} <= 0.\n")
+            return 1
     else:
-        local_path_lin = './algorithms/lib/' + name + ext
+        return rank
 
-        if not os.path.exists(local_path_lin):
-            local_path_lin = './imputegap/algorithms/lib/' + name + ext
 
-        lib_path = os.path.join(local_path_lin)
 
-    if verbose:
-        print("\n(SYS) Wrapper files loaded for C++ : ", lib_path, "\n")
+def clean_imputegap_assets(root_path, security=True, check="imputegap/imputegap_assets"):
+    """
+    Delete all files under the imputegap assets directory, preserving only `.gitkeep` files.
 
-    return ctypes.CDLL(lib_path)
+    Parameters
+    ----------
+    root_path : str or Path-like
+        Path to the root imputegap assets directory to be cleaned.
 
+    security : bool, optional
+        If True, abort cleaning unless `check` is found in `root_path`.
+        This is a safety guard to avoid accidentally deleting unintended paths.
+        Default is True.
+
+    check : str, optional
+        Substring that must be present in `root_path` for the cleaning to proceed.
+        Default is "imputegap/imputegap_assets".
+    """
+    from pathlib import Path
+
+    print("Cleaning imputegap assets...", root_path, "\n")
+
+    root_path_p = Path(root_path).resolve()
+
+    if security:
+        if check not in root_path:
+            print(f"[ABORT] Refusing to clean '{root_path}'.")
+            print(f"The target directory's must have '{check}' in it.")
+            return
+
+    # Walk through all files under root_dir
+    for path in root_path_p.rglob("*"):
+        if path.is_file():
+            # Keep only .gitkeep files
+            if path.name == ".gitkeep":
+                continue
+            try:
+                path.unlink()
+                print(f"Deleted: {path}")
+            except Exception as e:
+                print(f"Failed to delete {path}: {e}")
 
 
 def list_of_algorithms():
+    """
+    Return the list of available imputation algorithms.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of algorithm names supported by the framework.
+    """
     return sorted([
         "CDRec",
         "IterativeSVD",
@@ -1732,13 +2584,28 @@ def list_of_algorithms():
         "GAIN",
         "GRIN",
         "BayOTIDE",
-        "HKMF_T",
+        "HKMFT",
         "BitGraph",
+        "SAITS",
         "NuwaTS",
-        "GPT4TS"
+        "GPT4TS",
+        "TimesNet",
+        "CSDI"
     ])
 
 def list_of_patterns():
+    """
+    Return the list of available imputation patterns.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of patterns names supported by the framework.
+    """
     return sorted([
         "aligned",
         "disjoint",
@@ -1750,7 +2617,18 @@ def list_of_patterns():
     ])
 
 def list_of_datasets(txt=False):
+    """
+    Return the list of available datasets from ImputeGAP.
 
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of datasets names supported by ImputeGAP.
+    """
     list = sorted([
         "airq",
         "bafu",
@@ -1760,26 +2638,36 @@ def list_of_datasets(txt=False):
         "eeg-alcohol",
         "eeg-reading",
         "electricity",
-        "fmri-stoptask",
+        #"fmri-stoptask",
         "forecast-economy",
         "meteo",
         "motion",
         "soccer",
-        "solar-plant",
+        "solar",
         "sport-activity",
         "stock-exchange",
         "temperature",
         "traffic"
     ])
-
     if txt:
         list = [dataset + ".txt" for dataset in list]
-
     return list
 
 
 
 def list_of_optimizers():
+    """
+    Return the list of available optimizers from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of optimizers names supported by ImputeGAP.
+    """
     return sorted([
         "ray_tune",
         "bayesian",
@@ -1789,17 +2677,41 @@ def list_of_optimizers():
     ])
 
 def list_of_downstreams():
+    """
+    Return the list of available downstream models from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of downstream models names supported by ImputeGAP.
+    """
     return sorted(list_of_downstreams_sktime() + list_of_downstreams_darts())
 
 
 def list_of_downstreams_sktime():
+    """
+    Return the list of available downstream models (sktime) from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of downstream models names supported by ImputeGAP.
+    """
     return sorted([
         "prophet",
         "exp-smoothing",
         "hw-add",
         "arima",
         "sf-arima",
-        "bats",
+        #"bats",
         "ets",
         "croston",
         "theta",
@@ -1808,6 +2720,18 @@ def list_of_downstreams_sktime():
     ])
 
 def list_of_downstreams_darts():
+    """
+    Return the list of available downstream models (darts) from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of downstream models names supported by ImputeGAP.
+    """
     return sorted([
         "nbeats",
         "xgboost",
@@ -1818,6 +2742,18 @@ def list_of_downstreams_darts():
     ])
 
 def list_of_extractors():
+    """
+    Return the list of available extractors from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of extractors names supported by ImputeGAP.
+    """
     return sorted([
         "pycatch",
         "tsfel",
@@ -1825,13 +2761,86 @@ def list_of_extractors():
     ])
 
 def list_of_families():
+    """
+    Return the list of available families of imputation techniques from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of families of imputation techniques names supported by ImputeGAP.
+    """
     return sorted(["DeepLearning", "MatrixCompletion", "PatternSearch", "MachineLearning", "Statistics", "LLMs"])
 
 def list_of_metrics():
+    """
+    Return the list of available metrics from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of families of imputation metrics supported by ImputeGAP.
+    """
     return ["RMSE", "MAE", "MI", "CORRELATION", "RUNTIME", "RUNTIME_LOG"]
 
-def list_of_algorithms_with_families():
-    return sorted([
+def list_of_algorithms_deep_learning():
+    """
+    Returns all imputation algorithms of the Deep Learning family.
+    """
+    return list_of_algorithms_with_families(specify_family="DeepLearning")
+
+def list_of_algorithms_matrix_completion():
+    """
+    Returns all imputation algorithms of the Matrix Completion family.
+    """
+    return list_of_algorithms_with_families(specify_family="MatrixCompletion")
+
+def list_of_algorithms_pattern_search():
+    """
+    Returns all imputation algorithms of the Pattern Search family.
+    """
+    return list_of_algorithms_with_families(specify_family="PatternSearch")
+
+def list_of_algorithms_machine_learning():
+    """
+    Returns all imputation algorithms of the Machine Learning family.
+    """
+    return list_of_algorithms_with_families(specify_family="MachineLearning")
+
+def list_of_algorithms_statistics():
+    """
+    Returns all imputation algorithms of the Statistics family.
+    """
+    return list_of_algorithms_with_families(specify_family="Statistics")
+
+def list_of_algorithms_llms():
+    """
+    Returns all imputation algorithms of the LLMs family.
+    """
+    return list_of_algorithms_with_families(specify_family="LLMs")
+
+def list_of_algorithms_with_families(specify_family=None):
+    """
+    Return the list of available imputation techniques (with families) from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of imputation techniques (with families) supported by ImputeGAP.
+    """
+
+    my_list = [
         "MatrixCompletion.CDRec",
         "MatrixCompletion.IterativeSVD",
         "MatrixCompletion.GROUSE",
@@ -1862,12 +2871,118 @@ def list_of_algorithms_with_families():
         "DeepLearning.GAIN",
         "DeepLearning.GRIN",
         "DeepLearning.BayOTIDE",
-        "DeepLearning.HKMF_T",
+        "DeepLearning.HKMFT",
         "DeepLearning.BitGraph",
+        "DeepLearning.SAITS",
+        "DeepLearning.CSDI",
+        "DeepLearning.TimesNet",
         "LLMs.NuwaTS",
         "LLMs.GPT4TS"
-    ])
+    ]
+
+    def normalize_family(family: str) -> str:
+        return family.replace(" ", "").lower()
+
+    if specify_family is not None:
+        target = normalize_family(specify_family)
+        return [algo.split(".")[1] for algo in my_list if normalize_family(algo.split(".")[0]) == target]
+    else:
+        return sorted(my_list)
 
 def list_of_normalizers():
+    """
+    Return the list of available normalizer (with families) from ImputeGAP.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    list of str
+       A sorted list of normalizer supported by ImputeGAP.
+    """
+
     return ["z_score", "min_max"]
 
+
+def clean_missing_values(raw_data=None, substitute="zero", mask=None):
+    """
+    Replace all NaN values in a 2D matrix by a column-wise substitute.
+
+    Parameters
+    ----------
+    raw_data : np.ndarray
+        2D input array of shape (N, M) containing missing values encoded
+
+    substitute : {"mean", "median", "zero"}, optional
+        Strategy used to replace NaNs per column:
+        - "mean":   replace NaNs with the column-wise mean (ignoring NaNs).
+        - "median": replace NaNs with the column-wise median (ignoring NaNs).
+        - "zero":   replace NaNs with 0.
+        Default is "mean".
+
+    mask, np.ndarraym optional
+        Replace the normal NaNs detection
+
+    Returns
+    -------
+    np.ndarray
+        2D array of shape (N, M) with NaNs replaced column-wise
+    """
+    if raw_data is None:
+        raise ValueError("raw_data must not be None.")
+
+    if mask is None:
+        mask = np.isnan(raw_data)
+
+    if not mask.any():
+        return raw_data.copy()
+
+    n_rows, n_cols = raw_data.shape
+
+    if substitute == "mean":
+        col_values = np.nanmean(raw_data, axis=0)
+    elif substitute == "median":
+        col_values = np.nanmedian(raw_data, axis=0)
+    elif substitute == "zero":
+        col_values = np.zeros(n_cols, dtype=float)
+    else:
+        raise ValueError(f"Unknown substitute strategy '{substitute}'. Use 'mean', 'median', or 'zero'.")
+
+    filled = raw_data.copy()
+    rows, cols = np.where(mask)
+    filled[rows, cols] = col_values[cols]
+
+    return filled
+
+def handle_nan_input(raw_data, incomp_data):
+    raw_mask = 1-np.isnan(raw_data)
+    ts_mask = 1-np.isnan(incomp_data)
+
+    diff_raw = 1 - raw_mask
+    imputed_mask = diff_raw + ts_mask
+
+    return 1-imputed_mask
+
+
+def prepare_deep_learning_params(incomp_data, seq_len, batch_size, sliding_windows, tr_ratio, verbose):
+
+    error = False
+    if sliding_windows == 0:
+        multivariate = True
+    else:
+        multivariate = False
+
+    if seq_len == -1 or batch_size == -1:
+        if multivariate:
+            seq_len, batch_size = auto_seq_sample(matrix=incomp_data, tr_ratio=tr_ratio, verbose=verbose)
+            sliding_windows = seq_len
+        else:
+            seq_len, batch_size = auto_seq_llms(data_x=incomp_data, goal="seq", subset=True, high_limit=50, verbose=verbose)
+
+    if seq_len > len(incomp_data):
+        print(f"(ERROR) The current seq_length {seq_len} is not adapted to the contaminated matrix {len(incomp_data)} !")
+        error =True
+
+    return multivariate, seq_len, batch_size, sliding_windows, error

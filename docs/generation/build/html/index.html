@@ -7,11 +7,11 @@
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>ImputeGAP 1.1.1</title>
-      <link rel="stylesheet" type="text/css" href="static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
     
     
 
@@ -223,11 +223,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -258,7 +258,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="sources/index.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/index.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -287,16 +287,17 @@
 <li><p>[04-06-2025] ImputeGAP will be presented as a Tutorial at KDD 2025 in Toronto! <a class="reference external" href="https://imputegap-tutorials.github.io/KDD-2025/">[Link]</a></p></li>
 </ul>
 </div>
-<p>ImputeGAP is a comprehensive Python library for imputation of missing values in  time series data. It implements user-friendly APIs to easily visualize, analyze, and repair time series datasets. The library supports a diverse range of imputation algorithms and modular missing data simulation catering to datasets with varying characteristics. ImputeGAP includes extensive customization options, such as automated hyperparameter tuning, benchmarking, explainability, and downstream evaluation.</p>
+<p>ImputeGAP is a comprehensive Python library for imputation of missing values in  time series data. It implements user-friendly APIs to easily visualize, analyze, and repair incomplete time series datasets. The library supports a diverse range of imputation algorithms and modular missing data simulation catering to datasets with varying characteristics. ImputeGAP includes extensive customization options, such as automated hyperparameter tuning, benchmarking, explainability, and downstream evaluation.</p>
 <dl class="simple">
 <dt>In detail, the library provides:</dt><dd><ul class="simple">
 <li><p>Access to commonly used datasets in the time series imputation field</p></li>
 <li><p>Configurable contamination module that simulates real-world missingness patterns</p></li>
-<li><p>Parameterizable state-of-the-art time series imputation algorithms</p></li>
-<li><p>Extensive benchmarking to compare the performance of imputation algorithms</p></li>
-<li><p>Modular tools to assess the impact of imputation on key downstream tasks</p></li>
-<li><p>Fine-grained analysis of the impact of time series features on imputation results</p></li>
-<li><p>Seamless integration of new algorithms in Python, C++, Matlab, Java, and R</p></li>
+<li><p>Over 40 state-of-the-art time series imputation algorithms from six different families</p></li>
+<li><p>AutoML techniques to parameterize the imputation algorithms</p></li>
+<li><p>Unified benchmarking pipeline to evaluate the performance of imputation algorithms</p></li>
+<li><p>Modular analysis tools to assess the impact of imputation on time series downstream tasks</p></li>
+<li><p>Expainability module to understand the impact of time series features on the imputation results</p></li>
+<li><p>Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R</p></li>
 </ul>
 </dd>
 </dl>
@@ -462,11 +463,11 @@
       
     </aside>
   </div>
-</div><script src="static/documentation_options.js?v=58fbf978"></script>
-    <script src="static/doctools.js?v=9bcbadda"></script>
-    <script src="static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="static/copybutton.js?v=f281be69"></script>
+</div><script src="_static/documentation_options.js?v=58fbf978"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

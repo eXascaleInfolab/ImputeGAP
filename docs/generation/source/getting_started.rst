@@ -7,7 +7,7 @@ Getting Started
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-ImputeGAP runs with Python>=3.10 (except 3.13) and Unix-compatible environment.
+ImputeGAP is compatible with Python>=3.10 and Unix-compatible environment.
 
 .. _installation:
 
@@ -25,22 +25,7 @@ Installation
 
             pip install imputegap
 
-
-    .. tab:: source
-
-        If you would like to extend the library, you can install from source:
-
-        .. code-block:: bash
-
-            git init
-            git clone https://github.com/eXascaleInfolab/ImputeGAP
-            cd ./ImputeGAP
-            pip install -e .
-
-
     .. tab:: venv
-
-        ImputeGAP is compatible with Python>=3.10 (except 3.13) and Unix-compatible environment.
 
         .. raw:: html
 
@@ -316,9 +301,19 @@ Installation
 
                     pip install imputegap
 
-    .. tab:: docker
+    .. tab:: source
 
-        To install ImputeGAP as a Docker container:
+            If you would like to extend the library, you can install from source:
+
+            .. code-block:: bash
+
+                git init
+                git clone https://github.com/eXascaleInfolab/ImputeGAP
+                cd ./ImputeGAP
+                pip install -e .
+
+
+    .. tab:: docker
 
         .. tabs::
 

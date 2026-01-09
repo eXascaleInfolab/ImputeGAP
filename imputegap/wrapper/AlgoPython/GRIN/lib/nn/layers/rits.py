@@ -105,7 +105,7 @@ class RITS(nn.Module):
         steps = x.shape[-2]
 
         if mask is None:
-            mask = torch.ones_like(x, dtype=torch.uint8).bool()
+            mask = torch.ones_like(x, dtype=torch.uint8)
         if delta is None:
             delta = TemporalDecay.compute_delta(mask)
 

@@ -22,7 +22,7 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Information Analysis",
         "License :: OSI Approved :: MIT License",
     ],
-    python_requires=">=3.10, <3.13",
+    python_requires=">=3.10",
     install_requires=(
             open('requirements.txt').read().splitlines()
     ),    packages=setuptools.find_packages(),

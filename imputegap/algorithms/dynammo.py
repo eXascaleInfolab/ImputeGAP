@@ -90,12 +90,15 @@ def dynammo(incomp_data, h, max_iteration, approximation, logs=True, verbose=Tru
     """
     start_time = time.time()  # Record start time
 
+    if logs and verbose:
+        print(f"\n> logs: imputation DynaMMo - Data requires transposition to be effective. New shape: {incomp_data.T.shape}\n")
+
     # Call the C++ function to perform recovery
-    recov_data = native_dynammo(incomp_data, h, max_iteration, approximation, verbose)
+    recov_data = native_dynammo(incomp_data.T, h, max_iteration, approximation, verbose)
 
     end_time = time.time()
 
     if logs and verbose:
         print(f"\n> logs: imputation DynaMMo - Execution Time: {(end_time - start_time):.4f} seconds\n")
 
-    return recov_data
+    return recov_data.T

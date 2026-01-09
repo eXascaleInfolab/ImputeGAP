@@ -1,15 +1,9 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/Chengyui/NuwaTS/tree/master
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://arxiv.org/pdf/2405.15317
-# ===============================================================================================================
-
+import os
 import torch
-from imputegap.wrapper.AlgoPython.NuwaTS.models import TimesNet, NuwaTS, GPT4TS
+from imputegap.wrapper.AlgoPython.NuwaTS.models import Autoformer, TimesNet, DLinear, FEDformer, \
+    PatchTST, NuwaTS, iTransformer,GPT4TS
+from imputegap.wrapper.AlgoPython.NuwaTS.models.SAITS import SAITS
+from imputegap.wrapper.AlgoPython.NuwaTS.models.Brits import BRITS
 
 
 class Exp_Basic(object):
@@ -17,8 +11,15 @@ class Exp_Basic(object):
         self.args = args
         self.model_dict = {
             'TimesNet': TimesNet,
+            'Autoformer': Autoformer,
+            'DLinear': DLinear,
+            'FEDformer': FEDformer,
+            'PatchTST': PatchTST,
             'NuwaTS': NuwaTS,
-            'GPT4TS':GPT4TS
+            'iTransformer': iTransformer,
+            'GPT4TS':GPT4TS,
+            'SAITS':SAITS,
+            'BRITS':BRITS
         }
         self.device = self._acquire_device()
         self.model = self._build_model().to(self.device)
@@ -35,7 +36,6 @@ class Exp_Basic(object):
             #print('Use GPU: cuda:{}'.format(self.args.gpu))
         else:
             device = torch.device('cpu')
-            #print('Use CPU')
         return device
 
     def _get_data(self):

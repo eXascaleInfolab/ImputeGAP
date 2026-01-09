@@ -2,7 +2,7 @@
 Algorithms
 ==========
 
-To learn how to use an imputation algorithm, please refer to the `tutorial <tutorials.html#imputation>`_.
+To learn how to apply imputation within the library, please refer to the `tutorial <tutorials.html#imputation>`_.
 
 
 .. list-table::
@@ -36,11 +36,17 @@ To learn how to use an imputation algorithm, please refer to the `tutorial <tuto
      - BayOTIDE [30]_
      - PMLR -- 2024
    * - Deep Learning
+     - TimesNet [36]_
+     - ICLR -- 2023
+   * - Deep Learning
      - PRISTI [26]_
      - ICDE -- 2023
    * - Deep Learning
      - GRIN [29]_
      - ICLR -- 2022
+   * - Deep Learning
+     - CSDI [35]_
+     - NeurIPS -- 2021
    * - Deep Learning
      - DeepMVI [24]_
      - PVLDB -- 2021
@@ -173,7 +179,7 @@ References
 
 .. [11] Kevin Wellenzohn, Michael H. Böhlen, Anton Dignös, Johann Gamper, Hannes Mitterer: Continuous Imputation of Missing Values in Streams of Pattern-Determining Time Series. EDBT 2017: 330-341
 
-.. [12] Aoqian Zhang, Shaoxu Song, Yu Sun, Jianmin Wang: Learning Individual Models for Imputation (Technical Report). CoRR abs/2004.03436 (2020)
+.. [12] Aoqian Zhang, Shaoxu Song, Yu Sun, Jianmin Wang: Learning Individual Models for Imputation. ICDE (2019)
 
 .. [13] Tianqi Chen, Carlos Guestrin: XGBoost: A Scalable Tree Boosting System. KDD 2016: 785-794
 
@@ -206,3 +212,9 @@ References
 .. [33] Jinguo Cheng, Chunwei Yang, Wanlin Cai, Yuxuan Liang, Qingsong Wen, Yuankai Wu: NuwaTS: a Foundation Model Mending Every Incomplete Time Series. Arxiv 2024
 
 .. [34] Tian Zhou, Peisong Niu, Xue Wang, Liang Sun, Rong Jin: One fits all: power general time series analysis by pretrained LM. NeurIPS 2023
+
+.. [35] Yusuke Tashiro, Jiaming Song, Yang Song, Stefano Ermon: CSDI: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation. NeurIPS 2021
+
+.. [36] Haixu Wu, Tengge Hu, Yong Liu, Hang Zhou, Jianmin Wang, Mingsheng Long: TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis. ICLR 2023
+
+

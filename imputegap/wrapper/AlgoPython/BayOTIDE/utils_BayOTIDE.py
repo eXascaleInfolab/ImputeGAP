@@ -1,19 +1,14 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/xuangu-fang/BayOTIDE
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://arxiv.org/abs/2308.14906
-# ===============================================================================================================
-
 import numpy as np
 import torch
+
+# import utils
+import scipy
 from scipy import linalg
 import argparse
+from torch.utils.data import Dataset
 from pathlib import Path
 from scipy.special import kn
+
 torch.random.manual_seed(300)
 
 
@@ -55,44 +50,21 @@ def neg_llk(target,sample_X, test_mask):
 
     return -llk
 
-def parse_args_dynamic_streaming():
+def parse_args_dynamic_streaming(argv=None):
 
     description = "Bayesian dynamic streaming tensor factorization"
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("--seed", type=int, default=300, help="rand_seed")
-    parser.add_argument(
-        "--num_fold",
-        type=int,
-        default=1,
-        help="number of folds(random split) and take average,min:1,max:5",
-    )
-    parser.add_argument("--machine",
-                        type=str,
-                        default="zeus",
-                        help="machine_name")
-    parser.add_argument(
-        '--dataset',
-        type=str,
-        default='guangzhou',
-        help='dataset name: guangzhou, uber or solar')
-    parser.add_argument(
-        '--task',
-        type=str,
-        default='impute',
-        help='impute or forecast')
-    parser.add_argument(
-        '--r',
-          type=float,
-          default=0.2,
-          help='train/test ratio, support 0.2 or 0.4 now')    
-    parser.add_argument(
-        '--other_para',
-          type=str,
-          default='',
-          help='')    
+    parser.add_argument("--num_fold", type=int, default=1, help="number of folds(random split) and take average,min:1,max:5", )
+    parser.add_argument("--machine", type=str, default="zeus", help="machine_name")
+    parser.add_argument( '--dataset', type=str, default='guangzhou', help='dataset name: guangzhou, uber or solar')
+    parser.add_argument('--task', type=str, default='impute', help='impute or forecast')
+    parser.add_argument('--r', type=float, default=0.2, help='train/test ratio, support 0.2 or 0.4 now')
+    parser.add_argument('--other_para', type=str, default='', help='')
 
+    args, _unknown = parser.parse_known_args(argv)
 
-    return parser.parse_args()
+    return args
 
 
 def make_log(args, hyper_dict, result_dict,other_para = ''):
@@ -155,9 +127,7 @@ def make_log(args, hyper_dict, result_dict,other_para = ''):
 
 def make_hyper_dict(config, args=None):
     hyper_dict = config
-
     hyper_dict["device"] = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    #print("use device:", hyper_dict["device"])
 
     if args is not None:
         # overwrite config with args if needed
@@ -167,14 +137,17 @@ def make_hyper_dict(config, args=None):
     return hyper_dict
 
 
-def make_data_dict(hyper_dict, data_path, fold=0, args=None):
+def make_data_dict(hyper_dict, data_path, fold=0, deep_verbose=False, args=None):
     """to be polish"""
-    #print(f"Data loaded from {data_path}")
     full_data = np.load(data_path, allow_pickle=True).item()
 
-    #print(f"{full_data =}")
-    #print(f"{type(full_data)}")
-
+    if deep_verbose:
+        print(f"\t\t{full_data.keys() = }")
+        print(f"\t\t{full_data['raw_data'].shape = }\n")
+        print(f"\t\t{np.array(full_data['data']).shape = }")
+        print(f"\t\t{np.array(full_data['data']) = }\n")
+        print(f"\t\t{full_data['time_uni'].shape = }")
+        print(f"\t\t{full_data['ndims'] = }")
 
     # already split into train, test and valid mask
     data_dict = full_data["data"][fold]
@@ -186,11 +159,9 @@ def make_data_dict(hyper_dict, data_path, fold=0, args=None):
 
     data_dict["fix_int"] = hyper_dict["fix_int"]
 
-    data_dict["LDS_paras_trend"] = make_LDS_paras_trend(
-        hyper_dict, data_dict)
+    data_dict["LDS_paras_trend"] = make_LDS_paras_trend(hyper_dict, data_dict)
     
-    data_dict["LDS_paras_season"] = make_LDS_paras_season(
-        hyper_dict, data_dict)
+    data_dict["LDS_paras_season"] = make_LDS_paras_season(hyper_dict, data_dict)
     
     if 'clean_data' in full_data.keys():
         data_dict['clean_data'] = full_data['clean_data']
@@ -565,6 +536,9 @@ def moment_Hadmard(modes,
                    order="first",
                    sum_2_scaler=True,
                    device=torch.device("cpu")):
+    """
+    it's easy to transfer this function to kronecker_product(Tucker form) by changing Hadmard_product_batch to kronecker_product_einsum_batched
+    """
     assert order in {"first", "second"}
     assert sum_2_scaler in {True, False}
 
@@ -643,7 +617,6 @@ def moment_Hadmard_T(
         sum_2_scaler=True,
         device=torch.device("cpu"),
 ):
-
     assert order in {"first", "second"}
     assert sum_2_scaler in {True, False}
 
@@ -654,7 +627,6 @@ def moment_Hadmard_T(
     R_U = U_v_T[0].size()[1]
 
     if order == "first":
-        # only compute the first order moment
 
         E_z = U_m_T[last_mode][ind[:, last_mode], :, :, ind_T]  # N*R_u*1
 
@@ -748,7 +720,10 @@ def moment_product(
         device=torch.device("cpu"),
         product_method="hadamard",
 ):
+    """
+    it's easy to transfer this function to kronecker_product(Tucker form) by changing Hadmard_product_batch to kronecker_product_einsum_batched
 
+    """
     assert order in {"first", "second"}
     assert sum_2_scaler in {True, False}
     assert product_method in {"hadamard", "kronecker"}
@@ -834,6 +809,7 @@ def moment_product_T(
         device=torch.device("cpu"),
         product_method="hadamard",
 ):
+
     assert order in {"first", "second"}
     assert sum_2_scaler in {True, False}
     assert product_method in {"hadamard", "kronecker"}

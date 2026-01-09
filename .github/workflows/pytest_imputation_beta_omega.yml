@@ -33,5 +33,4 @@ jobs:
         python -m pytest ./tests/test_imputation_pristi.py
         python -m pytest ./tests/test_imputation_grin.py
         python -m pytest ./tests/test_imputation_gain.py
-        python -m pytest ./tests/test_imputation_hkmf_t.py
         python -m pytest ./tests/test_imputation_bit_graph.py

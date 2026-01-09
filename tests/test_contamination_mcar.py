@@ -1,8 +1,11 @@
+import math
 import os
 import unittest
 import numpy as np
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 
 class TestContaminationMCAR(unittest.TestCase):
@@ -12,27 +15,26 @@ class TestContaminationMCAR(unittest.TestCase):
         the goal is to test if only the selected values are contaminated
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test.txt"))
+        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
 
         series_impacted = [0.4]
         missing_rates = [40]
-        series_check = ["8", "1", "5", "0"]
-        offset = 0.1
+        series_check = ["1", "2", "6"]
+        offset = 4
         block_size = 2
 
 
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = ts_1.Contamination.mcar(input_data=ts_1.data,
-                                                         rate_dataset=series_sel,
-                                                         rate_series=missing_rate, block_size=block_size,
-                                                         offset=offset, seed=True)
+                ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, block_size=block_size, offset=offset, seed=True)
 
+                print(f"{ts_contaminate}")
                 check_nan_series = False
 
-                for series, data in enumerate(ts_contaminate):
-                    if str(series) in series_check:
+                for series in range(ts_contaminate.shape[1]):
+                    data = ts_contaminate[:, series]
+                    if str(series+1) in series_check:
                         if np.isnan(data).any():
                             check_nan_series = True
                     else:
@@ -58,13 +60,13 @@ class TestContaminationMCAR(unittest.TestCase):
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = ts_1.Contamination.mcar(input_data=ts_1.data,
+                ts_contaminate = GenGap.mcar(input_data=ts_1.data,
                                                          rate_dataset=series_sel,
                                                          rate_series=missing_rate,
                                                          block_size=2, offset=0.1,
                                                          seed=True)
 
-                if np.isnan(ts_contaminate[:, :ten_percent_index]).any():
+                if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
                     check_position = False
                 else:
                     check_position = True
@@ -75,7 +77,7 @@ class TestContaminationMCAR(unittest.TestCase):
         """
         test if only the selected values are contaminated in the right % of series with the right amount of values
         """
-        datasets = ["bafu", "chlorine", "climate", "drift", "meteo"]
+        datasets = ["bafu", "chlorine", "drift"]
         series_impacted = [0.4, 1]
         missing_rates = [0.2, 0.6]
         offset = 0.1
@@ -85,18 +87,14 @@ class TestContaminationMCAR(unittest.TestCase):
             ts_1 = TimeSeries()
             ts_1.load_series(utils.search_path(dataset))
 
-
             for S in series_impacted:
                 for R in missing_rates:
-                    ts_contaminate = ts_1.Contamination.mcar(input_data=ts_1.data,
-                                                             rate_series=R,
-                                                             rate_dataset=S,
-                                                             block_size=block_size, offset=offset,
-                                                             seed=True)
+                    ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_series=R, rate_dataset=S, block_size=block_size, offset=offset, seed=True)
+                    ts_contaminate = ts_contaminate.T
 
                     # 1) Check if the number of NaN values is correct
                     M, N = ts_contaminate.shape
-                    P = int(N * offset)
+                    P = math.ceil(N * offset)
                     W = int(N * R)
                     expected_contaminated_series = int(np.ceil(M * S))
                     B = int(W / block_size)
@@ -120,7 +118,7 @@ class TestContaminationMCAR(unittest.TestCase):
         """
         the goal is to test if the starting position is always guaranteed
         """
-        datasets = ["bafu", "chlorine", "climate", "drift", "meteo"]
+        datasets = ["test-logic-llm.txt", "meteo"]
         series_impacted = [0.4, 1]
         missing_rates = [0.2, 0.6]
         offset = 0.1
@@ -134,13 +132,9 @@ class TestContaminationMCAR(unittest.TestCase):
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
 
-                    ts_contaminate = ts_1.Contamination.mcar(input_data=ts_1.data,
-                                                             rate_dataset=series_sel,
-                                                             rate_series=missing_rate,
-                                                             block_size=block_size, offset=offset,
-                                                             seed=True)
+                    ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, block_size=block_size, offset=offset, seed=True)
 
-                    if np.isnan(ts_contaminate[:, :ten_percent_index]).any():
+                    if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
                         check_position = False
                     else:
                         check_position = True
@@ -157,8 +151,7 @@ class TestContaminationMCAR(unittest.TestCase):
         ts_1.load_series(utils.search_path("chlorine"))
 
         ts_2 = TimeSeries()
-        ts_2.import_matrix(ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.1,
-                                                   block_size=10, offset=0.1, seed=True))
+        ts_2.import_matrix(GenGap.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.1, block_size=10, offset=0.1, seed=True))
 
         ts_1.print()
         filepath = ts_1.plot(input_data=ts_1.data, incomp_data=ts_2.data, nbr_series=10, nbr_val=100, save_path="./assets/", display=False)
@@ -169,7 +162,7 @@ class TestContaminationMCAR(unittest.TestCase):
         """
         test if the size of the block is at least the number defined my the user
         """
-        datasets = ["drift", "chlorine", "eeg-reading", "eeg-reading", "eeg-alcohol", "fmri-stoptask"]
+        datasets = ["chlorine","eeg-reading", "eeg-alcohol"]
         series_impacted = [0.4, 1]
         missing_rates = [0.2, 0.6]
         offset = 0.1
@@ -184,11 +177,13 @@ class TestContaminationMCAR(unittest.TestCase):
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = ts_1.Contamination.mcar(input_data=ts_1.data,
+                    ts_contaminate = GenGap.mcar(input_data=ts_1.data,
                                                              rate_series=missing_rate,
                                                              rate_dataset=series_sel,
                                                              block_size=block_size, offset=offset,
                                                              seed=True)
+
+                    ts_contaminate = ts_contaminate.T
 
                     for i, series in enumerate(ts_contaminate):
                         nan_blocks = []
@@ -226,7 +221,7 @@ class TestContaminationMCAR(unittest.TestCase):
         """
         Test if the size of the missing percentage in a contaminated time series meets the expected number defined by the user.
         """
-        datasets = ["drift", "chlorine", "eeg-alcohol", "airq", "fmri-stoptask"]
+        datasets = ["eeg-alcohol", "airq", "chlorine"]
         series_impacted = [0.4, 0.8]
         missing_rates = [0.2, 0.65]
         offset, block_size = 0.1, 10
@@ -234,18 +229,17 @@ class TestContaminationMCAR(unittest.TestCase):
         for dataset in datasets:
             ts_1 = TimeSeries()
             ts_1.load_series(utils.search_path(dataset))
-            M, N = ts_1.data.shape
+            N, M = ts_1.data.shape
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = ts_1.Contamination.mcar(input_data=ts_1.data, rate_series=missing_rate,
-                                                             rate_dataset=series_sel, block_size=block_size,
-                                                             offset=offset, seed=True)
+                    ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, block_size=block_size, offset=offset, seed=True)
 
                     #print(*[f"({indc} {se})" for indc, se in enumerate(ts_contaminate)], sep=" ")  # debug
 
                     nbr_series_contaminated = 0
-                    for inx, current_series in enumerate(ts_contaminate):
+                    for inx in range(ts_contaminate.shape[1]):
+                        current_series = ts_contaminate[:, inx]
 
                         if np.isnan(current_series).any():
                             nbr_series_contaminated = nbr_series_contaminated+1
@@ -270,6 +264,10 @@ class TestContaminationMCAR(unittest.TestCase):
                                     f"Expected {expected_num_missing} missing values, but found {num_missing_values}.")
 
                             percentage = ((expected_num_missing+b_compensation)/N)*100
+                            print(f"\t\t{b_compensation = }")
+                            print(f"\t\t{expected_num_missing = }")
+                            print(f"\t\t{N = }")
+                            print(f"\t\tPERCENTAGE VALUES for series #{inx} : {percentage}")
                             print(f"\t\tPERCENTAGE VALUES for series #{inx} : {percentage}")
                             print(f"\t\tEXPECTED % VALUES for series #{inx} : {missing_rate * 100}\n")
 

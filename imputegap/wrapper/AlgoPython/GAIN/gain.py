@@ -1,3 +1,13 @@
+# ===============================================================================================================
+# SOURCE: https://github.com/jsyoon0823/GAIN
+#
+# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
+#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
+#
+# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
+# https://proceedings.mlr.press/v80/yoon18a/yoon18a.pdf
+# ===============================================================================================================
+
 # coding=utf-8
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,18 +30,22 @@ Paper Link: http://proceedings.mlr.press/v80/yoon18a/yoon18a.pdf
 Contact: jsyoon0823@gmail.com
 '''
 
-import tensorflow.compat.v1 as tf
+import os
 
+# (Optional but very effective fallback) run on CPU to avoid any GPU codegen
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import numpy as np
+from tqdm import tqdm
 
 from imputegap.wrapper.AlgoPython.GAIN.utils import normalization, renormalization, rounding
 from imputegap.wrapper.AlgoPython.GAIN.utils import xavier_init
 from imputegap.wrapper.AlgoPython.GAIN.utils import binary_sampler, uniform_sampler, sample_batch_index
 
-tf.logging.set_verbosity(tf.logging.ERROR)
-tf.disable_v2_behavior()
 
-def gain (data_x, gain_parameters):
+def gain (data_x, gain_parameters, verbose=True):
   '''Impute missing values in data_x
   
   Args:
@@ -47,7 +61,7 @@ def gain (data_x, gain_parameters):
   '''
   # Define mask matrix
   data_m = 1-np.isnan(data_x)
-
+  
   # System parameters
   batch_size = gain_parameters['batch_size']
   hint_rate = gain_parameters['hint_rate']
@@ -102,7 +116,7 @@ def gain (data_x, gain_parameters):
   # Generator
   def generator(x,m):
     # Concatenate Mask and Data
-    inputs = tf.concat(values = [x, m], axis = 1)
+    inputs = tf.concat(values = [x, m], axis = 1) 
     G_h1 = tf.nn.relu(tf.matmul(inputs, G_W1) + G_b1)
     G_h2 = tf.nn.relu(tf.matmul(G_h1, G_W2) + G_b2)   
     # MinMax normalized output
@@ -146,13 +160,15 @@ def gain (data_x, gain_parameters):
   G_solver = tf.train.AdamOptimizer().minimize(G_loss, var_list=theta_G)
   
   ## Iterations
-  sess = tf.Session()
+  config = tf.ConfigProto()
+  config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.OFF
+  sess = tf.Session(config=config)
   sess.run(tf.global_variables_initializer())
-   
+
+  d_tqdm = not verbose
   # Start Iterations
-  # for it in tqdm(range(iterations)):
-  for it in range(iterations):
-      
+  for it in tqdm(range(iterations), disable=d_tqdm):
+
     # Sample batch
     batch_idx = sample_batch_index(no, batch_size)
     X_mb = norm_data_x[batch_idx, :]  

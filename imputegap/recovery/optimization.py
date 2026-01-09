@@ -199,6 +199,8 @@ class Optimization:
                     best_score = score
                     best_params = params_dict
 
+                print(f"{score = }")
+
                 # Increment the run counter
                 run_count += 1
 
@@ -582,6 +584,9 @@ class Optimization:
             """
             imputer = utils.config_impute_algorithm(incomp_data, algorithm, verbose=False)
             imputer.impute(user_def=True, params=params)
+
+            print(f"{params = }")
+
             imputer.score(input_data=input_data)
             score = imputer.metrics.get(used_metric, "Key not found")
             return score

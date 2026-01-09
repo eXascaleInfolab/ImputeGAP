@@ -24,14 +24,15 @@ class Downstream:
     ----------
     input_data : numpy.ndarray
         The original time series without contamination (ground truth).
+
     recov_data : numpy.ndarray
         The imputed time series to evaluate.
+
     incomp_data : numpy.ndarray
         The time series with contamination (NaN values).
+
     downstream : dict
         Configuration for the downstream analysis, including the evaluator, model, and parameters.
-    split : float
-        The proportion of data used for training in the forecasting task (default is 0.8).
 
     Methods
     -------
@@ -45,7 +46,7 @@ class Downstream:
 
 
 
-    def __init__(self, input_data, recov_data, incomp_data, algorithm, downstream):
+    def __init__(self, input_data, recov_data, incomp_data, algorithm, downstream, verbose=True):
         """
         Initialize the Downstream class
 
@@ -53,22 +54,29 @@ class Downstream:
         ----------
         input_data : numpy.ndarray
             The original time series without contamination.
+
         recov_data : numpy.ndarray
             The imputed time series.
+
         incomp_data : numpy.ndarray
             The time series with contamination (NaN values).
+
         algorithm : str
             Name of the algorithm to analyse.
+
         downstream : dict
             Information about the model to launch with its parameters
+
+        verbose : bool
+            Display or not information.
         """
         self.input_data = input_data
         self.recov_data = recov_data
         self.incomp_data = incomp_data
         self.downstream = downstream
         self.algorithm = algorithm
-        self.split = 0.8
         self.sktime_models = utils.list_of_downstreams_sktime()
+        self.verbose = verbose
 
     def downstream_analysis(self):
         """
@@ -88,6 +96,8 @@ class Downstream:
         params = self.downstream.get("params", None)
         plots = self.downstream.get("plots", True)
         baseline = self.downstream.get("baseline", None)
+        split = self.downstream.get("split", 0.8)
+        selected_series = self.downstream.get("selected_series", None)
 
         if baseline is None:
             baseline = self.downstream.get("comparator", None)
@@ -97,12 +107,19 @@ class Downstream:
         model = model.lower()
         evaluator = evaluator.lower()
 
+        if selected_series is None:
+            nan_cols = np.isnan(self.incomp_data).any(axis=0)
+            series_indices = int(np.argmax(nan_cols)) if nan_cols.any() else -1
+            selected_series = [series_indices]
+        elif selected_series == -1:
+            selected_series = range(self.input_data.shape[1])
+
         if not params:
-            print("\n(DOWNSTREAM) Default parameters of the downstream model loaded.")
+            print("\n\n(DOWNSTREAM) Default parameters of the downstream model loaded.")
             loader = "forecaster-" + str(model)
             params = utils.load_parameters(query="default", algorithm=loader)
 
-        print(f"\n(DOWNSTREAM) Analysis launched !\ntask: {evaluator}\nmodel: {model}\nparams: {params}\nbase algorithm: {str(self.algorithm).lower()}\nreference algorithm: {str(baseline).lower()}\n")
+        print(f"\n(DOWNSTREAM) Analysis launched !\n\ttask: {evaluator}\n\tmodel: {model}\n\tparams: {params}\n\tbase algorithm: {str(self.algorithm).lower()}\n\treference algorithm: {str(baseline).lower()}\n\tselected series: {selected_series}\n")
 
         if evaluator in ["forecast", "forecaster", "forecasting"]:
             y_train_all, y_test_all, y_pred_all = [], [], []
@@ -125,13 +142,14 @@ class Downstream:
                         zero_impute = Imputation.Statistics.ZeroImpute(self.incomp_data).impute()
                         data = zero_impute.recov_data
 
-                data_len = data.shape[1]
-                train_len = int(data_len * self.split)
+                time_len  = data.shape[0]
+                train_len = int(time_len  * split)
 
-                y_train = data[:, :train_len]
-                y_test = data[:, train_len:]
+                y_train = data[:train_len, :]
+                y_test = data[train_len:, :]
 
                 forecaster = utils.config_forecaster(model, params)
+                y_pred = np.zeros_like(y_test, dtype=float)
 
                 if model in self.sktime_models:
                     # --- SKTIME APPROACH ---
@@ -139,11 +157,10 @@ class Downstream:
                     from sktime.forecasting.base import ForecastingHorizon
                     from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
 
-                    y_pred = np.zeros_like(y_test)
-
-                    for series_idx in range(data.shape[0]):
-                        series_train = y_train[series_idx, :]
-                        fh = np.arange(1, y_test.shape[1] + 1)  # Forecast horizon
+                    mae_list, mse_list, smape_list = [], [], []
+                    fh = np.arange(1, y_test.shape[0] + 1)  # Forecast horizon
+                    for series_idx in selected_series:
+                        series_train = y_train[:, series_idx]
 
                         if model == "ltsf" or model == "rnn":
                             forecaster.fit(series_train, fh=ForecastingHorizon(fh))
@@ -152,60 +169,50 @@ class Downstream:
                             forecaster.fit(series_train)
                             series_pred = forecaster.predict(fh=fh)
 
-                        y_pred[series_idx, :] = series_pred.ravel()
+                        y_pred[:, series_idx] = np.asarray(series_pred).ravel()
 
-                    # Compute metrics using sktime
-                    mae.append(mean_absolute_error(y_test, y_pred))
-                    mse.append(mean_squared_error(y_test, y_pred))
-                    scoring_m = MeanAbsolutePercentageError(symmetric=True)
-                    smape.append(scoring_m.evaluate(y_test, y_pred)*100)  # Compute SMAPE
-
+                        # Compute metrics using sktime
+                        mae_list.append(mean_absolute_error(y_test, y_pred))
+                        mse_list.append(mean_squared_error(y_test, y_pred))
+                        scoring_m = MeanAbsolutePercentageError(symmetric=True)
+                        smape_list.append(scoring_m.evaluate(y_test, y_pred)*100)  # Compute SMAPE
 
                 else:
                     # --- DARTS APPROACH ---
-                    # Convert entire matrix to a Darts multivariate TimeSeries object
                     from darts import TimeSeries
                     from darts.metrics import mae as darts_mae, mse as darts_mse
                     from darts.metrics import smape as darts_smape
 
-                    y_train_ts = TimeSeries.from_values(y_train.T)  # Shape: (time_steps, n_series)
-                    y_test_ts = TimeSeries.from_values(y_test.T)  # Shape: (time_steps, n_series)
+                    mae_list, mse_list, smape_list = [], [], []
+                    fh = y_test.shape[0]
+                    for series_idx in selected_series:
+                        train_ts = TimeSeries.from_values(y_train[:, series_idx])
+                        test_ts = TimeSeries.from_values(y_test[:, series_idx])
 
-                    # Fit the model
-                    forecaster.fit(y_train_ts)
+                        forecaster.fit(train_ts)
+                        pred_ts = forecaster.predict(n=fh)
 
-                    # Predict for the entire series at once
-                    forecast_horizon = y_test.shape[1]
-                    y_pred_ts = forecaster.predict(n=forecast_horizon)
+                        y_pred[:, series_idx] = pred_ts.values().ravel()
 
-                    # Convert predictions back to NumPy
-                    y_pred = y_pred_ts.values().T  # Shape: (n_series, time_steps)
+                        # Ensure pred_ts has the same components as y_test_ts
+                        pred_ts = pred_ts.with_columns_renamed(pred_ts.components, test_ts.components)
 
-                    # Ensure y_pred_ts has the same components as y_test_ts
-                    y_pred_ts = y_pred_ts.with_columns_renamed(y_pred_ts.components, y_test_ts.components)
+                        # Shift time index to match
+                        if pred_ts.start_time() != test_ts.start_time():
+                            pred_ts = pred_ts.shift(test_ts.start_time() - pred_ts.start_time())
 
-                    # Shift time index to match
-                    if y_pred_ts.start_time() != y_test_ts.start_time():
-                        y_pred_ts = y_pred_ts.shift(y_test_ts.start_time() - y_pred_ts.start_time())
+                        mae_list.append(darts_mae(test_ts, pred_ts))
+                        mse_list.append(darts_mse(test_ts, pred_ts))
+                        smape_list.append(darts_smape(test_ts, pred_ts))
 
-                    # Compute metrics safely
-                    mae_score = darts_mae(y_test_ts, y_pred_ts)
-                    mse_score = darts_mse(y_test_ts, y_pred_ts)
-                    smape_score = darts_smape(y_test_ts, y_pred_ts)
-
-                    # Compute metrics using Darts
-                    mae.append(mae_score)
-                    mse.append(mse_score)
-                    smape.append(smape_score)
+                mae.append(float(np.mean(mae_list)))
+                mse.append(float(np.mean(mse_list)))
+                smape.append(float(np.mean(smape_list)))
 
                 # Store for plotting
                 y_train_all.append(y_train)
                 y_test_all.append(y_test)
                 y_pred_all.append(y_pred)
-
-            if plots:
-                # Global plot with all rows and columns
-                plt = self._plot_downstream(y_train_all, y_test_all, y_pred_all, self.incomp_data, self.algorithm, baseline, model, evaluator)
 
             # Save metrics in a dictionary
             al_name = "MSE_" + self.algorithm.lower()
@@ -215,6 +222,15 @@ class Downstream:
 
             metrics = {"MSE_original": mse[0], al_name: mse[1], al_name_c: mse[2],
                        "sMAPE_original": smape[0], al_name_s: smape[1], al_name_cs: smape[2] }
+
+            if plots:
+                # Global plot with all rows and columns
+                here = os.path.dirname(os.path.dirname(__file__))
+                save_path = os.path.join(here, "imputegap_assets/downstream")
+
+                plt = self._plot_downstream(y_train=y_train_all, y_test=y_test_all, y_pred=y_pred_all,
+                                            incomp_data=self.incomp_data, algorithm=self.algorithm, comparison=baseline,
+                                            model=model, type=evaluator, save_path=save_path)
 
             return metrics, plt
 
@@ -267,33 +283,33 @@ class Downstream:
         fig.canvas.manager.set_window_title("downstream evaluation")
         fig.suptitle(title, fontsize=16)
 
+        # Find indices of the first 4 valid (non-NaN) series
+        valid_indices = [i for i in range(incomp_data.shape[1]) if np.isnan(incomp_data[:, i]).any()][:max_series]
+
         # Iterate over the three data types (recov_data, input_data, mean_impute)
         for row_idx in range(len(y_train)):
-            # Find indices of the first 4 valid (non-NaN) series
-            valid_indices = [i for i in range(incomp_data.shape[0]) if np.isnan(incomp_data[i]).any()][:max_series]
-
             for col_idx, series_idx in enumerate(valid_indices):
-                # Access the correct subplot
-                if max_series > 1:
-                    ax = axs[row_idx, col_idx]
-                else:
-                    ax = axs[row_idx]
+                ax = axs[row_idx, col_idx] if max_series > 1 else axs[row_idx]
 
                 # Extract the corresponding data for this data type and series
                 s_y_train = y_train[row_idx]
                 s_y_test = y_test[row_idx]
                 s_y_pred = y_pred[row_idx]
 
+                train_series = s_y_train[:, series_idx]
+                test_series = s_y_test[:, series_idx]
+                pred_series = s_y_pred[:, series_idx]
+
                 # Combine training and testing data for visualization
-                full_series = np.concatenate([s_y_train[series_idx], s_y_test[series_idx]])
+                full_series = np.concatenate([train_series, test_series])
 
                 # Plot training data
-                ax.plot(range(len(s_y_train[series_idx])), s_y_train[series_idx], color="green")
+                ax.plot(range(len(train_series)), train_series, color="green")
 
                 # Plot ground truth (testing data)
                 ax.plot(
-                    range(len(s_y_train[series_idx]), len(full_series)),
-                    s_y_test[series_idx],
+                    range(len(train_series), len(full_series)),
+                    test_series,
                     label="ground truth",
                     color="green"
                 )
@@ -301,8 +317,8 @@ class Downstream:
                 label = type + " " + model
                 # Plot forecasted data
                 ax.plot(
-                    range(len(s_y_train[series_idx]), len(full_series)),
-                    s_y_pred[series_idx],
+                    range(len(train_series), len(full_series)),
+                    pred_series,
                     label=label,
                     linestyle="--",
                     marker=None,
@@ -310,7 +326,7 @@ class Downstream:
                 )
 
                 # Add a vertical line at the split point
-                ax.axvline(x=len(s_y_train[series_idx]), color="orange", linestyle="--")
+                ax.axvline(x=len(train_series), color="orange", linestyle="--")
 
                 # Add labels, title, and grid
                 if row_idx == 0:

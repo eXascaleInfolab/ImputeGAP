@@ -15,14 +15,13 @@ class TestExplainerTSFEL(unittest.TestCase):
         ts_1.load_series(utils.search_path("chlorine"))
 
         exp = Explainer()
-
         shap_values, shap_details = exp.extractor_tsfel(data=ts_1.data)
 
         self.assertTrue(shap_values is not None)
         self.assertTrue(shap_details is not None)
 
         # Expected number of features per category
-        expected_feature_counts = {"spectral": 105, "statistical": 31, "temporal": 14, "fractal": 6}
+        expected_feature_counts = {"spectral": 111, "statistical": 31, "temporal": 14}
 
         # Initialize counters for actual feature counts
         actual_feature_counts = {category: 0 for category in expected_feature_counts.keys()}

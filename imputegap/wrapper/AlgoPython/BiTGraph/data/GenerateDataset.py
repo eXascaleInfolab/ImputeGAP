@@ -1,22 +1,10 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/chenxiaodanhit/BiTGraph
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://openreview.net/pdf?id=O9nZCwdGcG
-# ===============================================================================================================
-
-
 import os
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 import numpy as np
+import pandas as pd
 import torch
-
-from imputegap.tools import utils
-
+import imputegap.tools.utils as utils_imp
 np.set_printoptions(threshold=np.inf)
 
 class StandardScaler:
@@ -35,7 +23,7 @@ class StandardScaler:
         return (data * self.std) + self.mean
 class TSDataset(Dataset):
 
-    def __init__(self, Data, Label=None, mask=None, masks_target=None):
+    def __init__(self, Data, Label,mask,masks_target):
         self.Data = Data
         self.Label = Label
         self.mask = mask
@@ -47,15 +35,9 @@ class TSDataset(Dataset):
 
     def __getitem__(self, index):
         data = torch.Tensor(self.Data[index])
-        if self.Label is not None:
-            label = torch.Tensor(self.Label[index])
-        else:
-            label = None
+        label = torch.Tensor(self.Label[index])
         mask = torch.Tensor(self.mask[index])
-        if self.masks_target is not None:
-            masks_target = torch.Tensor(self.masks_target[index])
-        else:
-            masks_target = None
+        masks_target = torch.Tensor(self.masks_target[index])
 
         return data,label,mask,masks_target
 
@@ -66,67 +48,88 @@ def get_0_1_array(array,rate=0.2):
     new_array[:zeros_num] = 0
     np.random.shuffle(new_array)
     re_array = new_array.reshape(array.shape)
+
+    # also mark existing NaNs as 0 in the mask
+    re_array[np.isnan(array)] = 0
+
     return re_array
 
-def synthetic_data(mask_ratio, dataset, tr_ratio=0.9, tag="alpha", verbose=False):
+def synthetic_data(ts_m, mask_ratio,dataset):
 
-    if isinstance(dataset, str):
-        data_list = []
-        file_path = os.path.join(os.path.dirname(__file__), 'electricity.txt')
-        print(f"Validation paper: {file_path}")
-        with open(file_path, 'r') as f:
-            reader = f.readlines()
-            for row in reader:
-                data_list.append(row.split(','))
+    if ts_m is None:
+        if(dataset=='Metr'):
+            path = os.path.join('./data/metr_la/', 'metr_la.h5')
+            data = pd.read_hdf(path)
+            data = np.array(data)
+            data = data[:, :, None]
+            mask=get_0_1_array(data,mask_ratio)
 
-        data = np.array(data_list).astype('float')
-        mask = get_0_1_array(data, mask_ratio)
-        data = data[:, :, None].astype('float32')
-        mask = mask[:, :, None].astype('int32')
-        return data, mask
+
+        elif(dataset=='PEMS'):
+            path = os.path.join('./data/pems_bay/', 'pems_bay.h5')
+            data = pd.read_hdf(path)
+            data = np.array(data)
+            data = data[:, :, None]
+            mask = get_0_1_array(data, mask_ratio)
+
+
+        elif(dataset=='ETTh1'):
+            df_raw = pd.read_csv('./data/ETT/ETTh1.csv')
+            data=np.array(df_raw)
+            data=data[::,1:]
+            mask = get_0_1_array(data, mask_ratio)
+            data = data[:, :, None].astype('float32')
+            mask = mask[:, :, None].astype('int32')
+
+        elif (dataset == 'Elec'):
+            data_list = []
+            with open('./data/Electricity/electricity.txt', 'r') as f:
+                reader = f.readlines()
+                for row in reader:
+                    data_list.append(row.split(','))
+
+            data = np.array(data_list).astype('float')
+            mask = get_0_1_array(data, mask_ratio)
+            data = data[:, :, None].astype('float32')
+            mask = mask[:, :, None].astype('int32')
+
+        elif(dataset=='BeijingAir'):
+
+            data = pd.DataFrame(pd.read_hdf('./data/air_quality/small36.h5', 'pm25'))
+            data=np.array(data)
+            eval_mask=~np.isnan(data)
+            mask= get_0_1_array(data, mask_ratio)  #   ~np.isnan(data)
+            data[np.isnan(data)]=0.0
+            data = data[:, :, None].astype('float32')
+            mask = mask[:, :, None].astype('int32')
+
     else:
-        cont_data_matrix = dataset.copy()
+        data = ts_m.copy()
 
-        nan_replacement = -999999
-        artificial_training_drop = 0.30
-        offset = 0.05
+        if dataset == "reco":
+            mask_ori = ~np.isnan(data)
+            mask_tar = None
+            data[~mask_ori] = 0.0
+        else:
+            mask_tar = ~np.isnan(data)
+            mask_ori = get_0_1_array(data, mask_ratio).astype(bool)  # ensure bool  # ~np.isnan(data)
+            data[~mask_tar] = 0.0
 
-        # building test set ================================================================================================
-        original_missing_ratio = utils.get_missing_ratio(cont_data_matrix)
-        cont_data_matrix, new_mask, error = utils.prepare_testing_set(incomp_m=cont_data_matrix, original_missing_ratio=original_missing_ratio, tr_ratio=tr_ratio, verbose=False)
+        data = data[:, :].astype('float32')
+        mask_ori = mask_ori[:, :].astype('int32')
+        if mask_tar is not None:
+            mask_tar = mask_tar[:, :].astype('int32')
 
-        valid_rows = ~np.isnan(cont_data_matrix).any(axis=1)
-        data_tr = cont_data_matrix[valid_rows]
-        mask_tr = new_mask[valid_rows]
-        has_observed = np.any(mask_tr == 1)
+        return data, mask_ori, mask_tar
 
-        if verbose:
-            print(f"{data_tr.shape = }")
-            print(f"{mask_tr.shape = }")
-            print("Contains observed values:", has_observed)
-
-        gt_data_matrix = utils.prevent_leakage(cont_data_matrix, new_mask, nan_replacement, False)
-        # building test set ================================================================================================
-
-        mask_train = utils.generate_random_mask(gt=data_tr, mask_test=mask_tr, mask_valid=mask_tr, droprate=artificial_training_drop, offset=offset, verbose=False)
-
-        data = gt_data_matrix[:, :, None].astype('float32')
-        data_c = data_tr[:, :, None].astype('float32')
-
-        new_mask = 1 - new_mask
-        mask_train = 1 - mask_train
-
-        new_mask = new_mask[:, :, None].astype('int32')
-        mask_train = mask_train[:, :, None].astype('int32')
-
-        return data, data_c, mask_train, new_mask
+    return data,mask
 
 
-def split_data_by_ratio(x,y, mask,mask_target,val_ratio, test_ratio):
+def split_data_by_ratio(x, y, mask, mask_target, val_ratio, test_ratio):
     idx = np.arange(x.shape[0])
     # print('idx shape:',idx.shape)
     idx_shuffle = idx.copy()
-    # np.random.shuffle(idx_shuffle)
+    #np.random.shuffle(idx_shuffle)
     data_len = x.shape[0]
     test_x = x[idx_shuffle[-int(data_len * test_ratio):]]
     test_y = y[idx_shuffle[-int(data_len * test_ratio):]]
@@ -145,6 +148,47 @@ def split_data_by_ratio(x,y, mask,mask_target,val_ratio, test_ratio):
 
     return train_x,train_y,train_x_mask,train_y_mask,val_x,val_y,val_x_mask,val_y_mask,test_x,test_y,test_x_mask,test_y_mask
 
+
+
+def Add_Window_Horizon_Imputegap(data, mask_ori, mask_tar, seq_len=3, horizon=0, multivariate=False, sliding_windows=1, verbose=True):
+    '''
+    :param data: shape [B, ...]
+    :param window:
+    :param horizon:
+    :return: X is [B, W, ...], Y is [B, H, ...]
+    '''
+
+    if multivariate:
+        data = utils_imp.dataset_add_dimensionality(data, seq_length=seq_len, verbose=False)
+        mask_ori = utils_imp.dataset_add_dimensionality(mask_ori, seq_length=seq_len, verbose=False)
+
+        if mask_tar is not None:
+            mask_tar = utils_imp.dataset_add_dimensionality(mask_tar, seq_length=seq_len, verbose=False)
+    else:
+        data = utils_imp.window_truncation(data, seq_len=seq_len, stride=sliding_windows, info="bitgraph - data | ", verbose=False)
+        mask_ori = utils_imp.window_truncation(mask_ori, seq_len=seq_len, stride=sliding_windows, info="bitgraph - mask | ", verbose=False)
+        if mask_tar is not None:
+            mask_tar = utils_imp.window_truncation(mask_tar, seq_len=seq_len, stride=sliding_windows, info="bitgraph - mask | ", verbose=False)
+        #length = len(data)
+        #end_index = length - horizon - seq_len + 1
+
+    X = data[:, :, :, None].astype('float32')
+    masks = mask_ori[:, :, :, None].astype('int32')
+
+    if mask_tar is not None:
+        masks_target = mask_tar[:, :, :, None].astype('int32')
+    else:
+        masks_target = masks
+
+    Y = X
+
+    if verbose:
+        print(f"\nadding window/sample and horizon:\n{X.shape = }")
+        print(f"{Y.shape = }")
+        print(f"{masks.shape = }")
+        print(f"{masks_target.shape = }\n")
+
+    return X, Y, masks, masks_target
 
 def Add_Window_Horizon(data,mask, window=3, horizon=1):
     '''
@@ -172,157 +216,58 @@ def Add_Window_Horizon(data,mask, window=3, horizon=1):
     masks = np.array(masks)
     masks_target=np.array(masks_target)
 
-    return X, Y, masks, masks_target
+    return X, Y,masks,masks_target
 
 
-def reverse_window_horizon(X, Y, window=3, horizon=1):
-    '''
-    Reconstruct the original time series from overlapped windows (backcast + forecast).
+def loaddataset(ts_m, history_len, pred_len, mask_ratio, args, sliding_windows=1, multivariate=False, verbose=True):
+    data, mask_ori, mask_tar = synthetic_data(ts_m, args.mask_ratio, "train")
+    data_imp, mask_ori_imp, mask_tar_imp = synthetic_data(ts_m, args.mask_ratio, "reco")
 
-    :param X: shape [B, window, ...]
-    :param Y: shape [B, horizon, ...]
-    :param window: size of backcast window
-    :param horizon: size of forecast horizon
-    :return: reconstructed_data: shape [original_length, ...]
-    '''
-    B = X.shape[0]
-    feature_shape = X.shape[2:]
-    original_length = B + window + horizon - 1
+    if args.deep_verbose:
+        print(f"\n{args=}\n")
 
-    # Initialize reconstruction arrays
-    data_recon = np.zeros((original_length,) + feature_shape)
-    count_recon = np.zeros((original_length,) + feature_shape)
+    x, y, mask, mask_target = Add_Window_Horizon_Imputegap(data, mask_ori, mask_tar, history_len, pred_len, sliding_windows=sliding_windows, multivariate=multivariate, verbose=verbose)
+    x_reco, y_reco, mask_reco, mask_target_reco = Add_Window_Horizon_Imputegap(data_imp, mask_ori_imp, mask_tar_imp, history_len, pred_len, sliding_windows=sliding_windows, multivariate=multivariate, verbose=False)
 
-    for i in range(B):
-        # Backcast window
-        data_recon[i:i + window] += X[i]
-        count_recon[i:i + window] += 1
-
-        # Forecast horizon
-        data_recon[i + window:i + window + horizon] += Y[i]
-        count_recon[i + window:i + window + horizon] += 1
-
-    # Avoid division by zero
-    count_recon[count_recon == 0] = 1
-    reconstructed = data_recon / count_recon
-
-    return reconstructed.squeeze()
-
-
-
-
-def loaddataset_imputegap(history_len, pred_len, mask_ratio, dataset, batch_size=32, num_workers=0, tr_ratio=0.9, verbose=True, deep_verbose=False):
-
-    if deep_verbose:
-        print("\n\nLoading and transforming dataset...")
-
-    data_imp, data_tr, mask_train_imputegap, mask_test_imputegap = synthetic_data(mask_ratio, dataset, tr_ratio=tr_ratio, tag="beta", verbose=deep_verbose)
-
-    if deep_verbose:
-        print(f"\n\t{data_imp.shape = }")
-        print(f"\t{mask_test_imputegap.shape = }")
-        print("\n")
-        print(f"\t{data_tr.shape = }")
-        print(f"\t{mask_train_imputegap.shape = }")
-
-    num_zeros = np.sum(data_tr == 0)
-    num_zeros_data = np.sum(data_imp == 0)
-    if deep_verbose:
-        print("\tNumber of zeros:", num_zeros)
-        print("\tNumber of zeros num_zeros_data :", num_zeros_data)
-
-    x_tr, y_tr, mask_2_tr, mask_target_2_tr = Add_Window_Horizon(data_tr, mask_train_imputegap, history_len, pred_len)
-    x_ts, y_ts, mask_2_ts, mask_target_2_ts = Add_Window_Horizon(data_imp, mask_test_imputegap, history_len, pred_len)
+    train_x,train_y,masks_tra,masks_target_tra, val_x,val_y,masks_val,masks_target_val, test_x,test_y,masks_test,masks_target_test = split_data_by_ratio(x, y, mask, mask_target, args.val_r, args.ts_r)
 
     if verbose:
-        print(f"\n\t{x_tr.shape = }")
-        print(f"\t{mask_2_tr.shape = }")
-        print(f"\t{x_ts.shape = }")
-        print(f"\t{mask_2_ts.shape = }")
+        print(f"\nsplitting:\n(TRAIN): {train_x.shape = }")
+        print(f"(VAL): {val_x.shape = }")
+        print(f"(TEST): {test_x.shape = }")
+        print(f"(RECONSTRUCTION): {x_reco.shape = }\n")
 
-    train_x, train_y, masks_tra, masks_target_tra, val_x, val_y, masks_val, masks_target_val, test_x, test_y, masks_test, masks_target_test = split_data_by_ratio(x_tr, y_tr, mask_2_tr, mask_target_2_tr, 0, 0.3)
+    if args.batch_size > val_x.shape[0]:
+        args.batch_size = val_x.shape[0]
+        if verbose:
+            print(f"\n(INFO) batch size adapted to the current val length: {args.batch_size = }\n")
 
-    if deep_verbose:
-        print(f"\n\t{train_x.shape =}")
-        print(f"\t{test_x.shape =}")
+    if args.norma:
+        scaler = StandardScaler(mean=train_x.mean(), std=train_x.std())
+        scaler_reco = StandardScaler(mean=x_reco.mean(), std=x_reco.std())
+        train_x = scaler.transform(train_x)
+        train_y = scaler.transform(train_y)
+        val_x = scaler.transform(val_x)
+        val_y = scaler.transform(val_y)
+        test_x = scaler.transform(test_x)
+        test_y = scaler.transform(test_y)
 
-    if batch_size >= dataset.shape[0] // 2:
-        batch_size = dataset.shape[0] // 10
+        x_reco = scaler_reco.transform(x_reco)
+        y_reco = scaler_reco.transform(y_reco)
+    else:
+        scaler = None
+        scaler_reco = None
 
-    if batch_size < 1 :
-        batch_size = 1
+    train_dataset = TSDataset(train_x, train_y,masks_tra,masks_target_tra)
+    val_dataset = TSDataset(val_x, val_y,masks_val,masks_target_val)
+    test_dataset = TSDataset(test_x, test_y,masks_test,masks_target_test)
+    imp_dataset = TSDataset(x_reco, y_reco, mask_reco, mask_target_reco)
 
-    if verbose:
-        print(f"\t{batch_size = }\n")
+    train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, drop_last=True)
+    val_dataloader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, drop_last=True)
+    test_dataloader = DataLoader(test_dataset,batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, drop_last=False)
+    imp_dataloader = DataLoader(imp_dataset,batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, drop_last=False)
 
-    scaler = StandardScaler(mean=data_tr.mean(), std=data_tr.std())
-    x_tra = scaler.transform(train_x)
-    y_tra = scaler.transform(train_y)
-    x_val = scaler.transform(val_x)
-    y_val = scaler.transform(val_y)
-    x_test = scaler.transform(test_x)
-    y_test = scaler.transform(test_y)
-
-    train_dataset = TSDataset(x_tra, y_tra, masks_tra, masks_target_tra)
-    val_dataset = TSDataset(x_val, y_val, masks_val, masks_target_val)
-    test_dataset = TSDataset(x_test, y_test, masks_test, masks_target_test)
-
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, drop_last=False)
-    val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, drop_last=False)
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, drop_last=False)
-
-    test_val = reverse_window_horizon(x_ts, y_ts, window=history_len, horizon=pred_len)
-    if deep_verbose:
-        print(f"{test_val.shape = }")
-        print(f"{data_imp.shape = }")
-        print(f"{np.allclose(data_imp.squeeze(), test_val, atol=1e-6) = }")
+    return train_dataloader, val_dataloader, test_dataloader, imp_dataloader, scaler, scaler_reco
 
 
-    scaler_ts = StandardScaler(mean=x_ts.mean(), std=x_ts.std())
-    x_tst_imp = scaler_ts.transform(x_ts)
-    y_tst_imp = scaler_ts.transform(y_ts)
-
-
-
-    imputegap_dataset = TSDataset(x_tst_imp, y_tst_imp, mask_2_ts, mask_target_2_ts)
-    imputegap_dataloader = DataLoader(imputegap_dataset, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=False)
-
-    return train_dataloader, val_dataloader, test_dataloader, imputegap_dataloader, scaler, scaler
-
-
-def loaddataset(history_len,pred_len,mask_ratio,dataset,num_workers=0):
-    data_numpy,mask=synthetic_data(mask_ratio,dataset)
-    x, y, mask,mask_target = Add_Window_Horizon(
-        data_numpy, mask,history_len, pred_len)
-
-    print(f"{data_numpy.shape = }")
-    print(f"\n\t{x.shape = }")
-    print(f"\t{y.shape = }")
-
-    train_x,train_y,masks_tra,masks_target_tra,val_x,val_y,masks_val,masks_target_val,test_x,test_y,masks_test,masks_target_test = split_data_by_ratio(x,y, mask,mask_target, 0.1, 0.2)
-
-    print(f"{train_x.shape = }")
-    print(f"\n\t{val_x.shape = }")
-    print(f"\t{test_x.shape = }")
-
-    scaler = StandardScaler(mean=train_x.mean(), std=train_x.std())
-    x_tra = scaler.transform(train_x)
-    y_tra = scaler.transform(train_y)
-    x_val = scaler.transform(val_x)
-    y_val = scaler.transform(val_y)
-    x_test = scaler.transform(test_x)
-    y_test = scaler.transform(test_y)
-
-    train_dataset = TSDataset(x_tra, y_tra,masks_tra,masks_target_tra)
-    val_dataset = TSDataset(x_val, y_val,masks_val,masks_target_val)
-    test_dataset = TSDataset(x_test, y_test,masks_test,masks_target_test)
-    train_dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=num_workers, drop_last=True)
-    val_dataloader = DataLoader(val_dataset, batch_size=32, shuffle=False, num_workers=num_workers, drop_last=True)
-    test_dataloader = DataLoader(test_dataset,batch_size=32, shuffle=False, num_workers=num_workers, drop_last=False)
-
-
-    return train_dataloader, val_dataloader, test_dataloader, test_dataloader, scaler, scaler
-
-
-if __name__ == '__main__':
-    print('')

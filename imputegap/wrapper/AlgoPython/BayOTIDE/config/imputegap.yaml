@@ -1,0 +1,43 @@
+# config: hyper paras
+device: "cpu" #cuda'
+R: 0.2 # ratio of test
+
+
+K_trend: 30 # number of trend factors
+K_season: 1 # number of seasonal factors (frequency in the data)
+n_season: 10 # for each season/freq, we need n component to approximate it as a GP-SDE
+
+K_bias: 0 # number of bias factors
+
+a0: 1
+b0: 1
+v: 1
+fold: 1 # number of folds(random split) and take average,min:1,max:5'
+fix_int: True
+
+time_scale: 1 # time scale of the time-step, 
+kernel:
+  kernel_trend:
+    type: "Matern_21" # GP kernel type, Matern_21 or Matern_23"
+    lengthscale: 0.1 # lengthscale of kernel= torch.tensor(args.ls)
+    variance: 1 # var of kernel
+    noise: 1 # noise var of KF observation, will not be used actually
+
+  kernel_season:
+    type: "exp-periodic"
+    freq_list:
+      - 15 # pi/84(0.0374), period from TIDER paper
+    lengthscale_list:
+      - 0.05
+    noise: 1 # noise var of KF observation, will not be used actually
+
+
+DAMPING_U: 0.8
+DAMPING_tau: 0.5
+DAMPING_W: 0.8
+
+EVALU_T: 100
+
+INNER_ITER: 5
+THRE: 1.0e-4 # therethold of CEP innner iteration
+

@@ -1,4 +1,5 @@
 from imputegap.recovery.imputation import Imputation
+from imputegap.recovery.contamination import GenGap
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
 
@@ -7,14 +8,13 @@ ts = TimeSeries()
 print(f"\nImputation algorithms : {ts.algorithms}")
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"))
-ts.normalize(normalizer="z_score")
+ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
 # contaminate the time series
-ts_m = ts.Contamination.mcar(ts.data)
+ts_m = GenGap.mcar(ts.data)
 
 # impute the contaminated series
-imputer = Imputation.Statistics.CDRec(ts_m)
+imputer = Imputation.MatrixCompletion.CDRec(ts_m)
 imputer.impute()
 
 # compute and print the imputation metrics

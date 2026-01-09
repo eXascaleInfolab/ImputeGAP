@@ -7,11 +7,11 @@
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>imputegap.recovery.evaluation package - ImputeGAP 1.1.1</title>
-      <link rel="stylesheet" type="text/css" href="static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
     
     
 
@@ -223,11 +223,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="imputegap.html">API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -258,7 +258,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="sources/imputegap.evaluation.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/imputegap.evaluation.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -285,7 +285,7 @@
 <span id="modules"></span><h2>Modules<a class="headerlink" href="#module-imputegap.recovery.evaluation" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="imputegap.recovery.evaluation.Evaluation">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.evaluation.</span></span><span class="sig-name descname"><span class="pre">Evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/evaluation.html#Evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.evaluation.</span></span><span class="sig-name descname"><span class="pre">Evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/evaluation.html#Evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to evaluate the performance of imputation algorithms by comparing imputed time series with the ground truth.</p>
 <section id="methods">
@@ -304,7 +304,7 @@
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.evaluation.Evaluation.compute_all_metrics">
-<span class="sig-name descname"><span class="pre">compute_all_metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/evaluation.html#Evaluation.compute_all_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_all_metrics" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">compute_all_metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/evaluation.html#Evaluation.compute_all_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_all_metrics" title="Link to this definition">¶</a></dt>
 <dd><p>Compute a set of evaluation metrics for the imputation based on the ground truth and contamination data.</p>
 <p>The metrics include RMSE, MAE, Mutual Information (MI), and Pearson Correlation.</p>
 <section id="returns">
@@ -322,7 +322,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.evaluation.Evaluation.compute_correlation">
-<span class="sig-name descname"><span class="pre">compute_correlation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/evaluation.html#Evaluation.compute_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_correlation" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">compute_correlation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/evaluation.html#Evaluation.compute_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_correlation" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the Pearson Correlation Coefficient between the ground truth and imputed values for NaN positions in contamination.</p>
 <p>Pearson Correlation measures the linear relationship between the ground truth and imputed values,
 with 1 being a perfect positive correlation and -1 a perfect negative correlation.</p>
@@ -337,7 +337,7 @@ with 1 being a perfect positive correlation and -1 a perfect negative correlatio
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.evaluation.Evaluation.compute_mae">
-<span class="sig-name descname"><span class="pre">compute_mae</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/evaluation.html#Evaluation.compute_mae"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_mae" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">compute_mae</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/evaluation.html#Evaluation.compute_mae"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_mae" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the Mean Absolute Error (MAE) between the ground truth and imputed values for NaN positions in contamination.</p>
 <p>The MAE measures the average magnitude of the error in absolute terms, making it more robust to outliers than RMSE.</p>
 <section id="id2">
@@ -351,7 +351,7 @@ with 1 being a perfect positive correlation and -1 a perfect negative correlatio
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.evaluation.Evaluation.compute_mi">
-<span class="sig-name descname"><span class="pre">compute_mi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/evaluation.html#Evaluation.compute_mi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_mi" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">compute_mi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/evaluation.html#Evaluation.compute_mi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_mi" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the Mutual Information (MI) between the ground truth and imputed values for NaN positions in contamination.</p>
 <p>MI measures the amount of shared information between the ground truth and the imputed values,
 indicating how well the imputation preserves the underlying patterns of the data.</p>
@@ -366,7 +366,7 @@ indicating how well the imputation preserves the underlying patterns of the data
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.evaluation.Evaluation.compute_rmse">
-<span class="sig-name descname"><span class="pre">compute_rmse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/evaluation.html#Evaluation.compute_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_rmse" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">compute_rmse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/evaluation.html#Evaluation.compute_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation.compute_rmse" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the Root Mean Squared Error (RMSE) between the ground truth and imputed values for NaN positions in contamination.</p>
 <p>The RMSE measures the average magnitude of the error between the imputed values and the ground truth,
 giving higher weight to large errors.</p>
@@ -463,11 +463,11 @@ giving higher weight to large errors.</p>
       
     </aside>
   </div>
-</div><script src="static/documentation_options.js?v=58fbf978"></script>
-    <script src="static/doctools.js?v=9bcbadda"></script>
-    <script src="static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="static/copybutton.js?v=f281be69"></script>
+</div><script src="_static/documentation_options.js?v=58fbf978"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

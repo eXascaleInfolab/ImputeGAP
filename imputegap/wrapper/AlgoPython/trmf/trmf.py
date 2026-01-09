@@ -1,9 +1,18 @@
+# ===============================================================================================================
+# SOURCE: https://github.com/SemenovAlex/trmf/tree/master
+#
+# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
+#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
+#
+# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
+# https://www.cs.utexas.edu/~rofuyu/papers/tr-mf-nips.pdf
+# ===============================================================================================================
+
 """
 Temporal Regularized Matrix Factorization
 """
 
 # Author: Alexander Semenov <alexander.s.semenov@yandex.ru>
-# https://github.com/SemenovAlex/trmf
 
 import numpy as np
 
@@ -13,7 +22,7 @@ class trmf:
 
     Parameters
     ----------
-
+    
     lags : array-like, shape (n_lags,)
         Set of lag indices to use in model.
     
@@ -62,7 +71,7 @@ class trmf:
         Matrix of autoregressive coefficients.
     """
 
-    def __init__(self, lags, K, lambda_f, lambda_x, lambda_w, alpha, eta, max_iter=1000,
+    def __init__(self, lags, K, lambda_f, lambda_x, lambda_w, alpha, eta, max_iter=1000, 
                  F_step=0.0001, X_step=0.0001, W_step=0.0001):
         self.lags = lags
         self.L = len(lags)

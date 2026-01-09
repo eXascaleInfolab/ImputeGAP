@@ -21,7 +21,7 @@ import numpy as np
 
 from abc import ABC
 
-from imputegap.wrapper.AlgoPython.hkmft.hankel_methods import get_hankel_result
+from imputegap.wrapper.AlgoPython.HKMFT.hankel_methods import get_hankel_result
 
 
 class AbstractConvergeCallback(ABC):
@@ -38,7 +38,7 @@ class AbstractConvergeCallback(ABC):
     #     return True
 
     def on_epoch(self, p, it_set, err, old_A_hat, new_A_hat,
-                 Hpx_mask, Hpx_tag, *args, **kwargs) -> bool:
+                 Hpx_mask, Hpx_tag, verbose, *args, **kwargs) -> bool:
         """
         在每次 epoch 结束后回调，
         返回 False 将会结束训练。
@@ -46,13 +46,14 @@ class AbstractConvergeCallback(ABC):
         if len(it_set) <= 0:
             return False
         self._epoch += 1
-        x_idx = np.ndarray((len(it_set),), dtype=np.int64)
-        y_idx = np.ndarray((len(it_set),), dtype=np.int64)
+        x_idx = np.ndarray((len(it_set),), dtype=int)
+        y_idx = np.ndarray((len(it_set),), dtype=int)
         for i, (x, y) in enumerate(it_set):
             x_idx[i] = x
             y_idx[i] = y
         avg_err = np.average(err[x_idx, y_idx])
-        logging.info(f'epoch {self._epoch}: {avg_err}')
+        if verbose:
+            logging.info(f'epoch {self._epoch}: {avg_err}')
         return True
 
 
@@ -68,7 +69,6 @@ class MaxDiffConvergeCallback(AbstractConvergeCallback):
         #     return False
         old_rs = get_hankel_result(old_A_hat, Hpx_mask, p)
         new_rs = get_hankel_result(new_A_hat, Hpx_mask, p)
-
         if np.max(np.abs(new_rs - old_rs)) <= self._threshold:
             return False
         else:
@@ -76,7 +76,7 @@ class MaxDiffConvergeCallback(AbstractConvergeCallback):
 
 
 class EpochConvergeCallback(AbstractConvergeCallback):
-    def __init__(self, max_epoch: int = None):
+    def __init__(self, max_epoch: int = None, verbose=True):
         super().__init__()
         if max_epoch is None:
             self._max_epoch = 100000000
@@ -84,9 +84,9 @@ class EpochConvergeCallback(AbstractConvergeCallback):
             self._max_epoch = int(max_epoch)
 
     def on_epoch(self, p, it_set, err, old_A_hat, new_A_hat,
-                 Hpx_mask, Hpx_tag, *args, **kwargs) -> bool:
+                 Hpx_mask, Hpx_tag, verbose, *args, **kwargs) -> bool:
         super().on_epoch(p, it_set, err, old_A_hat, new_A_hat,
-                         Hpx_mask, Hpx_tag, *args, **kwargs)
+                         Hpx_mask, Hpx_tag, verbose, *args, **kwargs)
         self._max_epoch -= 1
         if self._max_epoch <= 0:
             return False

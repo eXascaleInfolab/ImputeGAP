@@ -1,0 +1,29 @@
+name: Pytest - ImputeGAP - IMPUTATION - GAMMA - 12
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        lfs: true
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libmlpack-dev libopenblas-dev python3-dev build-essential
+        pip install -r requirements.txt
+        pip install mypy pytest
+    - name: Run pytest
+      run: |
+        python -m pytest ./tests/test_imputation_hkmf_t.py
+        python -m pytest ./tests/test_imputation_saits.py
+        python -m pytest ./tests/test_imputation_timesnet.py
+        python -m pytest ./tests/test_imputation_csdi.py

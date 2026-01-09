@@ -20,7 +20,7 @@ class Evaluation:
     """
 
 
-    def __init__(self, input_data, recov_data, incomp_data, algorithm="", verbose=True):
+    def __init__(self, input_data, recov_data, incomp_data, algorithm="", mask=None, security=True, verbose=True):
         """
         Initialize the Evaluation class with ground truth, imputation, and incomp_data time series.
 
@@ -28,12 +28,23 @@ class Evaluation:
         ----------
         input_data : numpy.ndarray
             The original time series without contamination.
+
         recov_data : numpy.ndarray
             The imputed time series.
+
         incomp_data : numpy.ndarray
             The time series with contamination (NaN values).
+
         algorithm : str, optional
             Name of the algorithm to evaluate.
+
+        mask: numpy.ndarray, optional
+            Mask describing the missing values (default is None).
+            If None, take the missing values in the ts_m matrix (contaminated matrix).
+
+        security: bool, optional
+            Check if the no imputed values are the same in the imputed matrix and the raw data
+
         verbose : bool, optional
             Display of not the anomaly (default: True).
 
@@ -47,6 +58,8 @@ class Evaluation:
         self.large_error = 100
         self.algorithm = algorithm
         self.verbose = verbose
+        self.security = security
+        self.mask = mask
 
     def compute_all_metrics(self):
         """
@@ -64,7 +77,11 @@ class Evaluation:
             - "CORRELATION": Pearson Correlation Coefficient
         """
 
-        nan_locations = np.isnan(self.incomp_data)
+        if self.mask is None:
+            nan_locations = np.isnan(self.incomp_data)
+        else:
+            nan_locations = self.mask
+
         recov_vals = self.recov_data[nan_locations]
 
         if np.isnan(recov_vals).all():
@@ -91,7 +108,10 @@ class Evaluation:
         float
             The RMSE value for NaN positions in the contamination dataset.
         """
-        nan_locations = np.isnan(self.incomp_data)
+        if self.mask is None:
+            nan_locations = np.isnan(self.incomp_data)
+        else:
+            nan_locations = self.mask
 
         mse = np.mean((self.input_data[nan_locations] - self.recov_data[nan_locations]) ** 2)
         rmse = np.sqrt(mse)
@@ -114,7 +134,10 @@ class Evaluation:
         float
             The MAE value for NaN positions in the contamination dataset.
         """
-        nan_locations = np.isnan(self.incomp_data)
+        if self.mask is None:
+            nan_locations = np.isnan(self.incomp_data)
+        else:
+            nan_locations = self.mask
 
         absolute_error = np.abs(self.input_data[nan_locations] - self.recov_data[nan_locations])
         mean_absolute_error = np.mean(absolute_error)
@@ -124,7 +147,7 @@ class Evaluation:
                 print("Extreme error detected, limited to ", self.large_error)
             mean_absolute_error = self.large_error
 
-        return mean_absolute_error
+        return float(mean_absolute_error)
 
     def compute_mi(self):
         """
@@ -140,12 +163,15 @@ class Evaluation:
         """
         from sklearn.metrics import mutual_info_score
 
-        nan_locations = np.isnan(self.incomp_data)
+        if self.mask is None:
+            nan_locations = np.isnan(self.incomp_data)
+        else:
+            nan_locations = self.mask
 
         input_vals = self.input_data[nan_locations]
         recov_vals = self.recov_data[nan_locations]
 
-        if np.isnan(recov_vals).all() or np.isnan(input_vals).all():
+        if (np.isnan(recov_vals).all() or np.isnan(input_vals).all()) and self.security:
             return np.nan
 
         # Discretize the continuous data into bins
@@ -171,12 +197,16 @@ class Evaluation:
         """
         from scipy.stats import pearsonr
 
-        nan_locations = np.isnan(self.incomp_data)
+        if self.mask is None:
+            nan_locations = np.isnan(self.incomp_data)
+        else:
+            nan_locations = self.mask
+
         input_data_values = self.input_data[nan_locations]
         imputed_values = self.recov_data[nan_locations]
 
         # Check if input data is constant (i.e., no variance)
-        if np.all(input_data_values == input_data_values[0]) or np.all(imputed_values == imputed_values[0]):
+        if np.all(input_data_values == input_data_values[0]) or np.all(imputed_values == imputed_values[0]) and self.security:
             if self.verbose:
                 print("\t\t\t\nAn input array is constant; the correlation coefficient is not defined, set to 0")
             return np.nan

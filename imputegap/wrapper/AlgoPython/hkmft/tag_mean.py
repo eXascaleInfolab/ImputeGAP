@@ -8,7 +8,6 @@
 # https://ieeexplore.ieee.org/document/8979178
 # ===============================================================================================================
 
-
 # Copyright (c) [2021] [wlicsnju]
 # [HKMF-T] is licensed under Mulan PSL v2.
 # You can use this software according to the terms and conditions of the Mulan PSL v2. 
@@ -66,7 +65,7 @@ class TagMean(object):
         all_avg = all_avg / float(np.sum(self._mask != 0))
 
         blackout_l = np.sum(self._mask == 0)
-        rs = np.zeros((self._dim, blackout_l), dtype=np.float64)
+        rs = np.zeros((self._dim, blackout_l), dtype=float)
 
         j = 0
         for i, m in enumerate(self._mask):

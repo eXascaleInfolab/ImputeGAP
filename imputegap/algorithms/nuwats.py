@@ -1,9 +1,10 @@
 import time
 
-from imputegap.wrapper.AlgoPython.NuwaTS.llms_recovery import llms_recov
+from imputegap.wrapper.AlgoPython.NuwaTS.recovNuwa import recovLLMs
 
 
-def nuwats(incomp_data, seq_length=-1, patch_size=-1, batch_size=-1, pred_length=-1, label_length=-1, enc_in=10, dec_in=10, c_out=10, gpt_layers=6, num_workers=0, tr_ratio=0.9, seed=42, logs=True, verbose=True):
+
+def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, tr_ratio=0.9, seed=42, logs=True, verbose=True):
     """
     Perform imputation using NuwaTS: Transformer-based recovery from missing values in multivariate time series.
 
@@ -13,29 +14,14 @@ def nuwats(incomp_data, seq_length=-1, patch_size=-1, batch_size=-1, pred_length
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
 
-    seq_length : int, optional
+    seq_len : int, optional
         Length of the input sequence for the encoder. If -1, it will be automatically determined (default: -1).
-
-    patch_size : int, optional
-        Patch size used for segmenting the sequence in the NuwaTS model (default: -1).
 
     batch_size : int, optional
         Number of samples per batch during training/inference. If -1, it will be auto-set (default: -1).
 
-    pred_length : int, optional
-        Length of the output prediction window (default: -1).
-
-    label_length : int, optional
-        Length of the label segment used during decoding (default: -1).
-
-    enc_in : int, optional
-        Number of input features for the encoder (default: 10).
-
-    dec_in : int, optional
-        Number of input features for the decoder (default: 10).
-
-    c_out : int, optional
-        Number of output features of the model (default: 10).
+    epochs : int, optional
+        Number of epoch for training the model (default: 10).
 
     gpt_layers : int, optional
         Number of layers in the transformer/generator component (default: 6).
@@ -43,11 +29,11 @@ def nuwats(incomp_data, seq_length=-1, patch_size=-1, batch_size=-1, pred_length
     num_workers: int, optional
          Number of worker for multiprocess (default is 0).
 
+    seed : int, optional
+        Random seed for reproducibility (default: 2021).
+
     tr_ratio: float, optional
          Split ratio between training and testing sets (default is 0.9).
-
-    seed : int, optional
-        Random seed for reproducibility (default: 42).
 
     logs : bool, optional
         Whether to print/log execution time and key events (default: True).
@@ -72,7 +58,9 @@ def nuwats(incomp_data, seq_length=-1, patch_size=-1, batch_size=-1, pred_length
     """
     start_time = time.time()  # Record start time
 
-    recov_data = llms_recov(ts_m=incomp_data, seq_length=seq_length, patch_size=patch_size, batch_size=batch_size, pred_length=pred_length, label_length=label_length, enc_in=enc_in, dec_in=dec_in, c_out=c_out, gpt_layers=gpt_layers, num_workers=num_workers, tr_ratio=tr_ratio, model="NuwaTS", seed=seed, verbose=verbose)
+    #recov_data = recovGPT4TS(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=10, gpt_layers=gpt_layers, num_workers=num_workers, model="NuwaTS", tr_ratio=tr_ratio, seed=seed, verbose=verbose)
+    recov_data = recovLLMs(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, gpt_layers=gpt_layers, num_workers=num_workers, tr_ratio=tr_ratio, model="NuwaTS", seed=seed, verbose=verbose)
+    #recov_data = recovLLMs(ts_m=incomp_data)
 
     end_time = time.time()
     if logs and verbose:

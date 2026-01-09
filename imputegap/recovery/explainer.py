@@ -117,10 +117,11 @@ class Explainer:
 
         Parameters
         ----------
-            data (numpy.ndarray): 2D array of shape (M, N), where M is the number of series
-                                  and N is the number of values per series.
-            categories (list): List of categories to extract. Must include one or more of:
-                               ["statistical", "temporal", "frequency", "shape"]
+            data (numpy.ndarray):
+                2D array of shape (M, N), where M is the timestamp and N is the number of series
+
+            categories (list):
+                List of categories to extract. Must include one or more of: ["statistical", "temporal", "frequency", "shape"]
 
         Returns
         -------
@@ -148,7 +149,8 @@ class Explainer:
         features_list = features.mean(axis=0).to_frame().T
 
         # Define the mapping of categories to keywords
-        category_keywords = {categories[0]: {"mean", "variance", "standard_deviation", "sum", "median", "skewness", "kurtosis", "entropy"},
+        category_keywords = {
+            categories[0]: {"mean", "variance", "standard_deviation", "sum", "median", "skewness", "kurtosis", "entropy"},
             categories[1]: {"autocorrelation", "change", "linear_trend", "time_reversal_asymmetry_statistic", "c3", "cid_ce", "symmetry", "number_crossing_m"},
             categories[2]: {"fft", "frequency", "cwt", "spkt_welch_density", "ar_coefficient", "energy_ratio", "permutation_entropy", "fourier_entropy"},
             categories[3]: {"peaks", "strike", "location", "range_count", "value_count", "large_standard_deviation", "ratio_beyond_r_sigma", "lempel_ziv_complexity"}
@@ -178,7 +180,7 @@ class Explainer:
 
 
 
-    def extractor_tsfel(self, data, frequency=None, categories=["spectral", "statistical", "temporal", "fractal"]):
+    def extractor_tsfel(self, data, frequency=None, categories=["spectral", "statistical", "temporal"]):
         """
         Extract features using TSFEL (Time Series Feature Extraction Library).
 
@@ -190,18 +192,18 @@ class Explainer:
         Parameters
         ----------
             data (numpy.ndarray):
-                2D array of shape (M, N), where M is the number of time series and N is the number
-                of values per time series. Each row represents a separate time series.
+                2D array of shape (M, N), where M is the timestamp and N is the number of series
+
             frequency (float, optional):
                 The sampling frequency of the time series data. This is used for spectral feature
                 calculations (e.g., FFT-based features). If None, spectral features will be computed
                 using default assumptions.
+
             categories (list, optional):
                 A list of categories to extract. Valid categories are:
                     - "spectral": Extract frequency-domain features (e.g., FFT, spectral entropy).
                     - "statistical": Extract basic statistical features (e.g., mean, variance, skewness).
                     - "temporal": Extract temporal-domain features (e.g., autocorrelation, zero crossings).
-                    - "fractal": Extract fractal-related features (e.g., Hurst exponent, fractal dimension).
                 By default, all four categories are extracted.
 
         Returns
@@ -241,7 +243,11 @@ class Explainer:
             # the spectral configuration
             # Extract features with TSFEL
             cfg = tsfel.get_features_by_domain(category)
-            features = tsfel.time_series_features_extractor(cfg, data, fs=frequency)
+
+            if category == "fractal":
+                cfg = {name: params for name, params in cfg.items() if "hurst" not in name.lower()}
+
+            features = tsfel.time_series_features_extractor(cfg, timeseries=data, fs=frequency)
 
             # Extract feature types by removing the ID prefix
             features.columns = features.columns.str.split('_', n=1).str[1]
@@ -254,6 +260,7 @@ class Explainer:
 
             # Print the shape and aggregated features
             for inc, (feature_name, value) in enumerate(features_list.iloc[0].items()):
+
                 if np.isnan(value):
                     results[feature_name] = 0
                 else:
@@ -266,7 +273,7 @@ class Explainer:
         return results, descriptions
 
 
-    def extractor_pycatch(self, data, features_categories, features_list, do_catch24=True):
+    def extractor_pycatch(self, data, features_categories, features_list, do_catch24=True, deep_verbose=False):
         """
         Extract features from time series data using pycatch22.
 
@@ -274,12 +281,18 @@ class Explainer:
         ----------
         data : numpy.ndarray
             Time series dataset for feature extraction.
+
         features_categories : dict
             Dictionary that maps feature names to categories.
+
         features_list : dict
             Dictionary of all features expected.
+
         do_catch24 : bool, optional
             Flag to compute the mean and standard deviation for Catch24 (default is True).
+
+        deep_verbose : bool, optional
+            Print the detail information of the extractor
 
         Returns
         -------
@@ -290,8 +303,7 @@ class Explainer:
         """
 
         data = [[0 if num is None else num for num in sublist] for sublist in data]
-        data = [[0 if num is None or (isinstance(num, (float, np.float32, np.float64)) and np.isnan(num)) else num for num
-             in sublist] for sublist in data]
+        data = [[0 if num is None or (isinstance(num, (float, np.float32, np.float64)) and np.isnan(num)) else num for num in sublist] for sublist in data]
         data = np.array(data)
 
         if isinstance(data, np.ndarray):
@@ -313,6 +325,9 @@ class Explainer:
 
         inc = 0
         for feature_name, feature_value in zip(feature_names, feature_values):
+
+            print(f"{feature_name = } ({inc}/{len(feature_names)}) : {feature_value = }")
+
             results[feature_name] = feature_value
 
             for category, features in features_categories.items():
@@ -465,6 +480,10 @@ class Explainer:
         x_dataset = np.array(x_dataset)
         y_dataset = np.array(y_dataset)
 
+
+        x_dataset = np.nan_to_num(x_dataset, nan=0.0, posinf=10000, neginf=-10000)
+        x_dataset = np.clip(x_dataset, -10000, 10000)
+
         x_features = np.array(x_features)
         x_categories = np.array(x_categories)
         x_descriptions = np.array(x_descriptions)
@@ -488,6 +507,7 @@ class Explainer:
             print("\t SHAP_MODEL >> descriptions OK:", np.all(np.all(x_descriptions == x_descriptions[0, :], axis=1)), "\n\n")
 
         model = RandomForestRegressor()
+
         model.fit(x_train, y_train)
 
         exp = shap.KernelExplainer(model.predict, x_test)
@@ -595,36 +615,37 @@ class Explainer:
             plt.close()
             alphas.append(alpha)
 
-            shap.summary_plot(np.array(transformation).T, np.array(transformationT).T, plot_size=(20, 10), feature_names=transformationDesc, show=display)
-            alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[2].lower() + ".png")
-            plt.title("SHAP details of " + plots_categories[1].lower())
-            plt.savefig(alpha)
-            plt.close()
-            alphas.append(alpha)
+            if len(plots_categories) >= 2 and plots_categories[1] != "":
+                shap.summary_plot(np.array(transformation).T, np.array(transformationT).T, plot_size=(20, 10), feature_names=transformationDesc, show=display)
+                alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[2].lower() + ".png")
+                plt.title("SHAP details of " + plots_categories[1].lower())
+                plt.savefig(alpha)
+                plt.close()
+                alphas.append(alpha)
 
-            shap.summary_plot(np.array(correlation).T, np.array(correlationT).T, plot_size=(20, 10), feature_names=correlationDesc, show=display)
-            alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[1].lower() + ".png")
-            plt.title("SHAP details of " + plots_categories[1].lower())
-            plt.savefig(alpha)
-            plt.close()
-            alphas.append(alpha)
+            if len(plots_categories) >= 3 and plots_categories[2] != "":
+                shap.summary_plot(np.array(correlation).T, np.array(correlationT).T, plot_size=(20, 10), feature_names=correlationDesc, show=display)
+                alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[1].lower() + ".png")
+                plt.title("SHAP details of " + plots_categories[1].lower())
+                plt.savefig(alpha)
+                plt.close()
+                alphas.append(alpha)
 
-            shap.summary_plot(np.array(trend).T, np.array(trendT).T, plot_size=(20, 8), feature_names=trendDesc, show=display)
-            alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[3].lower() + ".png")
-            plt.title("SHAP details of " + plots_categories[3].lower())
-            plt.savefig(alpha)
-            plt.close()
-            alphas.append(alpha)
+            if len(plots_categories) >= 4 and plots_categories[3] != "":
+                shap.summary_plot(np.array(trend).T, np.array(trendT).T, plot_size=(20, 8), feature_names=trendDesc, show=display)
+                alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[3].lower() + ".png")
+                plt.title("SHAP details of " + plots_categories[3].lower())
+                plt.savefig(alpha)
+                plt.close()
+                alphas.append(alpha)
 
-        aggregation_features.append(np.mean(geometry, axis=0))
-        aggregation_features.append(np.mean(correlation, axis=0))
-        aggregation_features.append(np.mean(transformation, axis=0))
-        aggregation_features.append(np.mean(trend, axis=0))
+        for arr in (geometry, correlation, transformation, trend):
+            if arr is not None and arr.size > 0:
+                aggregation_features.append(np.mean(arr, axis=0))
 
-        aggregation_test.append(np.mean(geometryT, axis=0))
-        aggregation_test.append(np.mean(correlationT, axis=0))
-        aggregation_test.append(np.mean(transformationT, axis=0))
-        aggregation_test.append(np.mean(trendT, axis=0))
+        for arr in (geometryT, correlationT, transformationT, trendT):
+            if arr is not None and arr.size > 0:
+                aggregation_test.append(np.mean(arr, axis=0))
 
         aggregation_features = np.array(aggregation_features).T
         aggregation_test = np.array(aggregation_test).T
@@ -671,9 +692,7 @@ class Explainer:
 
         return results_shap
 
-    def shap_explainer(self, input_data, algorithm="cdrec", params=None, extractor="pycatch", pattern="mcar", missing_rate=0.4,
-                       block_size=10, offset=0.1, seed=True, rate_dataset=1, training_ratio=0.6,
-                       file_name="ts", display=False, verbose=False):
+    def shap_explainer(self, input_data, algorithm="cdrec", params=None, extractor="pycatch", pattern="mcar", missing_rate=0.4, block_size=10, offset=0.1, seed=True, rate_dataset=1, training_ratio=0.6, file_name="ts", display=False, verbose=False, deep_verbose=False):
         """
         Handle parameters and set variables to launch the SHAP model.
 
@@ -681,32 +700,48 @@ class Explainer:
         ----------
         input_data : numpy.ndarray
             The original time series dataset.
+
         algorithm : str, optional
             The algorithm used for imputation (default is 'cdrec'). Valid values: 'cdrec', 'stmvl', 'iim', 'mrnn'.
+
         params : dict, optional
             Parameters for the algorithm.
+
         pattern : str, optional
             Contamination pattern to apply (default is 'mcar').
+
         extractor : str, optional
             Extractor use to get the features of the data (default is 'pycatch').  Valid values: 'pycatch', 'tsfel', 'tsfresh'
+
         missing_rate : float, optional
             Percentage of missing values per series (default is 0.4).
+
         block_size : int, optional
             Size of the block to remove at each random position selected (default is 10).
+
         offset : float, optional
             Size of the uncontaminated section at the beginning of the time series (default is 0.1).
+
         seed : bool, optional
             Whether to use a seed for reproducibility (default is True).
+
         rate_dataset : flaot, optional
             Limitation on the number of series for the model (default is 1).
+
         training_ratio : flaot, optional
             Limitation on the training series for the model (default is 0.6).
+
         file_name : str, optional
             Name of the dataset file (default is 'ts').
+
         display : bool, optional
             Whether to display the SHAP plots (default is False).
+
         verbose : bool, optional
             Whether to print detailed output (default is False).
+
+        deep_verbose : bool, optional
+            Whether to print debug output (default is False).
 
         Returns
         -------
@@ -733,7 +768,7 @@ class Explainer:
             print("\nlimit percentage higher than 100%, reduce to 100% of the dataset")
             rate_dataset = 1
 
-        M = input_data.shape[0]
+        M = input_data.shape[1]
         limit = math.ceil(M * rate_dataset)
 
         if training_ratio < 0.05 or training_ratio > 0.95:
@@ -771,9 +806,12 @@ class Explainer:
             print("\n\nGeneration ", current_series, "/", limit, "(", int((current_series / limit) * 100), "%)________________________________________________________")
             print("\tContamination ", current_series, "...")
 
-            tmp = TimeSeries()
+            tmp = TimeSeries(verbose=False)
             tmp.import_matrix(input_data)
             incomp_data = utils.config_contamination(ts=tmp, pattern=pattern, dataset_rate=current_series, series_rate=missing_rate, block_size=block_size, offset=offset, seed=seed, explainer=True, verbose=False)
+
+            if deep_verbose:
+                print(f"\n\t\t{current_series}:{incomp_data =}\n\n")
 
             input_data_matrices.append(input_data)
             obfuscated_matrices.append(incomp_data)
@@ -800,6 +838,9 @@ class Explainer:
             algo.score(input_data)
             imputation_results = algo.metrics
 
+            if deep_verbose:
+                print(f"\t\t{algo.metrics = }")
+
             output_metrics.append(imputation_results)
             output_rmse.append(imputation_results["RMSE"])
 
@@ -807,8 +848,7 @@ class Explainer:
         for input, output in zip(input_params, output_metrics):
             shap_details.append((input, output["RMSE"]))
 
-        shap_values = self.execute_shap_model(input_params, input_params_full, output_rmse, file_name, algorithm,
-                                                   training_ratio, extractor, display, verbose)
+        shap_values = self.execute_shap_model(input_params, input_params_full, output_rmse, file_name, algorithm, training_ratio, extractor, display, verbose)
 
         end_time = time.time()
         print(f"\n> logs: shap explainer - Execution Time: {(end_time - start_time):.4f} seconds\n")

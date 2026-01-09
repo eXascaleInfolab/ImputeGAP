@@ -48,7 +48,7 @@ class LinearInterpolation(object):
 
     def get_result(self):
         blackout_l = np.sum(self._mask == 0)
-        rs = np.zeros((self._dim, blackout_l), dtype=np.float64)
+        rs = np.zeros((self._dim, blackout_l), dtype=float)
 
         idx = np.arange(self._data.shape[1])
         for d in range(self._dim):

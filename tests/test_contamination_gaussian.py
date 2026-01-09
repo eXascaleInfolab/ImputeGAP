@@ -3,6 +3,8 @@ import numpy as np
 import math
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 
 class TestContaminationGaussian(unittest.TestCase):
@@ -12,19 +14,19 @@ class TestContaminationGaussian(unittest.TestCase):
         the goal is to test if the number of NaN values expected are provided in the contamination output
         """
 
-        datasets = ["drift", "chlorine", "eeg-alcohol", "fmri-stoptask"]
+        datasets = ["drift", "chlorine", "eeg-alcohol"]
         series_impacted = [0.1, 0.5, 1]  # percentage of series impacted
         missing_rates = [0.1, 0.5, 0.9]  # percentage of missing values with NaN
-        P = 0.1  # offset zone
 
         for dataset in datasets:
             ts = TimeSeries()
             ts.load_series(utils.search_path(dataset))
-            M, N = ts.data.shape  # series, values
+            P = math.ceil(ts.data.shape[0] * 0.1)
 
             for S in series_impacted:
                 for R in missing_rates:
-                    incomp_data = ts.Contamination.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
+                    incomp_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
+                    N, M = incomp_data.shape
 
                     n_nan = np.isnan(incomp_data).sum()
                     expected_nan_series = math.ceil(S * M)
@@ -53,11 +55,9 @@ class TestContaminationGaussian(unittest.TestCase):
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = ts_1.Contamination.gaussian(input_data=ts_1.data,
-                                                             rate_dataset=series_sel,
-                                                             rate_series=missing_rate, offset=0.1)
+                ts_contaminate = GenGap.gaussian(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, offset=0.1)
 
-                if np.isnan(ts_contaminate[:, :ten_percent_index]).any():
+                if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
                     check_position = False
                 else:
                     check_position = True
@@ -88,8 +88,8 @@ class TestContaminationGaussian(unittest.TestCase):
 
                     for std_dev in std_devs:
                         # Generate contamination with the current standard deviation
-                        contaminated_data = ts.Contamination.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R,
-                                                                      std_dev=std_dev, offset=P)
+                        contaminated_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, std_dev=std_dev, offset=P)
+                        contaminated_data = contaminated_data.T
 
                         # Calculate positions of NaN values
                         nan_positions = np.where(np.isnan(contaminated_data))
@@ -110,7 +110,7 @@ class TestContaminationGaussian(unittest.TestCase):
         """
         Test if the size of the missing percentage in a contaminated time series meets the expected number defined by the user.
         """
-        datasets = ["drift", "chlorine", "eeg-alcohol", "fmri-stoptask"]
+        datasets = ["drift", "chlorine", "eeg-alcohol"]
         series_impacted = [0.4, 0.8]
         missing_rates = [0.2, 0.6]
         offset, std_dev = 0.1, 0.2
@@ -118,16 +118,15 @@ class TestContaminationGaussian(unittest.TestCase):
         for dataset in datasets:
             ts_1 = TimeSeries()
             ts_1.load_series(utils.search_path(dataset))
-            M, N = ts_1.data.shape
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = ts_1.Contamination.gaussian(input_data=ts_1.data, rate_series=missing_rate,
-                                                                 rate_dataset=series_sel, std_dev=std_dev,
-                                                                 offset=offset, seed=True)
+                    ts_contaminate = GenGap.gaussian(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, std_dev=std_dev, offset=offset, seed=True)
+                    N, M = ts_contaminate.shape
 
                     nbr_series_contaminated = 0
-                    for inx, current_series in enumerate(ts_contaminate):
+                    for inx in range(ts_contaminate.shape[1]):
+                        current_series = ts_contaminate[:, inx]
 
                         if np.isnan(current_series).any():
                             nbr_series_contaminated = nbr_series_contaminated + 1

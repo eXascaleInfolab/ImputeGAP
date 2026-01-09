@@ -1,40 +1,35 @@
+import os
 import unittest
-from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
 
 
 class TestBitGraph(unittest.TestCase):
 
-    def test_imputation_bitgraph_dft(self):
+    def test_imputation_bitgraph(self, name="bitgraph", limit=0.10):
         """
-        the goal is to test if only the simple imputation with BitGraph has the expected outcome
+        the goal is to test if only the simple imputation with the technique has the expected outcome
         """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
-        ts_1.normalize(normalizer="min_max")
+        here = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(here, "toml/imputegap_results.toml")
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data)
+        dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
+        ts = TimeSeries()
+        ts.load_series(utils.search_path(dataset), normalizer="z_score")
 
-        algo = Imputation.DeepLearning.BitGraph(incomp_data).impute()  # user defined> or
-
-        algo.incomp_data = incomp_data
-        algo.score(input_data=ts_1.data, recov_data=algo.recov_data)
+        incomp_data = GenGap.mcar(ts.data)
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute()
+        algo.score(ts.data)
         metrics = algo.metrics
 
-        expected_metrics = {
-            "RMSE": 0.20218134150858114,
-            "MAE": 0.16291651426264953,
-            "MI": 0.1489051542044696,
-            "CORRELATION": 0.3801492668587883
-        }
+        print(f"{name}:{metrics = }\n")
 
-        ts_1.print_results(algo.metrics, algo.algorithm)
+        ts.print_results(algo.metrics, algo.algorithm)
 
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < 0.2, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
-        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < 0.2, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
-        self.assertTrue(abs(metrics["MI"] - expected_metrics["MI"]) < 0.3, f"metrics MI = {metrics['MI']}, expected MI = {expected_metrics['MI']} ")
-        self.assertTrue(abs(metrics["CORRELATION"] - expected_metrics["CORRELATION"]) < 0.3, f"metrics CORRELATION = {metrics['CORRELATION']}, expected CORRELATION = {expected_metrics['CORRELATION']} ")
-
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")

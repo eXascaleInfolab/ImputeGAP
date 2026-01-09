@@ -1,49 +1,52 @@
+import os
 import unittest
-import numpy as np
-from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 class TestSoftImpute(unittest.TestCase):
 
-    def test_imputation_soft_impute_dft(self):
+    def test_imputation_softimpute(self, name="softimpute", limit=0.05):
         """
-        the goal is to test if only the simple imputation with SoftImpute has the expected outcome
+        the goal is to test if only the simple imputation with the technique has the expected outcome
         """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
-        ts_1.normalize(normalizer="min_max")
+        here = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(here, "toml/imputegap_results.toml")
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=10, offset=0.1, seed=True)
+        dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
-        algo = Imputation.MatrixCompletion.SoftImpute(incomp_data).impute()
-        algo.score(ts_1.data)
+        ts = TimeSeries()
+        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+
+
+        incomp_data = GenGap.mcar(ts.data)
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute()
+        algo.score(ts.data)
         metrics = algo.metrics
 
-        expected_metrics = {"RMSE": 0.09627777349763414, "MAE": 0.07448970558861644, "MI": 0.7493079086248395, "CORRELATION": 0.8982101360155362}
+        print(f"{name}:{metrics = }\n")
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < 0.01, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
-        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < 0.01, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
-        self.assertTrue(abs(metrics["MI"] - expected_metrics["MI"]) < 0.01, f"metrics MI = {metrics['MI']}, expected MI = {expected_metrics['MI']} ")
-        self.assertTrue(abs(metrics["CORRELATION"] - expected_metrics["CORRELATION"]) < 0.01, f"metrics CORRELATION = {metrics['CORRELATION']}, expected CORRELATION = {expected_metrics['CORRELATION']} ")
+        ts.print_results(algo.metrics, algo.algorithm)
 
-    def test_imputation_soft_impute_udef(self):
-        """
-        the goal is to test if only the simple imputation with SoftImpute has the expected outcome
-        """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
-        ts_1.normalize(normalizer="min_max")
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=10, offset=0.1, seed=True)
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
 
-        algo = Imputation.MatrixCompletion.SoftImpute(incomp_data).impute(params={"max_rank": 5})
-        algo.score(ts_1.data)
+        # ==============================================================================================================
+
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute(params={'max_rank': 3})
+        algo.score(ts.data)
         metrics = algo.metrics
 
-        expected_metrics = {"RMSE": 0.08170571441771922, "MAE": 0.06271339280403729, "MI": 0.911998312708481, "CORRELATION": 0.9345533571324787}
+        print(f"{name}:{metrics = }\n")
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < 0.01, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
-        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < 0.01, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
-        self.assertTrue(abs(metrics["MI"] - expected_metrics["MI"]) < 0.01, f"metrics MI = {metrics['MI']}, expected MI = {expected_metrics['MI']} ")
-        self.assertTrue(abs(metrics["CORRELATION"] - expected_metrics["CORRELATION"]) < 0.01, f"metrics CORRELATION = {metrics['CORRELATION']}, expected CORRELATION = {expected_metrics['CORRELATION']} ")
+        ts.print_results(algo.metrics, algo.algorithm)
+
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
+
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"default metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"default metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")

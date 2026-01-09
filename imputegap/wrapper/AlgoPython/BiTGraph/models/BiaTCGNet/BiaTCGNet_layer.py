@@ -1,22 +1,13 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/chenxiaodanhit/BiTGraph
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://openreview.net/pdf?id=O9nZCwdGcG
-# ===============================================================================================================
-
+# from __future__ import division
 import torch
 import torch.nn as nn
 from torch.nn import init
 import numbers
 import torch.nn.functional as F
 import numpy as np
-from torch.nn.utils.parametrizations import weight_norm
-
-
+# torch.set_printoptions(threshold=np.inf)
+#from torch.nn.utils import weight_norm
+from  torch.nn.utils.parametrizations import weight_norm
 class getweight(nn.Module):
     def __init__(self,inputsize):
         super(getweight, self).__init__()
@@ -39,7 +30,7 @@ class getweight(nn.Module):
         return mask_weight
 
 class nconv(nn.Module):
-    def __init__(self,inputsize,num_nodes,input_len,pred_len):
+    def __init__(self, inputsize, num_nodes, input_len, pred_len, device):
         super(nconv,self).__init__()
         self.pred_len = pred_len
         self.input_len = input_len
@@ -47,7 +38,7 @@ class nconv(nn.Module):
         self.inputsize = inputsize
         self.mlp = nn.Linear(inputsize, 10)
         self.getweight = getweight(inputsize)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = device
         self.alpha1 = nn.Parameter(torch.zeros(num_nodes, num_nodes, device=self.device))
         self.alpha2 = nn.Parameter(torch.zeros(num_nodes, num_nodes, device=self.device))
 
@@ -70,7 +61,11 @@ class nconv(nn.Module):
         mask_weight = torch.sigmoid(mask_weight / torch.sqrt(torch.tensor(10.0)))
         A = A.unsqueeze(0).unsqueeze(0) + 0.002 * mask_weight
 
-        _, topk_A = torch.topk(A, k=5, dim=-1, largest=True)
+        if B > k:
+            _, topk_A = torch.topk(A, k=B, dim=-1, largest=True)
+        else:
+            _, topk_A = torch.topk(A, k=5, dim=-1, largest=True)
+
         topk_A = topk_A.unsqueeze(-1).expand(-1, C1, -1, -1, self.inputsize)
         mask = mask.unsqueeze(2).expand(-1, C1, self.num_nodes, -1, -1)
         mask_select = mask.gather(3, topk_A)
@@ -119,10 +114,10 @@ class prop(nn.Module):
 
 
 class mixprop(nn.Module):
-    def __init__(self,c_in,c_out,gdep,dropout,alpha,inputsize,num_nodes,input_len,pred_len):
+    def __init__(self,c_in,c_out,gdep,dropout,alpha,inputsize,num_nodes,input_len,pred_len, device):
         ##16 16 2 0.3 0.05
         super(mixprop, self).__init__()
-        self.nconv = nconv(inputsize,num_nodes,input_len,pred_len)
+        self.nconv = nconv(inputsize,num_nodes,input_len,pred_len, device)
         self.mlp = linear((gdep+1)*c_in,c_out)
         self.gdep = gdep
         self.dropout = dropout
@@ -131,6 +126,7 @@ class mixprop(nn.Module):
 
     def forward(self,x,adj,mask,k,flag=0):
 
+        #adj = adj + torch.eye(adj.size(0)).cuda()
         adj = adj + torch.eye(adj.size(0), device=adj.device)
 
         d = adj.sum(1)
@@ -297,7 +293,7 @@ class graph_global(nn.Module):
     def __init__(self, nnodes, k, dim, device, alpha=3, static_feat=None):
         super(graph_global, self).__init__()
         self.nnodes = nnodes
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        #self.A = nn.Parameter(torch.randn(nnodes, nnodes).cuda(), requires_grad=True).cuda()#to(device)
         self.A = nn.Parameter(torch.randn(nnodes, nnodes).to(self.device), requires_grad=True)
         ##to(device)
     def forward(self, idx):
@@ -334,6 +330,7 @@ class graph_undirected(nn.Module):
 
         a = torch.mm(nodevec1, nodevec2.transpose(1,0))
         adj = F.relu(torch.tanh(self.alpha*a))
+        #mask = torch.zeros(idx.size(0), idx.size(0)).cuda()#to(self.device)
         mask = torch.zeros(idx.size(0), idx.size(0)).to(self.device)
         mask.fill_(float('0'))
         s1,t1 = adj.topk(self.k,1)
@@ -376,11 +373,15 @@ class graph_directed(nn.Module):
 
         a = torch.mm(nodevec1, nodevec2.transpose(1,0))
         adj = F.relu(torch.tanh(self.alpha*a))
+        #mask = torch.zeros(idx.size(0), idx.size(0)).cuda()#to(self.device)
         mask = torch.zeros(idx.size(0), idx.size(0)).to(self.device)
         mask.fill_(float('0'))
         s1,t1 = adj.topk(self.k,1)
         mask.scatter_(1,t1,s1.fill_(1))
         adj = adj*mask
+
+        # check hypothesis paper Nate
+
         return adj
 
 

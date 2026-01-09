@@ -3,6 +3,7 @@ import numpy as np
 import math
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
 
 
 class TestContaminationMP(unittest.TestCase):
@@ -12,19 +13,20 @@ class TestContaminationMP(unittest.TestCase):
         the goal is to test if the number of NaN values expected are provided in the contamination output
         """
 
-        datasets = ["drift", "chlorine", "eeg-alcohol", "traffic", "fmri-stoptask"]
+        datasets = ["drift", "chlorine", "eeg-alcohol", "test-logic-llm.txt"]
         series_impacted = [0.1, 0.5, 1]  # percentage of series impacted
         missing_rates = [0.1, 0.5, 0.9]  # percentage of missing values with NaN
-        P = 0.1  # offset zone
+
 
         for dataset in datasets:
             ts = TimeSeries()
             ts.load_series(utils.search_path(dataset))
-            M, N = ts.data.shape  # series, values
+            N, M = ts.data.shape  # series, values
+            P = math.ceil(ts.data.shape[0] * 0.1)
 
             for S in series_impacted:
                 for R in missing_rates:
-                    incomp_data = ts.Contamination.aligned(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
+                    incomp_data = GenGap.aligned(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
 
                     n_nan = np.isnan(incomp_data).sum()
                     expected_nan_series = math.ceil(S * M)
@@ -45,7 +47,7 @@ class TestContaminationMP(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test.txt"))
+        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
 
         series_impacted = [0.4, 0.8]
         missing_rates = [0.1, 0.4, 0.6]
@@ -54,11 +56,9 @@ class TestContaminationMP(unittest.TestCase):
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = ts_1.Contamination.aligned(input_data=ts_1.data,
-                                                            rate_dataset=series_sel,
-                                                            rate_series=missing_rate, offset=0.1)
+                ts_contaminate = GenGap.aligned(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, offset=0.1)
 
-                if np.isnan(ts_contaminate[:, :ten_percent_index]).any():
+                if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
                     check_position = False
                 else:
                     check_position = True
@@ -69,7 +69,7 @@ class TestContaminationMP(unittest.TestCase):
         """
         Test if the size of the missing percentage in a contaminated time series meets the expected number defined by the user.
         """
-        datasets = ["drift", "chlorine", "eeg-alcohol", "fmri-stoptask"]
+        datasets = ["chlorine", "eeg-alcohol", "drift"]
         series_impacted = [0.4, 0.8]
         missing_rates = [0.2, 0.6]
         offset = 0.1
@@ -78,17 +78,15 @@ class TestContaminationMP(unittest.TestCase):
             ts_1 = TimeSeries()
             ts_1.data = None
             ts_1.load_series(utils.search_path(dataset))
-            M, N = ts_1.data.shape
+            N, M = ts_1.data.shape
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = ts_1.Contamination.aligned(input_data=ts_1.data,
-                                                                rate_dataset=series_sel,
-                                                                rate_series=missing_rate,
-                                                                offset=offset)
+                    ts_contaminate = GenGap.aligned(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, offset=offset)
 
                     nbr_series_contaminated = 0
-                    for inx, current_series in enumerate(ts_contaminate):
+                    for inx in range(ts_contaminate.shape[1]):
+                        current_series = ts_contaminate[:, inx]
 
                         if np.isnan(current_series).any():
                             nbr_series_contaminated = nbr_series_contaminated+1
@@ -121,3 +119,80 @@ class TestContaminationMP(unittest.TestCase):
 
                     print("NUMBR OF SERIES : ", nbr_series_contaminated)
                     print("EXPECTED SERIES : ", expected_nbr_series, "\n")
+
+    def test_single_series(self):
+        """
+        Test if the size of the missing percentage in a contaminated time series meets the expected number defined by the user.
+        """
+        datasets = ["test-logic-llm.txt"]
+        series_pointer = [0, 3]
+        series_impacted = [0.4, 0.8]
+        missing_rates = [0.2, 0.6, 0.85]
+        offset = 5
+
+        for dataset in datasets:
+            ts_1 = TimeSeries()
+            ts_1.data = None
+            ts_1.load_series(utils.search_path(dataset))
+            N, M = ts_1.data.shape
+            for series_sel in series_impacted:
+                for Z in series_pointer :
+                    for missing_rate in missing_rates:
+                        ts_contaminate = GenGap.aligned(input_data=ts_1.data, single_series=Z, rate_series=missing_rate, offset=offset)
+
+                        self.assertEqual(ts_contaminate.shape, (N, M))
+
+                        for inx in range(ts_contaminate.shape[1]):
+                            current_series = ts_contaminate[:, inx]
+                            nan_mask = np.isnan(current_series)
+
+                            # 1) check that current series has NaNs only if inx == Z
+                            if inx != Z:
+                                self.assertFalse(
+                                    nan_mask.any(),
+                                    msg=f"Series {inx} should not contain NaNs when single_series={Z}",
+                                )
+                                continue
+
+                            # Now: inx == Z
+                            self.assertTrue(
+                                nan_mask.any(),
+                                msg=f"Selected series {Z} should contain NaNs",
+                            )
+
+                            # 2) NaNs only start after the offset
+                            self.assertFalse(
+                                nan_mask[:offset].any(),
+                                msg=f"NaNs found before offset={offset} in series {Z}",
+                            )
+
+                            nan_idx = np.where(nan_mask)[0]
+                            first_nan = int(nan_idx.min())
+                            last_nan = int(nan_idx.max())
+
+                            self.assertGreaterEqual(
+                                first_nan, offset,
+                                msg=f"First NaN index {first_nan} is before offset={offset} in series {Z}",
+                            )
+
+                            # Ensure NaNs form a single contiguous block
+                            self.assertTrue(
+                                np.all(np.diff(nan_idx) == 1),
+                                msg=f"NaNs are not contiguous in series {Z} (indices: {nan_idx[:20]} ...)",
+                            )
+                            self.assertTrue(
+                                nan_mask[first_nan:last_nan + 1].all(),
+                                msg=f"NaN block has gaps in series {Z}",
+                            )
+
+                            # 3) check block size matches expected
+                            expected_nans = int(N * missing_rate)
+                            self.assertEqual(
+                                len(nan_idx),
+                                expected_nans,
+                                msg=(
+                                    f"Unexpected number of NaNs in series {Z}: "
+                                    f"got {len(nan_idx)}, expected {expected_nans} "
+                                    f"(N={N}, missing_rate={missing_rate})"
+                                ),
+                            )

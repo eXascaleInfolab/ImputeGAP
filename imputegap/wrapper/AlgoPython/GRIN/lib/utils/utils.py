@@ -1,13 +1,3 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/Graph-Machine-Learning-Group/grin
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://openreview.net/pdf?id=kOu3-S3wJ7
-# ===============================================================================================================
-
 import numpy as np
 import pandas as pd
 
@@ -34,7 +24,7 @@ def sample_mask(shape, p=0.002, p_noise=0., max_seq=1, min_seq=1, rng=None):
         idxs = np.clip(idxs, 0, shape[0] - 1)
         mask[idxs, col] = True
     mask = mask | (rand(mask.shape) < p_noise)
-    return mask.astype(bool)
+    return mask.astype('uint8')
 
 
 def compute_mean(x, index=None):
@@ -110,8 +100,8 @@ def infer_mask(df, infer_from='next'):
     Can be either `previous` or `next`.
     @return: pd.DataFrame eval_mask: the evaluation mask for the DataFrame
     """
-    mask = (~df.isna()).astype(bool)
-    eval_mask = pd.DataFrame(index=mask.index, columns=mask.columns, data=0).astype(bool)
+    mask = (~df.isna()).astype('uint8')
+    eval_mask = pd.DataFrame(index=mask.index, columns=mask.columns, data=0).astype('uint8')
     if infer_from == 'previous':
         offset = -1
     elif infer_from == 'next':

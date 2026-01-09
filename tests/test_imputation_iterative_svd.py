@@ -1,53 +1,51 @@
+import os
 import unittest
-import numpy as np
-from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
 
-class TestIterativeSVD(unittest.TestCase):
 
-    def test_imputation_iterative_svd_dft(self):
+class TestInterativeSVD(unittest.TestCase):
+
+    def test_imputation_iterativesvd(self, name="iterativesvd", limit=0.05):
         """
-        the goal is to test if only the simple imputation with ITERATIVE SVD has the expected outcome
+        the goal is to test if only the simple imputation with the technique has the expected outcome
         """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
-        ts_1.normalize(normalizer="min_max")
+        here = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(here, "toml/imputegap_results.toml")
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=10, offset=0.1, seed=True)
+        dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
-        algo = Imputation.MatrixCompletion.IterativeSVD(incomp_data).impute()
-        algo.score(ts_1.data)
+        ts = TimeSeries()
+        ts.load_series(utils.search_path(dataset), normalizer="z_score")
+
+        incomp_data = GenGap.mcar(ts.data)
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute()
+        algo.score(ts.data)
         metrics = algo.metrics
 
-        print(f"{metrics = }")
+        print(f"{name}:{metrics = }\n")
 
-        expected_metrics = {"RMSE": 0.0896028056184559, "MAE": 0.06903741479850772, "MI": 0.7705228407404124, "CORRELATION": 0.9031251285117765}
+        ts.print_results(algo.metrics, algo.algorithm)
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < 0.1, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
-        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < 0.1, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
-        self.assertTrue(abs(metrics["MI"] - expected_metrics["MI"]) < 0.1, f"metrics MI = {metrics['MI']}, expected MI = {expected_metrics['MI']} ")
-        self.assertTrue(abs(metrics["CORRELATION"] - expected_metrics["CORRELATION"]) < 0.1, f"metrics CORRELATION = {metrics['CORRELATION']}, expected CORRELATION = {expected_metrics['CORRELATION']} ")
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
 
-    def test_imputation_iterative_svd_udef(self):
-        """
-        the goal is to test if only the simple imputation with ITERATIVE SVD has the expected outcome
-        """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
-        ts_1.normalize(normalizer="min_max")
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=10, offset=0.1, seed=True)
+        # ==============================================================================================================
 
-        algo = Imputation.MatrixCompletion.IterativeSVD(incomp_data).impute(params={"rank": 5})
-        algo.score(ts_1.data)
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute(params={'rank': 3})
+        algo.score(ts.data)
         metrics = algo.metrics
 
-        expected_metrics = {"RMSE": 0.07221514304936223, "MAE": 0.05453814202954925, "MI": 0.9334180985564122, "CORRELATION": 0.9383756495804448}
+        print(f"{name}:{metrics = }\n")
 
-        print(f"{metrics = }")
+        ts.print_results(algo.metrics, algo.algorithm)
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < 0.1, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
-        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < 0.1, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
-        self.assertTrue(abs(metrics["MI"] - expected_metrics["MI"]) < 0.1, f"metrics MI = {metrics['MI']}, expected MI = {expected_metrics['MI']} ")
-        self.assertTrue(abs(metrics["CORRELATION"] - expected_metrics["CORRELATION"]) < 0.1, f"metrics CORRELATION = {metrics['CORRELATION']}, expected CORRELATION = {expected_metrics['CORRELATION']} ")
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
+
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")

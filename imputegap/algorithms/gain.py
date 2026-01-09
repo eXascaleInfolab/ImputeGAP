@@ -1,9 +1,8 @@
 import time
+from imputegap.wrapper.AlgoPython.GAIN.recovGAIN import recovGAIN
 
-from imputegap.wrapper.AlgoPython.GAIN.gainRecovery import gainRecovery
 
-
-def gain(incomp_data, batch_size=-1, hint_rate=0.9, alpha=10, epoch=100, tr_ratio=0.9, logs=True, verbose=True):
+def gain(incomp_data, batch_size=-1, epochs=100, alpha=10, hint_rate=0.9, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using the Multivariate Recurrent Neural Network (MRNN) algorithm.
 
@@ -44,7 +43,7 @@ def gain(incomp_data, batch_size=-1, hint_rate=0.9, alpha=10, epoch=100, tr_rati
     """
     start_time = time.time()  # Record start time
 
-    recov_data = gainRecovery(miss_data_x=incomp_data, batch_size=batch_size, hint_rate=hint_rate, alpha=alpha, epoch=epoch, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = recovGAIN(ts_m=incomp_data, batch_size=batch_size, iterations=epochs, alpha=alpha, hint_rate=hint_rate, tr_ratio=tr_ratio, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

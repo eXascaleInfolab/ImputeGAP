@@ -8,13 +8,17 @@
 # https://arxiv.org/abs/2103.01600
 # ===============================================================================================================
 
-
 import torch
-
+import numpy as np
+import argparse
 import torch.nn as nn
-import math
-from typing import  List
-
+import os
+import _pickle as cPickle
+import random
+import math,copy
+import torch.nn.functional as F
+from typing import Dict, List, Tuple
+from torch.nn.utils.rnn import pad_sequence
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
@@ -82,7 +86,7 @@ class OurModel(nn.Module):
         self.use_context = use_context
         self.use_local = use_local
         self.block_size = block_size
-
+        
         if (self.use_context):
             self.atten_qdim = 32
             self.mapping_query = nn.Linear(2*nkernel,self.atten_qdim)

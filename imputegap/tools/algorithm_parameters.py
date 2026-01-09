@@ -4,8 +4,8 @@ from ray import train, tune
 
 # CDRec parameters
 CDREC_RANK_RANGE = [i for i in range(1, 11)]  # This will generate a range from 1 to 10
-CDREC_EPS_RANGE = np.logspace(-6, 0, num=10)  # log scale for eps
-CDREC_ITERS_RANGE = [i * 100 for i in range(1, 11)]  # replace with actual range
+CDREC_EPS_RANGE = np.logspace(-6, 0, num=3)  # log scale for eps
+CDREC_ITERS_RANGE = [i * 200 for i in range(1, 5)]  # replace with actual range
 
 # IIM parameters
 IIM_LEARNING_NEIGHBOR_RANGE = [i for i in range(1, 100)]  # Test up to 100 learning neighbors
@@ -26,14 +26,12 @@ STMVL_ALPHA_RANGE = [i for i in range(1, 10)]  # smoothing parameter alpha
 SEARCH_SPACES = {
     'cdrec': [Integer(1, 9, name='rank'), Real(1e-6, 1, "log-uniform", name='epsilon'), Integer(100, 1000, name='iteration')],
     'iim': [Integer(1, 100, name='learning_neighbors')],
-    'mrnn': [Integer(10, 15, name='hidden_dim'), Real(1e-6, 1e-1, "log-uniform", name='learning_rate'), Integer(10, 95, name='iterations')],
     'stmvl': [Integer(2, 99, name='window_size'), Real(1e-6, 0.999999, "log-uniform", name='gamma'), Integer(1, 9, name='alpha')],
 }
 
 SEARCH_SPACES_PSO = {
     'cdrec': [(1, 9), (1e-6, 1), (100, 1000)],
     'iim': [(1, 100)],
-    'mrnn': [(1, 15), (1e-6, 1e-1), (10, 95)],
     'stmvl': [(2, 99), (1e-6, 0.999999), (1, 9)]
 }
 
@@ -41,37 +39,37 @@ SEARCH_SPACES_PSO = {
 PARAM_NAMES = {
     'cdrec': ['rank', 'epsilon', 'iteration'],
     'iim': ['learning_neighbors'],
-    'mrnn': ['hidden_dim', 'learning_rate', 'iterations'],
     'stmvl': ['window_size', 'gamma', 'alpha']
 }
 
 
 CDREC_PARAMS = {'rank': CDREC_RANK_RANGE, 'epsilon': CDREC_EPS_RANGE, 'iteration': CDREC_ITERS_RANGE}
 IIM_PARAMS = {'learning_neighbors': IIM_LEARNING_NEIGHBOR_RANGE}
-MRNN_PARAMS = {'learning_rate': MRNN_LEARNING_RATE_CHANGE, 'hidden_dim': MRNN_HIDDEN_DIM_RANGE, 'iterations': MRNN_NUM_ITER_RANGE}
 STMVL_PARAMS = {'window_size': STMVL_WINDOW_SIZE_RANGE, 'gamma': STMVL_GAMMA_RANGE, 'alpha': STMVL_ALPHA_RANGE}
 
 # Create a dictionary to hold all parameter dictionaries for each algorithm
-ALL_ALGO_PARAMS = {'cdrec': CDREC_PARAMS, 'iim': IIM_PARAMS, 'mrnn': MRNN_PARAMS, 'stmvl': STMVL_PARAMS}
+ALL_ALGO_PARAMS = {'cdrec': CDREC_PARAMS, 'iim': IIM_PARAMS, 'stmvl': STMVL_PARAMS}
 
 
 RAYTUNE_PARAMS = {
     'cdrec': {
         "rank": tune.grid_search([i for i in range(2, 16, 1)]),
-        "eps": tune.loguniform(1e-6, 1),
-        "iters": tune.grid_search([i * 50 for i in range(1, 4)])
+        "epsilon": tune.grid_search([1/x for x in (10 ** i for i in range(1, 7))]),
+        "iteration": tune.grid_search([i * 50 for i in range(1, 3)])
     },
 
     "iim": {
         "learning_neighbors": tune.grid_search([i for i in range(1, 20)])  # Up to 100 learning neighbors
     },
 
-    "mrnn": {
-        "hidden_dim":  tune.grid_search([i for i in range(10, 100, 20)]),  # Hidden dimension
-        "learning_rate": tune.grid_search([0.001, 0.01, 0.1, 1]),  # Log scale for learning rate
-        "num_iter": tune.grid_search([i for i in range(5, 10, 5)]),  # Number of epochs
-        "seq_len": 7  # tune.grid_search([i for i in range(5, 7, 2)]),  # Sequence length
-        #"keep_prob": tune.loguniform(1e-6, 1)  # Dropout keep probability
+    "mrnn":{
+        "model": tune.grid_search(["brits_i"]),  # Support both univariate & multivariate models
+        "seq_length": tune.grid_search([1, 24, 48]),
+        "epoch": tune.grid_search([100, 1000]),
+        "batch_size": tune.grid_search([16, 32]),  # Test different batch sizes
+        "sliding_windows": tune.grid_search([0, 1]),
+        "hidden_layers": tune.grid_search([32, 64, 128]),
+        "num_workers": 0
     },
 
     "stmvl": {
@@ -125,10 +123,11 @@ RAYTUNE_PARAMS = {
     # --- Newly Added Deep Learning-Based Algorithms ---
 
     "brits": {
-        "model": tune.grid_search(["brits_i_univ"]),  # Support both univariate & multivariate models
-        "epoch": tune.grid_search([i for i in range(5, 20, 5)]),  # Epochs from 5 to 15
-        "batch_size": tune.grid_search([8, 16, 32]),  # Test different batch sizes
-        "nbr_features": 1,  # tune.grid_search([1, 2, 5]),  # Number of features
+        "model": tune.grid_search(["brits_i"]),  # Support both univariate & multivariate models
+        "seq_length": tune.grid_search([1, 24, 48]),
+        "epoch": tune.grid_search([100, 1000]),
+        "batch_size": tune.grid_search([16, 32]),  # Test different batch sizes
+        "sliding_windows": tune.grid_search([0, 1]),
         "hidden_layers": tune.grid_search([32, 64, 128]),
         "num_workers": 0
     },
@@ -136,29 +135,20 @@ RAYTUNE_PARAMS = {
     "deep_mvi": {
         "max_epoch": tune.grid_search([10, 50, 100]),  # Testing from 500 to 1500 epochs
         "patience": tune.grid_search([2, 5, 10]),  # Number of early stopping patience
-        "lr": tune.grid_search([0.001, 0.1])  # learning rate
+        "lr": tune.grid_search([0.001, 0.1]),  # learning rate
+        "batch_size": -1
     },
 
     "mpin": {
-        "incre_mode": tune.choice(["alone", "data", "state", "state+transfer", "data+state", "data+state+transfer"]),  # Different incremental modes
-        "window": 1,  # Window size variations
-        "k": tune.grid_search([5, 10]),  # Number of neighbors
-        "learning_rate": tune.grid_search([0.01, 0.1]),  # Learning rate range
-        "weight_decay": tune.grid_search([0.1, 0.5]),  # Weight decay regularization
-        "epochs": 200,  # Number of epochs
+        "window": tune.grid_search([2, 6, 16, 32]),  # Window size variations
+        "incre_mode": tune.choice(["alone", "data", "state", "data+state+transfer"]),  # Different incremental modes
+        "base": tune.choice(["SAGE", "GAT", "GCN"]),  # Model architectures
+        "epochs": tune.grid_search([15, 50]),  # Number of epochs
         "num_of_iteration": 5,  # Number of epochs
-        "threshold":  tune.grid_search([0.25, 0.75]),  # Threshold range
-        "base": tune.choice(["SAGE", "GAT", "GCN"])  # Model architectures
+        "k": tune.grid_search([5, 10])  # Number of neighbors
     },
 
-    "pristi": {
-        "target_strategy": "block",  # Different strategies
-        "unconditional": tune.choice([True, False]),  # Use unconditional or not
-        "batch_size": tune.grid_search([-1, 8]),
-        "embedding": tune.grid_search([-1, 8]),
-        "num_workers": 0,
-        "seed": 42
-    },
+
 
     "knn_impute": {
         "k": tune.grid_search([1, 3, 5, 7, 10]),
@@ -207,9 +197,9 @@ RAYTUNE_PARAMS = {
     },
 
     "miss_net": {
+        "n_components": tune.grid_search([5, 10, 20]),  # Example search space for L (hidden dimension)
         "alpha": tune.grid_search([0.1, 0.5, 1.0]),  # Example search space for alpha
         "beta": tune.grid_search([0.01, 0.1, 0.5]),  # Example search space for beta
-        "L": tune.grid_search([5, 10, 20]),  # Example search space for L (hidden dimension)
         "n_cl": 1,  # Number of clusters
         "max_iter": tune.grid_search([10]),  # Max iterations
         "tol": tune.grid_search([1, 5, 10]),  # Tolerance values
@@ -217,14 +207,14 @@ RAYTUNE_PARAMS = {
     },
 
     "grin": {
-        "d_hidden": tune.grid_search([16, 64]),  # Example search space for d_hidden
-        "lr": tune.grid_search([0.001, 0.01]),  # Example search space for learning rate
-        "batch_size": -1,  # Example search space for batch size
-        "window": 1,  # Example search space for window size
+        "seq_len": tune.grid_search([-1, 24]),  # Example search space for d_hidden
+        "sim_type":  tune.grid_search(["uniform", "corr"]),  # Example search space for d_hidden
+        "epochs": 50,  # Max training epochs
+        "batch_size":  32,  # Example search space for d_hidden
+        "sliding_windows":  tune.grid_search([0, 1]),  # Example search space for d_hidden
         "alpha": tune.grid_search([10, 20]),  # Example search space for alpha
-        "patience": 10,  # Patience for early stopping
-        "epochs": 100,  # Max training epochs
-        "workers": 4 # Number of workers
+        "patience": 40,  # Patience for early stopping
+        "num_workers": 0# Number of workers
     },
 
     "gain": {
@@ -243,54 +233,77 @@ RAYTUNE_PARAMS = {
         "a0": tune.grid_search([0.1, 0.6, 1]),  # Prior hyperparameter a0
         "b0": tune.grid_search([1, 2.5, 5]),  # Prior hyperparameter b0
         "v": tune.grid_search([0.1, 0.5, 1.0]),  # Variance parameter
-        "tr_ratio": tune.grid_search([0.8])  # tr parameter
+        "num_fold": 1
     },
 
     "bit_graph": {
-            "node_number": -1,  # Trend factor search space
-            "kernel_set": tune.grid_search([[1,2,3,4], [2,3,6,7]]),  # Seasonal factor search space
-            "dropout": tune.grid_search([0.05, 0.3]),  # Seasonal components per factor
-            "subgraph_size": tune.grid_search([2, 5]),  # Bias factor inclusion
-            "node_dim": 3,  # Time scaling factor
-            "seq_len": -1,  # Prior hyperparameter a0
-            "lr": 0.001,  # Prior hyperparameter b0
-            "batch_size": tune.grid_search([8, 32]),   # Prior hyperparameter b0
-            "epoch": 50,  # Variance parameter
-            "num_workers": 0,  # Variance parameter
-            "seed": 42 # Variance parameter
-        },
+        "seq_len": tune.grid_search([16, 24, 48]),  # Seasonal factor search space
+        "sliding_windows": tune.grid_search([0, 1]),  # Seasonal factor search space
+        "kernel_size": 7,
+        "kernel_set": tune.grid_search([[1, 2, 3, 4], [2, 3, 6, 7]]),  # Seasonal factor search space
+        "epochs": 50,  # Variance parameter
+        "batch_size": tune.grid_search([8, 32]),   # Prior hyperparameter b0
+        "subgraph_size": tune.grid_search([2, 5]),  # Bias factor inclusion
+        "num_workers": 0,  # Variance parameter
+    },
 
     "hkmf_t": {
         "tags": [],
-        "data_names": [],
-        "epoch": tune.grid_search([2, 10])
+        "seq_len": [7, 24],
+        "blackouts_begin":0,
+        "blackouts_end":0,
+        "epochs": tune.grid_search([30, 100])
     },
 
     "nuwats": {
-        "seq_length": tune.grid_search([-1, 10]),
-        "patch_size": -1,
-        "batch_size": tune.grid_search([-1, 32]),
-        "pred_length": -1,
-        "label_length":-1,
-        "enc_in": tune.grid_search([-1, 16]),
-        "dec_in": tune.grid_search([-1, 16]),
-        "c_out": tune.grid_search([-1, 16]),
+        "seq_len": tune.grid_search([-1]),
+        "batch_size": tune.grid_search([-1]),
+        "epochs": tune.grid_search([5, 10]),
         "gpt_layers":tune.grid_search([2, 6, 16]),
         "num_workers":0,
         "seed":42
     },
     "gpt4ts": {
-        "seq_length": tune.grid_search([-1, 10]),
-        "patch_size": -1,
-        "batch_size": tune.grid_search([-1, 32]),
-        "pred_length": -1,
-        "label_length":-1,
-        "enc_in": tune.grid_search([-1, 16]),
-        "dec_in": tune.grid_search([-1, 16]),
-        "c_out": tune.grid_search([-1, 16]),
+        "seq_len": tune.grid_search([-1]),
+        "batch_size": tune.grid_search([-1]),
+        "epochs": tune.grid_search([5, 10]),
         "gpt_layers":tune.grid_search([2, 6, 16]),
         "num_workers":0,
         "seed":42
+    },
+    "timesnet": {
+        "seq_len": tune.grid_search([-1]),
+        "batch_size": tune.grid_search([-1]),
+        "epochs": tune.grid_search([5, 10]),
+        "gpt_layers":tune.grid_search([2, 6, 16]),
+        "num_workers":0,
+        "seed":42
+    },
+    "csdi": {
+        "seq_len": tune.grid_search([8, 24, 48]),
+        "batch_size": tune.grid_search([8, 16, 64]),
+        "epochs": 200,
+        "sliding_windows": tune.grid_search([-1, 1]),
+        "target_strategy": tune.grid_search(["random", "block"]),
+        "nsamples": tune.grid_search([10, 100]),
+        "num_workers":0
+    },
+    "pristi": {
+        "seq_len": tune.grid_search([8, 24, 48]),
+        "batch_size": tune.grid_search([8, 16, 64]),
+        "epochs": 200,
+        "sliding_windows": tune.grid_search([-1, 1]),
+        "target_strategy": tune.grid_search(["random", "block"]),
+        "nsamples": tune.grid_search([10, 100]),
+        "num_workers":0
+    },
+    "saits": {
+        "seq_len": tune.grid_search([24]),
+        "batch_size": tune.grid_search([128]),
+        "epochs": 1000,
+        "sliding_windows": tune.grid_search([1]),
+        "n_head": tune.grid_search([8]),
+        "num_workers": 0
     }
 
     # your ray-tune limitation #contributing

@@ -32,11 +32,13 @@ def mean_impute_by_series(incomp_data, logs=True, verbose=True):
     start_time = time.time()  # Record start time
 
     recov_data = np.copy(incomp_data)
+    n_rows, n_cols = incomp_data.shape
 
     # Iterate over each row (time series)
-    for current_series in range(incomp_data.shape[0]):
-        mean_value = np.nanmean(incomp_data[current_series])
-        recov_data[current_series, np.isnan(incomp_data[current_series])] = mean_value
+    for current_series in range(n_cols):
+        s = incomp_data[:, current_series]
+        mean_value = np.nanmean(s)
+        recov_data[np.isnan(s), current_series] = mean_value
 
     end_time = time.time()
     if logs and verbose:

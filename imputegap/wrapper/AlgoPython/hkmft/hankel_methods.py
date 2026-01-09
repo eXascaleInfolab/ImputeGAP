@@ -8,7 +8,6 @@
 # https://ieeexplore.ieee.org/document/8979178
 # ===============================================================================================================
 
-
 # Copyright (c) [2021] [wlicsnju]
 # [HKMF-T] is licensed under Mulan PSL v2.
 # You can use this software according to the terms and conditions of the Mulan PSL v2. 
@@ -68,7 +67,7 @@ def get_hankel_result(A: np.ndarray, mask: np.ndarray, p: int) -> np.ndarray:
     blackout_l = np.sum(mask[0, :] == 0)
     data_d = mask.shape[0] // p
     data_l = mask.shape[1]
-    rs = np.zeros((data_d, blackout_l), dtype=np.float64)
+    rs = np.zeros((data_d, blackout_l), dtype=float)
     for i in range(data_d):
         for j in range(p):
             c = 0

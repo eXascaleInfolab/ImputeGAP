@@ -2,11 +2,28 @@
 Datasets
 ========
 
-ImputeGAP provides datasets for experimenting with imputation techniques and the library's modules. The datasets are stored in ``./imputegap/datasets``.
+The library currently hosts 16 datasets spanning 8 domains! Those datasets were collected from various time series imputation works in recent years. The datasets are stored in ``./imputegap/datasets`` and are represented using a ``numpy.ndarray`` structure.
 
 .. raw:: html
 
    <br>
+
+.. note::
+
+    Please ensure that your input data satisfies the following format:
+
+    - Columns are the series/features, separator: empty space
+
+    - Rows are the timestamps' values, separator: newline
+
+    - Missing values are NaNs
+
+
+
+.. raw:: html
+
+   <br>
+
 
 
 **Weather**
@@ -52,7 +69,7 @@ ImputeGAP provides datasets for experimenting with imputation techniques and the
 **Energy**
 
     -   `electricity <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#electricity>`_
-    -   `solar-plant <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#solar-plant>`_
+    -   `solar <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#solar>`_
 
 
 **Finance**

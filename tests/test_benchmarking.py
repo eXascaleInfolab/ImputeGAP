@@ -1,3 +1,4 @@
+import math
 import unittest
 from imputegap.recovery.benchmark import Benchmark
 
@@ -8,27 +9,26 @@ class TestBenchmarking(unittest.TestCase):
         the goal is to test if only the simple imputation benchmarking has the expected outcome
         """
         bench = Benchmark()
-        expected_datasets = ["eeg-alcohol"]
+        expected_datasets = ["test-logic-llm.txt"]
 
         opti_bayesian = {"optimizer": "bayesian", "options": {"n_calls": 2, "n_random_starts": 50, "acq_func": "gp_hedge", "metrics": "RMSE"}}
-        optimizers = [opti_bayesian]
+        optimizer = "default_params"
 
-        algorithms_full = ["meanimpute", "cdrec", "stmvl", "iim", "mrnn"]
+        algorithms_full = ["knn", "cdrec", "stmvl", "iim", "mrnn"]
         patterns_small = ["mcar"]
 
-        x_axis = [0.05, 0.1, 0.2, 0.4, 0.6, 0.8]
+        x_axis = [0.1, 0.2, 0.8]
 
-        bench.eval(datasets=expected_datasets, optimizers=optimizers, algorithms=algorithms_full, patterns=patterns_small, x_axis=x_axis, runs=-1)
+        bench.eval(datasets=expected_datasets, optimizer=optimizer, algorithms=algorithms_full, patterns=patterns_small, x_axis=x_axis, runs=-1)
         results_benchmarking = bench.list_results
         results_benchmarking = results_benchmarking[0]
-        expected_datasets = ["eegalcohol"]
+        expected_datasets = ["testlogicllm.txt"]
+
+        print(f"{bench.list_results = }")
 
         # Check that all datasets exist
         actual_datasets = list(results_benchmarking.keys())
-        self.assertCountEqual(
-            actual_datasets, expected_datasets,
-            f"Missing datasets. Expected: {expected_datasets}, Found: {actual_datasets}"
-        )
+        self.assertCountEqual( actual_datasets, expected_datasets, f"Missing datasets. Expected: {expected_datasets}, Found: {actual_datasets}" )
 
         # For each dataset, validate structure and values
         for dataset, dataset_data in results_benchmarking.items():
@@ -43,7 +43,7 @@ class TestBenchmarking(unittest.TestCase):
             scenario_data = dataset_data["mcar"]
 
             # Check that all algorithms exist
-            expected_algorithms = {"stmvl", "cdrec", "iim", "meanimpute", "mrnn"}
+            expected_algorithms = {"stmvl", "cdrec", "iim", "knn", "mrnn"}
             actual_algorithms = set(scenario_data.keys())
             self.assertTrue(
                 expected_algorithms.issubset(actual_algorithms),
@@ -51,27 +51,37 @@ class TestBenchmarking(unittest.TestCase):
             )
 
             # Check that each algorithm contains the expected keys
-            expected_keys = {"0.05", "0.1", "0.2", "0.4", "0.8"}
+            expected_keys = {"0.1", "0.2", "0.8"}
             for algorithm, algorithm_data in scenario_data.items():
                 for key in expected_keys:
                     self.assertIn(
-                        key, algorithm_data.get("bayesian", {}),
+                        key, algorithm_data.get("default_params", {}),
                         f"Algorithm '{algorithm}' in dataset '{dataset}' is missing key '{key}'."
                     )
 
-                    sub_data = algorithm_data["bayesian"].get(key, {})
+                    sub_data = algorithm_data["default_params"].get(key, {})
                     for score_key, score_value in sub_data.get("scores", {}).items():
                         self.assertIsInstance(
                             score_value,
-                            (float, int),  # Correct usage
+                            (float, int),
                             f"Score '{score_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is not a float or int."
                         )
+                        self.assertTrue(
+                            math.isfinite(float(score_value)),
+                            f"Score '{score_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is NaN/inf: {score_value}"
+                        )
+
                     for time_key, time_value in sub_data.get("times", {}).items():
                         self.assertIsInstance(
                             time_value,
-                            (float, int),  # Correct usage
-                            f"Time '{time_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}'is not a float."
+                            (float, int),
+                            f"Time '{time_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is not a float or int."
                         )
+                        self.assertTrue(
+                            math.isfinite(float(time_value)),
+                            f"Time '{time_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is NaN/inf: {time_value}"
+                        )
+
 
     def test_benchmarking_matrix(self):
         """

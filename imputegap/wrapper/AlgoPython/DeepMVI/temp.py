@@ -8,10 +8,12 @@
 # https://arxiv.org/abs/2103.01600
 # ===============================================================================================================
 
+#!/usr/bin/python
 import numpy as np
 import time
 
-from imputegap.wrapper.AlgoPython.DeepMVI.transformer import transformer_recovery
+from transformer import transformer_recovery
+from mean import mean_recovery,zero_recovery
 
 def recover_matrix(matrix):
     np.save('org_matrix',matrix)

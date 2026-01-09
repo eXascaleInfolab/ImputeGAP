@@ -58,7 +58,7 @@ Trend = [
 categories = ["Geometry", "Correlation", "Transformation", "Trend"]
 
 [tsfel]
-categories = ["spectral", "statistical", "temporal", "fractal"]
+categories = ["spectral", "statistical", "temporal", ""]
 
 [tsfresh]
 categories = ["statistical", "temporal", "shape", "frequency"]

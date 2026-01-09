@@ -5,9 +5,9 @@ from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 
 
-class TestExplainerTSFEL(unittest.TestCase):
+class TestExplainerPyCatch(unittest.TestCase):
 
-    def test_explainer_tsfel(self):
+    def test_explainer_pycatch(self):
         """
         Verify if the SHAP TSFEL EXTRACTOR is working
         """

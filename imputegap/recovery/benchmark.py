@@ -48,7 +48,7 @@ class Benchmark:
         self.plots = None
 
 
-    def _benchmark_exception(self, data, algorithm, pattern, x):
+    def _benchmark_exception(self, data, algorithm, pattern, x, N, F):
         """
         Check whether a specific algorithm-pattern combination should be excluded from benchmarking.
 
@@ -59,12 +59,21 @@ class Benchmark:
         ----------
         data : str
             Dataset used
+
         algorithm : str
             Name of the imputation algorithm (e.g., 'DEEPMVI', 'PRISTI').
+
         pattern : str
             Missing data pattern (e.g., 'MCAR', 'ALIGNED').
+
         x : float
             Proportion of missing values in the data (between 0 and 1).
+
+        N: int
+            Number of values
+
+        F : int
+            Number of series
 
         Returns
         -------
@@ -76,6 +85,10 @@ class Benchmark:
             - For DeepMVI with MCAR pattern and x > 0.6, skip benchmarking.
             - For PRISTI, always skip benchmarking.
         """
+
+        #if M < 5 or N < 5:
+        #    print(f"\n(BENCH) The imputation algorithm {algorithm} has not enough data to proceed ({M}, {N})")
+        return False
 
         if algorithm.upper() == 'DEEPMVI' or algorithm.upper() == 'DEEP_MVI':
             if pattern.lower() == "mcar" or pattern.lower() == "missing_completely_at_random":
@@ -93,8 +106,6 @@ class Benchmark:
             if x >= 0.8:
                 print(f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {data}. Not enough series to train the model.")
                 return True
-
-
 
         return False
 
@@ -346,6 +357,167 @@ class Benchmark:
                 plt.close()
 
         return True
+
+
+    def generate_reports_summary(self, run_of_values, save_dir="./reports", dataset="", metrics=["RMSE"], run=-1, rt=0, title="", verbose=True):
+        """
+        Generate and save a text report of metrics and timing for each dataset, algorithm, and pattern for the whole experiment.
+
+        Parameters
+        ----------
+        run_of_values : dict
+            Dictionary containing scores and timing information for each dataset, pattern, and algorithm.
+        save_dir : str, optional
+            Directory to save the reports file (default is "./reports").
+        dataset : str, optional
+            Name of the data for the report name.
+        metrics : str, optional
+            List of metrics asked for in the report.
+        run : int, optional
+            Number of the run.
+        rt : float, optional
+            Total time of the run.
+        title : str, optional
+            Title of the report (default is "").
+        verbose : bool, optional
+            Whether to display the contamination information (default is True).
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        The report is saved in a "report.txt" file in `save_dir`, organized in sections with headers and results.
+        """
+        os.makedirs(save_dir, exist_ok=True)
+        metric_unit = "ms"
+
+        if "RMSE" not in metrics:
+            to_call = [metrics[0], "RUNTIME"]
+        else:
+            to_call = ["RMSE", "RUNTIME"]
+
+        new_metrics = np.copy(metrics)
+
+        if metrics is None:
+            new_metrics = utils.list_of_metrics()
+        else:
+            if "RUNTIME" not in new_metrics:
+                new_metrics = np.append(new_metrics, "RUNTIME")
+            if "RUNTIME_LOG" not in new_metrics:
+                new_metrics = np.append(new_metrics, "RUNTIME_LOG")
+
+        # assumes: runs_plots_scores is a list of dicts (like in your example)
+        # and new_metrics, metric_unit, to_call, rt, run, verbose, save_dir are already defined
+        # 1) discover patterns, algos, and a sample optimizer across ALL datasets
+        opt = None
+        all_patterns = set()
+        patterns_to_algos = defaultdict(set)
+
+        for scores in run_of_values:
+            for dataset, patterns_items in scores.items():
+                for pattern, algorithm_items in patterns_items.items():
+                    all_patterns.add(pattern)
+                    for algorithm, optimizer_items in algorithm_items.items():
+                        patterns_to_algos[pattern].add(algorithm)
+                        if opt is None:
+                            # grab the first optimizer name we see
+                            for optimizer in optimizer_items.keys():
+                                opt = optimizer
+                                break
+
+        # 2) open the report ONCE (not inside any dataset loop)
+        os.makedirs(save_dir, exist_ok=True)
+        title_report = "report_" + title + ".log"
+        save_path = os.path.join(save_dir, title_report)
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        with open(save_path, "w") as file:
+            file.write(f"Generated on: {current_time}\n")
+            file.write(f"Total runtime: {rt} (ms)\n")
+            if run >= 0:
+                file.write(f"Run number: {run}\n")
+            file.write("=" * 120 + "\n\n")
+
+            # 3) one big table per (pattern, metric) including ALL datasets
+            for pattern in sorted(all_patterns):
+                algos = sorted(patterns_to_algos[pattern])
+
+                for metric in new_metrics:
+                    # nice title (avoid Python set display)
+                    if metric == "RUNTIME":
+                        title = "{" + f"{pattern}, {metric}[{metric_unit}], {opt}" + "}"
+                    else:
+                        title = "{" + f"{pattern}, {metric}, {opt}" + "}"
+                    file.write(title + "\n")
+
+                    # build rows across ALL datasets in runs_plots_scores
+                    row_map = defaultdict(dict)  # (dataset, rate) -> {algo: score_str}
+                    for scores in run_of_values:
+                        for dataset, patterns_items in scores.items():
+                            if pattern not in patterns_items:
+                                continue
+                            for algorithm, optimizer_items in patterns_items[pattern].items():
+                                for optimizer, x_data_items in optimizer_items.items():
+                                    for rate, payload in x_data_items.items():
+                                        val = payload.get("scores", {}).get(metric, None)
+                                        if val is not None:
+                                            row_map[(dataset, rate)][algorithm] = f"{val:.10f}"
+
+                    if not row_map:
+                        file.write("[no results]\n\n")
+                        continue
+
+                    # headers & widths
+                    headers = ["Dataset", "Rate"] + list(algos)
+                    ds_width = max(12, max((len(ds) for ds, _ in row_map.keys()), default=0) + 2)
+                    rate_width = max(6, max((len(str(r)) for _, r in row_map.keys()), default=0) + 2)
+                    algo_width = 18
+                    col_widths = [ds_width, rate_width] + [algo_width] * len(algos)
+
+                    def fmt_row(vals):
+                        return "".join(f" {str(v):^{w}} " for v, w in zip(vals, col_widths))
+
+                    header_row = fmt_row(headers)
+                    sep_row = "-" * len(header_row)
+
+                    file.write(sep_row + "\n")
+                    file.write(header_row + "\n")
+                    file.write(sep_row + "\n")
+
+                    if verbose and metric in to_call:
+                        print("\n" + title)
+                        print(sep_row)
+                        print(header_row)
+                        print(sep_row)
+
+                    def row_key(k):
+                        ds, rate = k
+                        # sort numerics first by value, then non-numerics by string;
+                        # within the same rate, sort by dataset name
+                        try:
+                            rf = float(rate)
+                            return (0, rf, ds)
+                        except Exception:
+                            return (1, str(rate), ds)
+
+                    for key in sorted(row_map.keys(), key=row_key):
+                        ds, rate = key
+                        row_vals = [ds, rate] + [row_map[key].get(a, "") for a in algos]
+                        line = fmt_row(row_vals)
+                        file.write(line + "\n")
+                        if verbose and metric in to_call:
+                            print(line)
+
+                    file.write(sep_row + "\n\n")
+                    if verbose and metric in to_call:
+                        print(sep_row + "\n")
+
+            # optional: dump raw dict(s)
+            file.write("Dictionary of Results:\n")
+            file.write(str(run_of_values) + "\n")
+
 
     def generate_reports_txt(self, runs_plots_scores, save_dir="./reports", dataset="", metrics=["RMSE"], run=-1, rt=0, verbose=True):
         """
@@ -769,7 +941,7 @@ class Benchmark:
 
         self.plots = plt
 
-    def eval(self, algorithms=["cdrec"], datasets=["eeg-alcohol"], patterns=["mcar"], x_axis=[0.05, 0.1, 0.2, 0.4, 0.6, 0.8], optimizers=["default_params"], metrics=["*"], save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", nbr_series=2500, nbr_vals=2500, dl_ratio=0.9, verbose=False):
+    def eval(self, algorithms=["cdrec"], datasets=["eeg-alcohol"], patterns=["mcar"], x_axis=[0.05, 0.1, 0.2, 0.4, 0.6, 0.8], optimizer="default_params", metrics=["*"], save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=250, nbr_vals=2500, dl_ratio=None, verbose=False):
         """
         Execute a comprehensive evaluation of imputation algorithms over multiple datasets and patterns.
 
@@ -783,8 +955,8 @@ class Benchmark:
             List of contamination patterns to apply.
         x_axis : list of float
             List of missing rates for contamination.
-        optimizers : list
-            List of optimizers with their configurations.
+        optimizer : str, dict
+            Name of the optimizer (str) or optimizer with their configurations (dict).
         metrics : list of str
             List of metrics for evaluation.
         save_dir : str, optional
@@ -793,8 +965,10 @@ class Benchmark:
             Number of executions with a view to averaging them
         normalizer : str, optional
             Normalizer to pre-process the data (default is "z_score").
+        report_title : str, optional
+            Title of the report (default is "").
         nbr_series : int, optional
-            Number of series to take inside the dataset (default is 2500 (as the max values)).
+            Number of series to take inside the dataset (default is 250 (as the max values)).
         nbr_vals : int, optional
             Number of values to take inside the series (default is 2500 (as the max values)).
         dl_ratio : float, optional
@@ -811,6 +985,7 @@ class Benchmark:
         -----
         Runs contamination, imputation, and evaluation, then generates plots and a summary reports.
         """
+
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
         run_storage = []
@@ -825,18 +1000,31 @@ class Benchmark:
             raise TypeError(f"'patterns' must be a list, but got {type(patterns).__name__}")
         if not isinstance(x_axis, list):
             raise TypeError(f"'x_axis' must be a list, but got {type(x_axis).__name__}")
+        if not isinstance(optimizer, str) and not isinstance(optimizer, dict):
+            raise TypeError(f"'optimizer' must be a str or dict, but got {type(optimizer).__name__}")
 
         if "*" in metrics or "all" in metrics:
             metrics = utils.list_of_metrics()
         if "*" in metrics or "all" in algorithms:
-            all_algs = utils.list_of_algorithms()
-            algorithms = [item for item in all_algs if item.upper() != "MPIN"]
+            algorithms = utils.list_of_algorithms()
+
+        if "default" in optimizer and isinstance(optimizer, str):
+            optimizer = "default_params"
 
         directory_now = datetime.datetime.now()
         directory_time = directory_now.strftime("%y_%m_%d_%H_%M_%S")
-        save_dir = save_dir + "/" + "bench_" + directory_time
+        save_dir = save_dir + "/" + "benchmark_" + report_title + "_" + directory_time
+
+        if nbr_series is None:
+            nbr_series = 10000000
+        if nbr_vals is None:
+            nbr_vals = 10000000
 
         benchmark_time = time.time()
+
+        definition_of_exp = f"\nThe benchmark has been called:\n\talgorithms: {algorithms}\n\tdatasets: {datasets}\n\tpatterns: {patterns}\n\tmissing_percentages: {x_axis}\n\toptimizer: {optimizer}\n\tnormalizer: {normalizer}\n\truns: {runs}\n\tnumber max series: {nbr_series}\n\tnumber max values: {nbr_vals}\n\n"
+        print(definition_of_exp)
+
         for i_run in range(0, abs(runs)):
             for dataset in datasets:
                 runs_plots_scores = {}
@@ -845,8 +1033,8 @@ class Benchmark:
 
                 if verbose:
                     print("\n1. evaluation launch for", dataset, "\n")
-                ts_test = TimeSeries()
-                default_data = TimeSeries()
+                ts_test = TimeSeries(verbose=False)
+                default_data = TimeSeries(verbose=False)
 
                 header = False
                 if dataset == "eeg-reading" or dataset == "eegreading":
@@ -861,8 +1049,8 @@ class Benchmark:
                     print(f"\nThe dataset contains a large number of values {default_data.data.shape}, which may be too much for some algorithms to handle efficiently. Consider reducing the number of series or the volume of data.")
                 default_data = None
 
-                ts_test.load_series(data=utils.search_path(dataset), nbr_series=nbr_series, nbr_val=nbr_vals, header=header)
-                M, N = ts_test.data.shape
+                ts_test.load_series(data=utils.search_path(dataset), nbr_series=nbr_series, nbr_val=nbr_vals, header=header, normalizer=normalizer, verbose=verbose)
+                N, F = ts_test.data.shape
 
                 if reshp:
                     print(f"Benchmarking module has reduced the shape to {ts_test.data.shape}.\n")
@@ -870,9 +1058,6 @@ class Benchmark:
                 if N < 250:
                     print(f"The block size is too high for the number of values per series, reduce to 2\n")
                     block_size_mcar = 2
-
-                if normalizer in utils.list_of_normalizers():
-                    ts_test.normalize(verbose=verbose)
 
                 for pattern in patterns:
                     if verbose:
@@ -892,24 +1077,34 @@ class Benchmark:
 
                             incomp_data = utils.config_contamination(ts=ts_test, pattern=pattern, dataset_rate=x, series_rate=x, block_size=block_size_mcar, verbose=verbose)
 
-                            for optimizer in optimizers:
+                            opt_imp = optimizer
+
+                            try:
                                 algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=algorithm, verbose=verbose)
 
-                                if isinstance(optimizer, dict):
-                                    optimizer_gt = {"input_data": ts_test.data, **optimizer}
-                                    optimizer_value = optimizer.get('optimizer')  # or optimizer['optimizer']
+                                if not isinstance(opt_imp, dict) and opt_imp != "default_params":
+                                    if opt_imp == "ray-tune":
+                                        opt_imp = "ray_tune"
+                                    opt_imp = {"optimizer": opt_imp}
 
+                                if isinstance(opt_imp, dict):
+                                    optimizer_gt = {"input_data": ts_test.data, **opt_imp}
+                                    optimizer_value = opt_imp.get('optimizer')  # or optimizer['optimizer']
                                     if not has_been_optimized and algorithm not in mean_group and algorithm not in not_optimized:
+
                                         if verbose:
-                                            print("\n5. AutoML to set the parameters", optimizer, "\n")
+                                            print("\n5. AutoML to set the parameters", opt_imp, "\n")
                                         i_opti = self._config_optimization(0.20, ts_test, pattern, algorithm, block_size_mcar)
 
                                         if utils.check_family("DeepLearning", algorithm):
-                                            i_opti.impute(user_def=False, params=optimizer_gt, tr_ratio=0.80)
+                                            if dl_ratio is None:
+                                                i_opti.impute(user_def=False, params=optimizer_gt)
+                                            else:
+                                                i_opti.impute(user_def=False, params=optimizer_gt, tr_ratio=dl_ratio)
                                         else:
                                             i_opti.impute(user_def=False, params=optimizer_gt)
 
-                                        utils.save_optimization(optimal_params=i_opti.parameters, algorithm=algorithm, dataset=dataset, optimizer="e")
+                                        optimal_params_path = utils.save_optimization(optimal_params=i_opti.parameters, algorithm=algorithm, dataset=dataset, optimizer="e", verbose=verbose)
 
                                         has_been_optimized = True
                                     else:
@@ -918,27 +1113,27 @@ class Benchmark:
 
                                     if algorithm not in mean_group and algorithm not in not_optimized:
                                         if i_opti.parameters is None:
-                                            opti_params = utils.load_parameters(query="optimal", algorithm=algorithm, dataset=dataset, optimizer="e")
+                                            opti_params = utils.load_parameters(query="optimal", algorithm=algorithm, dataset=dataset, optimizer="e", path=optimal_params_path, verbose=verbose)
                                             if verbose:
-                                                print("\n6. imputation", algorithm, "with optimal parameters from files", *opti_params)
+                                                print("\n6. load imputation", algorithm, "with optimal parameters from files", *opti_params)
                                         else:
                                             opti_params = i_opti.parameters
                                             if verbose:
-                                                print("\n6. imputation", algorithm, "with optimal parameters from object", *opti_params)
+                                                print("\n6. set imputation", algorithm, "with optimal parameters from object", *opti_params)
                                     else:
                                         if verbose:
                                             print("\n5. No AutoML launches without optimal params for", algorithm, "\n")
                                         opti_params = None
                                 else:
                                     if verbose:
-                                        print("\n5. Default parameters have been set the parameters", optimizer, "for", algorithm, "\n")
-                                    optimizer_value = optimizer
+                                        print("\n5. Default parameters have been set the parameters", opt_imp, "for", algorithm, "\n")
+                                    optimizer_value = opt_imp
                                     opti_params = None
 
                                 start_time_imputation = time.time()
 
-                                if not self._benchmark_exception(dataset, algorithm, pattern, x):
-                                    if utils.check_family("DeepLearning", algorithm) or utils.check_family("LLMs", algorithm):
+                                if not self._benchmark_exception(dataset, algorithm, pattern, x, N, F):
+                                    if (utils.check_family("DeepLearning", algorithm) or utils.check_family("LLMs", algorithm)) and dl_ratio is not None:
                                         if x > round(1-dl_ratio, 2):
                                             algo.recov_data = incomp_data
                                         else:
@@ -969,18 +1164,43 @@ class Benchmark:
 
                                 save_dir_plot = save_dir + "/" + dataset_s + "/" + pattern + "/recovery/"
                                 cont_rate = int(x*100)
-                                ts_test.plot(input_data=ts_test.data, incomp_data=incomp_data, recov_data=algo.recov_data, nbr_series=3, subplot=True, algorithm=algo.algorithm, cont_rate=str(cont_rate), display=False, save_path=save_dir_plot, verbose=False)
+                                ts_test.plot(input_data=ts_test.data, incomp_data=incomp_data, recov_data=algo.recov_data, nbr_series=6, subplot=True, algorithm=algo.algorithm, cont_rate=str(cont_rate), display=False, save_path=save_dir_plot, verbose=False)
 
                                 runs_plots_scores.setdefault(str(dataset_s), {}).setdefault(str(pattern), {}).setdefault(str(algorithm), {}).setdefault(str(optimizer_value), {})[str(x)] = {"scores": algo.metrics}
 
+                            except Exception as e:
+                                dataset_s = dataset
+                                if "-" in dataset:
+                                    dataset_s = dataset.replace("-", "")
+
+                                print(f"Error during benchmark for {algorithm}, with {dataset_s}, and {x}%: {e}")
+
+                                algo.metrics = {
+                                    "RMSE": np.nan,
+                                    "MAE": np.nan,
+                                    "MI": np.nan,
+                                    "CORRELATION": np.nan,
+                                    "RUNTIME": np.nan,
+                                    "RUNTIME_LOG": np.nan,
+                                }
+
+                                if isinstance(opt_imp, dict):
+                                    val_opt = opt_imp.get("optimizer")
+                                if isinstance(opt_imp, str):
+                                    val_opt = opt_imp
+                                if val_opt is None:
+                                    val_opt = ""
+
+                                runs_plots_scores.setdefault(str(dataset_s), {}).setdefault(str(pattern), {}).setdefault(str(algorithm), {}).setdefault(str(val_opt), {})[str(x)] = {"scores": algo.metrics}
+
+                                os.makedirs(save_dir, exist_ok=True)
+                                save_path = os.path.join(save_dir, f"error.log")
+                                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                with open(save_path, "a") as file:
+                                    file.write(f"{timestamp} | Error during benchmark for {algorithm}, with {dataset_s} - for a shape of ({N}, {F}) - ({pattern}/{val_opt}), and {x}%: {e}\n\n")
+
                         print(f"done!\n\n")
-                #save_dir_runs = save_dir + "/_details/run_" + str(i_run) + "/" + dataset
-                #if verbose:
-                #    print("\nruns saved in : ", save_dir_runs)
-                #self.generate_plots(runs_plots_scores=runs_plots_scores, ticks=x_axis, metrics=metrics, subplot=True, y_size=y_p_size, save_dir=save_dir_runs, display=False, verbose=verbose)
-                #self.generate_plots(runs_plots_scores=runs_plots_scores, ticks=x_axis, metrics=metrics, subplot=False, y_size=y_p_size, save_dir=save_dir_runs, display=False, verbose=verbose)
-                #self.generate_reports_txt(runs_plots_scores=runs_plots_scores, save_dir=save_dir_runs, dataset=dataset, metrics=metrics, run=i_run, verbose=verbose)
-                #self.generate_reports_excel(runs_plots_scores, save_dir_runs, dataset, i_run, verbose=verbose)
+
                 run_storage.append(runs_plots_scores)
 
         plt.close('all')  # Close all open figures
@@ -996,7 +1216,14 @@ class Benchmark:
         total_time_benchmark = round(benchmark_end - benchmark_time, 4)
         print(f"\n> logs: benchmark - Execution Time: {total_time_benchmark} seconds\n")
 
-        verb = True
+        os.makedirs(save_dir, exist_ok=True)
+        save_path = os.path.join(save_dir, f"runtime.log")
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        with open(save_path, "a") as file:
+            file.write(f"{timestamp} | logs: benchmark - Execution Time: {total_time_benchmark} seconds\n")
+
+        verb = False
 
         for scores in run_averaged:
             all_keys = list(scores.keys())
@@ -1006,6 +1233,13 @@ class Benchmark:
             self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, dataset=dataset_name, metrics=metrics, rt=total_time_benchmark, run=-1)
             self.generate_plots(runs_plots_scores=scores, ticks=x_axis, metrics=metrics, subplot=True, y_size=y_p_size, save_dir=save_dir_agg_set, display=verb)
 
+        self.generate_reports_summary(run_of_values=run_averaged, save_dir=save_dir, metrics=metrics, rt=total_time_benchmark, run=-1, title=report_title)
+
         print("\nThe results are saved in : ", save_dir, "\n")
         self.list_results = run_averaged
         self.aggregate_results = scores_list
+
+        save_def = os.path.join(save_dir, f"experimentation_setup.log")
+        with open(save_def, "w") as file:
+            file.write(definition_of_exp)
+

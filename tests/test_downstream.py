@@ -2,7 +2,7 @@ import unittest
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
-
+from imputegap.recovery.contamination import GenGap
 
 class TestDownstream(unittest.TestCase):
 
@@ -14,22 +14,27 @@ class TestDownstream(unittest.TestCase):
         # Load and normalize the series
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path("forecast-economy"))
-        ts_1.normalize(normalizer="min_max")
+
+        print(f"{utils.list_of_downstreams() = }")
+        print(f"{utils.list_of_downstreams_darts() = }")
+        print(f"{utils.list_of_downstreams_sktime() = }")
 
         # Create a mask for contamination
-        ts_mask = ts_1.Contamination.mcar(ts_1.data, rate_dataset=0.2, rate_series=0.8)
+        ts_mask = GenGap.aligned(ts_1.data, rate_series=0.7)
 
         # Perform imputation
         imputer = Imputation.MatrixCompletion.CDRec(ts_mask)
         imputer.impute()
 
+        models = utils.list_of_downstreams()
+
         # Configure downstream options
-        downstream_options = [{"task": "forecast", "model": "prophet", "params": None, "plots": False},
-                              {"task": "forecast", "model": "naive", "params": None, "plots": False},
-                              {"task": "forecast", "model": "exp-smoothing", "params": None, "plots": False},
-                              {"task": "forecast", "model": "nbeats", "params": None, "plots": False}]
+        downstream_options= [{"task": "forecast", "model": str(m), "params": None, "plots": None, "baseline": None, "split": 0.8 } for m in models]
+
+        print(f"{downstream_options = }")
 
         for options in downstream_options:
+
             model = options.get("model")
 
             # Score and evaluate

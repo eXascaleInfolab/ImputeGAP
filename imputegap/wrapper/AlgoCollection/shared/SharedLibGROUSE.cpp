@@ -54,6 +54,11 @@ recoveryGROUSE(double *matrixNative, size_t dimN, size_t dimM, size_t rank)
 {
     arma::mat input = marshal_as_arma(matrixNative, dimN, dimM);
 
+    input = input.t();
+
+    //std::cout << "(NATERQ:___) increment = (" << input.n_rows << ", " << input.n_cols << ")" << std::endl;
+    //std::cout << "(NATERQ:___) maxrank = (" << rank << ")" << std::endl;
+
     // Local
     int64_t result;
 
@@ -68,6 +73,8 @@ recoveryGROUSE(double *matrixNative, size_t dimN, size_t dimM, size_t rank)
     end = std::chrono::steady_clock::now();
 
     result = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+
+    input = input.t();
 
     verifyRecovery(input);
 

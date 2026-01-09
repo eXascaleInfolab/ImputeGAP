@@ -8,8 +8,6 @@
 # https://ieeexplore.ieee.org/document/8979178
 # ===============================================================================================================
 
-
-# Copyright (c) [2021] [wlicsnju]
 # [HKMF-T] is licensed under Mulan PSL v2.
 # You can use this software according to the terms and conditions of the Mulan PSL v2. 
 # You may obtain a copy of Mulan PSL v2 at:
@@ -20,14 +18,14 @@ import logging
 
 import numpy as np
 
-from imputegap.wrapper.AlgoPython.hkmft.callback import AbstractConvergeCallback
+from imputegap.wrapper.AlgoPython.HKMFT.callback import AbstractConvergeCallback
 from collections import namedtuple
 from typing import Iterable
 
-from imputegap.wrapper.AlgoPython.hkmft.hankel_methods import get_hankel_result, find_max_continue_0, hankelization
+from imputegap.wrapper.AlgoPython.HKMFT.hankel_methods import get_hankel_result, find_max_continue_0, hankelization
 
 HKMFTTrainParam = namedtuple('HKMFTTrainParam',
-                             ['eta', 'lambda_s', 'lambda_o', 'lambda_e', 'stop_rate', 'random'])
+                             ['eta', 'lambda_s', 'lambda_o', 'lambda_e', 'stop_rate', 'random', 'verbose'])
 HKMFT_MAX_EPOCH = 5000
 
 
@@ -42,8 +40,9 @@ class HKMFT(object):
         self._E = None
         self._A_hat = None
         self._data = None
+        self._data_original = None
 
-    def put_and_reset(self, data, mask, tag, r=None, p=None):
+    def put_and_reset(self, data, mask, tag, original, r=None, p=None):
         if data.shape != tag.shape:
             logging.error(f'\'data\'{data.shape} must be same to \'tag\'{tag.shape}.', ValueError)
             return
@@ -77,13 +76,13 @@ class HKMFT(object):
         self._E = np.random.rand(data_d * p, data_l)
         self._A_hat = (self._U @ self._V) + self._E
         self._Hpx, self._Hpx_mask, self._Hpx_tag = hankelization(data, mask, tag, self._p)
+        self._data_original = original
 
     def train(self, param: HKMFTTrainParam, callbacks: Iterable[AbstractConvergeCallback]):
         epoch = 0
         data_l = self._Hpx.shape[1]
         it_set = set()
         all_it_list = []
-
         for i, _ in enumerate(self._Hpx_mask):
             for t, x in enumerate(_):
                 if x != 0:
@@ -159,9 +158,10 @@ class HKMFT(object):
             new_A_hat = (self._U @ self._V) + self._E
             for c in callbacks:
                 if isinstance(c, AbstractConvergeCallback):
-                    if not c.on_epoch(self._p, it_set, e, self._A_hat, new_A_hat, self._Hpx_mask, self._Hpx_tag):
+                    if not c.on_epoch(self._p, it_set, e, self._A_hat, new_A_hat, self._Hpx_mask, self._Hpx_tag, param.verbose):
                         self._A_hat = new_A_hat
-                        logging.info(f'Early stop in {c.__class__.__name__}.on_epoch().')
+                        if param.verbose:
+                            logging.info(f'Early stop in {c.__class__.__name__}.on_epoch().')
                         return
             self._A_hat = new_A_hat
             if len(it_set) / (len(stop_it) + len(it_set)) <= param.stop_rate:
@@ -194,3 +194,14 @@ class HKMFT(object):
                     self._E[i, t] = tag_mean[tag]
         self._A_hat = (self._U @ self._V) + self._E
         return get_hankel_result(self._A_hat, self._Hpx_mask, self._p)
+
+
+    def get_imputed_matrix(self):
+        hankel_rec = get_hankel_result(self._A_hat, self._Hpx_mask, self._p)  # re
+        data_imputed = self._data_original.copy()
+
+        nan_mask = np.isnan(data_imputed)  # shape (1, 150)
+        data_imputed[nan_mask] = hankel_rec.ravel()
+
+        return data_imputed
+

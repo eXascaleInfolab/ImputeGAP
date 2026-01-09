@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 
 def miss_forest(incomp_data, n_estimators=10, max_iter=3, max_features='sqrt', seed=42, logs=True, verbose=True):
     """
-    Perform imputation using the Missing Value Imputation for Multi-attribute Sensor Data Streams via Message Propagation algorithm.
+    Perform imputation using the MissForest algorithm (Random-Forest-based imputation for mixed data)
 
     Parameters
     ----------
@@ -47,9 +47,11 @@ def miss_forest(incomp_data, n_estimators=10, max_iter=3, max_features='sqrt', s
     https://github.com/yuenshingyan/MissForest
     https://pypi.org/project/MissForest/
     """
+    incomp_data = incomp_data
 
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)
+    verbose_int = 2 if verbose else 0  # use 2 for full output, 0 for none
 
     if verbose:
         print(f"(IMPUTATION) MISS FOREST\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tn_estimators: {n_estimators}\n\tmax_iter: {max_iter}\n\tmax_features: {max_features}\n\tseed: {seed}\n")
@@ -65,7 +67,7 @@ def miss_forest(incomp_data, n_estimators=10, max_iter=3, max_features='sqrt', s
     rgr = RandomForestRegressor(n_estimators=n_estimators, max_features=max_features, random_state=seed)
 
     # Initialize MissForest with custom estimators
-    mf_imputer = MissForest(clf=clf, rgr=rgr, max_iter=max_iter)
+    mf_imputer = MissForest(clf=clf, rgr=rgr, max_iter=max_iter, verbose=verbose_int)
     recov_data = mf_imputer.fit_transform(incomp_data)
     recov_data = np.array(recov_data)
 

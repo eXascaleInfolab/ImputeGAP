@@ -9,11 +9,19 @@
 # ===============================================================================================================
 
 
-from typing import Optional
+import copy
+from typing import Optional, Any
 import torch
 from torch import Tensor
+from torch.nn import functional as F    
+from utils import *
+from functools import *
 
-
+# S,N,E
+# N,H,S,E
+# SNE -> NSE -> NSE*H -> NSHE -> NHSE
+# value is NHSE -> NSHE -> NSE-> SNE
+# return sould be SNE
 class FastCausalMultiheadAttention(torch.nn.Module):
     def __init__(self,d_query:int,d_key:int,d_value:int, nhead:int, backward=False):
         super(FastCausalMultiheadAttention, self).__init__()
@@ -105,3 +113,117 @@ class PerformerEncoderLayer(torch.nn.Module):
 
         return src
 
+# def softmax_kernel(data, *, projection_matrix, is_query, normalize_data=True, eps=1e-4, device = None):
+#     b, h, *_ = data.shape
+
+#     data_normalizer = (data.shape[-1] ** -0.25) if normalize_data else 1.
+
+#     ratio = (projection_matrix.shape[0] ** -0.5)
+
+#     projection = repeat(projection_matrix, 'j d -> b h j d', b = b, h = h)
+#     projection = projection.type_as(data)
+
+#     data_dash = torch.einsum('...id,...jd->...ij', (data_normalizer * data), projection)
+
+#     diag_data = data ** 2
+#     diag_data = torch.sum(diag_data, dim=-1)
+#     diag_data = (diag_data / 2.0) * (data_normalizer ** 2)
+#     diag_data = diag_data.unsqueeze(dim=-1)
+
+#     if is_query:
+#         data_dash = ratio * (
+#             torch.exp(data_dash - diag_data -
+#                     torch.max(data_dash, dim=-1, keepdim=True).values) + eps)
+#     else:
+#         data_dash = ratio * (
+#             torch.exp(data_dash - diag_data - torch.max(data_dash)) + eps)
+
+#     return data_dash.type_as(data)
+
+
+
+# # non-causal linear attention
+# def linear_attention(q, k, v):
+#     k_cumsum = k.sum(dim = -2)
+#     D_inv = 1. / torch.einsum('...nd,...d->...n', q, k_cumsum.type_as(q))
+#     context = torch.einsum('...nd,...ne->...de', k, v)
+#     out = torch.einsum('...de,...nd,...n->...ne', context, q, D_inv)
+#     return out
+
+# # efficient causal linear attention, created by EPFL
+# # TODO: rewrite EPFL's CUDA kernel to do mixed precision and remove half to float conversion and back
+
+# # def causal_linear_attention(q, k, v,backward=False,mask=None):
+# #     k_cumsum = k.cumsum(dim=-2)
+# #     context = torch.einsum('...nd,...ne->...nde', k, v)
+# #     context = context.cumsum(dim=-3)
+# #     if (backward):
+# #         k_cumsum = torch.flip(k_cumsum,dims = (-2,))
+# #         context = torch.flip(context,dims = (-3,))
+        
+# #     context = context[:,:,mask,:,:]
+# #     k_cumsum  = k_cumsum[:,:,mask,:]
+# #     D_inv = 1. / torch.einsum('...nd,...nd->...n', q, k_cumsum.type_as(q))
+# #     out = torch.einsum('...nde,...nd,...n->...ne', context, q, D_inv)
+# #     return out
+
+# def causal_linear_attention(q, k, v,backward=False,mask=None):
+#     from fast_transformers.causal_product import CausalDotProduct
+#     cuda_context = null_context
+
+#     causal_dot_product_fn = CausalDotProduct.apply
+
+#     k_cumsum = k.cumsum(dim=-2)
+#     D_inv = 1. / torch.einsum('...nd,...nd->...n', q, k_cumsum.type_as(q))
+
+#     with cuda_context():
+#         out = causal_dot_product_fn(q, k, v)
+
+#     out = torch.einsum('...nd,...n->...nd', out, D_inv)
+#     return out
+
+
+# def orthogonal_matrix_chunk(cols, qr_uniform_q = False, device = None):
+#     unstructured_block = torch.randn((cols, cols), device = device)
+#     q, r = torch.qr(unstructured_block.cpu(), some = True)
+#     q, r = map(lambda t: t.to(device), (q, r))
+
+#     # proposed by @Parskatt
+#     # to make sure Q is uniform https://arxiv.org/pdf/math-ph/0609050.pdf
+#     if qr_uniform_q:
+#         d = torch.diag(r, 0)
+#         q *= d.sign()
+#     return q.t()
+
+
+# def gaussian_orthogonal_random_matrix(nb_rows, nb_columns, scaling = 0, qr_uniform_q = False, device = None):
+#     nb_full_blocks = int(nb_rows / nb_columns)
+
+#     block_list = []
+
+#     for _ in range(nb_full_blocks):
+#         q = orthogonal_matrix_chunk(nb_columns, qr_uniform_q = qr_uniform_q, device = device)
+#         block_list.append(q)
+
+#     remaining_rows = nb_rows - nb_full_blocks * nb_columns
+#     if remaining_rows > 0:
+#         q = orthogonal_matrix_chunk(nb_columns, qr_uniform_q = qr_uniform_q, device = device)
+#         block_list.append(q[:remaining_rows])
+
+#     final_matrix = torch.cat(block_list)
+
+#     if scaling == 0:
+#         multiplier = torch.randn((nb_rows, nb_columns), device = device).norm(dim = 1)
+#     elif scaling == 1:
+#         multiplier = math.sqrt((float(nb_columns))) * torch.ones((nb_rows,), device = device)
+#     else:
+#         raise ValueError(f'Invalid scaling {scaling}')
+
+#     return torch.diag(multiplier) @ final_matrix
+
+
+# # if __name__ == "__main__":
+# #     exit()
+
+
+    

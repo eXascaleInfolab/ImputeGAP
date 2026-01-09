@@ -1,9 +1,10 @@
 import time
 
-from imputegap.wrapper.AlgoPython.MPIN.runnerMPIN import recoverMPIN
+#from imputegap.wrapper.AlgoPython.MPIN.runnerMPIN import recoverMPIN
+from imputegap.wrapper.AlgoPython.MPIN.recovMPIN import recovMPIN
 
 
-def mpin(incomp_data=None, incre_mode="alone", window=2, k=10, lr=0.01, weight_decay=0.1, epochs=200, num_of_iteration=5, thre=0.25, base="SAGE", tr_ratio=0.9, logs=True, verbose=True):
+def mpin(incomp_data=None, window=6, incre_mode="alone", base="SAGE", epochs=15, num_of_iteration=5, k=10, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using the Missing Value Imputation for Multi-attribute Sensor Data Streams via Message Propagation algorithm.
 
@@ -11,24 +12,18 @@ def mpin(incomp_data=None, incre_mode="alone", window=2, k=10, lr=0.01, weight_d
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
+    window : int, optional
+        The size of the sliding window for processing data streams (default is 6).
     incre_mode : str, optional
         The mode of incremental learning. Options are: 'alone',  'data', 'state', 'state+transfer', 'data+state', 'data+state+transfer' (default is "alone").
-    window : int, optional
-        The size of the sliding window for processing data streams (default is 2).
-    k : int, optional
-        The number of neighbors to consider during message propagation (default is 10).
-    lr : float, optional
-        The learning rate for optimizing the message propagation algorithm (default is 0.01).
-    weight_decay : float, optional
-        The weight decay (regularization) term to prevent overfitting during training (default is 0.1).
+    base : str, optional
+        The base model used for graph representation and message propagation. Common options include "SAGE" and "GCN" (default is "SAGE").
     epochs : int, optional
         The number of epochs to run the training process (default is 200).
     num_of_iteration : int, optional
         The number of iteration of the whole training (default is 5).
-    thre : float, optional
-        The threshold for considering a missing value as imputed (default is 0.25).
-    base : str, optional
-        The base model used for graph representation and message propagation. Common options include "SAGE" and "GCN" (default is "SAGE").
+    k : int, optional
+        The number of neighbors to consider during message propagation (default is 10).
     tr_ratio: float, optional
         Split ratio between training and testing sets (default is 0.9).
     logs : bool, optional
@@ -43,7 +38,7 @@ def mpin(incomp_data=None, incre_mode="alone", window=2, k=10, lr=0.01, weight_d
 
     Example
     -------
-        >>> recov_data = mpin(incomp_data, incre_mode="alone", window=2, k=10, lr=0.01, weight_decay=0.1, epochs=200, thre=0.25, base="SAGE")
+        >>> recov_data = mpin(incomp_data,  window=6, incre_mode="alone", base="SAGE", epochs=15, num_of_iteration=5, k=10)
         >>> print(recov_data)
 
     References
@@ -53,7 +48,7 @@ def mpin(incomp_data=None, incre_mode="alone", window=2, k=10, lr=0.01, weight_d
     """
     start_time = time.time()  # Record start time
 
-    recov_data = recoverMPIN(input=incomp_data, mode=incre_mode, window=window, k=k, lr=lr, weight_decay=weight_decay, epochs=epochs, num_of_iteration=num_of_iteration, thre=thre, base=base, out_channels=64, eval_ratio=0.05, state=True, verbose=verbose)
+    recov_data = recovMPIN(incomp_data=incomp_data, window=window, incre_mode=incre_mode, base=base, epochs=epochs, num_of_iter=num_of_iteration, k=k, tr_ratio=tr_ratio, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

@@ -344,7 +344,7 @@ The soccer dataset, initially presented in the DEBS Challenge 2013 [[3]](#ref3),
 <br /><hr /><br />
 
 
-## Solar Plant
+## Solar
 
 Real-time dataset of a thermal solar plant logged every minute from December 28, 2016, to October 10, 2018. The recordings come directly from a real plant, capturing the following:
 
@@ -362,7 +362,7 @@ Real-time dataset of a thermal solar plant logged every minute from December 28,
 
 | Dataset info |                                                                                                 |
 |--------------|-------------------------------------------------------------------------------------------------|
-| codename     | solar_plant                                                                                     |
+| codename     | solar                                                                                           |
 | name         | Solar Plant                                                                                     |
 | url          | https://github.com/stritti/thermal-solar-plant-dataset (temperature 01/2021 used: 20210120.csv) | 
 | source	     | -                                                                                               |
@@ -373,7 +373,7 @@ Real-time dataset of a thermal solar plant logged every minute from December 28,
 
 ### Sample Plots
 
-![SOLAR-PLANT dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/solar_plant/01_solat_plant_M.jpg)
+![SOLAR dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/solar_plant/01_solat_plant_M.jpg)
 
 
 

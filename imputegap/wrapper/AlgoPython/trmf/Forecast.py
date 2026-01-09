@@ -1,3 +1,13 @@
+# ===============================================================================================================
+# SOURCE: https://github.com/SemenovAlex/trmf/tree/master
+#
+# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
+#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
+#
+# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
+# https://www.cs.utexas.edu/~rofuyu/papers/tr-mf-nips.pdf
+# ===============================================================================================================
+
 """
 Different simple models for timeseries.
 """

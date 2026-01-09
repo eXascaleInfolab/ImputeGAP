@@ -4,7 +4,6 @@ from imputegap.recovery.explainer import Explainer
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 
-
 class TestExplainer(unittest.TestCase):
 
     def test_explainer_shap(self):
