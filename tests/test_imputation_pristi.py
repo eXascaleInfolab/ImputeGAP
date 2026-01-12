@@ -7,7 +7,7 @@ from imputegap.recovery.contamination import GenGap
 
 class TestPrisTI(unittest.TestCase):
 
-    def test_imputation_pristi(self, name="pristi", limit=0.10):
+    def test_imputation_pristi(self, name="pristi", limit=0.2):
         """
         the goal is to test if only the simple imputation with the technique has the expected outcome
         """

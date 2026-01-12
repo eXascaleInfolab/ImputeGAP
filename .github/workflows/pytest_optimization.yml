@@ -1,5 +1,5 @@
 
-name: Pytest - ImputeGAP - OPTIMIZATION - 12
+name: Pytest - ImputeGAP - OPTI - 12
 
 on:
   push:
@@ -19,16 +19,6 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install libmlpack-dev
-        sudo apt-get install libopenblas-dev
-        sudo apt-get install python3-dev build-essential
-        pip install -r requirements.txt
-        pip install mypy
-        pip install pytest
-        
     - name: Free disk space
       run: |
         df -h
@@ -38,6 +28,16 @@ jobs:
         sudo rm -rf /usr/local/.ghcup
         sudo apt-get clean
         df -h   
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install libmlpack-dev
+        sudo apt-get install libopenblas-dev
+        sudo apt-get install python3-dev build-essential
+        pip install -r requirements.txt
+        pip install mypy
+        pip install pytest
 
     - name: Run pytest
       run: |
