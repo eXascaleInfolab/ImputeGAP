@@ -1,7 +1,7 @@
 import time
 
 #from imputegap.wrapper.AlgoPython.BiTGraph.recovBitGraph import recoveryBitGRAPH
-from imputegap.wrapper.AlgoPython.BiTGraph_s.recovBitGRAPH import recovBitGRAPH
+from imputegap.wrapper.AlgoPython.BitGraph.recovBitGRAPH import recovBitGRAPH
 
 
 def bit_graph(incomp_data, seq_len=24, sliding_windows=1, kernel_size=2, kernel_set=[1], epochs=50, batch_size=32, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):

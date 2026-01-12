@@ -1,4 +1,4 @@
-from imputegap.wrapper.AlgoPython.BiTGraph_s.models.BiaTCGNet.BiaTCGNet_layer import *
+from imputegap.wrapper.AlgoPython.BitGraph.models.BiaTCGNet.BiaTCGNet_layer import *
 import torch.nn as nn
 import torch
 #from torch.nn.utils import weight_norm
