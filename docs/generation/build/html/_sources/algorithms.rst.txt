@@ -153,7 +153,7 @@ To learn how to apply imputation within the library, please refer to the `tutori
 
 .. raw:: html
 
-   <br>
+   <br><br>
 
 
 Under Integration
@@ -176,7 +176,7 @@ Under Integration
 
 .. raw:: html
 
-   <br>
+   <br><br>
 
 .. _references:
 
