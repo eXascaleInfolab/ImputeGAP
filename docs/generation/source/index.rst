@@ -3,7 +3,7 @@ ImputeGAP Documentation
 
 .. admonition:: 📢 News !
 
-        - [03-07-2025] Version 1.1.1 is out! Check out the latest updates and improvements!
+        - [14-01-2026] Version 1.1.2 is out! Check out the latest updates and improvements!
         - [04-06-2025] ImputeGAP will be presented as a Tutorial at KDD 2025 in Toronto! `[Link] <https://imputegap-tutorials.github.io/KDD-2025/>`_
 
 

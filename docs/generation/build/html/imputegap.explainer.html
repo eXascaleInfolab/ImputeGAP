@@ -280,8 +280,346 @@
         <article role="main" id="furo-main-content">
           <section id="imputegap-recovery-explainer-package">
 <h1>imputegap.recovery.explainer package<a class="headerlink" href="#imputegap-recovery-explainer-package" title="Link to this heading">¶</a></h1>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="module-imputegap.recovery.explainer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-imputegap.recovery.explainer" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.explainer.</span></span><span class="sig-name descname"><span class="pre">Explainer</span></span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to manage SHAP-based model explanations and feature extraction for time series datasets.</p>
+<section id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h3>
+<dl>
+<dt>show()</dt><dd><p>Show the shap result plot</p>
+</dd>
+<dt>load_configuration(file_path=None)</dt><dd><p>Load categories and features from a TOML file.</p>
+</dd>
+<dt>extractor_pycatch(data, features_categories, features_list, do_catch24=True)</dt><dd><p>Extract features from time series data using pycatch22.</p>
+</dd>
+<dt>extractor_tsfresh(data, categories=[“statistical”, “temporal”, “frequency”, “shape”])</dt><dd><p>Extract features from time series data using TSFresh.
+The function supports filtering by feature categories and calculates a large set of features
+(up to 783) related to statistics, temporal dynamics, frequency analysis, and shape.</p>
+</dd>
+<dt>extractor_tsfel(data, frequency=None, categories=[“spectral”, “statistical”, “temporal”, “fractal”])</dt><dd><p>Extract features from time series data using TSFEL (Time Series Feature Extraction Library).
+This method calculates features based on the selected categories and optionally uses the
+sampling frequency to compute frequency-domain features.</p>
+</dd>
+<dt>print(shap_values, shap_details=None)</dt><dd><p>Print SHAP values and details for display.</p>
+</dd>
+<dt>convert_results(tmp, file, algo, descriptions, features, categories, mean_features, to_save)</dt><dd><p>Convert SHAP raw results into a refined format for display.</p>
+</dd>
+<dt>execute_shap_model(x_dataset, x_information, y_dataset, file, algorithm, splitter=10, display=False, verbose=False)</dt><dd><p>Launch the SHAP model to explain the dataset features.</p>
+</dd>
+<dt>shap_explainer(input_data, algorithm=”cdrec”, params=None, extractor=”pycatch”, incomp_data=”mcar”,</dt><dd><blockquote>
+<div><p>missing_rate=0.4, block_size=10, offset=0.1, seed=True, limitation=15, splitter=0,
+file_name=”ts”, display=False, verbose=False)</p>
+</div></blockquote>
+<p>Handle parameters and set variables to launch the SHAP model.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.convert_results">
+<span class="sig-name descname"><span class="pre">convert_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descriptions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_save</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.convert_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.convert_results" title="Link to this definition">¶</a></dt>
+<dd><p>Convert SHAP raw results to a refined format for display.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>tmp<span class="classifier">list</span></dt><dd><p>Current SHAP results.</p>
+</dd>
+<dt>file<span class="classifier">str</span></dt><dd><p>Dataset used.</p>
+</dd>
+<dt>algo<span class="classifier">str</span></dt><dd><p>Algorithm used for imputation.</p>
+</dd>
+<dt>descriptions<span class="classifier">list</span></dt><dd><p>Descriptions of each feature.</p>
+</dd>
+<dt>features<span class="classifier">list</span></dt><dd><p>Raw names of each feature.</p>
+</dd>
+<dt>categories<span class="classifier">list</span></dt><dd><p>Categories of each feature.</p>
+</dd>
+<dt>mean_features<span class="classifier">list</span></dt><dd><p>Mean values of each feature.</p>
+</dd>
+<dt>to_save<span class="classifier">str</span></dt><dd><p>Path to save results.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>list</dt><dd><p>A list of processed SHAP results.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.execute_shap_model">
+<span class="sig-name descname"><span class="pre">execute_shap_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_information</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splitter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extractor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pycatch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.execute_shap_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.execute_shap_model" title="Link to this definition">¶</a></dt>
+<dd><p>Launch the SHAP model for explaining the features of the dataset.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>x_dataset<span class="classifier">numpy.ndarray</span></dt><dd><p>Dataset of feature extraction with descriptions.</p>
+</dd>
+<dt>x_information<span class="classifier">list</span></dt><dd><p>Descriptions of all features grouped by categories.</p>
+</dd>
+<dt>y_dataset<span class="classifier">numpy.ndarray</span></dt><dd><p>RMSE labels of each series.</p>
+</dd>
+<dt>file<span class="classifier">str</span></dt><dd><p>Dataset used for SHAP analysis.</p>
+</dd>
+<dt>algorithm<span class="classifier">str</span></dt><dd><p>Algorithm used for imputation (e.g., ‘cdrec’, ‘stmvl’, ‘iim’, ‘mrnn’).</p>
+</dd>
+<dt>splitter<span class="classifier">int, optional</span></dt><dd><p>Split ratio for data training and testing (default is 10).</p>
+</dd>
+<dt>extractor<span class="classifier">str</span></dt><dd><p>Feature extractor used for the regression (e.g., ‘pycatch’, ‘tsfel’).</p>
+</dd>
+<dt>display<span class="classifier">bool, optional</span></dt><dd><p>Whether to display the SHAP plots (default is False).</p>
+</dd>
+<dt>verbose<span class="classifier">bool, optional</span></dt><dd><p>Whether to print detailed output (default is False).</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>list</dt><dd><p>Results of the SHAP explainer model.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.extractor_pycatch">
+<span class="sig-name descname"><span class="pre">extractor_pycatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_categories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_catch24</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deep_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.extractor_pycatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.extractor_pycatch" title="Link to this definition">¶</a></dt>
+<dd><p>Extract features from time series data using pycatch22.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>data<span class="classifier">numpy.ndarray</span></dt><dd><p>Time series dataset for feature extraction.</p>
+</dd>
+<dt>features_categories<span class="classifier">dict</span></dt><dd><p>Dictionary that maps feature names to categories.</p>
+</dd>
+<dt>features_list<span class="classifier">dict</span></dt><dd><p>Dictionary of all features expected.</p>
+</dd>
+<dt>do_catch24<span class="classifier">bool, optional</span></dt><dd><p>Flag to compute the mean and standard deviation for Catch24 (default is True).</p>
+</dd>
+<dt>deep_verbose<span class="classifier">bool, optional</span></dt><dd><p>Print the detail information of the extractor</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h4>Returns<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>tuple</dt><dd><p>A tuple containing:
+- results (dict): A dictionary of feature values by feature names.
+- descriptions (list): A list of tuples containing feature names, categories, and descriptions.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.extractor_tsfel">
+<span class="sig-name descname"><span class="pre">extractor_tsfel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['spectral',</span> <span class="pre">'statistical',</span> <span class="pre">'temporal']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.extractor_tsfel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.extractor_tsfel" title="Link to this definition">¶</a></dt>
+<dd><p>Extract features using TSFEL (Time Series Feature Extraction Library).</p>
+<p>This function extracts features from the input time series data based on the specified
+categories. The categories determine the type of features to compute, such as spectral,
+statistical, temporal, or fractal features. Optionally, a frequency value can be provided
+to compute frequency-specific features.</p>
+<section id="id5">
+<h4>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><dl>
+<dt>data (numpy.ndarray):</dt><dd><p>2D array of shape (M, N), where M is the timestamp and N is the number of series</p>
+</dd>
+<dt>frequency (float, optional):</dt><dd><p>The sampling frequency of the time series data. This is used for spectral feature
+calculations (e.g., FFT-based features). If None, spectral features will be computed
+using default assumptions.</p>
+</dd>
+<dt>categories (list, optional):</dt><dd><dl class="simple">
+<dt>A list of categories to extract. Valid categories are:</dt><dd><ul class="simple">
+<li><p>“spectral”: Extract frequency-domain features (e.g., FFT, spectral entropy).</p></li>
+<li><p>“statistical”: Extract basic statistical features (e.g., mean, variance, skewness).</p></li>
+<li><p>“temporal”: Extract temporal-domain features (e.g., autocorrelation, zero crossings).</p></li>
+</ul>
+</dd>
+</dl>
+<p>By default, all four categories are extracted.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id6">
+<h4>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><dl class="simple">
+<dt>dict:</dt><dd><p>A dictionary where keys are feature names and values are the computed feature values
+for the entire dataset (aggregated over all time series).</p>
+</dd>
+<dt>list:</dt><dd><dl class="simple">
+<dt>A list of tuples, where each tuple contains:</dt><dd><ul class="simple">
+<li><p>Feature name (str): The name of the feature.</p></li>
+<li><p>Category (str): The category to which the feature belongs.</p></li>
+<li><p>Formatted feature name (str): A human-readable version of the feature name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># 5 time series, each with 100 values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span><span class="p">,</span> <span class="n">descriptions</span> <span class="o">=</span> <span class="n">extractor_tsfel</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;statistical&quot;</span><span class="p">,</span> <span class="s2">&quot;temporal&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">descriptions</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>This function requires TSFEL to be installed: <cite>pip install tsfel</cite>.</p></li>
+<li><p>Categories can be customized to extract only the desired features, reducing computation time.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.extractor_tsfresh">
+<span class="sig-name descname"><span class="pre">extractor_tsfresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['statistical',</span> <span class="pre">'temporal',</span> <span class="pre">'shape',</span> <span class="pre">'frequency']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.extractor_tsfresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.extractor_tsfresh" title="Link to this definition">¶</a></dt>
+<dd><p>Extract features using tsfresh and group them into 4 categories:
+statistical, temporal, frequency, and shape-based.</p>
+<section id="id7">
+<h4>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><dl class="simple">
+<dt>data (numpy.ndarray):</dt><dd><p>2D array of shape (M, N), where M is the timestamp and N is the number of series</p>
+</dd>
+<dt>categories (list):</dt><dd><p>List of categories to extract. Must include one or more of: [“statistical”, “temporal”, “frequency”, “shape”]</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id8">
+<h4>Returns<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><p>dict: A dictionary with feature names as keys and their aggregated values as values.
+list: A list of tuples (feature_name, category, formatted_feature_name).</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.load_configuration">
+<span class="sig-name descname"><span class="pre">load_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.load_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.load_configuration" title="Link to this definition">¶</a></dt>
+<dd><p>Load categories and features from a TOML file.</p>
+<section id="id9">
+<h4>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>file_path<span class="classifier">str, optional</span></dt><dd><p>The path to the TOML file (default is None). If None, it loads the default configuration file.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h4>Returns<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>tuple</dt><dd><p>A tuple containing two dictionaries: categories, features and config.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shap_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shap_details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.print" title="Link to this definition">¶</a></dt>
+<dd><p>Convert SHAP raw results to a refined format for display.</p>
+<section id="id11">
+<h4>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>shap_values<span class="classifier">list</span></dt><dd><p>The SHAP values and results of the SHAP analysis.</p>
+</dd>
+<dt>shap_details<span class="classifier">list, optional</span></dt><dd><p>Input and output data of the regression, if available (default is None).</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h4>Returns<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<p>None</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.shap_explainer">
+<span class="sig-name descname"><span class="pre">shap_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cdrec'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extractor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pycatch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mcar'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deep_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.shap_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.shap_explainer" title="Link to this definition">¶</a></dt>
+<dd><p>Handle parameters and set variables to launch the SHAP model.</p>
+<section id="id13">
+<h4>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>input_data<span class="classifier">numpy.ndarray</span></dt><dd><p>The original time series dataset.</p>
+</dd>
+<dt>algorithm<span class="classifier">str, optional</span></dt><dd><p>The algorithm used for imputation (default is ‘cdrec’). Valid values: ‘cdrec’, ‘stmvl’, ‘iim’, ‘mrnn’.</p>
+</dd>
+<dt>params<span class="classifier">dict, optional</span></dt><dd><p>Parameters for the algorithm.</p>
+</dd>
+<dt>pattern<span class="classifier">str, optional</span></dt><dd><p>Contamination pattern to apply (default is ‘mcar’).</p>
+</dd>
+<dt>extractor<span class="classifier">str, optional</span></dt><dd><p>Extractor use to get the features of the data (default is ‘pycatch’).  Valid values: ‘pycatch’, ‘tsfel’, ‘tsfresh’</p>
+</dd>
+<dt>missing_rate<span class="classifier">float, optional</span></dt><dd><p>Percentage of missing values per series (default is 0.4).</p>
+</dd>
+<dt>block_size<span class="classifier">int, optional</span></dt><dd><p>Size of the block to remove at each random position selected (default is 10).</p>
+</dd>
+<dt>offset<span class="classifier">float, optional</span></dt><dd><p>Size of the uncontaminated section at the beginning of the time series (default is 0.1).</p>
+</dd>
+<dt>seed<span class="classifier">bool, optional</span></dt><dd><p>Whether to use a seed for reproducibility (default is True).</p>
+</dd>
+<dt>rate_dataset<span class="classifier">flaot, optional</span></dt><dd><p>Limitation on the number of series for the model (default is 1).</p>
+</dd>
+<dt>training_ratio<span class="classifier">flaot, optional</span></dt><dd><p>Limitation on the training series for the model (default is 0.6).</p>
+</dd>
+<dt>file_name<span class="classifier">str, optional</span></dt><dd><p>Name of the dataset file (default is ‘ts’).</p>
+</dd>
+<dt>display<span class="classifier">bool, optional</span></dt><dd><p>Whether to display the SHAP plots (default is False).</p>
+</dd>
+<dt>verbose<span class="classifier">bool, optional</span></dt><dd><p>Whether to print detailed output (default is False).</p>
+</dd>
+<dt>deep_verbose<span class="classifier">bool, optional</span></dt><dd><p>Whether to print debug output (default is False).</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h4>Returns<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>tuple</dt><dd><p>A tuple containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>shap_values<span class="classifier">list</span></dt><dd><p>SHAP values for each series.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>shap_details<span class="classifier">list</span></dt><dd><p>Detailed SHAP analysis results.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h4>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h4>
+<p>The contamination is applied to each time series using the specified method. The SHAP model is then used
+to generate explanations for the imputation results, which are logged in a local directory.</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/explainer.html#Explainer.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.show" title="Link to this definition">¶</a></dt>
+<dd><p>Display the explainer plot for shap</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
 </section>
 </section>
 
@@ -341,7 +679,21 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">imputegap.recovery.explainer package</a><ul>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-imputegap.recovery.explainer">Module contents</a><ul>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer"><code class="docutils literal notranslate"><span class="pre">Explainer</span></code></a><ul>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.convert_results"><code class="docutils literal notranslate"><span class="pre">Explainer.convert_results()</span></code></a></li>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.execute_shap_model"><code class="docutils literal notranslate"><span class="pre">Explainer.execute_shap_model()</span></code></a></li>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.extractor_pycatch"><code class="docutils literal notranslate"><span class="pre">Explainer.extractor_pycatch()</span></code></a></li>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.extractor_tsfel"><code class="docutils literal notranslate"><span class="pre">Explainer.extractor_tsfel()</span></code></a></li>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.extractor_tsfresh"><code class="docutils literal notranslate"><span class="pre">Explainer.extractor_tsfresh()</span></code></a></li>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.load_configuration"><code class="docutils literal notranslate"><span class="pre">Explainer.load_configuration()</span></code></a></li>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.print"><code class="docutils literal notranslate"><span class="pre">Explainer.print()</span></code></a></li>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.shap_explainer"><code class="docutils literal notranslate"><span class="pre">Explainer.shap_explainer()</span></code></a></li>
+<li><a class="reference internal" href="#imputegap.recovery.explainer.Explainer.show"><code class="docutils literal notranslate"><span class="pre">Explainer.show()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

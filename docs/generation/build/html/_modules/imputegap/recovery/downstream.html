@@ -300,14 +300,15 @@
 <span class="sd">    ----------</span>
 <span class="sd">    input_data : numpy.ndarray</span>
 <span class="sd">        The original time series without contamination (ground truth).</span>
+
 <span class="sd">    recov_data : numpy.ndarray</span>
 <span class="sd">        The imputed time series to evaluate.</span>
+
 <span class="sd">    incomp_data : numpy.ndarray</span>
 <span class="sd">        The time series with contamination (NaN values).</span>
+
 <span class="sd">    downstream : dict</span>
 <span class="sd">        Configuration for the downstream analysis, including the evaluator, model, and parameters.</span>
-<span class="sd">    split : float</span>
-<span class="sd">        The proportion of data used for training in the forecasting task (default is 0.8).</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
@@ -321,7 +322,7 @@
 
 
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">recov_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">downstream</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">recov_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">downstream</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the Downstream class</span>
 
@@ -329,22 +330,29 @@
 <span class="sd">        ----------</span>
 <span class="sd">        input_data : numpy.ndarray</span>
 <span class="sd">            The original time series without contamination.</span>
+
 <span class="sd">        recov_data : numpy.ndarray</span>
 <span class="sd">            The imputed time series.</span>
+
 <span class="sd">        incomp_data : numpy.ndarray</span>
 <span class="sd">            The time series with contamination (NaN values).</span>
+
 <span class="sd">        algorithm : str</span>
 <span class="sd">            Name of the algorithm to analyse.</span>
+
 <span class="sd">        downstream : dict</span>
 <span class="sd">            Information about the model to launch with its parameters</span>
+
+<span class="sd">        verbose : bool</span>
+<span class="sd">            Display or not information.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span> <span class="o">=</span> <span class="n">input_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">recov_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span> <span class="o">=</span> <span class="n">incomp_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span> <span class="o">=</span> <span class="n">downstream</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">=</span> <span class="n">algorithm</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="mf">0.8</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sktime_models</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">list_of_downstreams_sktime</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 
 <div class="viewcode-block" id="Downstream.downstream_analysis">
 <a class="viewcode-back" href="../../../imputegap.downstream.html#imputegap.recovery.downstream.Downstream.downstream_analysis">[docs]</a>
@@ -366,6 +374,8 @@
         <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;params&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">plots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plots&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">baseline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;baseline&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;split&quot;</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+        <span class="n">selected_series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selected_series&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">baseline</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">baseline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;comparator&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -375,12 +385,19 @@
         <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">evaluator</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="n">selected_series</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nan_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">series_indices</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nan_cols</span><span class="p">))</span> <span class="k">if</span> <span class="n">nan_cols</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">selected_series</span> <span class="o">=</span> <span class="p">[</span><span class="n">series_indices</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">selected_series</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">selected_series</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(DOWNSTREAM) Default parameters of the downstream model loaded.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">(DOWNSTREAM) Default parameters of the downstream model loaded.&quot;</span><span class="p">)</span>
             <span class="n">loader</span> <span class="o">=</span> <span class="s2">&quot;forecaster-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">load_parameters</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">loader</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(DOWNSTREAM) Analysis launched !</span><span class="se">\n</span><span class="s2">task: </span><span class="si">{</span><span class="n">evaluator</span><span class="si">}</span><span class="se">\n</span><span class="s2">model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="se">\n</span><span class="s2">params: </span><span class="si">{</span><span class="n">params</span><span class="si">}</span><span class="se">\n</span><span class="s2">base algorithm: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">reference algorithm: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">baseline</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(DOWNSTREAM) Analysis launched !</span><span class="se">\n\t</span><span class="s2">task: </span><span class="si">{</span><span class="n">evaluator</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">params: </span><span class="si">{</span><span class="n">params</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">base algorithm: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">reference algorithm: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">baseline</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">selected series: </span><span class="si">{</span><span class="n">selected_series</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">evaluator</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;forecast&quot;</span><span class="p">,</span> <span class="s2">&quot;forecaster&quot;</span><span class="p">,</span> <span class="s2">&quot;forecasting&quot;</span><span class="p">]:</span>
             <span class="n">y_train_all</span><span class="p">,</span> <span class="n">y_test_all</span><span class="p">,</span> <span class="n">y_pred_all</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -403,13 +420,14 @@
                         <span class="n">zero_impute</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">Statistics</span><span class="o">.</span><span class="n">ZeroImpute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">)</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
                         <span class="n">data</span> <span class="o">=</span> <span class="n">zero_impute</span><span class="o">.</span><span class="n">recov_data</span>
 
-                <span class="n">data_len</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">train_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data_len</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
+                <span class="n">time_len</span>  <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">train_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time_len</span>  <span class="o">*</span> <span class="n">split</span><span class="p">)</span>
 
-                <span class="n">y_train</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="n">train_len</span><span class="p">]</span>
-                <span class="n">y_test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">train_len</span><span class="p">:]</span>
+                <span class="n">y_train</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="n">train_len</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">y_test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">train_len</span><span class="p">:,</span> <span class="p">:]</span>
 
                 <span class="n">forecaster</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">config_forecaster</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+                <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sktime_models</span><span class="p">:</span>
                     <span class="c1"># --- SKTIME APPROACH ---</span>
@@ -417,11 +435,10 @@
                     <span class="kn">from</span><span class="w"> </span><span class="nn">sktime.forecasting.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForecastingHorizon</span>
                     <span class="kn">from</span><span class="w"> </span><span class="nn">sktime.performance_metrics.forecasting</span><span class="w"> </span><span class="kn">import</span> <span class="n">MeanAbsolutePercentageError</span>
 
-                    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
-
-                    <span class="k">for</span> <span class="n">series_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-                        <span class="n">series_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">series_idx</span><span class="p">,</span> <span class="p">:]</span>
-                        <span class="n">fh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Forecast horizon</span>
+                    <span class="n">mae_list</span><span class="p">,</span> <span class="n">mse_list</span><span class="p">,</span> <span class="n">smape_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+                    <span class="n">fh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Forecast horizon</span>
+                    <span class="k">for</span> <span class="n">series_idx</span> <span class="ow">in</span> <span class="n">selected_series</span><span class="p">:</span>
+                        <span class="n">series_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[:,</span> <span class="n">series_idx</span><span class="p">]</span>
 
                         <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s2">&quot;ltsf&quot;</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="s2">&quot;rnn&quot;</span><span class="p">:</span>
                             <span class="n">forecaster</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">series_train</span><span class="p">,</span> <span class="n">fh</span><span class="o">=</span><span class="n">ForecastingHorizon</span><span class="p">(</span><span class="n">fh</span><span class="p">))</span>
@@ -430,62 +447,50 @@
                             <span class="n">forecaster</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">series_train</span><span class="p">)</span>
                             <span class="n">series_pred</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">fh</span><span class="o">=</span><span class="n">fh</span><span class="p">)</span>
 
-                        <span class="n">y_pred</span><span class="p">[</span><span class="n">series_idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">series_pred</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+                        <span class="n">y_pred</span><span class="p">[:,</span> <span class="n">series_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">series_pred</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
-                    <span class="c1"># Compute metrics using sktime</span>
-                    <span class="n">mae</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-                    <span class="n">mse</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-                    <span class="n">scoring_m</span> <span class="o">=</span> <span class="n">MeanAbsolutePercentageError</span><span class="p">(</span><span class="n">symmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                    <span class="n">smape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scoring_m</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># Compute SMAPE</span>
-
+                        <span class="c1"># Compute metrics using sktime</span>
+                        <span class="n">mae_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+                        <span class="n">mse_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+                        <span class="n">scoring_m</span> <span class="o">=</span> <span class="n">MeanAbsolutePercentageError</span><span class="p">(</span><span class="n">symmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="n">smape_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scoring_m</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># Compute SMAPE</span>
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># --- DARTS APPROACH ---</span>
-                    <span class="c1"># Convert entire matrix to a Darts multivariate TimeSeries object</span>
                     <span class="kn">from</span><span class="w"> </span><span class="nn">darts</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
                     <span class="kn">from</span><span class="w"> </span><span class="nn">darts.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mae</span> <span class="k">as</span> <span class="n">darts_mae</span><span class="p">,</span> <span class="n">mse</span> <span class="k">as</span> <span class="n">darts_mse</span>
                     <span class="kn">from</span><span class="w"> </span><span class="nn">darts.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">smape</span> <span class="k">as</span> <span class="n">darts_smape</span>
 
-                    <span class="n">y_train_ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>  <span class="c1"># Shape: (time_steps, n_series)</span>
-                    <span class="n">y_test_ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>  <span class="c1"># Shape: (time_steps, n_series)</span>
+                    <span class="n">mae_list</span><span class="p">,</span> <span class="n">mse_list</span><span class="p">,</span> <span class="n">smape_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+                    <span class="n">fh</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">series_idx</span> <span class="ow">in</span> <span class="n">selected_series</span><span class="p">:</span>
+                        <span class="n">train_ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">y_train</span><span class="p">[:,</span> <span class="n">series_idx</span><span class="p">])</span>
+                        <span class="n">test_ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">y_test</span><span class="p">[:,</span> <span class="n">series_idx</span><span class="p">])</span>
 
-                    <span class="c1"># Fit the model</span>
+                        <span class="n">forecaster</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_ts</span><span class="p">)</span>
+                        <span class="n">pred_ts</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">fh</span><span class="p">)</span>
 
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">y_train_ts</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
-                    <span class="n">forecaster</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y_train_ts</span><span class="p">)</span>
+                        <span class="n">y_pred</span><span class="p">[:,</span> <span class="n">series_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_ts</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
-                    <span class="c1"># Predict for the entire series at once</span>
-                    <span class="n">forecast_horizon</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="n">y_pred_ts</span> <span class="o">=</span> <span class="n">forecaster</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">forecast_horizon</span><span class="p">)</span>
+                        <span class="c1"># Ensure pred_ts has the same components as y_test_ts</span>
+                        <span class="n">pred_ts</span> <span class="o">=</span> <span class="n">pred_ts</span><span class="o">.</span><span class="n">with_columns_renamed</span><span class="p">(</span><span class="n">pred_ts</span><span class="o">.</span><span class="n">components</span><span class="p">,</span> <span class="n">test_ts</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
 
-                    <span class="c1"># Convert predictions back to NumPy</span>
-                    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">y_pred_ts</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># Shape: (n_series, time_steps)</span>
+                        <span class="c1"># Shift time index to match</span>
+                        <span class="k">if</span> <span class="n">pred_ts</span><span class="o">.</span><span class="n">start_time</span><span class="p">()</span> <span class="o">!=</span> <span class="n">test_ts</span><span class="o">.</span><span class="n">start_time</span><span class="p">():</span>
+                            <span class="n">pred_ts</span> <span class="o">=</span> <span class="n">pred_ts</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">test_ts</span><span class="o">.</span><span class="n">start_time</span><span class="p">()</span> <span class="o">-</span> <span class="n">pred_ts</span><span class="o">.</span><span class="n">start_time</span><span class="p">())</span>
 
-                    <span class="c1"># Ensure y_pred_ts has the same components as y_test_ts</span>
-                    <span class="n">y_pred_ts</span> <span class="o">=</span> <span class="n">y_pred_ts</span><span class="o">.</span><span class="n">with_columns_renamed</span><span class="p">(</span><span class="n">y_pred_ts</span><span class="o">.</span><span class="n">components</span><span class="p">,</span> <span class="n">y_test_ts</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
+                        <span class="n">mae_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">darts_mae</span><span class="p">(</span><span class="n">test_ts</span><span class="p">,</span> <span class="n">pred_ts</span><span class="p">))</span>
+                        <span class="n">mse_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">darts_mse</span><span class="p">(</span><span class="n">test_ts</span><span class="p">,</span> <span class="n">pred_ts</span><span class="p">))</span>
+                        <span class="n">smape_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">darts_smape</span><span class="p">(</span><span class="n">test_ts</span><span class="p">,</span> <span class="n">pred_ts</span><span class="p">))</span>
 
-                    <span class="c1"># Shift time index to match</span>
-                    <span class="k">if</span> <span class="n">y_pred_ts</span><span class="o">.</span><span class="n">start_time</span><span class="p">()</span> <span class="o">!=</span> <span class="n">y_test_ts</span><span class="o">.</span><span class="n">start_time</span><span class="p">():</span>
-                        <span class="n">y_pred_ts</span> <span class="o">=</span> <span class="n">y_pred_ts</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">y_test_ts</span><span class="o">.</span><span class="n">start_time</span><span class="p">()</span> <span class="o">-</span> <span class="n">y_pred_ts</span><span class="o">.</span><span class="n">start_time</span><span class="p">())</span>
-
-                    <span class="c1"># Compute metrics safely</span>
-                    <span class="n">mae_score</span> <span class="o">=</span> <span class="n">darts_mae</span><span class="p">(</span><span class="n">y_test_ts</span><span class="p">,</span> <span class="n">y_pred_ts</span><span class="p">)</span>
-                    <span class="n">mse_score</span> <span class="o">=</span> <span class="n">darts_mse</span><span class="p">(</span><span class="n">y_test_ts</span><span class="p">,</span> <span class="n">y_pred_ts</span><span class="p">)</span>
-                    <span class="n">smape_score</span> <span class="o">=</span> <span class="n">darts_smape</span><span class="p">(</span><span class="n">y_test_ts</span><span class="p">,</span> <span class="n">y_pred_ts</span><span class="p">)</span>
-
-                    <span class="c1"># Compute metrics using Darts</span>
-                    <span class="n">mae</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mae_score</span><span class="p">)</span>
-                    <span class="n">mse</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mse_score</span><span class="p">)</span>
-                    <span class="n">smape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">smape_score</span><span class="p">)</span>
+                <span class="n">mae</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mae_list</span><span class="p">)))</span>
+                <span class="n">mse</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mse_list</span><span class="p">)))</span>
+                <span class="n">smape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">smape_list</span><span class="p">)))</span>
 
                 <span class="c1"># Store for plotting</span>
                 <span class="n">y_train_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
                 <span class="n">y_test_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
                 <span class="n">y_pred_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">plots</span><span class="p">:</span>
-                <span class="c1"># Global plot with all rows and columns</span>
-                <span class="n">plt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plot_downstream</span><span class="p">(</span><span class="n">y_train_all</span><span class="p">,</span> <span class="n">y_test_all</span><span class="p">,</span> <span class="n">y_pred_all</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">)</span>
 
             <span class="c1"># Save metrics in a dictionary</span>
             <span class="n">al_name</span> <span class="o">=</span> <span class="s2">&quot;MSE_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -495,6 +500,15 @@
 
             <span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;MSE_original&quot;</span><span class="p">:</span> <span class="n">mse</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">al_name</span><span class="p">:</span> <span class="n">mse</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">al_name_c</span><span class="p">:</span> <span class="n">mse</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
                        <span class="s2">&quot;sMAPE_original&quot;</span><span class="p">:</span> <span class="n">smape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">al_name_s</span><span class="p">:</span> <span class="n">smape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">al_name_cs</span><span class="p">:</span> <span class="n">smape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">plots</span><span class="p">:</span>
+                <span class="c1"># Global plot with all rows and columns</span>
+                <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+                <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;imputegap_assets/downstream&quot;</span><span class="p">)</span>
+
+                <span class="n">plt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plot_downstream</span><span class="p">(</span><span class="n">y_train</span><span class="o">=</span><span class="n">y_train_all</span><span class="p">,</span> <span class="n">y_test</span><span class="o">=</span><span class="n">y_test_all</span><span class="p">,</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">y_pred_all</span><span class="p">,</span>
+                                            <span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">comparison</span><span class="o">=</span><span class="n">baseline</span><span class="p">,</span>
+                                            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">evaluator</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">plt</span>
 
@@ -548,33 +562,33 @@
         <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="s2">&quot;downstream evaluation&quot;</span><span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
+        <span class="c1"># Find indices of the first 4 valid (non-NaN) series</span>
+        <span class="n">valid_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()][:</span><span class="n">max_series</span><span class="p">]</span>
+
         <span class="c1"># Iterate over the three data types (recov_data, input_data, mean_impute)</span>
         <span class="k">for</span> <span class="n">row_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)):</span>
-            <span class="c1"># Find indices of the first 4 valid (non-NaN) series</span>
-            <span class="n">valid_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()][:</span><span class="n">max_series</span><span class="p">]</span>
-
             <span class="k">for</span> <span class="n">col_idx</span><span class="p">,</span> <span class="n">series_idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">valid_indices</span><span class="p">):</span>
-                <span class="c1"># Access the correct subplot</span>
-                <span class="k">if</span> <span class="n">max_series</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">row_idx</span><span class="p">]</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">]</span> <span class="k">if</span> <span class="n">max_series</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">axs</span><span class="p">[</span><span class="n">row_idx</span><span class="p">]</span>
 
                 <span class="c1"># Extract the corresponding data for this data type and series</span>
                 <span class="n">s_y_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">row_idx</span><span class="p">]</span>
                 <span class="n">s_y_test</span> <span class="o">=</span> <span class="n">y_test</span><span class="p">[</span><span class="n">row_idx</span><span class="p">]</span>
                 <span class="n">s_y_pred</span> <span class="o">=</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">row_idx</span><span class="p">]</span>
 
+                <span class="n">train_series</span> <span class="o">=</span> <span class="n">s_y_train</span><span class="p">[:,</span> <span class="n">series_idx</span><span class="p">]</span>
+                <span class="n">test_series</span> <span class="o">=</span> <span class="n">s_y_test</span><span class="p">[:,</span> <span class="n">series_idx</span><span class="p">]</span>
+                <span class="n">pred_series</span> <span class="o">=</span> <span class="n">s_y_pred</span><span class="p">[:,</span> <span class="n">series_idx</span><span class="p">]</span>
+
                 <span class="c1"># Combine training and testing data for visualization</span>
-                <span class="n">full_series</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">s_y_train</span><span class="p">[</span><span class="n">series_idx</span><span class="p">],</span> <span class="n">s_y_test</span><span class="p">[</span><span class="n">series_idx</span><span class="p">]])</span>
+                <span class="n">full_series</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">train_series</span><span class="p">,</span> <span class="n">test_series</span><span class="p">])</span>
 
                 <span class="c1"># Plot training data</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s_y_train</span><span class="p">[</span><span class="n">series_idx</span><span class="p">])),</span> <span class="n">s_y_train</span><span class="p">[</span><span class="n">series_idx</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_series</span><span class="p">)),</span> <span class="n">train_series</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
 
                 <span class="c1"># Plot ground truth (testing data)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                    <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s_y_train</span><span class="p">[</span><span class="n">series_idx</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">full_series</span><span class="p">)),</span>
-                    <span class="n">s_y_test</span><span class="p">[</span><span class="n">series_idx</span><span class="p">],</span>
+                    <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_series</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">full_series</span><span class="p">)),</span>
+                    <span class="n">test_series</span><span class="p">,</span>
                     <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ground truth&quot;</span><span class="p">,</span>
                     <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span>
                 <span class="p">)</span>
@@ -582,8 +596,8 @@
                 <span class="n">label</span> <span class="o">=</span> <span class="nb">type</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">model</span>
                 <span class="c1"># Plot forecasted data</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                    <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s_y_train</span><span class="p">[</span><span class="n">series_idx</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">full_series</span><span class="p">)),</span>
-                    <span class="n">s_y_pred</span><span class="p">[</span><span class="n">series_idx</span><span class="p">],</span>
+                    <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_series</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">full_series</span><span class="p">)),</span>
+                    <span class="n">pred_series</span><span class="p">,</span>
                     <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
                     <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
                     <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -591,7 +605,7 @@
                 <span class="p">)</span>
 
                 <span class="c1"># Add a vertical line at the split point</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">s_y_train</span><span class="p">[</span><span class="n">series_idx</span><span class="p">]),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">train_series</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
 
                 <span class="c1"># Add labels, title, and grid</span>
                 <span class="k">if</span> <span class="n">row_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>

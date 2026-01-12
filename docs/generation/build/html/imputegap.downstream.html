@@ -284,7 +284,7 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-imputegap.recovery.downstream" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="imputegap.recovery.downstream.Downstream">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.downstream.</span></span><span class="sig-name descname"><span class="pre">Downstream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downstream</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/downstream.html#Downstream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.downstream.Downstream" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.downstream.</span></span><span class="sig-name descname"><span class="pre">Downstream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downstream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/downstream.html#Downstream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.downstream.Downstream" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to evaluate the performance of imputation algorithms using downstream analysis.</p>
 <p>This class provides tools to assess the quality of imputed time series data by analyzing
@@ -303,8 +303,6 @@ Error (MAE) and Mean Squared Error (MSE) and visualizes the results for better i
 <dt>incomp_data<span class="classifier">numpy.ndarray</span></dt><dd><p>The time series with contamination (NaN values).</p>
 </dd>
 <dt>downstream<span class="classifier">dict</span></dt><dd><p>Configuration for the downstream analysis, including the evaluator, model, and parameters.</p>
-</dd>
-<dt>split<span class="classifier">float</span></dt><dd><p>The proportion of data used for training in the forecasting task (default is 0.8).</p>
 </dd>
 </dl>
 </section>

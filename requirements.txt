@@ -91,4 +91,5 @@ linear-attention-transformer>=0.19.1
 
 #downstream
 pmdarima>=2.1.1
+statsforecast>=1.0.0
 

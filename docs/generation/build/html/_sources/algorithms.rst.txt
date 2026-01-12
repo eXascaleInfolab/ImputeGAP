@@ -11,11 +11,11 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - **Family**
      - **Algorithm**
      - **Venue -- Year**
-   * - LLMs
-     - NuwaTS [33]_
+   * - NuwaTS [33]_
+     - LLMs
      - Arxiv -- 2024
-   * - LLMs
-     - GPT4TS [34]_
+   * - GPT4TS [34]_
+     - LLMs
      - NeurIPS -- 2023
    * -
      -
@@ -23,44 +23,44 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * -
      -
      -
-   * - Deep Learning
-     - MissNet [27]_
+   * - MissNet [27]_
+     - Deep Learning
      - KDD -- 2024
-   * - Deep Learning
-     - MPIN [25]_
+   * - MPIN [25]_
+     - Deep Learning
      - PVLDB -- 2024
-   * - Deep Learning
-     - BitGraph [32]_
+   * - BitGraph [32]_
+     - Deep Learning
      - ICLR -- 2024
-   * - Deep Learning
-     - BayOTIDE [30]_
+   * - BayOTIDE [30]_
+     - Deep Learning
      - PMLR -- 2024
-   * - Deep Learning
-     - TimesNet [36]_
+   * - TimesNet [36]_
+     - Deep Learning
      - ICLR -- 2023
-   * - Deep Learning
-     - PRISTI [26]_
+   * - PRISTI [26]_
+     - Deep Learning
      - ICDE -- 2023
-   * - Deep Learning
-     - GRIN [29]_
+   * - GRIN [29]_
+     - Deep Learning
      - ICLR -- 2022
-   * - Deep Learning
-     - CSDI [35]_
+   * - CSDI [35]_
+     - Deep Learning
      - NeurIPS -- 2021
-   * - Deep Learning
-     - DeepMVI [24]_
+   * - DeepMVI [24]_
+     - Deep Learning
      - PVLDB -- 2021
-   * - Deep Learning
-     - HKMF_T [31]_
+   * - HKMFT [31]_
+     - Deep Learning
      - TKDE -- 2021
-   * - Deep Learning
-     - MRNN [22]_
+   * - MRNN [22]_
+     - Deep Learning
      - IEEE Trans on BE -- 2019
-   * - Deep Learning
-     - BRITS [23]_
+   * - BRITS [23]_
+     - Deep Learning
      - NeurIPS -- 2018
-   * - Deep Learning
-     - GAIN [28]_
+   * - GAIN [28]_
+     - Deep Learning
      - ICML -- 2018
    * -
      -
@@ -68,29 +68,29 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * -
      -
      -
-   * - Matrix Completion
-     - CDRec [1]_
+   * - CDRec [1]_
+     - Matrix Completion
      - KAIS -- 2020
-   * - Matrix Completion
-     - TRMF [8]_
+   * - TRMF [8]_
+     - Matrix Completion
      - NeurIPS -- 2016
-   * - Matrix Completion
-     - GROUSE [3]_
+   * - GROUSE [3]_
+     - Matrix Completion
      - PMLR -- 2016
-   * - Matrix Completion
-     - ROSL [4]_
+   * - ROSL [4]_
+     - Matrix Completion
      - CVPR -- 2014
-   * - Matrix Completion
-     - SoftImpute [6]_
+   * - SoftImpute [6]_
+     - Matrix Completion
      - JMLR -- 2010
-   * - Matrix Completion
-     - SVT [7]_
+   * - SVT [7]_
+     - Matrix Completion
      - SIAM J. OPTIM -- 2010
-   * - Matrix Completion
-     - SPIRIT [5]_
+   * - SPIRIT [5]_
+     - Matrix Completion
      - VLDB -- 2005
-   * - Matrix Completion
-     - IterativeSVD [2]_
+   * - IterativeSVD [2]_
+     - Matrix Completion
      - BIOINFORMATICS -- 2001
    * -
      -
@@ -98,14 +98,14 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * -
      -
      -
-   * - Pattern Search
-     - TKCM [11]_
+   * - TKCM [11]_
+     - Pattern Search
      - EDBT -- 2017
-   * - Pattern Search
-     - STMVL [9]_
+   * - STMVL [9]_
+     - Pattern Search
      - IJCAI -- 2016
-   * - Pattern Search
-     - DynaMMo [10]_
+   * - DynaMMo [10]_
+     - Pattern Search
      - KDD -- 2009
    * -
      -
@@ -113,17 +113,17 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * -
      -
      -
-   * - Machine Learning
-     - IIM [12]_
+   * - IIM [12]_
+     - Machine Learning
      - ICDE -- 2019
-   * - Machine Learning
-     - XGBOOST [13]_
+   * - XGBOOST [13]_
+     - Machine Learning
      - KDD -- 2016
-   * - Machine Learning
-     - MICE [14]_
+   * - MICE [14]_
+     - Machine Learning
      - Statistical Software -- 2011
-   * - Machine Learning
-     - MissForest [15]_
+   * - MissForest [15]_
+     - Machine Learning
      - BioInformatics -- 2011
    * -
      -
@@ -131,26 +131,52 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * -
      -
      -
-   * - Statistics
-     - KNNImpute
+   * - KNNImpute
+     - Statistics
      - _
-   * - Statistics
-     - Interpolation
+   * - Interpolation
+     - Statistics
      - _
-   * - Statistics
-     - MinImpute
+   * - MinImpute
+     - Statistics
      - _
-   * - Statistics
-     - ZeroImpute
+   * - ZeroImpute
+     - Statistics
      - _
-   * - Statistics
-     - MeanImpute
+   * - MeanImpute
+     - Statistics
      - _
-   * - Statistics
-     - MeanImputeBySeries
+   * - MeanImputeBySeries
+     - Statistics
      - _
 
 
+.. raw:: html
+
+   <br>
+
+
+Under Integration
+~~~~~~~~~~~~~~~~~
+
+
+.. list-table::
+   :header-rows: 1
+
+   * - **Family**
+     - **Algorithm**
+     - **Venue -- Year**
+   * - Moments [37]_
+     - LLMs
+     - ICLR -- 2025
+   * - SSGAN [38]_
+     - Deep Learning
+     - AAAI -- 21
+
+
+.. raw:: html
+
+   <br>
 
 .. _references:
 
@@ -216,5 +242,12 @@ References
 .. [35] Yusuke Tashiro, Jiaming Song, Yang Song, Stefano Ermon: CSDI: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation. NeurIPS 2021
 
 .. [36] Haixu Wu, Tengge Hu, Yong Liu, Hang Zhou, Jianmin Wang, Mingsheng Long: TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis. ICLR 2023
+
+
+
+
+.. [37] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. ICLR 2025
+
+.. [38] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin : Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI 2021
 
 

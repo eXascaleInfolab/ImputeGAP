@@ -151,6 +151,32 @@ To learn how to apply imputation within the library, please refer to the `tutori
      - _
 
 
+.. raw:: html
+
+   <br><br>
+
+
+Under Integration
+~~~~~~~~~~~~~~~~~
+
+
+.. list-table::
+   :header-rows: 1
+
+   * - **Family**
+     - **Algorithm**
+     - **Venue -- Year**
+   * - Moments [37]_
+     - LLMs
+     - ICLR -- 2025
+   * - SSGAN [38]_
+     - Deep Learning
+     - AAAI -- 21
+
+
+.. raw:: html
+
+   <br><br>
 
 .. _references:
 
@@ -216,5 +242,12 @@ References
 .. [35] Yusuke Tashiro, Jiaming Song, Yang Song, Stefano Ermon: CSDI: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation. NeurIPS 2021
 
 .. [36] Haixu Wu, Tengge Hu, Yong Liu, Hang Zhou, Jianmin Wang, Mingsheng Long: TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis. ICLR 2023
+
+
+
+
+.. [37] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. ICLR 2025
+
+.. [38] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin : Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI 2021
 
 

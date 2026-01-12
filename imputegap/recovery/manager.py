@@ -549,7 +549,7 @@ class TimeSeries:
                         if style == "default":
                             ax.plot(timestamps, input_data[i, :nbr_val], linewidth=1.5, color=color, linestyle='--', label=title_contamination)
                         else:
-                            ax.plot(timestamps, input_data[i, :nbr_val], linewidth=2, color="blue", linestyle='--', label=title_contamination)
+                            ax.plot(timestamps, input_data[i, :nbr_val], linewidth=2, color="red", linestyle='--', label=title_contamination)
 
 
                     if np.isnan(incomp_data[i, :]).any() or not subplot:
@@ -639,7 +639,7 @@ class TimeSeries:
            Values of shift (vertically) (default: 0.01).
        """
        if self.data.shape[0] > id_series > 0:
-           self.data[id_series, :] += shift_value
+           self.data[:, id_series] += shift_value
            print(f"(SYS) Time series {id_series} data as been shift by: {shift_value}")
        else:
            print(f"(ERR) The series {id_series} has no data.")

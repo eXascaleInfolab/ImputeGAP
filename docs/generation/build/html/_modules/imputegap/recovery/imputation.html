@@ -359,7 +359,7 @@
 
 <span class="sd">        downstream : dict, optional</span>
 <span class="sd">            Dictionary that calls, if active, the downstream evaluation. (default is None).</span>
-<span class="sd">            format : {&quot;model&quot;: &quot;forcaster&quot;, &quot;params&quot;: parameters}</span>
+<span class="sd">            format : {&quot;task&quot;: &quot;forecast&quot;, &quot;model&quot;: &quot;hw-add&quot;, &quot;comparator&quot;: &quot;ZeroImputation&quot;, &quot;split&quot;: 0.8}</span>
 
 <span class="sd">        mask: numpy.ndarray, optional</span>
 <span class="sd">            Mask describing the missing values (default is None).</span>
@@ -378,7 +378,7 @@
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
 <span class="sd">            &gt;&gt;&gt; imputer.score(ts.data, imputer.recov_data) # upstream</span>
-<span class="sd">            &gt;&gt;&gt; imputer.score(ts.data, imputer.recov_data, {&quot;task&quot;: &quot;forecast&quot;, &quot;model&quot;: &quot;hw-add&quot;, &quot;comparator&quot;: &quot;ZeroImputation&quot;}) # downstream</span>
+<span class="sd">            &gt;&gt;&gt; imputer.score(ts.data, imputer.recov_data, {&quot;task&quot;: &quot;forecast&quot;, &quot;model&quot;: &quot;hw-add&quot;, &quot;comparator&quot;: &quot;ZeroImputation&quot;, &quot;split&quot;: 0.8}) # downstream</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">recov_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">recov_data</span>
@@ -425,11 +425,11 @@
                     <span class="n">algo_code</span> <span class="o">=</span> <span class="s2">&quot;iim &quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\W_]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_neighbours</span><span class="p">))</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">learning_neighbours</span><span class="p">,</span> <span class="n">algo_code</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;mrnn&quot;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">iterations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
-                    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sequence_length</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">load_parameters</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;mrnn&quot;</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">sequence_length</span><span class="p">)</span>
+            <span class="c1">#if self.algorithm == &quot;mrnn&quot;:</span>
+            <span class="c1">#    if len(self.parameters) == 3:</span>
+            <span class="c1">#hidden_dim, learning_rate, iterations = self.parameters</span>
+            <span class="c1">#_, _, _, sequence_length = utils.load_parameters(query=&quot;default&quot;, algorithm=&quot;mrnn&quot;)</span>
+            <span class="c1">#self.parameters = (hidden_dim, learning_rate, iterations, sequence_length)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
 
@@ -611,7 +611,7 @@
 <span class="sd">        configuration : tuple</span>
 <span class="sd">            Tuple of the configuration of the algorithm.</span>
 <span class="sd">        algorithm : str, optional</span>
-<span class="sd">            Imputation algorithm to use. Valid values: &#39;cdrec&#39;, &#39;mrnn&#39;, &#39;stmvl&#39;, &#39;iim&#39; (default is &#39;cdrec&#39;).</span>
+<span class="sd">            Imputation algorithm to use. Valid values: &#39;cdrec&#39;, &#39;stmvl&#39;, &#39;iim&#39; (default is &#39;cdrec&#39;).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -638,14 +638,13 @@
             <span class="n">algo</span><span class="o">.</span><span class="n">logs</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">algo</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;learning_neighbours&quot;</span><span class="p">:</span> <span class="n">learning_neighbours</span><span class="p">,</span> <span class="s2">&quot;alg_code&quot;</span><span class="p">:</span> <span class="n">alg_code</span><span class="p">})</span>
 
-        <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;mrnn&#39;</span><span class="p">:</span>
-            <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">iterations</span> <span class="o">=</span> <span class="n">configuration</span>
-
-            <span class="n">algo</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">DeepLearning</span><span class="o">.</span><span class="n">MRNN</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
-            <span class="n">algo</span><span class="o">.</span><span class="n">logs</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">algo</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;hidden_dim&quot;</span><span class="p">:</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="s2">&quot;iterations&quot;</span><span class="p">:</span> <span class="n">iterations</span><span class="p">,</span>
-                                <span class="s2">&quot;seq_length&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">})</span>
+        <span class="c1">#elif algorithm == &#39;mrnn&#39;:</span>
+        <span class="c1">#    hidden_dim, learning_rate, iterations = configuration</span>
+        <span class="c1">#    algo = Imputation.DeepLearning.MRNN(incomp_data)</span>
+        <span class="c1">#    algo.logs = False</span>
+        <span class="c1">#    algo.impute(user_def=True,</span>
+        <span class="c1">#                params={&quot;hidden_dim&quot;: hidden_dim, &quot;learning_rate&quot;: learning_rate, &quot;iterations&quot;: iterations,</span>
+        <span class="c1">#                       &quot;seq_length&quot;: 7})</span>
 
         <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;stmvl&#39;</span><span class="p">:</span>
             <span class="n">window_size</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">configuration</span>
@@ -877,6 +876,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, params=None):</span>
 <span class="sd">                Perform imputation by replacing missing values with interpolation-based algorithm</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ interpolation.impute(params={&quot;method&quot;:&quot;linear&quot;, &quot;poly_order&quot;:2})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;interpolation&quot;</span>
 
@@ -930,6 +933,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, params=None):</span>
 <span class="sd">                Perform imputation by replacing missing values with K-Nearest Neighbor</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ knn.impute(user_def=True, params={&#39;k&#39;: 5, &#39;weights&#39;: &quot;uniform&quot;})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;knn_impute&quot;</span>
 
@@ -1154,6 +1161,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the Iterative SDV algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ i_svd.impute(params={&#39;rank&#39;: 3})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;iterative_svd&quot;</span>
@@ -1187,7 +1198,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; i_svd_imputer = Imputation.MatrixCompletion.IterativeSVD(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; i_svd_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; i_svd_imputer.impute(params={&#39;rank&#39;: 5}) # user-defined  &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; i_svd_imputer.impute(params={&#39;rank&#39;: 3}) # user-defined  &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; i_svd_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = i_svd_imputer.recov_data</span>
 
@@ -1286,6 +1297,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the ROSL algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ rosl.impute(params={&#39;rank&#39;: 3, &#39;regularization&#39;: 0.6})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;rosl&quot;</span>
@@ -1322,7 +1337,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; rosl_imputer = Imputation.MatrixCompletion.ROSL(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; rosl_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; rosl_imputer.impute(params={&#39;rank&#39;: 5, &#39;regularization&#39;: 10}) # user-defined  &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; rosl_imputer.impute(params={&#39;rank&#39;: 3, &#39;regularization&#39;: 0.6}) # user-defined  &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; rosl_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = rosl_imputer.recov_data</span>
 
@@ -1355,6 +1370,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the Soft Impute algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ softimpute.impute(params={&#39;max_rank&#39;: 3})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;soft_impute&quot;</span>
@@ -1388,7 +1407,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; soft_impute_imputer = Imputation.MatrixCompletion.SoftImpute(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; soft_impute_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; soft_impute_imputer.impute(params={&#39;max_rank&#39;: 5}) # user-defined  &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; soft_impute_imputer.impute(params={&#39;max_rank&#39;: 3}) # user-defined  &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; soft_impute_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = soft_impute_imputer.recov_data</span>
 
@@ -1422,6 +1441,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the SPIRIT algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ spirit.impute(params={&#39;k&#39;: 4, &#39;w&#39;: 6, &#39;lambda_value&#39;: 1.0})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;spirit&quot;</span>
@@ -1461,7 +1484,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; spirit_imputer = Imputation.MatrixCompletion.SPIRIT(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; spirit_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; spirit_imputer.impute(params={&#39;k&#39;: 2, &#39;w&#39;: 5, &#39;lambda_value&#39;: 0.85}) # user-defined  &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; spirit_imputer.impute(params={&#39;k&#39;: 4, &#39;w&#39;: 6, &#39;lambda_value&#39;: 1.0}) # user-defined  &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; spirit_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = spirit_imputer.recov_data</span>
 
@@ -1495,6 +1518,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the SVT algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ svt.impute(params={&#39;tau&#39;: 2})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;svt&quot;</span>
@@ -1529,7 +1556,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; svt_imputer = Imputation.MatrixCompletion.SVT(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; svt_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; svt_imputer.impute(params={&#39;tau&#39;: 1}) # user-defined  &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; svt_imputer.impute(params={&#39;tau&#39;: 2}) # user-defined  &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; svt_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = svt_imputer.recov_data</span>
 
@@ -1560,6 +1587,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the TRMF algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ imputer.impute(params={&quot;lags&quot;:[1,7], &quot;K&quot;:4, &quot;lambda_f&quot;:1.0, &quot;lambda_x&quot;:1.0, &quot;lambda_w&quot;:1.0, &quot;eta&quot;:1.0, &quot;alpha&quot;:1000.0, &quot;max_iter&quot;:5000})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;trmf&quot;</span>
@@ -1610,7 +1641,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; trmf_imputer = Imputation.MatrixCompletion.TRMF(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; trmf_imputer.impute()</span>
-<span class="sd">                    &gt;&gt;&gt; trmf_imputer.impute(params={&quot;lags&quot;:[], &quot;K&quot;:-1, &quot;lambda_f&quot;:1.0, &quot;lambda_x&quot;:1.0, &quot;lambda_w&quot;:1.0, &quot;eta&quot;:1.0, &quot;alpha&quot;:1000.0, &quot;max_iter&quot;:100})</span>
+<span class="sd">                    &gt;&gt;&gt; trmf_imputer.impute(params={&quot;lags&quot;:[1,7], &quot;K&quot;:4, &quot;lambda_f&quot;:1.0, &quot;lambda_x&quot;:1.0, &quot;lambda_w&quot;:1.0, &quot;eta&quot;:1.0, &quot;alpha&quot;:1000.0, &quot;max_iter&quot;:5000})</span>
 <span class="sd">                    &gt;&gt;&gt; trmf_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = trmf_imputer.recov_data</span>
 
@@ -1664,6 +1695,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the Miss Forest algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ missforest.impute(params={&quot;n_estimators&quot;:100, &quot;max_iter&quot;:5, &quot;max_features&quot;:&quot;sqrt&quot;, &quot;seed&quot;: 42})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;miss_forest&quot;</span>
 
@@ -1707,7 +1742,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; mf_imputer = Imputation.MachineLearning.MissForest(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; mf_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; mf_imputer.impute(user_def=True, params={&quot;n_estimators&quot;:10, &quot;max_iter&quot;:3, &quot;max_features&quot;:&quot;sqrt&quot;, &quot;seed&quot;: 42})  # user defined &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; mf_imputer.impute(user_def=True, params={&quot;n_estimators&quot;:100, &quot;max_iter&quot;:5, &quot;max_features&quot;:&quot;sqrt&quot;, &quot;seed&quot;: 42})  # user defined &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; mf_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = mf_imputer.recov_data</span>
 
@@ -1811,6 +1846,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the XGBOOST algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ xgboost.impute(user_def=True, params={&quot;n_estimators&quot;:2, &quot;seed&quot;: 42})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;xgboost&quot;</span>
 
@@ -1843,7 +1882,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; mxgboost_imputer = Imputation.MachineLearning.XGBOOST(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; mxgboost_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; mxgboost_imputer.impute(user_def=True, params={&quot;n_estimators&quot;:3, &quot;seed&quot;: 42})  # user defined &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; mxgboost_imputer.impute(user_def=True, params={&quot;n_estimators&quot;:2, &quot;seed&quot;: 42})  # user defined &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; mxgboost_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = mxgboost_imputer.recov_data</span>
 
@@ -1965,6 +2004,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the STMVL algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ stmvl.impute(params={&#39;window_size&#39;: 7, &#39;gamma&#39;:0.85, &#39;alpha&#39;: 2})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;stmvl&quot;</span>
 
@@ -1997,7 +2040,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; stmvl_imputer = Imputation.PatternSearch.STMVL(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; stmvl_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; stmvl_imputer.impute(user_def=True, params={&#39;window_size&#39;: 7, &#39;learning_rate&#39;:0.01, &#39;gamma&#39;:0.85, &#39;alpha&#39;: 7})  # user-defined  &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; stmvl_imputer.impute(user_def=True, params={&#39;window_size&#39;: 7, &#39;gamma&#39;:0.85, &#39;alpha&#39;: 2})  # user-defined  &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; stmvl_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;bayesian&quot;, &quot;options&quot;: {&quot;n_calls&quot;: 2}})  # automl with bayesian</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = stmvl_imputer.recov_data</span>
 
@@ -2099,6 +2142,10 @@
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
 <span class="sd">                Perform imputation using the TKCM algorithm.</span>
+
+<span class="sd">            Example</span>
+<span class="sd">            -------</span>
+<span class="sd">            $ tkcm.impute(params={&#39;rank&#39;: 4})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;tkcm&quot;</span>
@@ -2130,7 +2177,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; tkcm_imputer = Imputation.PatternSearch.TKCM(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; tkcm_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; tkcm_imputer.impute(params={&#39;rank&#39;: 5})  # user-defined &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; tkcm_imputer.impute(params={&#39;rank&#39;: 4})  # user-defined &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; tkcm_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = tkcm_imputer.recov_data</span>
 
@@ -2180,7 +2227,7 @@
 <span class="sd">            Imputation method using Graph Neural Networks for Multivariate Time Series Imputation.</span>
 <span class="sd">        BayOTIDE :</span>
 <span class="sd">            Imputation method using Bayesian Online Multivariate Time Series Imputation with functional decomposition.</span>
-<span class="sd">        HKMF_T :</span>
+<span class="sd">        HKMFT :</span>
 <span class="sd">            Imputation method using Hankel Matrix Factorization to recover from blackouts in tagged time series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -3105,9 +3152,9 @@
 
 
 
-<div class="viewcode-block" id="Imputation.DeepLearning.HKMF_T">
-<a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.DeepLearning.HKMF_T">[docs]</a>
-        <span class="k">class</span><span class="w"> </span><span class="nc">HKMF_T</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
+<div class="viewcode-block" id="Imputation.DeepLearning.HKMFT">
+<a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.DeepLearning.HKMFT">[docs]</a>
+        <span class="k">class</span><span class="w"> </span><span class="nc">HKMFT</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            HKMF-T class to impute missing values using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization</span>
 
@@ -3133,8 +3180,8 @@
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;hkmf_t&quot;</span>
 
-<div class="viewcode-block" id="Imputation.DeepLearning.HKMF_T.impute">
-<a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.DeepLearning.HKMF_T.impute">[docs]</a>
+<div class="viewcode-block" id="Imputation.DeepLearning.HKMFT.impute">
+<a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.DeepLearning.HKMFT.impute">[docs]</a>
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization</span>
@@ -3172,7 +3219,7 @@
 
 <span class="sd">                Example</span>
 <span class="sd">                -------</span>
-<span class="sd">                    &gt;&gt;&gt; hkmf_t_imputer = Imputation.DeepLearning.HKMF_T(incomp_data)</span>
+<span class="sd">                    &gt;&gt;&gt; hkmf_t_imputer = Imputation.DeepLearning.HKMFT(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; hkmf_t_imputer.impute()  # default parameters for imputation &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; hkmf_t_imputer.impute(user_def=True, params={&quot;tags&quot;:[], &quot;seq_len&quot;:7, &quot;blackouts_begin&quot;:0, &quot;blackouts_end&quot;: 0,&quot;epochs&quot;:10})  # user defined&gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; hkmf_t_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # auto-ml with ray_tune</span>
@@ -3674,7 +3721,7 @@
 
 <div class="viewcode-block" id="Imputation.LLMs.NuwaTS.impute">
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.LLMs.NuwaTS.impute">[docs]</a>
-            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using Foundation Model Mending Every Incomplete Time Series</span>
 

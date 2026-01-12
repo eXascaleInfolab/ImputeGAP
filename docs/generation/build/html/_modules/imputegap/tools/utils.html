@@ -309,6 +309,8 @@
 <span class="sd">    tuple</span>
 <span class="sd">        A tuple containing the loaded parameters for the given algorithm.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+
     <span class="k">if</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">filepath</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s1">&#39;imputegap.env&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;./default_values.toml&quot;</span><span class="p">)</span>
@@ -320,15 +322,15 @@
                 <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;./env/default_values.toml&quot;</span>
 
     <span class="k">elif</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;optimal&quot;</span><span class="p">:</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;./optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
-            <span class="n">filepath</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s1">&#39;imputegap.params&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">filepath</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;./params/optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
+            <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;imputegap_assets/params&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">filepath</span> <span class="o">=</span> <span class="n">path</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-                <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;./params/optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">filepath</span> <span class="o">=</span> <span class="kc">None</span>
@@ -336,8 +338,13 @@
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
         <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;./params/optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-            <span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>  <span class="c1"># test</span>
+            <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))))</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;tests/imputegap_assets/params&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;file not found: </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">, load the default folder.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">toml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
@@ -830,8 +837,8 @@
         <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">DeepLearning</span><span class="o">.</span><span class="n">GRIN</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">alg</span> <span class="o">==</span> <span class="s2">&quot;bayotide&quot;</span><span class="p">:</span>
         <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">DeepLearning</span><span class="o">.</span><span class="n">BayOTIDE</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">alg</span> <span class="o">==</span> <span class="s2">&quot;hkmft&quot;</span><span class="p">:</span>
-        <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">DeepLearning</span><span class="o">.</span><span class="n">HKMF_T</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">alg</span> <span class="o">==</span> <span class="s2">&quot;hkmft&quot;</span> <span class="ow">or</span> <span class="n">alg</span> <span class="o">==</span> <span class="s2">&quot;hkmf-t&quot;</span> <span class="p">:</span>
+        <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">DeepLearning</span><span class="o">.</span><span class="n">HKMFT</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">alg</span> <span class="o">==</span> <span class="s2">&quot;bitgraph&quot;</span><span class="p">:</span>
         <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">DeepLearning</span><span class="o">.</span><span class="n">BitGraph</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">alg</span> <span class="o">==</span> <span class="s2">&quot;meanimpute&quot;</span><span class="p">:</span>
@@ -855,7 +862,6 @@
     <span class="c1">#</span>
     <span class="c1">#elif alg == &quot;your_algo_name&quot;:</span>
     <span class="c1">#    imputer = Imputation.MyFamily.NewAlg(incomp_data)</span>
-
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(IMP) Algorithm &#39;</span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">&#39; not recognized, please choose your algorithm from this list:</span><span class="se">\n\t</span><span class="si">{</span><span class="n">TimeSeries</span><span class="p">()</span><span class="o">.</span><span class="n">algorithms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">imputer</span> <span class="o">=</span> <span class="kc">None</span>
@@ -869,7 +875,7 @@
 
 <div class="viewcode-block" id="save_optimization">
 <a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.save_optimization">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">save_optimization</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_optimization</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Save the optimization parameters to a TOML file for later use without recomputing.</span>
 
@@ -890,20 +896,28 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;./imputegap_assets/params/optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">file_name</span> <span class="o">+=</span> <span class="s2">&quot;optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
 
-    <span class="n">dir_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
+    <span class="n">dir_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;imputegap_assets/params&quot;</span><span class="p">)</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;imputegap_assets/params&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">optimal_params</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">optimal_params</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="n">dir_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">dir_name</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dir_name</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dir_name</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dir_name</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;cdrec&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;CDRec&quot;</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;cdrec&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-            <span class="s2">&quot;eps&quot;</span><span class="p">:</span> <span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="s2">&quot;iters&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s2">&quot;iteration&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
     <span class="p">}</span>
     <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;mrnn&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;MRNN&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
@@ -926,7 +940,7 @@
             <span class="s2">&quot;learning_neighbors&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="p">}</span>
 
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;iterative_svd&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;IterativeSVD&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;iterative_svd&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;iterativesvd&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="p">}</span>
@@ -939,7 +953,7 @@
             <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
             <span class="s2">&quot;regularization&quot;</span><span class="p">:</span> <span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="p">}</span>
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;soft_impute&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;SoftImpute&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;soft_impute&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;softimpute&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;max_rank&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="p">}</span>
@@ -971,12 +985,12 @@
             <span class="s2">&quot;seq_len&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
             <span class="s2">&quot;epoch&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
             <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
-            <span class="s2">&quot;sliding_windows&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliding_windows</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span>
+            <span class="s2">&quot;sliding_windows&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span>
             <span class="s2">&quot;hidden_layers&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span>
             <span class="s2">&quot;impute_weight&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">6</span><span class="p">]),</span>
             <span class="s2">&quot;num_workers&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
         <span class="p">}</span>
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;deep_mvi&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;deep_mvi&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;deepmvi&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;max_epoch&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
             <span class="s2">&quot;patience&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
@@ -1009,7 +1023,7 @@
             <span class="s2">&quot;initial_strategy&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
             <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">42</span>
         <span class="p">}</span>
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;miss_forest&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;miss_forest&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;missforest&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
             <span class="s2">&quot;max_iter&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
@@ -1021,7 +1035,7 @@
             <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
             <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">42</span>
         <span class="p">}</span>
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;miss_net&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;miss_net&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;missnet&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;n_components&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
             <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
@@ -1049,7 +1063,7 @@
             <span class="s2">&quot;patience&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">6</span><span class="p">]),</span>
             <span class="s2">&quot;num_workers&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
         <span class="p">}</span>
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;bay_otide&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;bay_otide&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;bayotide&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;K_trend&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
             <span class="s2">&quot;K_season&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
@@ -1061,7 +1075,7 @@
             <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">7</span><span class="p">]),</span>
             <span class="s2">&quot;num_fold&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">8</span><span class="p">]),</span>
         <span class="p">}</span>
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;hkmf_t&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;hkmf_t&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;hkmft&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="s2">&quot;seq_len&quot;</span><span class="p">:</span> <span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
@@ -1069,7 +1083,7 @@
             <span class="s2">&quot;blackouts_end&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
             <span class="s2">&quot;epochs&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span>
         <span class="p">}</span>
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;bit_graph&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;bit_graph&quot;</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;bitgraph&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;seq_len&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
             <span class="s2">&quot;sliding_windows&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
@@ -1151,12 +1165,16 @@
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="s2">(SYS) Algorithm </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is not recognized.&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
+    <span class="n">toml_payload</span> <span class="o">=</span> <span class="p">{</span><span class="n">algorithm</span><span class="p">:</span> <span class="n">params_to_save</span><span class="p">}</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-            <span class="n">toml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">params_to_save</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+            <span class="n">toml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">toml_payload</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Optimization parameters successfully saved to </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) An error occurred while saving the file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) An error occurred while saving the file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">file_name</span></div>
 
 
 
@@ -1284,7 +1302,7 @@
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;distribution&quot;</span> <span class="ow">or</span> <span class="n">pattern</span> <span class="o">==</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span>
         <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">probabilities_list</span><span class="o">=</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;blackout&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">blackout</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">series_rate</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">blackout</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(CONT) Pattern &#39;</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">&#39; not recognized, please choose your algorithm on this list :</span><span class="se">\n\t</span><span class="si">{</span><span class="n">TimeSeries</span><span class="p">()</span><span class="o">.</span><span class="n">patterns</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">incomp_data</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1347,7 +1365,7 @@
         <span class="k">elif</span> <span class="n">mdl</span> <span class="o">==</span> <span class="s2">&quot;arima&quot;</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">sktime.forecasting.arima</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoARIMA</span>
             <span class="n">forecaster</span> <span class="o">=</span> <span class="n">AutoARIMA</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">mdl</span> <span class="o">==</span> <span class="s2">&quot;sf-arima&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">mdl</span> <span class="o">==</span> <span class="s2">&quot;sf-arima&quot;</span> <span class="ow">or</span> <span class="n">mdl</span> <span class="o">==</span> <span class="s2">&quot;sfarima&quot;</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">sktime.forecasting.statsforecast</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatsForecastAutoARIMA</span>
             <span class="n">forecaster</span> <span class="o">=</span> <span class="n">StatsForecastAutoARIMA</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
             <span class="n">forecaster</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="n">warnings</span><span class="o">=</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
@@ -1456,7 +1474,8 @@
 
     <span class="n">sample_collector</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">start_indices</span><span class="p">:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="n">seq_len</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">values</span><span class="p">:</span> <span class="k">break</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="n">seq_len</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">values</span><span class="p">:</span>
+            <span class="k">break</span>
         <span class="n">sample_collector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature_vectors</span><span class="p">[</span><span class="n">idx</span><span class="p">:</span> <span class="n">idx</span> <span class="o">+</span> <span class="n">seq_len</span><span class="p">])</span>
 
     <span class="n">dataset_strat_windows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sample_collector</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
@@ -1590,7 +1609,6 @@
         <span class="k">return</span> <span class="n">new_m</span></div>
 
         
-
 
 <div class="viewcode-block" id="dataset_reverse_dimensionality">
 <a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.dataset_reverse_dimensionality">[docs]</a>
@@ -1898,7 +1916,6 @@
     <span class="n">T</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
 
-
     <span class="n">batch_table</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">96</span><span class="p">]</span>
 
     <span class="n">small_set</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tr_ratio</span><span class="p">))</span><span class="o">//</span><span class="mi">2</span>
@@ -2049,8 +2066,6 @@
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(IMPUTATION-ERROR) </span><span class="si">{</span><span class="n">algo</span><span class="si">}</span><span class="s2"> is a uni-dimensional algorithm and can only operate when series 0 is the sole contaminated one.</span><span class="se">\n\t</span><span class="s2">The provided matrix contains </span><span class="si">{</span><span class="n">cols_with_nans</span><span class="si">}</span><span class="s2"> contaminated series.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
-
-
 
 
 
@@ -2743,8 +2758,6 @@
     <span class="k">return</span> <span class="n">batch_size</span></div>
 
 
-
-
 <div class="viewcode-block" id="load_share_lib">
 <a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.load_share_lib">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_share_lib</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;lib_cdrec&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -2776,12 +2789,12 @@
             <span class="n">cpp_wrapper</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Wrapper files loaded for C++ : &quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">lib_path</span><span class="p">},</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">lib_path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s1">&#39;imputegap.algorithms.lib&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;./&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_new.dylib&quot;</span><span class="p">)</span>
                 <span class="n">cpp_wrapper</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(SYS-UPD) C++ shared object linked with new version of armadillo: </span><span class="si">{</span><span class="n">lib_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">lib_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s1">&#39;algorithms/lib/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.dylib&quot;</span><span class="p">)</span>
                 <span class="n">cpp_wrapper</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(SYS-UPD) C++ shared object linked with the user  path : </span><span class="si">{</span><span class="n">lib_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2793,7 +2806,7 @@
             <span class="n">cpp_wrapper</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Wrapper files loaded for C++ : &quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">lib_path</span><span class="p">},</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="n">lib_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s1">&#39;algorithms/lib/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.so&quot;</span><span class="p">)</span>
             <span class="n">cpp_wrapper</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(SYS-UPD) C++ shared object linked with the user path : </span><span class="si">{</span><span class="n">lib_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2935,7 +2948,7 @@
         <span class="s2">&quot;GAIN&quot;</span><span class="p">,</span>
         <span class="s2">&quot;GRIN&quot;</span><span class="p">,</span>
         <span class="s2">&quot;BayOTIDE&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;HKMF_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;HKMFT&quot;</span><span class="p">,</span>
         <span class="s2">&quot;BitGraph&quot;</span><span class="p">,</span>
         <span class="s2">&quot;SAITS&quot;</span><span class="p">,</span>
         <span class="s2">&quot;NuwaTS&quot;</span><span class="p">,</span>
@@ -3077,7 +3090,7 @@
         <span class="s2">&quot;hw-add&quot;</span><span class="p">,</span>
         <span class="s2">&quot;arima&quot;</span><span class="p">,</span>
         <span class="s2">&quot;sf-arima&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;bats&quot;</span><span class="p">,</span>
+        <span class="c1">#&quot;bats&quot;,</span>
         <span class="s2">&quot;ets&quot;</span><span class="p">,</span>
         <span class="s2">&quot;croston&quot;</span><span class="p">,</span>
         <span class="s2">&quot;theta&quot;</span><span class="p">,</span>
@@ -3270,7 +3283,7 @@
         <span class="s2">&quot;DeepLearning.GAIN&quot;</span><span class="p">,</span>
         <span class="s2">&quot;DeepLearning.GRIN&quot;</span><span class="p">,</span>
         <span class="s2">&quot;DeepLearning.BayOTIDE&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;DeepLearning.HKMF_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DeepLearning.HKMFT&quot;</span><span class="p">,</span>
         <span class="s2">&quot;DeepLearning.BitGraph&quot;</span><span class="p">,</span>
         <span class="s2">&quot;DeepLearning.SAITS&quot;</span><span class="p">,</span>
         <span class="s2">&quot;DeepLearning.CSDI&quot;</span><span class="p">,</span>
