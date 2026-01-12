@@ -90,7 +90,6 @@ class trmf:
         self.F = None
         self.X = None
 
-
     def fit(self, train, resume=False):
         """Fit the TRMF model according to the given training data.
 

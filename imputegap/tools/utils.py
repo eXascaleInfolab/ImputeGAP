@@ -558,7 +558,7 @@ def config_impute_algorithm(incomp_data, algorithm, verbose=True):
         imputer = Imputation.DeepLearning.GRIN(incomp_data)
     elif alg == "bayotide":
         imputer = Imputation.DeepLearning.BayOTIDE(incomp_data)
-    elif alg == "hkmft":
+    elif alg == "hkmft" or alg == "hkmf-t" :
         imputer = Imputation.DeepLearning.HKMFT(incomp_data)
     elif alg == "bitgraph":
         imputer = Imputation.DeepLearning.BitGraph(incomp_data)
@@ -1174,7 +1174,8 @@ def window_truncation(feature_vectors, seq_len, stride=None, info="", verbose=Tr
 
     sample_collector = []
     for idx in start_indices:
-        if (idx + seq_len) > values: break
+        if (idx + seq_len) > values:
+            break
         sample_collector.append(feature_vectors[idx: idx + seq_len])
 
     dataset_strat_windows = np.asarray(sample_collector).astype('float32')

@@ -34,7 +34,6 @@ jobs:
         sudo apt-get install libmlpack-dev
         sudo apt-get install libopenblas-dev
         sudo apt-get install python3-dev build-essential
-        pip install --upgrade google protobuf
         pip install -r requirements.txt
         pip install mypy
         pip install pytest

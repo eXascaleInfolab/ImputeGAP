@@ -10,8 +10,7 @@
 
 import numpy as np
 
-from imputegap.wrapper.AlgoPython.TRMF.trmf import trmf
-
+from imputegap.wrapper.AlgoPython.Trmf.trmf import trmf
 
 def recovTRMF(data, lags=[1,7], K=4, lambda_f=1.0, lambda_x=1.0, lambda_w=1.0, eta=1.0, alpha=1000.0, max_iter=5000, reversed=False, verbose=True):
     """Temporal Regularized Matrix Factorization : https://github.com/SemenovAlex/trmf

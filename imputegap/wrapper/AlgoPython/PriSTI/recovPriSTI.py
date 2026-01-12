@@ -151,12 +151,12 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
     else:
         recovery = utils_imp.reconstruction_windowd_based(preds=imputed_imputegap, nbr_timestamps=recov.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
 
-    recovery = np.array(recovery)
+    rec_pristi = np.array(recovery)
 
     if verbose:
-        print(f"{recovery.shape =}")
+        print(f"{rec_pristi.shape =}")
 
-    recov[m_mask] = recovery[m_mask]
+    recov[m_mask] = rec_pristi[m_mask]
 
     return np.array(recov)
 

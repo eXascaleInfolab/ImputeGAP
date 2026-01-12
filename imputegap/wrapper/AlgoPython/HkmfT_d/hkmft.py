@@ -18,11 +18,11 @@ import logging
 
 import numpy as np
 
-from imputegap.wrapper.AlgoPython.HKMFT.callback import AbstractConvergeCallback
+from imputegap.wrapper.AlgoPython.HkmfT_d.callback import AbstractConvergeCallback
 from collections import namedtuple
 from typing import Iterable
 
-from imputegap.wrapper.AlgoPython.HKMFT.hankel_methods import get_hankel_result, find_max_continue_0, hankelization
+from imputegap.wrapper.AlgoPython.HkmfT_d.hankel_methods import get_hankel_result, find_max_continue_0, hankelization
 
 HKMFTTrainParam = namedtuple('HKMFTTrainParam',
                              ['eta', 'lambda_s', 'lambda_o', 'lambda_e', 'stop_rate', 'random', 'verbose'])

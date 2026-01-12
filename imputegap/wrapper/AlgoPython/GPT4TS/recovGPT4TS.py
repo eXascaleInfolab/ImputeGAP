@@ -36,7 +36,7 @@ def handle_parser(argv=None):
     # data loader
     parser.add_argument('--data', type=str, default='ETTm1', help='dataset type')
     parser.add_argument('--root_path', type=str, default='./', help='root path of the data file')
-    parser.add_argument('--data_path', type=str, default='ETTh1.csv', help='data file')
+    parser.add_argument('--data_path', type=str, default='imputegap_dataset', help='data file')
     parser.add_argument('--features', type=str, default='M', help='forecasting task, options:[M, S, MS]; M:multivariate predict multivariate, S:univariate predict univariate, MS:multivariate predict univariate')
     parser.add_argument('--target', type=str, default='OT', help='target feature in S or MS task')
     parser.add_argument('--freq', type=str, default='h', help='freq for time features encoding, options:[s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly], you can also use more detailed freq like 15min or 3h')
@@ -233,7 +233,9 @@ def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_wo
         torch.cuda.empty_cache()
 
         if np.isnan(reconstruction).any():
-            print(f"\n(ERROR) Imputation error with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage.\n")
+            max_nans = np.isnan(ts_m).sum(axis=0).max()
+            print(f"\n\n(ERROR) Imputation error with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage."
+                  f"\n\tCurrently, the number of NaNs might reach {max_nans} for a sequence and the size of seq_len is {args.seq_len}.\n")
             return recov
 
         if replicat:

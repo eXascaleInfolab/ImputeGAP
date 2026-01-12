@@ -16,7 +16,6 @@
 # THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.  
 # See the Mulan PSL v2 for more details.  
 import datetime
-import fire
 import logging
 
 import numpy as np
@@ -25,13 +24,13 @@ import matplotlib.pyplot as plt
 from typing import Union, Callable
 from joblib import Parallel, delayed, cpu_count
 
-import imputegap.wrapper.AlgoPython.HKMFT.utils as utils
+import imputegap.wrapper.AlgoPython.HkmfT_d.utils as utils
 
-from imputegap.wrapper.AlgoPython.HKMFT.callback import EpochConvergeCallback, MaxDiffConvergeCallback
-from imputegap.wrapper.AlgoPython.HKMFT.hkmft import HKMFT, HKMFTTrainParam, HKMFT_MAX_EPOCH
-from imputegap.wrapper.AlgoPython.HKMFT.ma_tag import MATag
-from imputegap.wrapper.AlgoPython.HKMFT.tag_mean import TagMean
-from imputegap.wrapper.AlgoPython.HKMFT.linear import LinearInterpolation
+from imputegap.wrapper.AlgoPython.HkmfT_d.callback import EpochConvergeCallback, MaxDiffConvergeCallback
+from imputegap.wrapper.AlgoPython.HkmfT_d.hkmft import HKMFT, HKMFTTrainParam, HKMFT_MAX_EPOCH
+from imputegap.wrapper.AlgoPython.HkmfT_d.ma_tag import MATag
+from imputegap.wrapper.AlgoPython.HkmfT_d.tag_mean import TagMean
+from imputegap.wrapper.AlgoPython.HkmfT_d.linear import LinearInterpolation
 
 
 def rmse_metric(gt: np.ndarray, rs: np.ndarray):
@@ -357,6 +356,7 @@ def recovHKMFT(dataset,
                norm=False,
                replicat=False
                ):
+
 
     ts_m = np.copy(dataset)
     T, N = dataset.shape
