@@ -46,6 +46,7 @@ def iim(incomp_data, number_neighbor, algo_code, logs=True, verbose=True):
     recov_data = impute_with_algorithm(algo_code, incomp_data.copy(), number_neighbor, verbose=verbose)
 
     end_time = time.time()
+
     if logs and verbose:
         print(f"\n> logs: imputation iim - Execution Time: {(end_time - start_time):.4f} seconds\n")
 

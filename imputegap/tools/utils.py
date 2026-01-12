@@ -1011,7 +1011,7 @@ def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_s
     elif ptn == "distribution" or pattern == "dist":
         incomp_data = GenGap.distribution(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, probabilities_list=probabilities, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
     elif ptn == "blackout":
-        incomp_data = GenGap.blackout(input_data=ts.data, series_rate=dataset_rate, offset=offset, verbose=verbose)
+        incomp_data = GenGap.blackout(input_data=ts.data, rate_series=dataset_rate, offset=offset, verbose=verbose)
     else:
         raise ValueError(f"\n(CONT) Pattern '{pattern}' not recognized, please choose your algorithm on this list :\n\t{TimeSeries().patterns}\n")
         incomp_data = None
@@ -1305,7 +1305,6 @@ def dataset_add_dimensionality(matrix, seq_length=24, reshapable=True, adding_na
 
         return new_m
         
-
 
 def dataset_reverse_dimensionality(matrix, expected_n: int, verbose: bool = True):
     """
@@ -1602,7 +1601,6 @@ def auto_seq_sample(matrix, tr_ratio, high_val=98, verbose=True):
     T, F = matrix.shape
     found = False
 
-
     batch_table = [2, 4, 8, 16, 32, 64, 96]
 
     small_set = int(T*(1-tr_ratio))//2
@@ -1747,8 +1745,6 @@ def check_contamination_series(ts_m, algo="the algorithm", verbose=True):
         if verbose:
             print(f"(IMPUTATION-ERROR) {algo} is a uni-dimensional algorithm and can only operate when series 0 is the sole contaminated one.\n\tThe provided matrix contains {cols_with_nans} contaminated series.\n")
         return True
-
-
 
 
 def search_path(set_name="test"):
@@ -2403,8 +2399,6 @@ def compute_batch_size(data, min_size=4, max_size=16, divisor=2, verbose=True):
         print(f"(Batch-Size) Computed batch size: {batch_size}\n")
 
     return batch_size
-
-
 
 def load_share_lib(name="lib_cdrec", verbose=True):
     """

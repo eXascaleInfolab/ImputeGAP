@@ -317,8 +317,6 @@ class TestPipeline(unittest.TestCase):
                 incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
                 incomp_data = np.tile(incomp_data, (7, 5))
                 ts.data = np.tile(ts.data, (7, 5))
-            if name == "SPIRIT" or name == "TKCM":
-                incomp_data = GenGap.aligned(ts.data, single_series=0)
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
             algo.impute()
             algo.score(ts.data)
@@ -351,12 +349,6 @@ class TestPipeline(unittest.TestCase):
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
-            if name == "DeepMVI":
-                incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
-                incomp_data = np.tile(incomp_data, (7, 5))
-                ts.data = np.tile(ts.data, (7, 5))
-            if name == "SPIRIT" or name == "TKCM":
-                incomp_data = GenGap.aligned(ts.data, single_series=0)
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
             algo.impute()
             algo.score(ts.data)
@@ -391,11 +383,7 @@ class TestPipeline(unittest.TestCase):
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
-            if name == "DeepMVI":
-                incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
-                incomp_data = np.tile(incomp_data, (7, 5))
-                ts.data = np.tile(ts.data, (7, 5))
-            if name == "SPIRIT" or name == "TKCM":
+            if name == "SPIRIT":
                 incomp_data = GenGap.aligned(ts.data, single_series=0)
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
             algo.impute()
@@ -424,13 +412,13 @@ class TestPipeline(unittest.TestCase):
 
         print(f"{utils.list_of_algorithms_pattern_search() = }")
 
-        for name in ["TKCM"]:
+        for name in utils.list_of_algorithms_pattern_search():
             # load and normalize the dataset
             ts = TimeSeries()
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
-            if name in ["DeepMVI", "TKCM", "SPIRIT"]:
+            if name == "TKCM":
                 ts.data = np.tile(ts.data, (7, 5))
                 incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
@@ -465,13 +453,6 @@ class TestPipeline(unittest.TestCase):
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
-            if name == "DeepMVI":
-                incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
-                incomp_data = np.tile(incomp_data, (7, 5))
-                ts.data = np.tile(ts.data, (7, 5))
-            if name == "SPIRIT" or name == "TKCM":
-                incomp_data = GenGap.aligned(ts.data, single_series=0)
-            algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
             algo.impute()
             algo.score(ts.data)
             metrics = algo.metrics
@@ -504,13 +485,7 @@ class TestPipeline(unittest.TestCase):
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
-            if name == "DeepMVI":
-                incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
-                incomp_data = np.tile(incomp_data, (7, 5))
-                ts.data = np.tile(ts.data, (7, 5))
-            if name == "SPIRIT" or name == "TKCM":
-                incomp_data = GenGap.aligned(ts.data, single_series=0)
-            algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+            algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
             algo.impute()
             algo.score(ts.data)
             metrics = algo.metrics

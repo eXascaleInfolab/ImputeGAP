@@ -151,7 +151,10 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
     else:
         recovery = utils_imp.reconstruction_windowd_based(preds=imputed_imputegap, nbr_timestamps=recov.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
 
-    rec_pristi = np.array(recovery)
+    if hasattr(recovery, "detach"):
+        rec_pristi = recovery.detach().cpu().numpy()
+    else:
+        rec_pristi = np.asarray(recovery)
 
     if verbose:
         print(f"{rec_pristi.shape =}")

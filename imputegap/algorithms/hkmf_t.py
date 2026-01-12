@@ -59,6 +59,7 @@ def hkmf_t(incomp_data, tags=None, seq_len=24, blackouts_begin=None, blackouts_e
     recov_data = recovHKMFT(dataset=incomp_data, tags=tags, seq_len=seq_len, blackouts_begin=blackouts_begin, blackouts_end=blackouts_end, max_epoch=epochs, tr_ratio=tr_ratio, verbose=verbose)
 
     end_time = time.time()
+
     if logs and verbose:
         print(f"\n> logs: imputation hkmf_t - Execution Time: {(end_time - start_time):.4f} seconds\n")
 

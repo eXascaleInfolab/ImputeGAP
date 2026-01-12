@@ -1,8 +1,6 @@
 import time
 
 from imputegap.wrapper.AlgoPython.CSDI.recovCSDI import recovCSDI
-#from imputegap.wrapper.AlgoPython.CSDI2.csdi_recovery import csdi_recovery
-
 
 def csdi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, target_strategy="mix", nsamples=100, num_workers=0, tr_ratio=0.9, seed=1, logs=True, verbose=True):
     """
@@ -66,9 +64,9 @@ def csdi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, t
     start_time = time.time()  # Record start time
 
     recov_data = recovCSDI(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, sliding_windows=sliding_windows, target_strategy=target_strategy, nsamples=nsamples, num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, verbose=verbose)
-    #recov_data = csdi_recovery(ts_m=incomp_data)
 
     end_time = time.time()
+
     if logs and verbose:
         print(f"\n> logs: imputation csdi - Execution Time: {(end_time - start_time):.4f} seconds\n")
 

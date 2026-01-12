@@ -2,9 +2,9 @@ import copy
 import torch
 import torch.optim as optim
 import numpy as np
-from imputegap.wrapper.AlgoPython.BiTGraph.models.BiaTCGNet.BiaTCGNet import Model
+from imputegap.wrapper.AlgoPython.BiTGraph_s.models.BiaTCGNet.BiaTCGNet import Model
 import os
-from imputegap.wrapper.AlgoPython.BiTGraph.data.GenerateDataset import loaddataset
+from imputegap.wrapper.AlgoPython.BiTGraph_s.data.GenerateDataset import loaddataset
 import datetime
 
 # python main.py --epochs 200 --mask_ratio 0.2 --dataset-name Elec
