@@ -10,9 +10,7 @@
 
 #!/usr/bin/python
 import numpy as np
-
 from imputegap.wrapper.AlgoPython.DeepMVI.transformer import transformer_recovery
-
 # end function
 
 

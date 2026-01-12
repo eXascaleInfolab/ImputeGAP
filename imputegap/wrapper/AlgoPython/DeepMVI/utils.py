@@ -8,23 +8,8 @@
 # https://arxiv.org/abs/2103.01600
 # ===============================================================================================================
 
-import torch
 import numpy as np
-import argparse
-import torch.nn as nn
-import os
-import _pickle as cPickle
-import random
-import math,copy
-import torch.nn.functional as F
-from typing import Dict, List, Tuple
-from torch.nn.utils.rnn import pad_sequence
-from torch.cuda.amp import autocast
-
-from torch import nn
-from einops import rearrange, repeat
-
-from functools import partial
+import copy
 from contextlib import contextmanager
 
 @contextmanager

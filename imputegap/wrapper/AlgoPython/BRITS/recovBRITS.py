@@ -21,8 +21,6 @@ import imputegap.tools.utils as utils_imp
 import imputegap.wrapper.AlgoPython.BRITS.models.rits_i, imputegap.wrapper.AlgoPython.BRITS.models.brits_i, imputegap.wrapper.AlgoPython.BRITS.models.rits, imputegap.wrapper.AlgoPython.BRITS.models.brits, imputegap.wrapper.AlgoPython.BRITS.models.m_rnn
 from imputegap.wrapper.AlgoPython.BRITS.input_process_imputegap import data_loader_brits
 
-
-
 def handle_parser(argv=None):
 
     import argparse
@@ -135,7 +133,8 @@ def evaluate(model, val_iter, verbose=True, deep_verbose=False):
     save_impute = np.concatenate(save_impute, axis=0)
     save_label = np.concatenate(save_label, axis=0)
 
-    outdir = os.path.join(os.path.dirname(__file__), "result")
+    here = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    outdir = os.path.join(here, "imputegap_assets/models/brits/result")
     os.makedirs(outdir, exist_ok=True)
 
     np.save(os.path.join(outdir, f"{args.model}_data.npy"), save_impute)

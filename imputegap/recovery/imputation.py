@@ -1205,6 +1205,10 @@ class Imputation:
             -------
             impute(self, user_def=True, params=None):
                 Perform imputation using the TRMF algorithm.
+
+            Example
+            -------
+            $ imputer.impute(params={"lags":[1,7], "K":4, "lambda_f":1.0, "lambda_x":1.0, "lambda_w":1.0, "eta":1.0, "alpha":1000.0, "max_iter":5000})
             """
 
             algorithm = "trmf"
@@ -1253,7 +1257,7 @@ class Imputation:
                 -------
                     >>> trmf_imputer = Imputation.MatrixCompletion.TRMF(incomp_data)
                     >>> trmf_imputer.impute()
-                    >>> trmf_imputer.impute(params={"lags":[], "K":-1, "lambda_f":1.0, "lambda_x":1.0, "lambda_w":1.0, "eta":1.0, "alpha":1000.0, "max_iter":100})
+                    >>> trmf_imputer.impute(params={"lags":[1,7], "K":4, "lambda_f":1.0, "lambda_x":1.0, "lambda_w":1.0, "eta":1.0, "alpha":1000.0, "max_iter":5000})
                     >>> trmf_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})
                     >>> recov_data = trmf_imputer.recov_data
 
