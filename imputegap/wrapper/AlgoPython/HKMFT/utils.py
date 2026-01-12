@@ -24,10 +24,10 @@ import matplotlib.pyplot as plt
 
 from typing import Union
 
-from imputegap.wrapper.AlgoPython.HkmfT_d.dataloder import DataLoader
-from imputegap.wrapper.AlgoPython.HkmfT_d.dataloder_imputegap import DataLoaderImputeGAP
-from imputegap.wrapper.AlgoPython.HkmfT_d.dataloder import Dataset
-from imputegap.wrapper.AlgoPython.HkmfT_d.dataloder_imputegap import DatasetImputeGAP
+from imputegap.wrapper.AlgoPython.HKMFT.dataloder import DataLoader
+from imputegap.wrapper.AlgoPython.HKMFT.dataloder_imputegap import DataLoaderImputeGAP
+from imputegap.wrapper.AlgoPython.HKMFT.dataloder import Dataset
+from imputegap.wrapper.AlgoPython.HKMFT.dataloder_imputegap import DatasetImputeGAP
 
 
 def show_gt_rs(gt: np.ndarray, rs: np.ndarray, begin_idx, end_idx, method_name: str = 'HKMF-T') -> None:

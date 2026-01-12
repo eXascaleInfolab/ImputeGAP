@@ -1,6 +1,6 @@
 import time
 
-from imputegap.wrapper.AlgoPython.HkmfT_d.recovHKMFT import recovHKMFT
+from imputegap.wrapper.AlgoPython.HKMFT.recovHKMFT import recovHKMFT
 
 def hkmf_t(incomp_data, tags=None, seq_len=24, blackouts_begin=None, blackouts_end=None, epochs=30, tr_ratio=0.9, logs=True, verbose=True):
     """

@@ -19,7 +19,7 @@ import logging
 
 import numpy as np
 
-from imputegap.wrapper.AlgoPython.HkmfT_d.hankel_methods import find_max_continue_0
+from imputegap.wrapper.AlgoPython.HKMFT.hankel_methods import find_max_continue_0
 
 
 class MATag(object):
