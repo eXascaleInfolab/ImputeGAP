@@ -461,8 +461,10 @@ class TimeSeries:
 
         if reverse:
             input_data = input_data.T
-            if incomp_data is not None: incomp_data = incomp_data.T
-            if recov_data is not None: recov_data = recov_data.T
+            if incomp_data is not None:
+                incomp_data = incomp_data.T
+            if recov_data is not None:
+                recov_data = recov_data.T
 
         number_of_series = 0
         if algorithm is None:

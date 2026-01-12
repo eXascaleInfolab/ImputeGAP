@@ -28,6 +28,16 @@ jobs:
         pip install -r requirements.txt
         pip install mypy
         pip install pytest
+        
+    - name: Free disk space
+      run: |
+        df -h
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/.ghcup
+        sudo apt-get clean
+        df -h   
 
     - name: Run pytest
       run: |

@@ -66,7 +66,8 @@ def window_truncate(feature_vectors, seq_len, sliding_len=None, imputegap=True, 
     else:
         sample_collector = []
         for idx in start_indices:
-            if (idx + seq_len) > total_len: break
+            if (idx + seq_len) > total_len:
+                break
             sample_collector.append(feature_vectors[idx: idx + seq_len])
 
     dataset_strat_windows = np.asarray(sample_collector).astype('float32')

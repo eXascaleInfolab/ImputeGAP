@@ -2434,12 +2434,12 @@ def load_share_lib(name="lib_cdrec", verbose=True):
             cpp_wrapper = ctypes.CDLL(lib_path)
             if verbose:
                 print(f"\n(SYS) Wrapper files loaded for C++ : ", {lib_path}, "\n")
-        except:
+        except Exception:
             try:
                 lib_path = importlib.resources.files('imputegap.algorithms.lib').joinpath("./" + str(name) + "_new.dylib")
                 cpp_wrapper = ctypes.CDLL(lib_path)
                 print(f"(SYS-UPD) C++ shared object linked with new version of armadillo: {lib_path}\n")
-            except:
+            except Exception:
                 lib_path = os.path.join(here, 'algorithms/lib/' + name + ".dylib")
                 cpp_wrapper = ctypes.CDLL(lib_path)
                 print(f"(SYS-UPD) C++ shared object linked with the user  path : {lib_path}\n")
@@ -2451,7 +2451,7 @@ def load_share_lib(name="lib_cdrec", verbose=True):
             cpp_wrapper = ctypes.CDLL(lib_path)
             if verbose:
                 print(f"\n(SYS) Wrapper files loaded for C++ : ", {lib_path}, "\n")
-        except:
+        except Exception:
             lib_path = os.path.join(here, 'algorithms/lib/' + name + ".so")
             cpp_wrapper = ctypes.CDLL(lib_path)
             print(f"(SYS-UPD) C++ shared object linked with the user path : {lib_path}\n")

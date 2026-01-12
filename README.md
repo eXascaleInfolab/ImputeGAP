@@ -36,44 +36,44 @@ In detail, the package provides:
 
 
 # Available Imputation Algorithms
-| **Family**                | **Algorithm**     | **Venue -- Year**            |
-|---------------------------|-------------------|------------------------------|
-| NuwaTS [[35]](#ref35)     | LLMs              | Arxiv -- 2024                |
-| GPT4TS [[36]](#ref36)     | LLMs              | NeurIPS -- 2023              |
-| MissNet [[27]](#ref27)    | Deep Learning     | KDD -- 2024                  |
-| MPIN [[25]](#ref25)       | Deep Learning     | PVLDB -- 2024                |
-| BayOTIDE [[30]](#ref30)   | Deep Learning     | PMLR -- 2024                 |
-| BitGraph [[32]](#ref32)   | Deep Learning     | ICLR -- 2024                 |
-| TimesNet [[37]](#ref37)   | Deep Learning     | ICLR -- 2023                 |
-| PRISTI [[26]](#ref26)     | Deep Learning     | ICDE -- 2023                 |
-| GRIN [[29]](#ref29)       | Deep Learning     | ICLR -- 2022                 |
-| CSDI [[38]](#ref38)       | Deep Learning     | NeurIPS -- 2021              |
-| HKMF_T [[31]](#ref31)     | Deep Learning     | TKDE -- 2021                 |
-| DeepMVI [[24]](#ref24)    | Deep Learning     | PVLDB -- 2021                |
-| MRNN [[22]](#ref22)       | Deep Learning     | IEEE Trans on BE -- 2019     |
-| BRITS [[23]](#ref23)      | Deep Learning     | NeurIPS -- 2018              |
-| GAIN [[28]](#ref28)       | Deep Learning     | ICML -- 2018                 |
-| CDRec [[1]](#ref1)        | Matrix Completion | KAIS -- 2020                 |
-| TRMF [[8]](#ref8)         | Matrix Completion | NeurIPS -- 2016              |
-| GROUSE [[3]](#ref3)       | Matrix Completion | PMLR -- 2016                 |
-| ROSL [[4]](#ref4)         | Matrix Completion | CVPR -- 2014                 |
-| SoftImpute [[6]](#ref6)   | Matrix Completion | JMLR -- 2010                 |
-| SVT [[7]](#ref7)          | Matrix Completion | SIAM J. OPTIM -- 2010        |
-| SPIRIT [[5]](#ref5)       | Matrix Completion | VLDB -- 2005                 |
-| IterativeSVD [[2]](#ref2) | Matrix Completion | BIOINFORMATICS -- 2001       |
-| TKCM [[11]](#ref11)       | Pattern Search    | EDBT -- 2017                 |
-| STMVL [[9]](#ref9)        | Pattern Search    | IJCAI -- 2016                |
-| DynaMMo [[10]](#ref10)    | Pattern Search    | KDD -- 2009                  |
-| IIM [[12]](#ref12)        | Machine Learning  | ICDE -- 2019                 |
-| XGBOOST [[13]](#ref13)    | Machine Learning  | KDD -- 2016                  |
-| MICE [[14]](#ref14)       | Machine Learning  | Statistical Software -- 2011 |
-| MissForest [[15]](#ref15) | Machine Learning  | BioInformatics -- 2011       |
-| KNNImpute                 | Statistics        | -                            |
-| Interpolation             | Statistics        | -                            |
-| MinImpute                 | Statistics        | -                            |
-| ZeroImpute                | Statistics        | -                            |
-| MeanImpute                | Statistics        | -                            |
-| MeanImputeBySeries        | Statistics        | -                            |
+| **Family**                 | **Algorithm**     | **Venue -- Year**            |
+|----------------------------|-------------------|------------------------------|
+| NuwaTS [[35]](#ref35)      | LLMs              | Arxiv -- 2024                |
+| GPT4TS [[36]](#ref36)      | LLMs              | NeurIPS -- 2023              |
+| MissNet [[27]](#ref27)     | Deep Learning     | KDD -- 2024                  |
+| MPIN [[25]](#ref25)        | Deep Learning     | PVLDB -- 2024                |
+| BayOTIDE [[30]](#ref30)    | Deep Learning     | PMLR -- 2024                 |
+| BitGraph [[32]](#ref32)    | Deep Learning     | ICLR -- 2024                 |
+| TimesNet [[37]](#ref37)    | Deep Learning     | ICLR -- 2023                 |
+| PRISTI [[26]](#ref26)      | Deep Learning     | ICDE -- 2023                 |
+| GRIN [[29]](#ref29)        | Deep Learning     | ICLR -- 2022                 |
+| CSDI [[38]](#ref38)        | Deep Learning     | NeurIPS -- 2021              |
+| HKMFT [[31]](#ref31)       | Deep Learning     | TKDE -- 2021                 |
+| DeepMVI [[24]](#ref24)     | Deep Learning     | PVLDB -- 2021                |
+| MRNN [[22]](#ref22)        | Deep Learning     | IEEE Trans on BE -- 2019     |
+| BRITS [[23]](#ref23)       | Deep Learning     | NeurIPS -- 2018              |
+| GAIN [[28]](#ref28)        | Deep Learning     | ICML -- 2018                 |
+| CDRec [[1]](#ref1)         | Matrix Completion | KAIS -- 2020                 |
+| TRMF [[8]](#ref8)          | Matrix Completion | NeurIPS -- 2016              |
+| GROUSE [[3]](#ref3)        | Matrix Completion | PMLR -- 2016                 |
+| ROSL [[4]](#ref4)          | Matrix Completion | CVPR -- 2014                 |
+| SoftImpute [[6]](#ref6)    | Matrix Completion | JMLR -- 2010                 |
+| SVT [[7]](#ref7)           | Matrix Completion | SIAM J. OPTIM -- 2010        |
+| SPIRIT [[5]](#ref5)        | Matrix Completion | VLDB -- 2005                 |
+| IterativeSVD [[2]](#ref2)  | Matrix Completion | BIOINFORMATICS -- 2001       |
+| TKCM [[11]](#ref11)        | Pattern Search    | EDBT -- 2017                 |
+| STMVL [[9]](#ref9)         | Pattern Search    | IJCAI -- 2016                |
+| DynaMMo [[10]](#ref10)     | Pattern Search    | KDD -- 2009                  |
+| IIM [[12]](#ref12)         | Machine Learning  | ICDE -- 2019                 |
+| XGBOOST [[13]](#ref13)     | Machine Learning  | KDD -- 2016                  |
+| MICE [[14]](#ref14)        | Machine Learning  | Statistical Software -- 2011 |
+| MissForest [[15]](#ref15)  | Machine Learning  | BioInformatics -- 2011       |
+| KNNImpute                  | Statistics        | -                            |
+| Interpolation              | Statistics        | -                            |
+| MinImpute                  | Statistics        | -                            |
+| ZeroImpute                 | Statistics        | -                            |
+| MeanImpute                 | Statistics        | -                            |
+| MeanImputeBySeries         | Statistics        | -                            |
 
 ---
 
