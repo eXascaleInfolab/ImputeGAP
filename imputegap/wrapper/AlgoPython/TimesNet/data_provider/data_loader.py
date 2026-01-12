@@ -7,7 +7,6 @@
 # FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
 # https://iclr.cc/virtual/2023/poster/11976
 # ===============================================================================================================
-
 import os
 import numpy as np
 import pandas as pd
@@ -17,12 +16,8 @@ from sklearn.preprocessing import StandardScaler
 from imputegap.wrapper.AlgoPython.TimesNet.utils.timefeatures import time_features
 import warnings
 from imputegap.wrapper.AlgoPython.TimesNet.utils.augmentation import run_augmentation_single
-
 import imputegap.tools.utils as utils_imp
-
 warnings.filterwarnings('ignore')
-
-#HUGGINGFACE_REPO = "thuml/Time-Series-Library"
 
 
 class Dataset_ETT_hour(Dataset):
@@ -56,12 +51,10 @@ class Dataset_ETT_hour(Dataset):
 
     def __read_data__(self):
         self.scaler = StandardScaler()
-
         here = os.path.dirname(os.path.abspath(__file__))
         filepath = os.path.join(here, "dataset/ETT-small/ETTh1.csv")
         print(f"\ntest for {filepath} - Authors results... {self.scale = } - {self.target = }\n")
         df_raw = pd.read_csv(filepath)
-            
         border1s = [0, 12 * 30 * 24 - self.seq_len, 12 * 30 * 24 + 4 * 30 * 24 - self.seq_len]
         border2s = [12 * 30 * 24, 12 * 30 * 24 + 4 * 30 * 24, 12 * 30 * 24 + 8 * 30 * 24]
 
@@ -131,6 +124,7 @@ class Dataset_ETT_hour(Dataset):
         return self.scaler.inverse_transform(data)
 
 
+"""
 class Dataset_ETT_minute(Dataset):
     def __init__(self, args, root_path, flag='train', size=None,
                  features='S', data_path='ETTm1.csv',
@@ -234,7 +228,7 @@ class Dataset_ETT_minute(Dataset):
 
     def inverse_transform(self, data):
         return self.scaler.inverse_transform(data)
-
+"""
 
 class Dataset_Custom(Dataset):
     def __init__(self, args, root_path, flag='train', size=None, features='S', data_path='ETTh1.csv', target='OT', scale=True, timeenc=0, freq='h', seasonal_patterns=None, ts_m=None, reconstruction=False, tr_ratio=0.7, verbose=True, replicat=False, normalizer=False):
@@ -277,16 +271,6 @@ class Dataset_Custom(Dataset):
             self.scaler = StandardScaler()
         else:
             self.scaler = None
-
-        #local_fp = os.path.join(self.root_path, self.data_path)
-        #cfg_name = os.path.splitext(os.path.basename(self.data_path))[0]
-
-        #if os.path.exists(local_fp):
-        #    df_raw = pd.read_csv(local_fp)
-        #else:
-        #    ds = load_dataset(HUGGINGFACE_REPO, name=cfg_name)
-        #    split_name = "train" if "train" in ds else list(ds.keys())[0]
-        #df_raw = ds[split_name].to_pandas()
 
         if not self.replicat:
             data = self.ts_m

@@ -126,7 +126,7 @@ class Dataset_ETT_hour(Dataset):
     def inverse_transform(self, data):
         return self.scaler.inverse_transform(data)
 
-
+"""
 class Dataset_ETT_minute(Dataset):
     def __init__(self, root_path, flag='train', size=None,
                  features='S', data_path='ETTm1.csv',
@@ -219,7 +219,7 @@ class Dataset_ETT_minute(Dataset):
 
     def inverse_transform(self, data):
         return self.scaler.inverse_transform(data)
-
+"""
 
 class Dataset_Custom(Dataset):
     def __init__(self, root_path, flag='train', size=None, features='S', data_path='ETTh1.csv', target='OT', scale=True, timeenc=0, freq='h',  seasonal_patterns=None, percent=10, ts_m=None, reconstruction=False, tr_ratio=0.7, verbose=True, replicat=False, normalizer=False):
@@ -372,10 +372,6 @@ class Dataset_Custom(Dataset):
         seq_y_mark = self.data_stamp[r_begin:r_end]
 
         mask = self.mask[s_begin:s_end]
-
-        #print(f"\n\n{index}")
-        #print(f"{s_begin}")
-        #print(f"{s_end}\n\n")
 
         return seq_x, seq_y, seq_x_mark, seq_y_mark, mask
 

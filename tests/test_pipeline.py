@@ -453,6 +453,7 @@ class TestPipeline(unittest.TestCase):
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
+            algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
             algo.impute()
             algo.score(ts.data)
             metrics = algo.metrics

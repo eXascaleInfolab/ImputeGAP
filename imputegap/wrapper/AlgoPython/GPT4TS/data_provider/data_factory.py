@@ -8,14 +8,11 @@
 # https://dl.acm.org/doi/10.5555/3666122.3667999
 # ===============================================================================================================
 
-from imputegap.wrapper.AlgoPython.GPT4TS.data_provider.data_loader import Dataset_ETT_hour, Dataset_ETT_minute, Dataset_Custom
+from imputegap.wrapper.AlgoPython.GPT4TS.data_provider.data_loader import Dataset_ETT_hour, Dataset_Custom
 from torch.utils.data import DataLoader
 
 data_dict = {
     'ETTh1': Dataset_ETT_hour,
-    'ETTh2': Dataset_ETT_hour,
-    'ETTm1': Dataset_ETT_minute,
-    'ETTm2': Dataset_ETT_minute,
     'custom': Dataset_Custom,
 }
 

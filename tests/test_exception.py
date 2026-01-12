@@ -6,7 +6,7 @@ import pytest
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
-from recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGap
 
 
 class TestException(unittest.TestCase):

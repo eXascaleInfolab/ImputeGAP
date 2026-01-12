@@ -8,14 +8,11 @@
 # https://iclr.cc/virtual/2023/poster/11976
 # ===============================================================================================================
 
-from imputegap.wrapper.AlgoPython.TimesNet.data_provider.data_loader import Dataset_Custom, Dataset_ETT_hour, Dataset_ETT_minute
+from imputegap.wrapper.AlgoPython.TimesNet.data_provider.data_loader import Dataset_Custom, Dataset_ETT_hour
 from torch.utils.data import DataLoader
 
 data_dict = {
     'ETTh1': Dataset_ETT_hour,
-    'ETTh2': Dataset_ETT_hour,
-    'ETTm1': Dataset_ETT_minute,
-    'ETTm2': Dataset_ETT_minute,
     'custom': Dataset_Custom,
 }
 

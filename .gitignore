@@ -8,7 +8,6 @@ build_script.txt
 *extractor_imp.py
 *extractor_pickle.py
 *extractor_pkl.py
-imputegap/tools/extract/*
 imputegap/datasets/z_*.txt
 imputegap/datasets/y_*.txt
 imputegap/datasets/fmri-objectviewing.txt

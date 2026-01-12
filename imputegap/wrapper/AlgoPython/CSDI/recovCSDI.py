@@ -88,7 +88,7 @@ def recovCSDI(ts_m, seq_len=-1, batch_size=-1, epochs=200, num_workers=0, nsampl
 
 
     if verbose:
-        print(f"(IMPUTATION) CSDI\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tbatch_size: {config["train"]["batch_size"]}\n\tepochs: {config["train"]["epochs"]}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {args.target_strategy}\n\tnsample: {args.nsample}\n\tfeatures: {args.features}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tshuffle: {args.shuffle}\n\tinner normalizer: {args.normalize}\n\tseed: {seed}\n\tverbose: {verbose}\n\tdevice: {args.device}\n")
+        print(f"(IMPUTATION) CSDI\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tbatch_size: {config['train']['batch_size']}\n\tepochs: {config['train']['epochs']}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {args.target_strategy}\n\tnsample: {args.nsample}\n\tfeatures: {args.features}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tshuffle: {args.shuffle}\n\tinner normalizer: {args.normalize}\n\tseed: {seed}\n\tverbose: {verbose}\n\tdevice: {args.device}\n")
 
     if deep_verbose:
         print(args)
