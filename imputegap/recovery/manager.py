@@ -547,7 +547,7 @@ class TimeSeries:
                 if incomp_data is not None and recov_data is None:  # plot infected matrix
                     if np.isnan(incomp_data[i, :]).any():
                         if style == "default":
-                            ax.plot(timestamps, input_data[i, :nbr_val], linewidth=1.5, color=color, linestyle='--', label=title_contamination)
+                            ax.plot(timestamps, input_data[i, :nbr_val], linewidth=2, color=color, linestyle=':', label=title_contamination)
                         else:
                             ax.plot(timestamps, input_data[i, :nbr_val], linewidth=2, color="red", linestyle='--', label=title_contamination)
 
@@ -560,20 +560,22 @@ class TimeSeries:
 
                 if recov_data is not None:  # plot imputed matrix
                     if np.isnan(incomp_data[i, :]).any():
-                        ax.plot(np.arange(min(recov_data.shape[1], nbr_val)), recov_data[i, :nbr_val], linewidth=2.5, linestyle='-', color="r", label=title_imputation)
+                        ax.plot(np.arange(min(recov_data.shape[1], nbr_val)), recov_data[i, :nbr_val], linewidth=1.5, linestyle='-', color="r", label=title_imputation)
 
-                        ax.plot(timestamps, input_data[i, :nbr_val], linewidth=1.5, linestyle='--', color=color, label=f'Missing Data')
+                        ax.plot(timestamps, input_data[i, :nbr_val], linewidth=1.5, linestyle=':', color=color, label=f'Missing Data')
 
                     if np.isnan(incomp_data[i, :]).any() or not subplot:
                         ax.plot(np.arange(min(incomp_data.shape[1], nbr_val)), incomp_data[i, :nbr_val], color=color, linewidth=2.5, linestyle='-', label=f'Series')
 
                 # Label and legend for subplot
                 if subplot:
+                    handles, labels = ax.get_legend_handles_labels()
+
                     ax.set_title('Series ' + str(i+1), fontsize=9)
                     #ax.plot([], [], ' ', label='Series ' + str(i + 1))  # invisible line with label
                     ax.set_xlabel('Timestamp', fontsize=7)
                     ax.set_ylabel('Values', fontsize=7)
-                    ax.legend(loc='upper left', fontsize=6, frameon=True, fancybox=True, framealpha=0.8)
+                    ax.legend(handles[::-1], labels[::-1], loc='upper left', fontsize=6, frameon=True, fancybox=True, framealpha=0.8, ncol=len(ax.get_legend_handles_labels()[0]))
                     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
                     fig.subplots_adjust(top=0.96, hspace=0.4)
                 else:
