@@ -23,9 +23,6 @@ class TestNuwaTS(unittest.TestCase):
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute(user_def=True, params={"seq_len":-2, "batch_size":-1, "epochs":10, "gpt_layers":6, "num_workers":0, "seed":2021})
         algo.score(ts.data)
-        algo.logs=False
-        algo.impute(user_def=True, params={"seq_len": -2, "batch_size": -1, "epochs": 10, "gpt_layers": 6, "num_workers": 0, "seed": 2021})
-        algo.score(ts.data)
         metrics = algo.metrics
 
         print(f"{name}:{metrics = }\n")

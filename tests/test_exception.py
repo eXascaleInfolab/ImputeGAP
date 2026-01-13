@@ -181,6 +181,20 @@ class TestException(unittest.TestCase):
         imputer.logs=False
         imputer.impute()
 
+        _ = utils.load_parameters(query="default", algorithm="other", verbose=True)
+        _ = utils.load_parameters(query="default", algorithm="colors_blacks", verbose=True)
+        _ = utils.load_parameters(query="default", algorithm="forecaster-rnn", verbose=True)
+        _ = utils.load_parameters(query="default", algorithm="forecaster-bats", verbose=True)
+        _ = utils.load_parameters(query="default", algorithm="nuwats", verbose=False)
+
+        ts = TimeSeries()
+        ts.import_matrix([[1, np.nan, 3], [1, 2, 3]])
+        ts2 = TimeSeries()
+        ts2.import_matrix([[1, np.nan, 3], [1, 2, 3]])
+
+        _ = utils.clean_missing_values(ts.data)
+        _ = utils.handle_nan_input(ts.data, ts2.data)
+
 
 
 
@@ -204,6 +218,9 @@ class TestException(unittest.TestCase):
 
         _ = GenGap.mcar(ts.data, rate_dataset=0.5, rate_series=0.5, logic_by_series=False, block_size=1, offset=0)
         self.assertTrue(alpha, True)
+
+        with pytest.raises(ValueError) as excinfo:
+            _ = utils.config_contamination(ts=ts, pattern="dfds", offset=100)
 
         for pattern in s:
             if pattern != "distribution":
@@ -244,28 +261,20 @@ class TestException(unittest.TestCase):
             "interpolation": (("linear", 2), {"method", "poly_order"}),
             "mice": ((10, 1e-3, "mean"), {"max_iter", "tol", "initial_strategy", "seed"}),
             "missforest": ((100, 10, "sqrt"), {"n_estimators", "max_iter", "max_features", "seed"}),
-            "xgboost": ((200,), {"n_estimators", "seed"}),
-            "gain": ((64, 10, 1, 0.9), {"batch_size", "epochs", "alpha", "hint_rate"}),
-            "bayotide": ((1, 1, 12, 1, 1, 0.1, 0.1, 0.1, 5),
-                         {"K_trend", "K_season", "n_season", "K_bias", "time_scale", "a0", "b0", "v", "num_fold"}),
+            "xgboost": ((200,), {"n_estimators", "seed"}), "gain": ((64, 10, 1, 0.9), {"batch_size", "epochs", "alpha", "hint_rate"}),
+            "bayotide": ((1, 1, 12, 1, 1, 0.1, 0.1, 0.1, 5), {"K_trend", "K_season", "n_season", "K_bias", "time_scale", "a0", "b0", "v", "num_fold"}),
             "hkmft": (("tag", 12, 1, 2, 5), {"tags", "seq_len", "blackouts_begin", "blackouts_end", "epochs"}),
-            "bitgraph": ((12, 3, 5, "kernels", 10, 32, 8, 0),
-                         {"seq_len", "sliding_windows", "kernel_size", "kernel_set", "epochs", "batch_size",
-                          "subgraph_size", "num_workers"}),
-            "nuwats": (
-            (12, 32.0, 5, 2, 0, 42), {"seq_len", "batch_size", "epochs", "gpt_layers", "num_workers", "seed"}),
-            "gpt4ts": (
-            (12, 32.0, 5, 2, 0, 42), {"seq_len", "batch_size", "epochs", "gpt_layers", "num_workers", "seed"}),
-            "timesnet": (
-            (12, 32.0, 5, 2, 0, 42), {"seq_len", "batch_size", "epochs", "gpt_layers", "num_workers", "seed"}),
-            "pristi": ((12, 32.0, 5, 3, "strategy", 2, 0),
-                       {"seq_len", "batch_size", "epochs", "sliding_windows", "target_strategy", "nsamples",
-                        "num_workers"}),
-            "csdi": ((12, 32.0, 5, 3, "strategy", 2, 0),
-                     {"seq_len", "batch_size", "epochs", "sliding_windows", "target_strategy", "nsamples",
-                      "num_workers"}),
-            "saits": (
-            (12, 32, 5, 3, 2, 0), {"seq_len", "batch_size", "epochs", "sliding_windows", "n_head", "num_workers"}),
+            "bitgraph": ((12, 3, 5, "kernels", 10, 32, 8, 0), {"seq_len", "sliding_windows", "kernel_size", "kernel_set", "epochs", "batch_size", "subgraph_size", "num_workers"}),
+            "nuwats": ( (12, 32.0, 5, 2, 0, 42), {"seq_len", "batch_size", "epochs", "gpt_layers", "num_workers", "seed"}),
+            "gpt4ts": ( (12, 32.0, 5, 2, 0, 42), {"seq_len", "batch_size", "epochs", "gpt_layers", "num_workers", "seed"}),
+            "timesnet": ( (12, 32.0, 5, 2, 0, 42), {"seq_len", "batch_size", "epochs", "gpt_layers", "num_workers", "seed"}),
+            "pristi": ((12, 32.0, 5, 3, "strategy", 2, 0), {"seq_len", "batch_size", "epochs", "sliding_windows", "target_strategy", "nsamples", "num_workers"}),
+            "csdi": ((12, 32.0, 5, 3, "strategy", 2, 0), {"seq_len", "batch_size", "epochs", "sliding_windows", "target_strategy", "nsamples", "num_workers"}),
+            "saits": ((12, 32, 5, 3, 2, 0), {"seq_len", "batch_size", "epochs", "sliding_windows", "n_head", "num_workers"}),
+            "deep_mvi": ((12, 32, 5, 3), {"max_epoch", "patience", "lr", "batch_size"}),
+            "mpin": ((12, 32, "test", 3, 1, 2), {"window", "incre_mode", "base", "epochs", "num_of_iteration", "k"}),
+            "miss_net": ((12, 32, 1, 3, 1, 2, True), {"n_components", "alpha", "beta", "n_cl", "max_iter", "tol", "random_init"}),
+            "grin": ((12, 32, 1, 3, 1, 2, 1,1), {"seq_len", "sim_type", "epochs", "batch_size", "sliding_windows", "alpha", "patience", "num_workers"}),
         }
 
         for a in ALG_SPECS:

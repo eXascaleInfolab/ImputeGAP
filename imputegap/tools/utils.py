@@ -2257,34 +2257,8 @@ def prepare_testing_set(incomp_m, original_missing_ratio, block_selection=True, 
     return new_m, new_mask, error
 
 
+"""
 def set_dic_position_dl(mask_test, split_idx, verbose=False):
-    """
-    Build a mapping from original row index to (split, index_within_split) for
-    deterministic reconstruction of an imputed matrix.
-
-    Parameters
-    ----------
-    mask_test : array-like of shape (N,), bool
-        Row-wise boolean mask where True marks rows that belong to the 'test' split
-        (e.g., rows with any missing values in the test mask). If you start from a
-        2D mask, pass `mask_test.any(axis=1)` to obtain this 1D array.
-    split_idx : int
-        Number of NON-TEST rows to assign to the 'train' split. The first `split_idx`
-        non-test rows go to 'train'; the remaining non-test rows go to 'val'.
-
-    Returns
-    -------
-    position_dic_imputegap : dict[int, tuple[str, int]]
-        Dictionary mapping each original row index to a tuple
-        (split_label, index_within_split), where split_label ∈ {"train","val","test"}
-        and index_within_split is 0-based within its respective split, assigned in
-        the order rows are encountered.
-
-    Notes
-    -----
-        position_dic_imputegap: e.g. {0: ("test",0), 1: ("test",1), 2: ("train",0), ...}
-
-    """
     position_dic_imputegap = {}  # {original_row_index: "train"|"val"|"test"}
     non_test_seen = 0  # position among NON-TEST rows
     inc_tr = 0
@@ -2311,21 +2285,7 @@ def set_dic_position_dl(mask_test, split_idx, verbose=False):
 
     return position_dic_imputegap
 
-
 def compute_seq_length(M):
-    """
-    Compute a sequence length based on the input length `M` using heuristic rules.
-
-    Parameters
-    ----------
-    M : int
-        Number of series in the dataset.
-
-    Returns
-    -------
-    seq_length: int
-        A derived sequence length appropriate for processing or windowing.
-    """
 
     seq_length = 1
     if M > 5000:
@@ -2356,30 +2316,7 @@ def compute_seq_length(M):
 
 
 def compute_batch_size(data, min_size=4, max_size=16, divisor=2, verbose=True):
-    """
-    Compute an appropriate batch size based on the input data shape.
-
-    The batch size is computed as `min(M // 2, max_size)`, where M is the number of samples.
-    If this computed batch size is less than `min_size`, it is set to `min_size` instead.
-
-    Parameters
-    ----------
-    data : np.ndarray or torch.Tensor
-        Input 2D data of shape (M, N), where M is the number of samples.
-    min_size : int, optional
-        Minimum allowed batch size. Default is 4.
-    max_size : int, optional
-        Maximum allowed batch size. Default is 16.
-    divisor : int, optional
-        Divisor on the shape of the dataset. Default is 2.
-    verbose : bool, optional
-        If True, prints the computed batch size. Default is True.
-
-    Returns
-    -------
-    int
-        Computed batch size.
-    """
+    
     M, N = data.shape
 
     batch_size = min(M // divisor, max_size)
@@ -2399,6 +2336,8 @@ def compute_batch_size(data, min_size=4, max_size=16, divisor=2, verbose=True):
         print(f"(Batch-Size) Computed batch size: {batch_size}\n")
 
     return batch_size
+"""
+
 
 def load_share_lib(name="lib_cdrec", verbose=True):
     """
