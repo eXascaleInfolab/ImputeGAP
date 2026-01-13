@@ -328,15 +328,11 @@ class Optimization:
             list
                 Formatted list of parameters.
             """
-            if algorithm == 'cdrec':
+            three_side = ["cdrec", "mrnn", "stmvl"]
+            if algorithm in three_side:
                 particle_params = [int(particle_params[0]), particle_params[1], int(particle_params[2])]
             if algorithm == 'iim':
                 particle_params = [int(particle_params[0])]
-            elif algorithm == 'mrnn':
-                particle_params = [int(particle_params[0]), particle_params[1], int(particle_params[2])]
-            elif algorithm == 'stmvl':
-                particle_params = [int(particle_params[0]), particle_params[1], int(particle_params[2])]
-
             return particle_params
 
         def _objective(self, input_data, incomp_data, algorithm, metrics, params):
@@ -514,20 +510,14 @@ class Optimization:
                 if not temp_rank_range:
                     raise ValueError("No suitable rank found within CDREC_RANK_RANGE for the given matrix shape!")
 
-                configs = [(np.random.choice(temp_rank_range),
-                            np.random.choice(sh_params.CDREC_EPS_RANGE),
-                            np.random.choice(sh_params.CDREC_ITERS_RANGE)) for _ in range(num_configs)]
+                configs = [(np.random.choice(temp_rank_range), np.random.choice(sh_params.CDREC_EPS_RANGE), np.random.choice(sh_params.CDREC_ITERS_RANGE)) for _ in range(num_configs)]
             elif algorithm == 'iim':
                 configs = [(np.random.choice(sh_params.IIM_LEARNING_NEIGHBOR_RANGE))
                            for _ in range(num_configs)]
             elif algorithm == 'mrnn':
-                configs = [(np.random.choice(sh_params.MRNN_HIDDEN_DIM_RANGE),
-                            np.random.choice(sh_params.MRNN_LEARNING_RATE_CHANGE),
-                            np.random.choice(sh_params.MRNN_NUM_ITER_RANGE)) for _ in range(num_configs)]
+                configs = [(np.random.choice(sh_params.MRNN_HIDDEN_DIM_RANGE), np.random.choice(sh_params.MRNN_LEARNING_RATE_CHANGE), np.random.choice(sh_params.MRNN_NUM_ITER_RANGE)) for _ in range(num_configs)]
             elif algorithm == 'stmvl':
-                configs = [(np.random.choice(sh_params.STMVL_WINDOW_SIZE_RANGE),
-                            np.random.choice(sh_params.STMVL_GAMMA_RANGE),
-                            np.random.choice(sh_params.STMVL_ALPHA_RANGE)) for _ in range(num_configs)]
+                configs = [(np.random.choice(sh_params.STMVL_WINDOW_SIZE_RANGE), np.random.choice(sh_params.STMVL_GAMMA_RANGE), np.random.choice(sh_params.STMVL_ALPHA_RANGE)) for _ in range(num_configs)]
             else:
                 raise ValueError(f"Invalid algorithm: {algorithm}")
 
@@ -548,11 +538,8 @@ class Optimization:
 
             if not configs:
                 raise ValueError("No configurations left after successive halving.")
-
             if algorithm == 'iim':
-                best_config = min(configs, key=lambda single_config: self._objective(
-                    Imputation.evaluate_params(input_data, incomp_data, [single_config], algorithm),
-                    metrics))
+                best_config = min(configs, key=lambda single_config: self._objective(Imputation.evaluate_params(input_data, incomp_data, [single_config], algorithm), metrics))
             else:
                 best_config = min(configs, key=lambda config: self._objective(
                     Imputation.evaluate_params(input_data, incomp_data, config, algorithm), metrics))
@@ -564,7 +551,6 @@ class Optimization:
             if len(param_names[algorithm]) == 1:
                 # If only one parameter name, wrap best_config in a list if it's not already
                 best_config = [best_config] if not isinstance(best_config, list) else best_config
-
             # Create the dictionary using zip
             best_config_dict = {name: value for name, value in zip(param_names[algorithm], best_config)}
 

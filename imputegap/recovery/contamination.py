@@ -647,8 +647,7 @@ class GenGap:
                   f"\n\tprobabilities list : {np.array(probabilities_list).shape}\n")
 
         if offset_nbr + values_nbr > NS:
-            raise ValueError(
-                f"\n\tError: The sum of offset ({offset_nbr}) and missing values ({values_nbr}) exceeds the limit of of the series.")
+            raise ValueError(f"\n\tError: The sum of offset ({offset_nbr}) and missing values ({values_nbr}) exceeds the limit of of the series.")
 
         if np.array(probabilities_list).shape != (M, NS - offset_nbr):
             raise ValueError(f"\n\tError: The probability list does not match the matrix in input {np.array(probabilities_list).shape} != ({M},{NS - offset_nbr}).")

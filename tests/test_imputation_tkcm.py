@@ -1,5 +1,8 @@
 import os
 import unittest
+
+import numpy as np
+
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.contamination import GenGap
@@ -49,3 +52,20 @@ class TestTKCM(unittest.TestCase):
 
         self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
         self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
+
+
+    def test_imputation_multiple_tkcm(self, name="tkcm", limit=0.05):
+        ts = TimeSeries()
+        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+        incomp_data = GenGap.aligned(ts.data)
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute()
+        algo.score(ts.data)
+        metrics = algo.metrics
+
+        print(f"{name}:{metrics = }\n")
+
+        ts.print_results(algo.metrics, algo.algorithm)
+
+        self.assertTrue(np.isnan(metrics["RMSE"]))
+        self.assertTrue(np.isnan(metrics["MAE"]))

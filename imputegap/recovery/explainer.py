@@ -260,7 +260,6 @@ class Explainer:
 
             # Print the shape and aggregated features
             for inc, (feature_name, value) in enumerate(features_list.iloc[0].items()):
-
                 if np.isnan(value):
                     results[feature_name] = 0
                 else:
@@ -534,7 +533,6 @@ class Explainer:
 
 
         if not display:
-
             shap.plots.waterfall(shval_x[0], show=display)
             alpha = os.path.join(path_file_details + file + "_" + algorithm + "_" + extractor + "_DTL_Waterfall.png")
             plt.title("SHAP Waterfall Results")
@@ -763,7 +761,6 @@ class Explainer:
         if pattern in ["disjoint", "overlap", "blackout"]:
             raise ValueError("Invalid pattern detected: disjoint, overlap, or blackout are not allowed for SHAP.\nPlease, you MCAR, Aligned, Scattered, Gaussian, or Distribution.")
 
-
         if rate_dataset < 0.05 or rate_dataset > 1:
             print("\nlimit percentage higher than 100%, reduce to 100% of the dataset")
             rate_dataset = 1
@@ -777,7 +774,7 @@ class Explainer:
 
         training_ratio = int(limit * training_ratio)
 
-        if limit > M:
+        if limit >= M:
             limit = M
 
         if verbose:
@@ -810,9 +807,6 @@ class Explainer:
             tmp.import_matrix(input_data)
             incomp_data = utils.config_contamination(ts=tmp, pattern=pattern, dataset_rate=current_series, series_rate=missing_rate, block_size=block_size, offset=offset, seed=seed, explainer=True, verbose=False)
 
-            if deep_verbose:
-                print(f"\n\t\t{current_series}:{incomp_data =}\n\n")
-
             input_data_matrices.append(input_data)
             obfuscated_matrices.append(incomp_data)
 
@@ -837,9 +831,6 @@ class Explainer:
             algo.impute(user_def=True, params=params)
             algo.score(input_data)
             imputation_results = algo.metrics
-
-            if deep_verbose:
-                print(f"\t\t{algo.metrics = }")
 
             output_metrics.append(imputation_results)
             output_rmse.append(imputation_results["RMSE"])

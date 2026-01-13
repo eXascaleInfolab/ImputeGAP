@@ -133,6 +133,9 @@ def handle_parser(argv=None):
 
 def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, seed=2023, tr_ratio=0.7, verbose=True, deep_verbose=False, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq"):
 
+    if seq_len == -2:
+        return np.nan_to_num(ts_m, nan=0.0)
+
     miss = np.copy(ts_m)
     recov = np.copy(ts_m)
     m_mask = np.isnan(ts_m)

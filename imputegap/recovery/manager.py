@@ -380,8 +380,10 @@ class TimeSeries:
 
             end_time = time.time()
         else:
+            start_time = time.time()
             if verbose:
                 print(f"> (ERROR): normalizer not recognised...")
+            end_time = time.time()
 
         if self.reversed:
             self.data = self.data.T

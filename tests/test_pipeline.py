@@ -318,6 +318,7 @@ class TestPipeline(unittest.TestCase):
                 incomp_data = np.tile(incomp_data, (7, 5))
                 ts.data = np.tile(ts.data, (7, 5))
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+            algo.logs = False
             algo.impute()
             algo.score(ts.data)
             metrics = algo.metrics
@@ -350,6 +351,7 @@ class TestPipeline(unittest.TestCase):
                 incomp_data = GenGap.mcar(ts.data)
                 print(f"\n\n{incomp_data.shape = }")
                 algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+                algo.logs = False
                 algo.impute()
                 algo.score(ts.data)
                 metrics = algo.metrics
@@ -385,6 +387,7 @@ class TestPipeline(unittest.TestCase):
             if name == "SPIRIT":
                 incomp_data = GenGap.aligned(ts.data, single_series=0)
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+            algo.logs = False
             algo.impute()
             algo.score(ts.data)
             metrics = algo.metrics
@@ -421,6 +424,7 @@ class TestPipeline(unittest.TestCase):
                 ts.data = np.tile(ts.data, (7, 5))
                 incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+            algo.logs = False
             algo.impute()
             algo.score(ts.data)
             metrics = algo.metrics
@@ -453,6 +457,7 @@ class TestPipeline(unittest.TestCase):
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+            algo.logs = False
             algo.impute()
             algo.score(ts.data)
             metrics = algo.metrics
@@ -486,6 +491,7 @@ class TestPipeline(unittest.TestCase):
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
+            algo.logs = False
             algo.impute()
             algo.score(ts.data)
             metrics = algo.metrics

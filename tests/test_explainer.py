@@ -23,7 +23,7 @@ class TestExplainer(unittest.TestCase):
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path(filename))
 
-        exp.shap_explainer(input_data=ts_1.data, file_name=filename, rate_dataset=0.3, seed=True, verbose=True)
+        exp.shap_explainer(input_data=ts_1.data, file_name=filename, rate_dataset=0.3, seed=True, verbose=True, extractor="pycatch22")
 
         exp.print(exp.shap_values, exp.shap_details)
 

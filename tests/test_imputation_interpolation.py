@@ -3,6 +3,7 @@ import unittest
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.contamination import GenGap
+import pytest
 
 
 class TestInterpolation(unittest.TestCase):
@@ -49,3 +50,21 @@ class TestInterpolation(unittest.TestCase):
 
         self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
         self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
+
+        # ==============================================================================================================
+
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        models = ["spline", "polynomial", "xxx"]
+
+        for s in models:
+            if s != "xxx":
+                algo.impute(params={"method": s, "poly_order": 2})
+                algo.score(ts.data)
+                metrics = algo.metrics
+                print(f"{name}:{metrics = }\n")
+                ts.print_results(algo.metrics, algo.algorithm)
+                self.assertTrue(metrics["RMSE"]<100)
+                self.assertTrue(metrics["MAE"]<100)
+            else:
+                with pytest.raises(ValueError):
+                    algo.impute(params={"method": s, "poly_order": 2})

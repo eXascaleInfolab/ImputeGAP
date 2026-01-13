@@ -172,7 +172,7 @@ def recovMissNet(X, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=100, to
     config = Config(n_components=n_components, alpha=alpha, beta=beta, n_cl=n_cl, max_iter=max_iter, tol=tol, random_init=random_init, verbose=verbose)
 
     if verbose:
-        print(f"(IMPUTATION) MissNet2\n\tMatrix Shape: {X.shape[0]}, {X.shape[1]}\n\tn_components: {config.n_components}\n\talpha: {config.alpha}\n\tbeta: {config.beta}\n\tn_cl: {config.n_cl}\n\tmax_iter: {config.max_iter}\n\ttol: {config.tol}\n\trandom_init: {config.random_init}\n\tnumber of nan: {np.count_nonzero(np.isnan(X))}\n\tpercentage: {np.round(np.count_nonzero(np.isnan(X)) / X.size * 100, decimals=1)}%\n\tverbose: {config.verbose}")
+        print(f"(IMPUTATION) MissNet\n\tMatrix Shape: {X.shape[0]}, {X.shape[1]}\n\tn_components: {config.n_components}\n\talpha: {config.alpha}\n\tbeta: {config.beta}\n\tn_cl: {config.n_cl}\n\tmax_iter: {config.max_iter}\n\ttol: {config.tol}\n\trandom_init: {config.random_init}\n\tnumber of nan: {np.count_nonzero(np.isnan(X))}\n\tpercentage: {np.round(np.count_nonzero(np.isnan(X)) / X.size * 100, decimals=1)}%\n\tverbose: {config.verbose}")
         print("\tcall: missnet.impute(params={'n_components':", n_components,", 'alpha':", alpha,", 'beta': ", beta,", 'n_cl':", n_cl,", 'max_iter':", 15,", 'tol': ", tol, ", 'random_init':", random_init,"})\n")
 
     here = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))

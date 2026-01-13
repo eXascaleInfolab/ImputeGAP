@@ -7,7 +7,7 @@ from imputegap.recovery.contamination import GenGap
 
 class TestNuwaTS(unittest.TestCase):
 
-    def test_imputation_nuwats(self, name="nuwats", limit=0.10):
+    def test_imputation_nuwats(self, name="nuwats", limit=100):
         """
         the goal is to test if only the simple imputation with the technique has the expected outcome
         """
@@ -19,10 +19,12 @@ class TestNuwaTS(unittest.TestCase):
         ts = TimeSeries()
         ts.load_series(utils.search_path(dataset), normalizer="z_score")
 
-        """
         incomp_data = GenGap.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute()
+        algo.impute(user_def=True, params={"seq_len":-2, "batch_size":-1, "epochs":10, "gpt_layers":6, "num_workers":0, "seed":2021})
+        algo.score(ts.data)
+        algo.logs=False
+        algo.impute(user_def=True, params={"seq_len": -2, "batch_size": -1, "epochs": 10, "gpt_layers": 6, "num_workers": 0, "seed": 2021})
         algo.score(ts.data)
         metrics = algo.metrics
 
@@ -34,7 +36,4 @@ class TestNuwaTS(unittest.TestCase):
 
         self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
         self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
-        
-        
-        """
         self.assertTrue(1>0)

@@ -5,12 +5,8 @@ import time
 from collections import defaultdict
 import numpy as np
 import matplotlib.pyplot as plt
-import xlsxwriter
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-import psutil
-
-
 
 class Benchmark:
     """
@@ -343,9 +339,6 @@ class Benchmark:
         filepath = os.path.join(save_dir, filename)
         plt.savefig(filepath, dpi=300, bbox_inches='tight')  # Save in HD with tight layout
 
-
-
-
         # Show the plot
         if display:
             plt.tight_layout()
@@ -647,28 +640,8 @@ class Benchmark:
                     file.write("Dictionary of Results:\n")
                     file.write(str(runs_plots_scores) + "\n")
 
-
+    """
     def generate_reports_excel(self, runs_plots_scores, save_dir="./reports", dataset="", run=-1, verbose=True):
-        """
-        Generate and save an Excel-like text report of metrics and timing for each dataset, algorithm, and pattern.
-
-        Parameters
-        ----------
-        runs_plots_scores : dict
-            Dictionary containing scores and timing information for each dataset, pattern, and algorithm.
-        save_dir : str, optional
-            Directory to save the Excel-like file (default is "./reports").
-        dataset : str, optional
-            Name of the data for the Excel-like file name.
-        run : int, optional
-            Number of the run
-        verbose : bool, optional
-            Whether to display the contamination information (default is True).
-
-        Returns
-        -------
-        None
-        """
         os.makedirs(save_dir, exist_ok=True)
         save_path = os.path.join(save_dir, f"report_{dataset}.xlsx")
 
@@ -747,6 +720,7 @@ class Benchmark:
 
         # Close the workbook
         workbook.close()
+    """
 
 
     def generate_plots(self, runs_plots_scores, ticks,  metrics=None, subplot=False, y_size=4, title=None, save_dir="./reports",display=False, verbose=True):
@@ -913,7 +887,7 @@ class Benchmark:
                         ax.set_xticks(ticks)
                         ax.set_xticklabels([f"{int(tick * 100)}%" for tick in ticks])
                         ax.grid(True, zorder=0)
-                        ax.legend(loc='upper left', fontsize=7, frameon=True, fancybox=True, framealpha=0.8)
+                        ax.legend(loc='upper left', fontsize=7, frameon=True, fancybox=True, framealpha=0.8, ncol=len(ax.get_legend_handles_labels()[0]))
 
                     if not subplot:
                         filename = f"{dataset}_{pattern}_{optimizer}_{metric}.jpg"
@@ -992,6 +966,9 @@ class Benchmark:
         not_optimized = ["none"]
         mean_group = ["mean", "MeanImpute", "min", "MinImpute", "zero", "ZeroImpute", "MeanImputeBySeries", "meanimpute", "minimpute", "zeroimpute", "meanimputebyseries"]
 
+        if optimizer is None:
+            optimizer = "default_params"
+
         if not isinstance(algorithms, list):
             raise TypeError(f"'algorithms' must be a list, but got {type(algorithms).__name__}")
         if not isinstance(datasets, list):
@@ -1050,7 +1027,12 @@ class Benchmark:
                 default_data = None
 
                 ts_test.load_series(data=utils.search_path(dataset), nbr_series=nbr_series, nbr_val=nbr_vals, header=header, normalizer=normalizer, verbose=verbose)
-                N, F = ts_test.data.shape
+                N, M = ts_test.data.shape
+
+                print(f"{M=}")
+
+                if M <= 0:
+                    raise ValueError(f"The dataset loaded has no series (series {M}).")
 
                 if reshp:
                     print(f"Benchmarking module has reduced the shape to {ts_test.data.shape}.\n")
@@ -1132,7 +1114,7 @@ class Benchmark:
 
                                 start_time_imputation = time.time()
 
-                                if not self._benchmark_exception(dataset, algorithm, pattern, x, N, F):
+                                if not self._benchmark_exception(dataset, algorithm, pattern, x, N, M):
                                     if (utils.check_family("DeepLearning", algorithm) or utils.check_family("LLMs", algorithm)) and dl_ratio is not None:
                                         if x > round(1-dl_ratio, 2):
                                             algo.recov_data = incomp_data
@@ -1197,7 +1179,7 @@ class Benchmark:
                                 save_path = os.path.join(save_dir, f"error.log")
                                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                 with open(save_path, "a") as file:
-                                    file.write(f"{timestamp} | Error during benchmark for {algorithm}, with {dataset_s} - for a shape of ({N}, {F}) - ({pattern}/{val_opt}), and {x}%: {e}\n\n")
+                                    file.write(f"{timestamp} | Error during benchmark for {algorithm}, with {dataset_s} - for a shape of ({N}, {M}) - ({pattern}/{val_opt}), and {x}%: {e}\n\n")
 
                         print(f"done!\n\n")
 

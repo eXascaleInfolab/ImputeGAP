@@ -272,20 +272,8 @@ class BaseImputer:
 
         self.parameters = optimal_params
 
+    """
     def _check_dl_split(self, split_ratio):
-        """
-        Check whether the proportion of missing values in the contaminated data is acceptable
-        for training a deep learning model. If more than 40% of the values are missing,
-        the function returns False.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        bool
-            True if the missing data ratio is less than or equal to 40%, False otherwise.
-        """
         missing_ratio = utils.get_missing_ratio(self.incomp_data)
 
         ratio = 1 - split_ratio
@@ -296,7 +284,7 @@ class BaseImputer:
             print(f"\n(IMP) The proportion of missing values {missing_ratio*100}% is too high to train an effective deep learning model, limited to {int(round(ratio*100))}%.\n"
                   "Please consider reducing the contamination rate or selecting a different family of imputation methods")
             return False
-
+    """
 
 class Imputation:
     """
@@ -2059,10 +2047,6 @@ class Imputation:
                 """
                 from imputegap.algorithms.deep_mvi import deep_mvi
 
-                if not (self._check_dl_split(split_ratio=0.6)):
-                    self.recov_data = self.incomp_data
-                    return
-
                 if params is not None:
                     max_epoch, patience, lr, batch_size = self._check_params(user_def, params)
                 else:
@@ -2645,10 +2629,6 @@ class Imputation:
                 https://github.com/xuangu-fang/BayOTIDE
                 """
                 from imputegap.algorithms.bayotide import bay_otide
-
-                if not (self._check_dl_split(split_ratio=0.8)):
-                    self.recov_data = self.incomp_data
-                    return
 
                 if params is not None:
                     K_trend, K_season, n_season, K_bias, time_scale, a0, b0, v, num_fold = self._check_params(user_def, params)

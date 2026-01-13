@@ -968,7 +968,7 @@ def sets_splitter_based_on_training(tr, split=0.66667, verbose=False):
     return test_len, val_len
 
 
-def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_size=10, offset=0.1, seed=True, limit=1, shift=0.05, std_dev=0.5, explainer=False, probabilities=None, verbose=True):
+def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_size=10, offset=0.1, seed=True, limit=1, shift=0.05, std_dev=0.5, explainer=False, probabilities=None, logic_by_series=True, verbose=True):
     """
     Configure and execute contamination for selected imputation algorithm and pattern.
 
@@ -997,21 +997,21 @@ def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_s
     ptn = pattern_low.replace('_', '').replace('-', '')
 
     if ptn == "mcar" or ptn == "missing_completely_at_random":
-        incomp_data = GenGap.mcar(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, block_size=block_size, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.mcar(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, block_size=block_size, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "mp" or ptn == "missingpercentage" or ptn == "aligned":
-        incomp_data = GenGap.aligned(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.aligned(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "ps" or ptn == "percentageshift" or ptn == "scattered" or ptn == "scatter":
-        incomp_data = GenGap.scattered(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.scattered(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "disjoint":
-        incomp_data = GenGap.disjoint(input_data=ts.data, rate_series=dataset_rate, limit=1, offset=offset, verbose=verbose)
+        incomp_data = GenGap.disjoint(input_data=ts.data, rate_series=dataset_rate, limit=1, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "overlap":
-        incomp_data = GenGap.overlap(input_data=ts.data, rate_series=dataset_rate, limit=limit, shift=shift, offset=offset, verbose=verbose)
+        incomp_data = GenGap.overlap(input_data=ts.data, rate_series=dataset_rate, limit=limit, shift=shift, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "gaussian":
-        incomp_data = GenGap.gaussian(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, std_dev=std_dev, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.gaussian(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, std_dev=std_dev, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "distribution" or pattern == "dist":
-        incomp_data = GenGap.distribution(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, probabilities_list=probabilities, offset=offset, seed=seed, explainer=explainer, verbose=verbose)
+        incomp_data = GenGap.distribution(input_data=ts.data, rate_dataset=dataset_rate, rate_series=series_rate, probabilities_list=probabilities, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "blackout":
-        incomp_data = GenGap.blackout(input_data=ts.data, rate_series=dataset_rate, offset=offset, verbose=verbose)
+        incomp_data = GenGap.blackout(input_data=ts.data, rate_series=dataset_rate, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
     else:
         raise ValueError(f"\n(CONT) Pattern '{pattern}' not recognized, please choose your algorithm on this list :\n\t{TimeSeries().patterns}\n")
         incomp_data = None
