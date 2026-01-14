@@ -469,36 +469,11 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="imputegap.recovery.benchmark.Benchmark.generate_reports_excel">
-<span class="sig-name descname"><span class="pre">generate_reports_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs_plots_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./reports'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/benchmark.html#Benchmark.generate_reports_excel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.benchmark.Benchmark.generate_reports_excel" title="Link to this definition">¶</a></dt>
-<dd><p>Generate and save an Excel-like text report of metrics and timing for each dataset, algorithm, and pattern.</p>
-<section id="id10">
-<h4>Parameters<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
-<dl class="simple">
-<dt>runs_plots_scores<span class="classifier">dict</span></dt><dd><p>Dictionary containing scores and timing information for each dataset, pattern, and algorithm.</p>
-</dd>
-<dt>save_dir<span class="classifier">str, optional</span></dt><dd><p>Directory to save the Excel-like file (default is “./reports”).</p>
-</dd>
-<dt>dataset<span class="classifier">str, optional</span></dt><dd><p>Name of the data for the Excel-like file name.</p>
-</dd>
-<dt>run<span class="classifier">int, optional</span></dt><dd><p>Number of the run</p>
-</dd>
-<dt>verbose<span class="classifier">bool, optional</span></dt><dd><p>Whether to display the contamination information (default is True).</p>
-</dd>
-</dl>
-</section>
-<section id="id11">
-<h4>Returns<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
-<p>None</p>
-</section>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.benchmark.Benchmark.generate_reports_summary">
 <span class="sig-name descname"><span class="pre">generate_reports_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_of_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./reports'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['RMSE']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/benchmark.html#Benchmark.generate_reports_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.benchmark.Benchmark.generate_reports_summary" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save a text report of metrics and timing for each dataset, algorithm, and pattern for the whole experiment.</p>
-<section id="id12">
-<h4>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<section id="id10">
+<h4>Parameters<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
 <dl class="simple">
 <dt>run_of_values<span class="classifier">dict</span></dt><dd><p>Dictionary containing scores and timing information for each dataset, pattern, and algorithm.</p>
 </dd>
@@ -518,12 +493,12 @@
 </dd>
 </dl>
 </section>
-<section id="id13">
-<h4>Returns<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<section id="id11">
+<h4>Returns<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
 <p>None</p>
 </section>
-<section id="id14">
-<h4>Notes<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<section id="id12">
+<h4>Notes<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
 <p>The report is saved in a “report.txt” file in <cite>save_dir</cite>, organized in sections with headers and results.</p>
 </section>
 </dd></dl>
@@ -532,8 +507,8 @@
 <dt class="sig sig-object py" id="imputegap.recovery.benchmark.Benchmark.generate_reports_txt">
 <span class="sig-name descname"><span class="pre">generate_reports_txt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs_plots_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./reports'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['RMSE']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imputegap/recovery/benchmark.html#Benchmark.generate_reports_txt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.benchmark.Benchmark.generate_reports_txt" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save a text report of metrics and timing for each dataset, algorithm, and pattern.</p>
-<section id="id15">
-<h4>Parameters<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
+<section id="id13">
+<h4>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
 <dl class="simple">
 <dt>runs_plots_scores<span class="classifier">dict</span></dt><dd><p>Dictionary containing scores and timing information for each dataset, pattern, and algorithm.</p>
 </dd>
@@ -551,12 +526,12 @@
 </dd>
 </dl>
 </section>
-<section id="id16">
-<h4>Returns<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<section id="id14">
+<h4>Returns<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
 <p>None</p>
 </section>
-<section id="id17">
-<h4>Notes<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
+<section id="id15">
+<h4>Notes<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
 <p>The report is saved in a “report.txt” file in <cite>save_dir</cite>, organized in sections with headers and results.</p>
 </section>
 </dd></dl>
@@ -630,7 +605,6 @@
 <li><a class="reference internal" href="#imputegap.recovery.benchmark.Benchmark.eval"><code class="docutils literal notranslate"><span class="pre">Benchmark.eval()</span></code></a></li>
 <li><a class="reference internal" href="#imputegap.recovery.benchmark.Benchmark.generate_heatmap"><code class="docutils literal notranslate"><span class="pre">Benchmark.generate_heatmap()</span></code></a></li>
 <li><a class="reference internal" href="#imputegap.recovery.benchmark.Benchmark.generate_plots"><code class="docutils literal notranslate"><span class="pre">Benchmark.generate_plots()</span></code></a></li>
-<li><a class="reference internal" href="#imputegap.recovery.benchmark.Benchmark.generate_reports_excel"><code class="docutils literal notranslate"><span class="pre">Benchmark.generate_reports_excel()</span></code></a></li>
 <li><a class="reference internal" href="#imputegap.recovery.benchmark.Benchmark.generate_reports_summary"><code class="docutils literal notranslate"><span class="pre">Benchmark.generate_reports_summary()</span></code></a></li>
 <li><a class="reference internal" href="#imputegap.recovery.benchmark.Benchmark.generate_reports_txt"><code class="docutils literal notranslate"><span class="pre">Benchmark.generate_reports_txt()</span></code></a></li>
 </ul>

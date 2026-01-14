@@ -394,7 +394,7 @@ class TimeSeries:
         if data is not None:
             return self.data
 
-    def plot(self, input_data, incomp_data=None, recov_data=None, nbr_series=None, nbr_val=None, series_range=None, subplot=False, size=(16, 8), algorithm=None, save_path="./imputegap_assets", style="default", cont_rate=None, grid=True, reverse=True, display=True, verbose=True):
+    def plot(self, input_data, incomp_data=None, recov_data=None, nbr_series=None, nbr_val=None, series_range=None, subplot=False, size=(16, 8), algorithm=None, save_path="./imputegap_assets", style="default", cont_rate=None, grid=True, reverse=True, legends=True, display=True, verbose=True):
         """
         Plot the time series data, including raw, contaminated, or imputed data.
 
@@ -440,7 +440,10 @@ class TimeSeries:
             Whether to plot in a grid or not.
 
         reverse : bool, optional
-             Reverse the plot to see timestamps as x axis and values as y axis.
+            Reverse the plot to see timestamps as x axis and values as y axis.
+
+        legends: bool, optional
+            Display or not the legend in the plot (default is True).
 
         display : bool, optional
             Whether to display the plot. Default is True.
@@ -524,6 +527,8 @@ class TimeSeries:
             else:
                 colors = utils.load_parameters("default", algorithm="colors_blacks", verbose=False)
 
+            if nbr_series == 1:
+                colors = ["blue"]
 
             for idx, i in enumerate(series_indices):
 
@@ -577,7 +582,8 @@ class TimeSeries:
                     #ax.plot([], [], ' ', label='Series ' + str(i + 1))  # invisible line with label
                     ax.set_xlabel('Timestamp', fontsize=7)
                     ax.set_ylabel('Values', fontsize=7)
-                    ax.legend(handles[::-1], labels[::-1], loc='upper left', fontsize=6, frameon=True, fancybox=True, framealpha=0.8, ncol=len(ax.get_legend_handles_labels()[0]))
+                    if legends:
+                        ax.legend(handles[::-1], labels[::-1], loc='upper left', fontsize=6, frameon=True, fancybox=True, framealpha=0.8, ncol=len(ax.get_legend_handles_labels()[0]))
                     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
                     fig.subplots_adjust(top=0.96, hspace=0.4)
                 else:
@@ -594,15 +600,16 @@ class TimeSeries:
         if not subplot:
             plt.xlabel('Timestamp')
             plt.ylabel('Values')
-            plt.legend(
-                loc='upper left',
-                fontsize=9,
-                frameon=True,
-                fancybox=True,
-                shadow=True,
-                borderpad=1.5,
-                bbox_to_anchor=(1.02, 1),  # Adjusted to keep the legend inside the window
-            )
+            if legends:
+                plt.legend(
+                    loc='upper left',
+                    fontsize=9,
+                    frameon=True,
+                    fancybox=True,
+                    shadow=True,
+                    borderpad=1.5,
+                    bbox_to_anchor=(1.02, 1),  # Adjusted to keep the legend inside the window
+                )
 
         file_path = None
 
@@ -611,6 +618,9 @@ class TimeSeries:
 
             now = datetime.datetime.now()
             current_time = now.strftime("%y_%m_%d_%H_%M_%S")
+
+            if not legends:
+                current_time = "img"
 
             if cont_rate is None:
                 file_path = os.path.join(save_path + "/" + current_time + "_" + algorithm + "_plot.jpg")

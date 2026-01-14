@@ -1,4 +1,6 @@
 import time
+import platform
+
 from imputegap.wrapper.AlgoPython.GAIN.recovGAIN import recovGAIN
 
 
@@ -42,6 +44,11 @@ def gain(incomp_data, batch_size=-1, epochs=100, alpha=10, hint_rate=0.9, tr_rat
     J. Yoon, W. R. Zame and M. van der Schaar, "Estimating Missing Data in Temporal Data Streams Using Multi-Directional Recurrent Neural Networks," in IEEE Transactions on Biomedical Engineering, vol. 66, no. 5, pp. 1477-1490, May 2019, doi: 10.1109/TBME.2018.2874712. keywords: {Time measurement;Interpolation;Estimation;Medical diagnostic imaging;Correlation;Recurrent neural networks;Biomedical measurement;Missing data;temporal data streams;imputation;recurrent neural nets}
     """
     start_time = time.time()  # Record start time
+
+    system = platform.system()
+    if system == "Darwin":
+        raise NotImplementedError("GAIN is currently disabled on macOS (Darwin) in ImputeGAP due to TensorFlow backend/performance issues. Please run GAIN on Linux/Windows or use another imputer on macOS.")
+        return incomp_data
 
     recov_data = recovGAIN(ts_m=incomp_data, batch_size=batch_size, iterations=epochs, alpha=alpha, hint_rate=hint_rate, tr_ratio=tr_ratio, verbose=verbose)
 

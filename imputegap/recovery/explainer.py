@@ -5,11 +5,7 @@ import importlib.resources
 
 import numpy as np
 import pandas as pd
-import shap
-import pycatch22
 import toml
-import tsfel
-import tsfresh
 from matplotlib import pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
 
@@ -70,6 +66,7 @@ class Explainer:
         """
         Display the explainer plot for shap
         """
+        import shap
 
         if self.plots is not None:
             plt.close("all")
@@ -128,6 +125,8 @@ class Explainer:
             dict: A dictionary with feature names as keys and their aggregated values as values.
             list: A list of tuples (feature_name, category, formatted_feature_name).
         """
+        import tsfresh
+
         M, N = data.shape
         data = [[0 if num is None else num for num in sublist] for sublist in data]
         data = [[0 if num is None or (isinstance(num, (float, np.float32, np.float64)) and np.isnan(num)) else num for num in sublist] for sublist in data]
@@ -228,7 +227,8 @@ class Explainer:
             - This function requires TSFEL to be installed: `pip install tsfel`.
             - Categories can be customized to extract only the desired features, reducing computation time.
         """
-        M, N = data.shape
+        import tsfel
+
         data = [[0 if num is None else num for num in sublist] for sublist in data]
         data = [[0 if num is None or (isinstance(num, (float, np.float32, np.float64)) and np.isnan(num)) else num for num in sublist] for sublist in data]
         data = np.array(data)
@@ -300,6 +300,7 @@ class Explainer:
             - results (dict): A dictionary of feature values by feature names.
             - descriptions (list): A list of tuples containing feature names, categories, and descriptions.
         """
+        import pycatch22
 
         data = [[0 if num is None else num for num in sublist] for sublist in data]
         data = [[0 if num is None or (isinstance(num, (float, np.float32, np.float64)) and np.isnan(num)) else num for num in sublist] for sublist in data]
@@ -447,6 +448,7 @@ class Explainer:
         list
             Results of the SHAP explainer model.
         """
+        import shap
 
         print("\n\nInitialization of the SHAP model with dimension", np.array(x_information).shape)
         _, _, config = self.load_configuration()

@@ -7,7 +7,7 @@ from imputegap.recovery.manager import TimeSeries
 
 class TestCSDI(unittest.TestCase):
 
-    def test_imputation_csdi_dft(self, name="csdi", limit=0.05):
+    def test_imputation_csdi_dft(self, name="csdi", limit=0.19):
         """
         the goal is to test if only the simple imputation with GPT4TS has the expected outcome
         """

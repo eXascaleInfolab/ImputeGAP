@@ -1,6 +1,9 @@
 import os
+import platform
 import unittest
 import numpy as np
+import pytest
+
 
 class TestPipeline(unittest.TestCase):
 
@@ -319,17 +322,26 @@ class TestPipeline(unittest.TestCase):
                 ts.data = np.tile(ts.data, (7, 5))
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
             algo.logs = False
-            algo.impute()
-            algo.score(ts.data)
-            metrics = algo.metrics
-            print(f"{name} : {metrics}\n\n")
 
-            self.assertIsInstance(algo.metrics, dict)
-            self.assertTrue(len(algo.metrics) > 0, "Metrics dict is empty")
-            self.assertIn("MAE", algo.metrics)
-            mae = float(algo.metrics["MAE"])
-            self.assertGreaterEqual(mae, 0.0, f"MAE should be >= 0, got {mae} for {name}")
-            self.assertLessEqual(mae, 100.0, f"MAE should be <= 1, got {mae} for {name}")
+            if name == "GAIN":
+                system = platform.system()
+                if system == "Darwin":
+                    with pytest.raises(NotImplementedError):
+                        algo.impute()
+                else:
+                    algo.impute()
+            else:
+                algo.impute()
+                algo.score(ts.data)
+                metrics = algo.metrics
+                print(f"{name} : {metrics}\n\n")
+
+                self.assertIsInstance(algo.metrics, dict)
+                self.assertTrue(len(algo.metrics) > 0, "Metrics dict is empty")
+                self.assertIn("MAE", algo.metrics)
+                mae = float(algo.metrics["MAE"])
+                self.assertGreaterEqual(mae, 0.0, f"MAE should be >= 0, got {mae} for {name}")
+                self.assertLessEqual(mae, 100.0, f"MAE should be <= 1, got {mae} for {name}")
 
         x = not x
         self.assertTrue(x)

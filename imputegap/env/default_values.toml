@@ -142,11 +142,13 @@ max_iter = 15
 tol = 5
 random_init = false
 
+
 [gain]
 batch_size = 128
 epochs = 10000
 alpha = 100
 hint_rate = 0.9
+
 
 [grin]
 seq_len = -1
@@ -157,6 +159,7 @@ sliding_windows = 1
 alpha = 10.0
 patience = 40
 num_workers = 0
+
 
 [bay_otide]
 K_trend = 30
@@ -169,6 +172,7 @@ b0 = 1
 v = 1
 num_fold = 1
 
+
 [bit_graph]
 seq_len = -1
 sliding_windows = 1
@@ -179,12 +183,14 @@ batch_size = -1
 subgraph_size = 5
 num_workers = 0
 
+
 [hkmf_t]
 tags = []
 seq_len = 7
 blackouts_begin = 0
 blackouts_end = 0
 epochs = 10
+
 
 [saits]
 seq_len = -1
@@ -212,6 +218,7 @@ sliding_windows = 1
 target_strategy = "random"
 nsamples = 1
 num_workers = 0
+
 
 [pristi]
 seq_len = -1
@@ -409,7 +416,7 @@ load_missing_rate_contamination = "0"
 
 [colors]
 chart = ["#696969", "#2b908f", "#a6c96a", "#876d5d", "#8f10ba", "#f7a35c", "#434348", "#f15c80", "#910000", "#8085e9", "#365e0c", "#90ed7d"]
-plot = ['green', 'blue', 'orange', 'mediumseagreen', 'khaki', 'gold', 'darkslategrey', 'hotpink', 'chocolate', 'lightseagreen', 'wheat']
+plot = ['blue', 'green', 'orange', 'mediumseagreen', 'khaki', 'gold', 'darkslategrey', 'hotpink', 'chocolate', 'lightseagreen', 'wheat']
 
 [colors_blacks]
 chart = ["#696969", "#2b908f", "#a6c96a", "#876d5d", "#8f10ba", "#f7a35c", "#434348", "#f15c80", "#910000", "#8085e9", "#365e0c", "#90ed7d"]

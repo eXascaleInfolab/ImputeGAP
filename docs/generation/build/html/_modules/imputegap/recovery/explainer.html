@@ -279,11 +279,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pycatch22</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">toml</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">tsfel</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">tsfresh</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span>
 
@@ -348,6 +344,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Display the explainer plot for shap</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
@@ -412,6 +409,8 @@
 <span class="sd">            dict: A dictionary with feature names as keys and their aggregated values as values.</span>
 <span class="sd">            list: A list of tuples (feature_name, category, formatted_feature_name).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">tsfresh</span>
+
         <span class="n">M</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">num</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">num</span><span class="p">))</span> <span class="k">else</span> <span class="n">num</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
@@ -515,7 +514,8 @@
 <span class="sd">            - This function requires TSFEL to be installed: `pip install tsfel`.</span>
 <span class="sd">            - Categories can be customized to extract only the desired features, reducing computation time.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">M</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">tsfel</span>
+
         <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">num</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">num</span><span class="p">))</span> <span class="k">else</span> <span class="n">num</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -547,7 +547,6 @@
 
             <span class="c1"># Print the shape and aggregated features</span>
             <span class="k">for</span> <span class="n">inc</span><span class="p">,</span> <span class="p">(</span><span class="n">feature_name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">features_list</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-
                 <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                     <span class="n">results</span><span class="p">[</span><span class="n">feature_name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -591,6 +590,7 @@
 <span class="sd">            - results (dict): A dictionary of feature values by feature names.</span>
 <span class="sd">            - descriptions (list): A list of tuples containing feature names, categories, and descriptions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pycatch22</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">num</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">num</span><span class="p">))</span> <span class="k">else</span> <span class="n">num</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
@@ -747,6 +747,7 @@
 <span class="sd">        list</span>
 <span class="sd">            Results of the SHAP explainer model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Initialization of the SHAP model with dimension&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_information</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_configuration</span><span class="p">()</span>
@@ -833,7 +834,6 @@
 
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">display</span><span class="p">:</span>
-
             <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">waterfall</span><span class="p">(</span><span class="n">shval_x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="n">display</span><span class="p">)</span>
             <span class="n">alpha</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_file_details</span> <span class="o">+</span> <span class="n">file</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">algorithm</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">extractor</span> <span class="o">+</span> <span class="s2">&quot;_DTL_Waterfall.png&quot;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;SHAP Waterfall Results&quot;</span><span class="p">)</span>
@@ -1065,7 +1065,6 @@
         <span class="k">if</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;disjoint&quot;</span><span class="p">,</span> <span class="s2">&quot;overlap&quot;</span><span class="p">,</span> <span class="s2">&quot;blackout&quot;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid pattern detected: disjoint, overlap, or blackout are not allowed for SHAP.</span><span class="se">\n</span><span class="s2">Please, you MCAR, Aligned, Scattered, Gaussian, or Distribution.&quot;</span><span class="p">)</span>
 
-
         <span class="k">if</span> <span class="n">rate_dataset</span> <span class="o">&lt;</span> <span class="mf">0.05</span> <span class="ow">or</span> <span class="n">rate_dataset</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">limit percentage higher than 100%, reduce to 100</span><span class="si">% o</span><span class="s2">f the dataset&quot;</span><span class="p">)</span>
             <span class="n">rate_dataset</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1079,7 +1078,7 @@
 
         <span class="n">training_ratio</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span> <span class="o">*</span> <span class="n">training_ratio</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="n">M</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="o">&gt;=</span> <span class="n">M</span><span class="p">:</span>
             <span class="n">limit</span> <span class="o">=</span> <span class="n">M</span>
 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -1112,9 +1111,6 @@
             <span class="n">tmp</span><span class="o">.</span><span class="n">import_matrix</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
             <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">config_contamination</span><span class="p">(</span><span class="n">ts</span><span class="o">=</span><span class="n">tmp</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">pattern</span><span class="p">,</span> <span class="n">dataset_rate</span><span class="o">=</span><span class="n">current_series</span><span class="p">,</span> <span class="n">series_rate</span><span class="o">=</span><span class="n">missing_rate</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="n">block_size</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">deep_verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="si">{</span><span class="n">current_series</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">incomp_data</span><span class="w"> </span><span class="si">=}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
             <span class="n">input_data_matrices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
             <span class="n">obfuscated_matrices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
 
@@ -1139,9 +1135,6 @@
             <span class="n">algo</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
             <span class="n">algo</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
             <span class="n">imputation_results</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">metrics</span>
-
-            <span class="k">if</span> <span class="n">deep_verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">{</span><span class="n">algo</span><span class="o">.</span><span class="n">metrics</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="n">output_metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imputation_results</span><span class="p">)</span>
             <span class="n">output_rmse</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imputation_results</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">])</span>

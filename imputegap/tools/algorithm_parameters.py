@@ -63,12 +63,12 @@ RAYTUNE_PARAMS = {
     },
 
     "mrnn":{
-        "model": tune.grid_search(["brits_i"]),  # Support both univariate & multivariate models
-        "seq_length": tune.grid_search([1, 24, 48]),
-        "epoch": tune.grid_search([100, 1000]),
-        "batch_size": tune.grid_search([16, 32]),  # Test different batch sizes
+        "seq_len": 24,
+        "epochs": 100,
+        "batch_size": 64,  # Test different batch sizes
         "sliding_windows": tune.grid_search([0, 1]),
-        "hidden_layers": tune.grid_search([32, 64, 128]),
+        "hidden_layers": tune.grid_search([32, 108]),
+        "impute_weight": tune.grid_search([0.3, 0.6]),
         "num_workers": 0
     },
 
@@ -117,38 +117,37 @@ RAYTUNE_PARAMS = {
     },
 
     "tkcm": {
-        "rank": tune.grid_search([i for i in range(2, 16, 1)])   # Testing rank from 2 to 8
+        "rank": tune.grid_search([i for i in range(2, 5, 1)])   # Testing rank from 2 to 8
     },
 
     # --- Newly Added Deep Learning-Based Algorithms ---
 
     "brits": {
-        "model": tune.grid_search(["brits_i"]),  # Support both univariate & multivariate models
-        "seq_length": tune.grid_search([1, 24, 48]),
-        "epoch": tune.grid_search([100, 1000]),
-        "batch_size": tune.grid_search([16, 32]),  # Test different batch sizes
+        "model": "brits",  # Support both univariate & multivariate models
+        "seq_len": 24,
+        "epochs": 100,
+        "batch_size": 64,  # Test different batch sizes
         "sliding_windows": tune.grid_search([0, 1]),
-        "hidden_layers": tune.grid_search([32, 64, 128]),
+        "hidden_layers": tune.grid_search([32, 108]),
+        "impute_weight": tune.grid_search([0.3, 0.6]),
         "num_workers": 0
     },
 
     "deep_mvi": {
-        "max_epoch": tune.grid_search([10, 50, 100]),  # Testing from 500 to 1500 epochs
-        "patience": tune.grid_search([2, 5, 10]),  # Number of early stopping patience
+        "max_epoch": 1000,
+        "patience": tune.grid_search([2, 5]),  # Number of early stopping patience
         "lr": tune.grid_search([0.001, 0.1]),  # learning rate
-        "batch_size": -1
+        "batch_size": tune.grid_search([-1, 24]),  # learning rate
     },
 
     "mpin": {
         "window": tune.grid_search([2, 6, 16, 32]),  # Window size variations
         "incre_mode": tune.choice(["alone", "data", "state", "data+state+transfer"]),  # Different incremental modes
         "base": tune.choice(["SAGE", "GAT", "GCN"]),  # Model architectures
-        "epochs": tune.grid_search([15, 50]),  # Number of epochs
+        "epochs": 200,
         "num_of_iteration": 5,  # Number of epochs
         "k": tune.grid_search([5, 10])  # Number of neighbors
     },
-
-
 
     "knn_impute": {
         "k": tune.grid_search([1, 3, 5, 7, 10]),
@@ -157,7 +156,7 @@ RAYTUNE_PARAMS = {
 
 
     "knn": {
-        "k": tune.grid_search([1, 12, 1]),
+        "k": tune.grid_search([1, 3, 5, 7, 10]),
         "weights": tune.choice(["uniform", "distance"])
     },
 
@@ -167,26 +166,26 @@ RAYTUNE_PARAMS = {
     },
 
     "trmf": {
-        "lags": tune.grid_search([[], [1, 2, 3], [1, 5, 10]]),  # Different lag configurations
-        "K": tune.choice([-1, 5, 10, 20]),  # Latent dimensions
+        "lags": tune.grid_search([[1,7], [1, 2, 3]]),  # Different lag configurations
+        "K": tune.choice([4, 10, 20]),  # Latent dimensions
         "lambda_f": tune.grid_search([0.1, 1.0, 10.0]),  # Regularization parameter for factors
         "lambda_x": tune.grid_search([0.1, 1.0, 10.0]),  # Regularization parameter for observations
         "lambda_w": tune.grid_search([0.1, 1.0, 10.0]),  # Regularization parameter for weights
         "eta": tune.grid_search([0.1, 1.0, 5.0]),  # Learning rate-like parameter
         "alpha": tune.grid_search([100.0, 500.0]),  # Temporal regularization strength
-        "max_iter": tune.choice([100])  # Maximum number of iterations
+        "max_iter": 5000
     },
 
     "mice": {
-        "max_iter": tune.grid_search([2, 3]),
+        "max_iter": 1,
         "tol": tune.grid_search([0.001, 0.1]),
         "initial_strategy": tune.choice(["mean", "median", "most_frequent", "constant"]),
         "seed": 42
     },
 
     "miss_forest": {
-        "n_estimators": tune.grid_search([2, 10, 15]),
-        "max_iter": tune.grid_search([2, 5, 10]),
+        "n_estimators": 100,
+        "max_iter": 5,
         "max_features": tune.choice(["auto", "sqrt", "log2"]),
         "seed": 42
     },
@@ -201,7 +200,7 @@ RAYTUNE_PARAMS = {
         "alpha": tune.grid_search([0.1, 0.5, 1.0]),  # Example search space for alpha
         "beta": tune.grid_search([0.01, 0.1, 0.5]),  # Example search space for beta
         "n_cl": 1,  # Number of clusters
-        "max_iter": tune.grid_search([10]),  # Max iterations
+        "max_iter": 5,
         "tol": tune.grid_search([1, 5, 10]),  # Tolerance values
         "random_init": False
     },
@@ -209,19 +208,19 @@ RAYTUNE_PARAMS = {
     "grin": {
         "seq_len": tune.grid_search([-1, 24]),  # Example search space for d_hidden
         "sim_type":  tune.grid_search(["uniform", "corr"]),  # Example search space for d_hidden
-        "epochs": 50,  # Max training epochs
-        "batch_size":  32,  # Example search space for d_hidden
+        "epochs": 30,  # Max training epochs
+        "batch_size":  -1,  # Example search space for d_hidden
         "sliding_windows":  tune.grid_search([0, 1]),  # Example search space for d_hidden
         "alpha": tune.grid_search([10, 20]),  # Example search space for alpha
         "patience": 40,  # Patience for early stopping
-        "num_workers": 0# Number of workers
+        "num_workers": 0 # Number of workers
     },
 
     "gain": {
-        "batch_size": tune.grid_search([1, 10, 32]),
-        "hint_rate": tune.grid_search([0.01, 0.1, 0.5, 0.75, 0.9]),
-        "alpha": tune.grid_search([1, 5, 10]),
-        "epoch": 100
+        "batch_size": tune.grid_search([16, 64, 128]),
+        "epochs": 10000,
+        "hint_rate": tune.grid_search([0.1, 0.5, 0.9]),
+        "alpha": tune.grid_search([10, 100]),
     },
 
     "bay_otide": {
@@ -237,22 +236,22 @@ RAYTUNE_PARAMS = {
     },
 
     "bit_graph": {
-        "seq_len": tune.grid_search([16, 24, 48]),  # Seasonal factor search space
+        "seq_len": tune.grid_search([-1, 24]),  # Seasonal factor search space
         "sliding_windows": tune.grid_search([0, 1]),  # Seasonal factor search space
         "kernel_size": 7,
         "kernel_set": tune.grid_search([[1, 2, 3, 4], [2, 3, 6, 7]]),  # Seasonal factor search space
         "epochs": 50,  # Variance parameter
-        "batch_size": tune.grid_search([8, 32]),   # Prior hyperparameter b0
+        "batch_size": tune.grid_search([-1, 64]),   # Prior hyperparameter b0
         "subgraph_size": tune.grid_search([2, 5]),  # Bias factor inclusion
         "num_workers": 0,  # Variance parameter
     },
 
     "hkmf_t": {
         "tags": [],
-        "seq_len": [7, 24],
+        "seq_len": tune.grid_search([7, 24]),
         "blackouts_begin":0,
         "blackouts_end":0,
-        "epochs": tune.grid_search([30, 100])
+        "epochs": 10
     },
 
     "nuwats": {
@@ -264,45 +263,45 @@ RAYTUNE_PARAMS = {
         "seed":42
     },
     "gpt4ts": {
-        "seq_len": tune.grid_search([-1]),
-        "batch_size": tune.grid_search([-1]),
-        "epochs": tune.grid_search([5, 10]),
-        "gpt_layers":tune.grid_search([2, 6, 16]),
+        "seq_len": tune.grid_search([-1, 24]),
+        "batch_size": tune.grid_search([-1, 24]),
+        "epochs": 10,
+        "gpt_layers":tune.grid_search([3, 6]),
         "num_workers":0,
-        "seed":42
+        "seed":2021
     },
     "timesnet": {
-        "seq_len": tune.grid_search([-1]),
-        "batch_size": tune.grid_search([-1]),
-        "epochs": tune.grid_search([5, 10]),
-        "gpt_layers":tune.grid_search([2, 6, 16]),
+        "seq_len": tune.grid_search([-1, 24]),
+        "batch_size": tune.grid_search([-1, 24]),
+        "epochs": 10,
+        "gpt_layers":tune.grid_search([3, 6]),
         "num_workers":0,
-        "seed":42
+        "seed":2021
     },
     "csdi": {
-        "seq_len": tune.grid_search([8, 24, 48]),
-        "batch_size": tune.grid_search([8, 16, 64]),
-        "epochs": 200,
-        "sliding_windows": tune.grid_search([-1, 1]),
+        "seq_len": tune.grid_search([-1, 24]),
+        "batch_size": tune.grid_search([-1, 64]),
+        "epochs": 50,
+        "sliding_windows": tune.grid_search([0, 1]),
         "target_strategy": tune.grid_search(["random", "block"]),
-        "nsamples": tune.grid_search([10, 100]),
+        "nsamples": 1,
         "num_workers":0
     },
     "pristi": {
-        "seq_len": tune.grid_search([8, 24, 48]),
-        "batch_size": tune.grid_search([8, 16, 64]),
-        "epochs": 200,
-        "sliding_windows": tune.grid_search([-1, 1]),
+        "seq_len": tune.grid_search([-1, 24]),
+        "batch_size": tune.grid_search([-1, 64]),
+        "epochs": 20,
+        "sliding_windows": tune.grid_search([0, 1]),
         "target_strategy": tune.grid_search(["random", "block"]),
-        "nsamples": tune.grid_search([10, 100]),
+        "nsamples": 1,
         "num_workers":0
     },
     "saits": {
-        "seq_len": tune.grid_search([24]),
-        "batch_size": tune.grid_search([128]),
+        "seq_len": tune.grid_search([-1, 24]),
+        "batch_size": tune.grid_search([-1, 128]),
         "epochs": 1000,
-        "sliding_windows": tune.grid_search([1]),
-        "n_head": tune.grid_search([8]),
+        "sliding_windows": tune.grid_search([0, 1]),
+        "n_head": tune.grid_search([4, 8]),
         "num_workers": 0
     }
 

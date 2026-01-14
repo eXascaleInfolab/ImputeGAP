@@ -773,7 +773,7 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
     elif algorithm == "grin":
         params_to_save = {
             "seq_len": int(optimal_params[0]),
-            "sim_type": int(optimal_params[1]),
+            "sim_type": str(optimal_params[1]),
             "epochs": int(optimal_params[2]),
             "batch_size": int(optimal_params[3]),
             "sliding_windows": int(optimal_params[4]),
@@ -1108,11 +1108,13 @@ def get_resuts_unit_tests(algo_name, loader, verbose=True):
     """
     try:
         import tomllib  # Python 3.11+
-    except ImportError:
-        import toml as tomllib  # pip install toml
+        with open(loader, "rb") as f:
+            config = tomllib.load(f)
 
-    with open(loader, "rb") as f:
-        config = tomllib.load(f)
+    except ImportError:
+        import toml
+        with open(loader, "r", encoding="utf-8") as f:
+            config = toml.load(f)
 
     section = config[algo_name]
 

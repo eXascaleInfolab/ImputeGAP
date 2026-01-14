@@ -1019,7 +1019,7 @@ class Benchmark:
 
                 reshp = False
                 default_data.load_series(data=utils.search_path(dataset), header=header, verbose=False)
-                Mdef, Ndef = default_data.data.shape
+                Ndef, Mdef = default_data.data.shape
 
                 if Ndef > nbr_vals or Mdef > nbr_series:
                     reshp = True
@@ -1028,8 +1028,6 @@ class Benchmark:
 
                 ts_test.load_series(data=utils.search_path(dataset), nbr_series=nbr_series, nbr_val=nbr_vals, header=header, normalizer=normalizer, verbose=verbose)
                 N, M = ts_test.data.shape
-
-                print(f"{M=}")
 
                 if M <= 0:
                     raise ValueError(f"The dataset loaded has no series (series {M}).")

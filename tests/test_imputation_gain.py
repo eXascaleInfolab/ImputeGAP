@@ -1,5 +1,9 @@
 import os
+import platform
 import unittest
+
+import pytest
+
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.contamination import GenGap
@@ -21,15 +25,22 @@ class TestGAIN(unittest.TestCase):
 
         incomp_data = GenGap.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute()
-        algo.score(ts.data)
-        metrics = algo.metrics
 
-        print(f"{name}:{metrics = }\n")
+        system = platform.system()
+        if system == "Darwin":
+            with pytest.raises(NotImplementedError):
+                algo.impute()
+        else:
+            algo.impute()
 
-        ts.print_results(algo.metrics, algo.algorithm)
+            algo.score(ts.data)
+            metrics = algo.metrics
 
-        expected_metrics = {"RMSE": rmse, "MAE": mae}
+            print(f"{name}:{metrics = }\n")
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
-        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
+            ts.print_results(algo.metrics, algo.algorithm)
+
+            expected_metrics = {"RMSE": rmse, "MAE": mae}
+
+            self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit , f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+            self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")

@@ -57,6 +57,7 @@ class TestException(unittest.TestCase):
         """
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path("chlorine"), nbr_series=10, nbr_val=40)
+
         exp = Explainer()
 
         with pytest.raises(KeyError):
@@ -132,6 +133,7 @@ class TestException(unittest.TestCase):
         The goal is to test exceptions
         """
         from imputegap.algorithms.test import zero_impute
+        from imputegap.algorithms.cpp_integration import your_algo
 
         # initialize the time series object
         ts = TimeSeries()
@@ -142,6 +144,8 @@ class TestException(unittest.TestCase):
         imputer = Imputation.MatrixCompletion.CDRec(ts_m)
         imputer.impute()
         ts.plot(ts.data, style="mono")
+        ts.plot(ts.data, legends=False, nbr_series=1)
+
         imputer.recov_data = imputer.recov_data *1000
         # compute and print the imputation metrics
         imputer.score(ts.data, imputer.recov_data)
@@ -154,6 +158,10 @@ class TestException(unittest.TestCase):
         y = zero_impute(ts_m)
         print(f"{y.shape=}")
         self.assertTrue(y.shape == (256,64))
+
+        y = your_algo(ts_m, 3)
+        print(f"{y.shape=}")
+        self.assertTrue(y.shape == (256, 64))
 
 
         ts = TimeSeries()
@@ -179,6 +187,10 @@ class TestException(unittest.TestCase):
         ts_m = GenGap.mcar(ts.data, offset=10, seed=False)
         imputer = Imputation.Statistics.MeanImputeBySeries(ts_m)
         imputer.logs=False
+        imputer.impute()
+
+        imputer = Imputation.Statistics.ZeroImpute(ts_m)
+        imputer.logs = False
         imputer.impute()
 
         _ = utils.load_parameters(query="default", algorithm="other", verbose=True)

@@ -1259,7 +1259,7 @@
 
 <div class="viewcode-block" id="config_contamination">
 <a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.config_contamination">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">config_contamination</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">dataset_rate</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">series_rate</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">std_dev</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">probabilities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">config_contamination</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">dataset_rate</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">series_rate</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">std_dev</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">probabilities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Configure and execute contamination for selected imputation algorithm and pattern.</span>
 
@@ -1288,21 +1288,21 @@
     <span class="n">ptn</span> <span class="o">=</span> <span class="n">pattern_low</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;mcar&quot;</span> <span class="ow">or</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;missing_completely_at_random&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="n">block_size</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="n">block_size</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;mp&quot;</span> <span class="ow">or</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;missingpercentage&quot;</span> <span class="ow">or</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;aligned&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;ps&quot;</span> <span class="ow">or</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;percentageshift&quot;</span> <span class="ow">or</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;scattered&quot;</span> <span class="ow">or</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;scatter&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">scattered</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">scattered</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;disjoint&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">disjoint</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">disjoint</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;overlap&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">std_dev</span><span class="o">=</span><span class="n">std_dev</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">std_dev</span><span class="o">=</span><span class="n">std_dev</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;distribution&quot;</span> <span class="ow">or</span> <span class="n">pattern</span> <span class="o">==</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">probabilities_list</span><span class="o">=</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">series_rate</span><span class="p">,</span> <span class="n">probabilities_list</span><span class="o">=</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="n">explainer</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ptn</span> <span class="o">==</span> <span class="s2">&quot;blackout&quot;</span><span class="p">:</span>
-        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">blackout</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">blackout</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">dataset_rate</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(CONT) Pattern &#39;</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">&#39; not recognized, please choose your algorithm on this list :</span><span class="se">\n\t</span><span class="si">{</span><span class="n">TimeSeries</span><span class="p">()</span><span class="o">.</span><span class="n">patterns</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">incomp_data</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1405,11 +1405,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>  <span class="c1"># Python 3.11+</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">toml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tomllib</span>  <span class="c1"># pip install toml</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">toml</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">toml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
     <span class="n">section</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">algo_name</span><span class="p">]</span>
 
@@ -2606,156 +2608,86 @@
 
 
 
-<div class="viewcode-block" id="set_dic_position_dl">
-<a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.set_dic_position_dl">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_dic_position_dl</span><span class="p">(</span><span class="n">mask_test</span><span class="p">,</span> <span class="n">split_idx</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Build a mapping from original row index to (split, index_within_split) for</span>
-<span class="sd">    deterministic reconstruction of an imputed matrix.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">def set_dic_position_dl(mask_test, split_idx, verbose=False):</span>
+<span class="sd">    position_dic_imputegap = {}  # {original_row_index: &quot;train&quot;|&quot;val&quot;|&quot;test&quot;}</span>
+<span class="sd">    non_test_seen = 0  # position among NON-TEST rows</span>
+<span class="sd">    inc_tr = 0</span>
+<span class="sd">    inc_val = 0</span>
+<span class="sd">    inc_test = 0</span>
+<span class="sd">    for i, is_test in enumerate(mask_test):</span>
+<span class="sd">        if is_test:</span>
+<span class="sd">            position_dic_imputegap[i] = (&quot;test&quot;, inc_test)</span>
+<span class="sd">            inc_test += 1</span>
+<span class="sd">        else:</span>
+<span class="sd">            if non_test_seen &lt; split_idx:</span>
+<span class="sd">                position_dic_imputegap[i] = (&quot;train&quot;, inc_tr)</span>
+<span class="sd">                inc_tr += 1</span>
+<span class="sd">            else:</span>
+<span class="sd">                position_dic_imputegap[i] = (&quot;val&quot;, inc_val)</span>
+<span class="sd">                inc_val += 1</span>
+<span class="sd">            non_test_seen += 1</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    mask_test : array-like of shape (N,), bool</span>
-<span class="sd">        Row-wise boolean mask where True marks rows that belong to the &#39;test&#39; split</span>
-<span class="sd">        (e.g., rows with any missing values in the test mask). If you start from a</span>
-<span class="sd">        2D mask, pass `mask_test.any(axis=1)` to obtain this 1D array.</span>
-<span class="sd">    split_idx : int</span>
-<span class="sd">        Number of NON-TEST rows to assign to the &#39;train&#39; split. The first `split_idx`</span>
-<span class="sd">        non-test rows go to &#39;train&#39;; the remaining non-test rows go to &#39;val&#39;.</span>
+<span class="sd">    if verbose:</span>
+<span class="sd">        print(&quot;\nIndices ImputeGAP Deep Learning Training with Patterns:&quot;)</span>
+<span class="sd">        for k, v in position_dic_imputegap.items():</span>
+<span class="sd">            set, inc = v</span>
+<span class="sd">            print(f&quot;\t{k}\t{set}\t{inc}&quot;)</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    position_dic_imputegap : dict[int, tuple[str, int]]</span>
-<span class="sd">        Dictionary mapping each original row index to a tuple</span>
-<span class="sd">        (split_label, index_within_split), where split_label ∈ {&quot;train&quot;,&quot;val&quot;,&quot;test&quot;}</span>
-<span class="sd">        and index_within_split is 0-based within its respective split, assigned in</span>
-<span class="sd">        the order rows are encountered.</span>
+<span class="sd">    return position_dic_imputegap</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">        position_dic_imputegap: e.g. {0: (&quot;test&quot;,0), 1: (&quot;test&quot;,1), 2: (&quot;train&quot;,0), ...}</span>
+<span class="sd">def compute_seq_length(M):</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">position_dic_imputegap</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># {original_row_index: &quot;train&quot;|&quot;val&quot;|&quot;test&quot;}</span>
-    <span class="n">non_test_seen</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># position among NON-TEST rows</span>
-    <span class="n">inc_tr</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">inc_val</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">inc_test</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">is_test</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mask_test</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">is_test</span><span class="p">:</span>
-            <span class="n">position_dic_imputegap</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">inc_test</span><span class="p">)</span>
-            <span class="n">inc_test</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">non_test_seen</span> <span class="o">&lt;</span> <span class="n">split_idx</span><span class="p">:</span>
-                <span class="n">position_dic_imputegap</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">inc_tr</span><span class="p">)</span>
-                <span class="n">inc_tr</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">position_dic_imputegap</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;val&quot;</span><span class="p">,</span> <span class="n">inc_val</span><span class="p">)</span>
-                <span class="n">inc_val</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">non_test_seen</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="sd">    seq_length = 1</span>
+<span class="sd">    if M &gt; 5000:</span>
+<span class="sd">        seq_length = 3000</span>
+<span class="sd">    elif M &gt; 3000:</span>
+<span class="sd">        seq_length = 1400</span>
+<span class="sd">    elif M &gt; 2000:</span>
+<span class="sd">        seq_length = 1000</span>
+<span class="sd">    elif M &gt; 1000:</span>
+<span class="sd">        seq_length = 600</span>
+<span class="sd">    elif M &gt; 300:</span>
+<span class="sd">        seq_length = 100</span>
+<span class="sd">    elif M &gt; 30:</span>
+<span class="sd">        seq_length = 16</span>
+<span class="sd">    else:</span>
+<span class="sd">        if M % 5 == 0:</span>
+<span class="sd">            seq_length = M // 5</span>
+<span class="sd">        elif M % 6 == 0:</span>
+<span class="sd">            seq_length = M // 6</span>
+<span class="sd">        elif M % 2 == 0:</span>
+<span class="sd">            seq_length = M // 2 - 2</span>
+<span class="sd">            if seq_length &lt; 1:</span>
+<span class="sd">                seq_length = 1</span>
+<span class="sd">        elif M % 3 == 0:</span>
+<span class="sd">            seq_length = M // 3</span>
 
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Indices ImputeGAP Deep Learning Training with Patterns:&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">position_dic_imputegap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="nb">set</span><span class="p">,</span> <span class="n">inc</span> <span class="o">=</span> <span class="n">v</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="nb">set</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="n">inc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">position_dic_imputegap</span></div>
-
-
-
-<div class="viewcode-block" id="compute_seq_length">
-<a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.compute_seq_length">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_seq_length</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute a sequence length based on the input length `M` using heuristic rules.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    M : int</span>
-<span class="sd">        Number of series in the dataset.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    seq_length: int</span>
-<span class="sd">        A derived sequence length appropriate for processing or windowing.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">M</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">:</span>
-        <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">3000</span>
-    <span class="k">elif</span> <span class="n">M</span> <span class="o">&gt;</span> <span class="mi">3000</span><span class="p">:</span>
-        <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">1400</span>
-    <span class="k">elif</span> <span class="n">M</span> <span class="o">&gt;</span> <span class="mi">2000</span><span class="p">:</span>
-        <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">1000</span>
-    <span class="k">elif</span> <span class="n">M</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
-        <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">600</span>
-    <span class="k">elif</span> <span class="n">M</span> <span class="o">&gt;</span> <span class="mi">300</span><span class="p">:</span>
-        <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="k">elif</span> <span class="n">M</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
-        <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">M</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">seq_length</span> <span class="o">=</span> <span class="n">M</span> <span class="o">//</span> <span class="mi">5</span>
-        <span class="k">elif</span> <span class="n">M</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">seq_length</span> <span class="o">=</span> <span class="n">M</span> <span class="o">//</span> <span class="mi">6</span>
-        <span class="k">elif</span> <span class="n">M</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">seq_length</span> <span class="o">=</span> <span class="n">M</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span>
-            <span class="k">if</span> <span class="n">seq_length</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">M</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">seq_length</span> <span class="o">=</span> <span class="n">M</span> <span class="o">//</span> <span class="mi">3</span>
-
-    <span class="k">return</span> <span class="n">seq_length</span></div>
+<span class="sd">    return seq_length</span>
 
 
+<span class="sd">def compute_batch_size(data, min_size=4, max_size=16, divisor=2, verbose=True):</span>
+<span class="sd">    </span>
+<span class="sd">    M, N = data.shape</span>
 
-<div class="viewcode-block" id="compute_batch_size">
-<a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.compute_batch_size">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_batch_size</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">min_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">divisor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute an appropriate batch size based on the input data shape.</span>
+<span class="sd">    batch_size = min(M // divisor, max_size)</span>
 
-<span class="sd">    The batch size is computed as `min(M // 2, max_size)`, where M is the number of samples.</span>
-<span class="sd">    If this computed batch size is less than `min_size`, it is set to `min_size` instead.</span>
+<span class="sd">    if batch_size &lt; min_size:</span>
+<span class="sd">        batch_size = min_size</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    data : np.ndarray or torch.Tensor</span>
-<span class="sd">        Input 2D data of shape (M, N), where M is the number of samples.</span>
-<span class="sd">    min_size : int, optional</span>
-<span class="sd">        Minimum allowed batch size. Default is 4.</span>
-<span class="sd">    max_size : int, optional</span>
-<span class="sd">        Maximum allowed batch size. Default is 16.</span>
-<span class="sd">    divisor : int, optional</span>
-<span class="sd">        Divisor on the shape of the dataset. Default is 2.</span>
-<span class="sd">    verbose : bool, optional</span>
-<span class="sd">        If True, prints the computed batch size. Default is True.</span>
+<span class="sd">    if batch_size % 2 != 0:</span>
+<span class="sd">        batch_size = batch_size + 1</span>
+<span class="sd">        if batch_size &gt; max_size:</span>
+<span class="sd">            batch_size = batch_size -2</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    int</span>
-<span class="sd">        Computed batch size.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">M</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="sd">    if batch_size &lt; 1:</span>
+<span class="sd">        batch_size = 1</span>
 
-    <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">M</span> <span class="o">//</span> <span class="n">divisor</span><span class="p">,</span> <span class="n">max_size</span><span class="p">)</span>
+<span class="sd">    if verbose:</span>
+<span class="sd">        print(f&quot;(Batch-Size) Computed batch size: {batch_size}\n&quot;)</span>
 
-    <span class="k">if</span> <span class="n">batch_size</span> <span class="o">&lt;</span> <span class="n">min_size</span><span class="p">:</span>
-        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">min_size</span>
-
-    <span class="k">if</span> <span class="n">batch_size</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">batch_size</span> <span class="o">&gt;</span> <span class="n">max_size</span><span class="p">:</span>
-            <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="o">-</span><span class="mi">2</span>
-
-    <span class="k">if</span> <span class="n">batch_size</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(Batch-Size) Computed batch size: </span><span class="si">{</span><span class="n">batch_size</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">batch_size</span></div>
+<span class="sd">    return batch_size</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="load_share_lib">

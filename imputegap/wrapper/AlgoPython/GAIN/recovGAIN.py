@@ -88,13 +88,13 @@ def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9,
       print(f"\n(ERROR): {old_batch_size} > {input_data.shape[0]}, in order to train the model, reduction of the batch_size: {batch_size}.")
 
   inc = 1
-  while np.any(recov):
+  tries, max_tries = 0, 10
+  while np.any(recov) and tries < max_tries:
 
     if iterations < 50:
       break
 
     iterations = iterations // inc
-
 
     miss_rate = 1-tr_ratio
 

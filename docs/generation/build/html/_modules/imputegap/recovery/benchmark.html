@@ -279,12 +279,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">xlsxwriter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
-
-
 
 <div class="viewcode-block" id="Benchmark">
 <a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark">[docs]</a>
@@ -627,9 +623,6 @@
         <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>  <span class="c1"># Save in HD with tight layout</span>
 
-
-
-
         <span class="c1"># Show the plot</span>
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -938,109 +931,87 @@
                     <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">runs_plots_scores</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    def generate_reports_excel(self, runs_plots_scores, save_dir=&quot;./reports&quot;, dataset=&quot;&quot;, run=-1, verbose=True):</span>
+<span class="sd">        os.makedirs(save_dir, exist_ok=True)</span>
+<span class="sd">        save_path = os.path.join(save_dir, f&quot;report_{dataset}.xlsx&quot;)</span>
 
-<div class="viewcode-block" id="Benchmark.generate_reports_excel">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_reports_excel">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">generate_reports_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs_plots_scores</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">run</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generate and save an Excel-like text report of metrics and timing for each dataset, algorithm, and pattern.</span>
+<span class="sd">        # Create an Excel workbook</span>
+<span class="sd">        workbook = xlsxwriter.Workbook(save_path)</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        runs_plots_scores : dict</span>
-<span class="sd">            Dictionary containing scores and timing information for each dataset, pattern, and algorithm.</span>
-<span class="sd">        save_dir : str, optional</span>
-<span class="sd">            Directory to save the Excel-like file (default is &quot;./reports&quot;).</span>
-<span class="sd">        dataset : str, optional</span>
-<span class="sd">            Name of the data for the Excel-like file name.</span>
-<span class="sd">        run : int, optional</span>
-<span class="sd">            Number of the run</span>
-<span class="sd">        verbose : bool, optional</span>
-<span class="sd">            Whether to display the contamination information (default is True).</span>
+<span class="sd">        # Add a summary sheet with the header, creation date, dictionary content, and links to other sheets</span>
+<span class="sd">        summary_sheet = workbook.add_worksheet(&quot;Summary&quot;)</span>
+<span class="sd">        current_time = datetime.datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)</span>
+<span class="sd">        summary_sheet.set_column(0, 1, 50)</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;report_</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">.xlsx&quot;</span><span class="p">)</span>
+<span class="sd">        # Title and header</span>
+<span class="sd">        summary_sheet.write(0, 0, &quot;ImputeGAP, A library of Imputation Techniques for Time Series Data&quot;)</span>
+<span class="sd">        summary_sheet.write(2, 0, &quot;Report for Dataset&quot;)</span>
+<span class="sd">        summary_sheet.write(2, 1, dataset)</span>
+<span class="sd">        summary_sheet.write(3, 0, &quot;Generated on&quot;)</span>
+<span class="sd">        summary_sheet.write(3, 1, current_time)</span>
+<span class="sd">        if run &gt;= 0:</span>
+<span class="sd">            summary_sheet.write(4, 0, &quot;Run Number&quot;)</span>
+<span class="sd">            summary_sheet.write(4, 1, run)</span>
 
-        <span class="c1"># Create an Excel workbook</span>
-        <span class="n">workbook</span> <span class="o">=</span> <span class="n">xlsxwriter</span><span class="o">.</span><span class="n">Workbook</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span>
+<span class="sd">        # Add links to metric sheets</span>
+<span class="sd">        row = 6</span>
+<span class="sd">        summary_sheet.write(row, 0, &quot;Metric Sheets:&quot;)</span>
+<span class="sd">        row += 1</span>
+<span class="sd">        metrics = {</span>
+<span class="sd">            &quot;RMSE&quot;: &quot;Root Mean Square Error - Measures the average magnitude of error.&quot;,</span>
+<span class="sd">            &quot;MAE&quot;: &quot;Mean Absolute Error - Measures the average absolute error.&quot;,</span>
+<span class="sd">            &quot;MI&quot;: &quot;Mutual Information - Indicates dependency between variables.&quot;,</span>
+<span class="sd">            &quot;CORRELATION&quot;: &quot;Correlation Coefficient - Indicates linear relationship between variables.&quot;</span>
+<span class="sd">        }</span>
+<span class="sd">        for metric in metrics.keys():</span>
+<span class="sd">            summary_sheet.write_url(row, 0, f&quot;internal:&#39;{metric}&#39;!A1&quot;, string=f&quot;Go to {metric} Sheet&quot;)</span>
+<span class="sd">            row += 1</span>
 
-        <span class="c1"># Add a summary sheet with the header, creation date, dictionary content, and links to other sheets</span>
-        <span class="n">summary_sheet</span> <span class="o">=</span> <span class="n">workbook</span><span class="o">.</span><span class="n">add_worksheet</span><span class="p">(</span><span class="s2">&quot;Summary&quot;</span><span class="p">)</span>
-        <span class="n">current_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">set_column</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="sd">        # Write the dictionary content</span>
+<span class="sd">        summary_sheet.write(row + 1, 0, &quot;Dictionary of Results&quot;)</span>
+<span class="sd">        row += 2</span>
 
-        <span class="c1"># Title and header</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;ImputeGAP, A library of Imputation Techniques for Time Series Data&quot;</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Report for Dataset&quot;</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Generated on&quot;</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">current_time</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">run</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Run Number&quot;</span><span class="p">)</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">run</span><span class="p">)</span>
+<span class="sd">        for key, value in runs_plots_scores.items():</span>
+<span class="sd">            summary_sheet.write(row, 0, str(key))</span>
+<span class="sd">            summary_sheet.write(row, 1, str(value))</span>
+<span class="sd">            row += 1</span>
 
-        <span class="c1"># Add links to metric sheets</span>
-        <span class="n">row</span> <span class="o">=</span> <span class="mi">6</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Metric Sheets:&quot;</span><span class="p">)</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;RMSE&quot;</span><span class="p">:</span> <span class="s2">&quot;Root Mean Square Error - Measures the average magnitude of error.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;MAE&quot;</span><span class="p">:</span> <span class="s2">&quot;Mean Absolute Error - Measures the average absolute error.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;MI&quot;</span><span class="p">:</span> <span class="s2">&quot;Mutual Information - Indicates dependency between variables.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;CORRELATION&quot;</span><span class="p">:</span> <span class="s2">&quot;Correlation Coefficient - Indicates linear relationship between variables.&quot;</span>
-        <span class="p">}</span>
-        <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write_url</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;internal:&#39;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">&#39;!A1&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Go to </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> Sheet&quot;</span><span class="p">)</span>
-            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="sd">        for metric, description in metrics.items():</span>
+<span class="sd">            # Create a worksheet for each metric</span>
+<span class="sd">            worksheet = workbook.add_worksheet(metric)</span>
 
-        <span class="c1"># Write the dictionary content</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Dictionary of Results&quot;</span><span class="p">)</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">2</span>
+<span class="sd">            # Write the metric description at the top and add IMPUTEGAP header</span>
+<span class="sd">            worksheet.write(0, 0, &quot;ImputeGAP, A library of Imputation Techniques for Time Series Data&quot;)</span>
+<span class="sd">            worksheet.write(2, 0, f&quot;{metric}: {description}&quot;)</span>
 
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">runs_plots_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="sd">            # Define consistent column headers and widths</span>
+<span class="sd">            headers = [&quot;Dataset&quot;, &quot;Algorithm&quot;, &quot;Optimizer&quot;, &quot;Pattern&quot;, &quot;X Value&quot;, metric]</span>
+<span class="sd">            column_widths = [15, 15, 15, 15, 12, 20]  # Adjust widths for Excel</span>
 
-        <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">description</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># Create a worksheet for each metric</span>
-            <span class="n">worksheet</span> <span class="o">=</span> <span class="n">workbook</span><span class="o">.</span><span class="n">add_worksheet</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+<span class="sd">            # Write the headers</span>
+<span class="sd">            for col, (header, width) in enumerate(zip(headers, column_widths)):</span>
+<span class="sd">                worksheet.set_column(col, col, width)</span>
+<span class="sd">                worksheet.write(3, col, header)</span>
 
-            <span class="c1"># Write the metric description at the top and add IMPUTEGAP header</span>
-            <span class="n">worksheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;ImputeGAP, A library of Imputation Techniques for Time Series Data&quot;</span><span class="p">)</span>
-            <span class="n">worksheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">            # Populate the data</span>
+<span class="sd">            row = 4</span>
+<span class="sd">            for dataset, algo_items in runs_plots_scores.items():</span>
+<span class="sd">                for algorithm, optimizer_items in algo_items.items():</span>
+<span class="sd">                    for optimizer, pattern_data in optimizer_items.items():</span>
+<span class="sd">                        for pattern, x_data_items in pattern_data.items():</span>
+<span class="sd">                            for x, values in x_data_items.items():</span>
+<span class="sd">                                value = values.get(&quot;scores&quot;, {}).get(metric, None)</span>
+<span class="sd">                                if value is not None:</span>
+<span class="sd">                                    value = f&quot;{value:.10f}&quot;</span>
+<span class="sd">                                    data = [dataset, algorithm, optimizer, pattern, str(x), value]</span>
+<span class="sd">                                    for col, cell_value in enumerate(data):</span>
+<span class="sd">                                        worksheet.write(row, col, cell_value)</span>
+<span class="sd">                                    row += 1</span>
 
-            <span class="c1"># Define consistent column headers and widths</span>
-            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;Algorithm&quot;</span><span class="p">,</span> <span class="s2">&quot;Optimizer&quot;</span><span class="p">,</span> <span class="s2">&quot;Pattern&quot;</span><span class="p">,</span> <span class="s2">&quot;X Value&quot;</span><span class="p">,</span> <span class="n">metric</span><span class="p">]</span>
-            <span class="n">column_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>  <span class="c1"># Adjust widths for Excel</span>
-
-            <span class="c1"># Write the headers</span>
-            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">column_widths</span><span class="p">)):</span>
-                <span class="n">worksheet</span><span class="o">.</span><span class="n">set_column</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
-                <span class="n">worksheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
-
-            <span class="c1"># Populate the data</span>
-            <span class="n">row</span> <span class="o">=</span> <span class="mi">4</span>
-            <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">algo_items</span> <span class="ow">in</span> <span class="n">runs_plots_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">for</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">optimizer_items</span> <span class="ow">in</span> <span class="n">algo_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="k">for</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">pattern_data</span> <span class="ow">in</span> <span class="n">optimizer_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x_data_items</span> <span class="ow">in</span> <span class="n">pattern_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">x_data_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                                <span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scores&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                    <span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.10f</span><span class="si">}</span><span class="s2">&quot;</span>
-                                    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">value</span><span class="p">]</span>
-                                    <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">cell_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-                                        <span class="n">worksheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">cell_value</span><span class="p">)</span>
-                                    <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="c1"># Close the workbook</span>
-        <span class="n">workbook</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
+<span class="sd">        # Close the workbook</span>
+<span class="sd">        workbook.close()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="Benchmark.generate_plots">
@@ -1209,7 +1180,7 @@
                         <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">tick</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s2">%&quot;</span> <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">ticks</span><span class="p">])</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()[</span><span class="mi">0</span><span class="p">]))</span>
 
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">subplot</span><span class="p">:</span>
                         <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">optimizer</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">.jpg&quot;</span>
@@ -1291,6 +1262,9 @@
         <span class="n">not_optimized</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]</span>
         <span class="n">mean_group</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;MeanImpute&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;MinImpute&quot;</span><span class="p">,</span> <span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="s2">&quot;ZeroImpute&quot;</span><span class="p">,</span> <span class="s2">&quot;MeanImputeBySeries&quot;</span><span class="p">,</span> <span class="s2">&quot;meanimpute&quot;</span><span class="p">,</span> <span class="s2">&quot;minimpute&quot;</span><span class="p">,</span> <span class="s2">&quot;zeroimpute&quot;</span><span class="p">,</span> <span class="s2">&quot;meanimputebyseries&quot;</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="s2">&quot;default_params&quot;</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">algorithms</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;algorithms&#39; must be a list, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">algorithms</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -1349,7 +1323,12 @@
                 <span class="n">default_data</span> <span class="o">=</span> <span class="kc">None</span>
 
                 <span class="n">ts_test</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">search_path</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">nbr_series</span><span class="o">=</span><span class="n">nbr_series</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="n">nbr_vals</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="n">normalizer</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-                <span class="n">N</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">N</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">M</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">M</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The dataset loaded has no series (series </span><span class="si">{</span><span class="n">M</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">reshp</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Benchmarking module has reduced the shape to </span><span class="si">{</span><span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1431,7 +1410,7 @@
 
                                 <span class="n">start_time_imputation</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_benchmark_exception</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">F</span><span class="p">):</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_benchmark_exception</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
                                     <span class="k">if</span> <span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;DeepLearning&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">)</span> <span class="ow">or</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;LLMs&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">))</span> <span class="ow">and</span> <span class="n">dl_ratio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                                         <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">dl_ratio</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
                                             <span class="n">algo</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">incomp_data</span>
@@ -1496,7 +1475,7 @@
                                 <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;error.log&quot;</span><span class="p">)</span>
                                 <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
                                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-                                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2"> | Error during benchmark for </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">, with </span><span class="si">{</span><span class="n">dataset_s</span><span class="si">}</span><span class="s2"> - for a shape of (</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">F</span><span class="si">}</span><span class="s2">) - (</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">val_opt</span><span class="si">}</span><span class="s2">), and </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">%: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2"> | Error during benchmark for </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">, with </span><span class="si">{</span><span class="n">dataset_s</span><span class="si">}</span><span class="s2"> - for a shape of (</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">M</span><span class="si">}</span><span class="s2">) - (</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">val_opt</span><span class="si">}</span><span class="s2">), and </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">%: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;done!</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 

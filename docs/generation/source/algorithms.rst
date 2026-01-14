@@ -8,8 +8,8 @@ To learn how to apply imputation within the library, please refer to the `tutori
 .. list-table::
    :header-rows: 1
 
-   * - **Family**
-     - **Algorithm**
+   * - **Algorithm**
+     - **Family**
      - **Venue -- Year**
    * - NuwaTS [33]_
      - LLMs
@@ -149,29 +149,35 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - MeanImputeBySeries
      - Statistics
      - _
-
-
-.. raw:: html
-
-   <br><br>
-
-
-Under Integration
-~~~~~~~~~~~~~~~~~
+   * -
+     -
+     -
+   * -
+     -
+     -
+   * -
+     -
+     -
+   * -
+     -
+     -
+   * -
+     -
+     -
+   * -
+     -
+     -
+   * - 🚧 Moments* [37]_
+     - LLMs
+     - ICLR -- 2025
+   * - 🚧 SSGAN* [38]_
+     - Deep Learning
+     - AAAI -- 21
 
 
 .. list-table::
    :header-rows: 1
 
-   * - **Family**
-     - **Algorithm**
-     - **Venue -- Year**
-   * - Moments [37]_
-     - LLMs
-     - ICLR -- 2025
-   * - SSGAN [38]_
-     - Deep Learning
-     - AAAI -- 21
 
 
 .. raw:: html
@@ -251,3 +257,13 @@ References
 .. [38] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin : Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI 2021
 
 
+.. raw:: html
+
+   <br><br>
+
+
+🚧 = under integration*
+
+.. raw:: html
+
+   <br><br>

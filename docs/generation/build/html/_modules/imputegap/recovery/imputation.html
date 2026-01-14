@@ -557,31 +557,19 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">optimal_params</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_check_dl_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_ratio</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check whether the proportion of missing values in the contaminated data is acceptable</span>
-<span class="sd">        for training a deep learning model. If more than 40% of the values are missing,</span>
-<span class="sd">        the function returns False.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    def _check_dl_split(self, split_ratio):</span>
+<span class="sd">        missing_ratio = utils.get_missing_ratio(self.incomp_data)</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+<span class="sd">        ratio = 1 - split_ratio</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        bool</span>
-<span class="sd">            True if the missing data ratio is less than or equal to 40%, False otherwise.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">missing_ratio</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_missing_ratio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">)</span>
-
-        <span class="n">ratio</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">split_ratio</span>
-
-        <span class="k">if</span> <span class="n">missing_ratio</span> <span class="o">&lt;=</span> <span class="n">ratio</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(IMP) The proportion of missing values </span><span class="si">{</span><span class="n">missing_ratio</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="s2">% is too high to train an effective deep learning model, limited to </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">ratio</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span><span class="si">}</span><span class="s2">%.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                  <span class="s2">&quot;Please consider reducing the contamination rate or selecting a different family of imputation methods&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">False</span></div>
-
+<span class="sd">        if missing_ratio &lt;= ratio:</span>
+<span class="sd">            return True</span>
+<span class="sd">        else:</span>
+<span class="sd">            print(f&quot;\n(IMP) The proportion of missing values {missing_ratio*100}% is too high to train an effective deep learning model, limited to {int(round(ratio*100))}%.\n&quot;</span>
+<span class="sd">                  &quot;Please consider reducing the contamination rate or selecting a different family of imputation methods&quot;)</span>
+<span class="sd">            return False</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="Imputation">
@@ -2512,10 +2500,6 @@
 <span class="sd">                &quot;&quot;&quot;</span>
                 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.algorithms.deep_mvi</span><span class="w"> </span><span class="kn">import</span> <span class="n">deep_mvi</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_check_dl_split</span><span class="p">(</span><span class="n">split_ratio</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span>
-                    <span class="k">return</span>
-
                 <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">max_epoch</span><span class="p">,</span> <span class="n">patience</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_params</span><span class="p">(</span><span class="n">user_def</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -3134,10 +3118,6 @@
 <span class="sd">                https://github.com/xuangu-fang/BayOTIDE</span>
 <span class="sd">                &quot;&quot;&quot;</span>
                 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.algorithms.bayotide</span><span class="w"> </span><span class="kn">import</span> <span class="n">bay_otide</span>
-
-                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_check_dl_split</span><span class="p">(</span><span class="n">split_ratio</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span>
-                    <span class="k">return</span>
 
                 <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">K_trend</span><span class="p">,</span> <span class="n">K_season</span><span class="p">,</span> <span class="n">n_season</span><span class="p">,</span> <span class="n">K_bias</span><span class="p">,</span> <span class="n">time_scale</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">num_fold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_params</span><span class="p">(</span><span class="n">user_def</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>

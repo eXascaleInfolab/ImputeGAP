@@ -6,6 +6,34 @@ ImputeGap brings a repository of highly curated time series datasets for missing
 real-world time series from various of applications and which cover a wide range of characteristics and sizes. 
 
 
+## Dataset Index
+## Dataset Index
+
+## 📑 Dataset Index
+
+| Category          | Codename                            | Dataset        |
+|-------------------|-------------------------------------|----------------|
+| **Weather**       | [`climate`](#climate)               | Climate        |
+| **Weather**       | [`meteo`](#meteoswiss)              | Meteo Swiss    |
+| **Weather**       | [`temperature`](#temperature)       | Temperature    |
+| **Air Quality**   | [`airq`](#air-quality)              | Air Quality    |
+| **Air Quality**   | [`drift`](#drift)                   | Drift          |
+| **Water Quality** | [`bafu`](#bafu)                     | BAFU           |
+| **Water Quality** | [`chlorine`](#chlorine)             | Chlorine       |
+| **Neuroscience**  | [`eeg-alcohol`](#eeg-alcohol)       | EEG Alcohol    |
+| **Neuroscience**  | [`eeg-reading`](#eeg-reading)       | EEG Reading    |
+| **IoT Sensing**   | [`motion`](#motion)                 | Motion         |
+| **IoT Sensing**   | [`traffic`](#traffic)               | Traffic        |
+| **Sports**        | [`soccer`](#soccer)                 | Soccer         |
+| **Sports**        | [`sport_activity`](#sport-activity) | Sport Activity |
+| **Energy**        | [`electricity`](#electricity)       | Electricity    |
+| **Energy**        | [`solar`](#solar)                   | Solar          |
+| **Finance**       | [`stock_exchange`](#stock-exchange) | Stock Exchange |
+
+
+---
+
+
 ## Air-Quality
 
 The air quality dataset includes a subset of air quality measurements collected from 36 monitoring stations in China from 2014 to 2015.
@@ -50,7 +78,11 @@ The BAFU dataset, kindly provided by the BundesAmt Für Umwelt (the Swiss Federa
 
 ### Sample Plots
 
-![BAFU dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/bafu/01_bafu_m.jpg)
+
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 
@@ -75,8 +107,10 @@ It consists of 50 time series, each representing a distinct location, with 1,000
 
 ### Sample Plots
 
-![Chlorine dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg)
-
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 
@@ -132,7 +166,10 @@ The dataset has a time granularity of 6 hours and consists of 100 time series, e
 ### Sample Plots
 
 
-![Drift dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/drift/01_drift_m.jpg)
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 
@@ -164,7 +201,11 @@ This dataset is primarily used for the analysis of medical and brain-related dat
 
 ### Sample Plots
 
-![EEG-ALCOHOL dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/eeg-alcohol/01_eeg_alcohol_m.jpg)
+
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 
 <br /><hr /><br />
@@ -197,8 +238,11 @@ The extracted dataset contains 1201 values across 33 series.
 
 ### Sample Plots
 
-![EEG-READING dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/eeg-reading/01_eeg_reading_m.jpg)
 
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 
 
@@ -230,39 +274,13 @@ The electricity dataset has data on household energy consumption of 370 individu
 
 ### Sample Plots
 
-![ELECTRICITY dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/electricity/01_electricity_M.jpg)
+
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 
-
-
-
-<br /><hr /><br />
-
-
-
-## fMRI-Stoptask
-
-The fMRI-Stoptask dataset was obtained from the OpenfMRI database, with the accession number ds000007. This dataset is an extraction of a fMRI scan of Visual where subjects performed a stop-signal task with one of three response types: manual response, spoken letter naming, and spoken pseudo word naming.
-Following the same conversion hypothesis as used for the object recognition dataset, the fMRI-Stoptask dataset was extracted from the first run of subject 1. Voxels with values of 0 were removed, and the total number of voxels was reduced to 10,000 after flattening the dimensions. This resulted in a dataset comprising 10,000 series, each containing 182 values.
-The fMRI-Stoptask dataset will emphasize brain activity in regions such as the right inferior frontal gyrus and the basal ganglia, illustrating neural mechanisms of inhibition commonly associated with stop-signal tasks.
-
-
-### Summary
-
-| Data  info |                                                                                           |
-|------------|-------------------------------------------------------------------------------------------|
-| codename   | fmri-objectviewing                                                                        |
-| name       | Visual object recognition                                                                 |
-| url        | https://www.openfmri.org/dataset/ds000007/ (epoch 1 used on 120)                          |
-| source     | Common neural substrates for inhibition of spoken and manual responses. (Cereb Cortex'08) |
-| size       | n_series=10000; n_values/series=182                                                       |
-
-
-
-
-### Sample Plots
-
-![fMRI-STOPTASK](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/fmri-stoptask/01_fmri_stoptask_m.jpg)
 
 <br /><hr /><br />
 
@@ -286,8 +304,11 @@ The MeteoSwiss dataset, kindly provided by the Swiss Federal Office of Meteorolo
 
 ### Sample Plots
 
-![Meteo dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/meteo/01_meteo_m.jpg)
 
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 
@@ -312,9 +333,11 @@ The motion dataset consists of time series data collected from accelerometer and
 
 ### Sample Plots
 
-![Motion dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/motion/01_motion_M.jpg)
 
-
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 
 <br /><hr /><br />
@@ -338,8 +361,11 @@ The soccer dataset, initially presented in the DEBS Challenge 2013 [[3]](#ref3),
 
 
 ### Sample Plots
-![Soccer dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/soccer/01_soccer_M.jpg)
 
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 
@@ -373,8 +399,11 @@ Real-time dataset of a thermal solar plant logged every minute from December 28,
 
 ### Sample Plots
 
-![SOLAR dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/solar_plant/01_solat_plant_M.jpg)
 
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 
 <br /><hr /><br />
@@ -399,8 +428,11 @@ Dataset consists of data in categories walking, running, biking, skiing, and rol
 
 ### Sample Plots
 
-![SPORT-ACTIVITY dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/sport_activity/01_sport_activity_M.jpg)
 
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 
@@ -426,9 +458,11 @@ the collection of the daily exchange rates of eight foreign countries including 
 
 ### Sample Plots
 
-![STOCK-EXCHANGE dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/stock_exchange/01_stock_exchange_M.jpg)
 
-
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 
@@ -453,8 +487,11 @@ This dataset contains temperature data collected from climate stations in China 
 
 ### Sample Plots
 
-![Temperature dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/temperature/01_temperature_M.jpg)
 
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 
@@ -478,8 +515,11 @@ The raw data is in http://pems.dot.ca.gov. The data in this repo is a collection
 
 ### Sample Plots
 
-![TRAFFIC dataset](https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/traffic/01_traffic_M.jpg)
 
+<p align="center">
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/chlorine/01_chlorine_m.jpg" width="45%" />
+</p>
 
 <br /><hr /><br />
 

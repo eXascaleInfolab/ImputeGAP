@@ -129,6 +129,9 @@ def handle_parser(argv=None):
     parser.add_argument('--cov_prompt', action='store_true', help='', default=False)
     parser.add_argument('--output_token', action='store_true', help='', default=False)
 
+    if argv is None:
+        argv = []  # <-- key line: do NOT read pytest/sys.argv
+
     args, _unknown = parser.parse_known_args(argv)
 
     return args
