@@ -42,6 +42,7 @@ jobs:
     - name: Run pytest
       run: |
         python -m pytest ./tests/test_loading.py
+        python -m pytest ./tests/test_shapes_dim.py
         python -m pytest ./tests/test_contamination_mcar.py
         python -m pytest ./tests/test_contamination_mp.py
         python -m pytest ./tests/test_contamination_blackout.py
