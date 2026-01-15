@@ -86,9 +86,6 @@ class TestDownstream(unittest.TestCase):
 
             model = options.get("model")
 
-            if model == "prophet":
-                options = {"task": "forecast", "model": "prophet", "params": None, "plots": True, "baseline": "CDRec", "split": 0.8}
-
             # Score and evaluate
             imputer.score(ts_1.data, imputer.recov_data)
 

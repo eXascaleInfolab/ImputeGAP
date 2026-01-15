@@ -54,8 +54,5 @@ class TestExplainer(unittest.TestCase):
             assert feature_found_in_category, f"Feature '{feature}' not found in any category"
 
             # Check relation description/feature
-            if feature in expected_features:
-                expected_description = expected_features[feature]
-                assert description == expected_description, f"Feature '{feature}' has wrong description. Expected '{expected_description}', got '{description}' "
-            else:
-                assert False, f"Feature '{feature}'not found in the FEATURES dictionary"
+            expected_description = expected_features[feature]
+            assert description == expected_description, f"Feature '{feature}' has wrong description. Expected '{expected_description}', got '{description}' "

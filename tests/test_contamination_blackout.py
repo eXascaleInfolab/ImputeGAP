@@ -44,12 +44,7 @@ class TestContaminationBlackout(unittest.TestCase):
 
             print(f"{ts_contaminate = }")
 
-            if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                check_position = False
-            else:
-                check_position = True
-
-            self.assertTrue(check_position, True)
+            self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg="NaNs in the first 10%")
 
         for missing_rate in missing_rates:
 
@@ -57,9 +52,4 @@ class TestContaminationBlackout(unittest.TestCase):
 
             print(f"{ts_contaminate = }")
 
-            if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                check_position = False
-            else:
-                check_position = True
-
-            self.assertTrue(check_position, True)
+            self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (missing_rate={missing_rate}, offset=4)")

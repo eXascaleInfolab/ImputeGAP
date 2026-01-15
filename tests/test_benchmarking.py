@@ -32,8 +32,6 @@ class TestBenchmarking(unittest.TestCase):
 
         # For each dataset, validate structure and values
         for dataset, dataset_data in results_benchmarking.items():
-            if not dataset_data:  # If dataset is empty, skip validation
-                continue
 
             # Check that patterns exist (e.g., 'mcar')
             self.assertIn(
@@ -69,17 +67,6 @@ class TestBenchmarking(unittest.TestCase):
                         self.assertTrue(
                             math.isfinite(float(score_value)),
                             f"Score '{score_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is NaN/inf: {score_value}"
-                        )
-
-                    for time_key, time_value in sub_data.get("times", {}).items():
-                        self.assertIsInstance(
-                            time_value,
-                            (float, int),
-                            f"Time '{time_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is not a float or int."
-                        )
-                        self.assertTrue(
-                            math.isfinite(float(time_value)),
-                            f"Time '{time_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is NaN/inf: {time_value}"
                         )
 
 

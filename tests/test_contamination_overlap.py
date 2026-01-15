@@ -23,12 +23,7 @@ class TestContaminationOverlap(unittest.TestCase):
 
             ts_contaminate = GenGap.overlap(input_data=ts_1.data, rate_series=series_sel, limit=1, shift=0.1, offset=100)
 
-            if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                check_position = False
-            else:
-                check_position = True
-
-            self.assertTrue(check_position, True)
+            self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows" )
 
     def get_last_nan_series_index(self, matrix):
         last_nan_index = None  # Initialize the variable to store the result

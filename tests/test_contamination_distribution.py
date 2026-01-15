@@ -93,12 +93,8 @@ class TestContaminationDistribution(unittest.TestCase):
                 D = self.load_probabilities(ts_1.data)
                 ts_contaminate = GenGap.distribution(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, probabilities_list=D, offset=0.1)
 
-                if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                    check_position = False
-                else:
-                    check_position = True
-
-                self.assertTrue(check_position, True)
+                self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(),
+                    msg=f"Found NaNs in first {ten_percent_index} rows (series_sel={series_sel}, missing_rate={missing_rate})")
 
 
     def test_distribution_logic(self):

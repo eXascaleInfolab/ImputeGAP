@@ -58,12 +58,7 @@ class TestContaminationPercentageShift(unittest.TestCase):
                                                               rate_dataset=series_sel,
                                                               rate_series=missing_rate, offset=0.1)
 
-                if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                    check_position = False
-                else:
-                    check_position = True
-
-                self.assertTrue(check_position, True)
+                self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_dataset={series_sel}, rate_series={missing_rate})")
 
     def test_percentage_shift_total(self):
         """

@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+import itertools
+
 
 class Benchmark:
     """
@@ -401,9 +403,6 @@ class Benchmark:
             if "RUNTIME_LOG" not in new_metrics:
                 new_metrics = np.append(new_metrics, "RUNTIME_LOG")
 
-        # assumes: runs_plots_scores is a list of dicts (like in your example)
-        # and new_metrics, metric_unit, to_call, rt, run, verbose, save_dir are already defined
-        # 1) discover patterns, algos, and a sample optimizer across ALL datasets
         opt = None
         all_patterns = set()
         patterns_to_algos = defaultdict(set)
@@ -723,7 +722,7 @@ class Benchmark:
     """
 
 
-    def generate_plots(self, runs_plots_scores, ticks,  metrics=None, subplot=False, y_size=4, title=None, save_dir="./reports",display=False, verbose=True):
+    def generate_plots(self, runs_plots_scores, ticks,  metrics=None, subplot=False, y_size=8, title=None, save_dir="./reports",display=False, verbose=True):
         """
         Generate and save plots for each metric and pattern based on provided scores.
 
@@ -758,9 +757,14 @@ class Benchmark:
         """
         os.makedirs(save_dir, exist_ok=True)
 
+        markers = itertools.cycle(["o", "s", "D", "^", "v", "<", ">", "P", "X", "*", "h", "p", "8"])
+        marker_by_algo = {}
+
         print("\nThe plots have been generated...\n")
 
         new_metrics = np.copy(metrics)
+
+
         new_plots = 0
 
         if metrics is None:
@@ -770,6 +774,8 @@ class Benchmark:
                 new_plots = new_plots + 1
                 new_metrics = np.append(new_metrics, "RUNTIME_LOG")
 
+        nbr_metrics = len(new_metrics)
+
         n_rows = int((len(new_metrics)+new_plots)/2)
 
         x_size, title_flag = 16, title
@@ -777,7 +783,19 @@ class Benchmark:
         for dataset, pattern_items in runs_plots_scores.items():
             for pattern, algo_items in pattern_items.items():
                 if subplot:
-                    fig, axes = plt.subplots(nrows=n_rows, ncols=2, figsize=(x_size*1.90, y_size*2.90))  # Adjusted figsize
+                    x_size = x_size * 2
+                    y_size = y_size * round(nbr_metrics//2)
+                    scale_factor = 0.85
+                    x_size_screen = (1920 / 100) * scale_factor
+                    y_size_screen = (1080 / 100) * scale_factor
+                    if n_rows < 4:
+                        x_size = x_size_screen
+                        y_size = y_size_screen
+
+                    print(f"{x_size = }")
+                    print(f"{y_size = }")
+
+                    fig, axes = plt.subplots(nrows=n_rows, ncols=2, figsize=(x_size, y_size))  # Adjusted figsize
                     fig.subplots_adjust(
                         left=0.04,
                         right=0.99,
@@ -818,11 +836,17 @@ class Benchmark:
                             sorted_pairs = sorted(zip(x_vals, y_vals))
                             x_vals, y_vals = zip(*sorted_pairs)
 
-                            # Plot each algorithm as a line with scattered points
-                            ax.plot(x_vals, y_vals, label=f"{algorithm}", linewidth=2)
-                            ax.scatter(x_vals, y_vals)
-                            has_data = True
+                            if algorithm not in marker_by_algo:
+                                marker_by_algo[algorithm] = next(markers)
+                            m = marker_by_algo[algorithm]
 
+                            # Plot each algorithm as a line with scattered points
+                            ax.plot(x_vals, y_vals, label=f"{algorithm}", linewidth=2, marker=m, markersize=6)
+                            ax.scatter(x_vals, y_vals, marker=m, s=35)
+
+                            #ax.plot(x_vals, y_vals, label=f"{algorithm}", linewidth=2)
+                            #ax.scatter(x_vals, y_vals)
+                            has_data = True
 
                             if min_y > min(y_vals):
                                 min_y = min(y_vals)

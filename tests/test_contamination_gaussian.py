@@ -47,7 +47,6 @@ class TestContaminationGaussian(unittest.TestCase):
         """
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path("drift"))
-
         series_impacted = [0.4, 0.8]
         missing_rates = [0.1, 0.4, 0.6]
         ten_percent_index = int(ts_1.data.shape[1] * 0.1)
@@ -57,13 +56,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
                 ts_contaminate = GenGap.gaussian(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, offset=0.1)
 
-                if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                    check_position = False
-                else:
-                    check_position = True
-
-                self.assertTrue(check_position, True)
-
+                self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows")
 
     def test_gaussian_logic(self):
         """

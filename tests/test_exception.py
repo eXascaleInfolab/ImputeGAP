@@ -116,7 +116,7 @@ class TestException(unittest.TestCase):
         print(f"Caught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer="ray-tune", nbr_series="w", nbr_vals=None)
+            bench.eval(algorithms=["*"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer="ray-tune", nbr_series="w", nbr_vals=None)
         print(f"Caught TypeError: {excinfo.value}")
 
         with pytest.raises(ValueError) as excinfo:
@@ -125,7 +125,13 @@ class TestException(unittest.TestCase):
 
         bench.eval(algorithms=["CDRec"], datasets=["eeg-reading"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer=None, nbr_series=1, nbr_vals=100)
 
-        bench.eval(algorithms=["SoftImpute"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer="ray-tune", nbr_series=15, nbr_vals=100, verbose=True)
+        bench.eval(algorithms=["SoftImpute"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer="ray-tune", nbr_series=12, nbr_vals=60, verbose=True)
+
+        bench.eval(algorithms=["BRITS"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer=None, nbr_series=12, nbr_vals=60, verbose=True, dl_ratio=0.5)
+
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval(algorithms=["CDRec"], datasets=["eeg-reading"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer=10, nbr_series=10, nbr_vals=10)
 
 
     def test_score_raises(self):
@@ -207,7 +213,146 @@ class TestException(unittest.TestCase):
         _ = utils.clean_missing_values(ts.data)
         _ = utils.handle_nan_input(ts.data, ts2.data)
 
+    def test_paths_raises(self):
+        import os
+        expected = (3, 1e-06, 100)
 
+        optimal_params = utils.load_parameters(query="default", algorithm="cdrec")
+        print(f"{optimal_params = }")
+        assert optimal_params == expected
+
+        here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        filepath = os.path.join(here, "env/default_values.toml")
+        optimal_params = utils.load_parameters(query="default", algorithm="cdrec", path=filepath)
+        print(f"{filepath = } / {optimal_params = }")
+        assert optimal_params == expected
+
+        here = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(here, "env/default_values.toml")
+        optimal_params = utils.load_parameters(query="default", algorithm="cdrec", path=filepath)
+        print(f"{filepath = } / {optimal_params = }")
+        assert optimal_params == expected
+
+        with pytest.raises(ValueError):
+            _ = utils.load_parameters(query="error", algorithm="cdrec", path=filepath)
+
+        expected = (3, 0.0004596525401418828, 209)
+        here = os.path.dirname(os.path.abspath(__file__))
+        s = "optimal_parameters_" + str("b") + "_" + str("chlorine") + "_" + str("cdrec") + ".toml"
+        filepath = os.path.join(here, "imputegap_assets/params", s)
+        opti = utils.load_parameters(query="optimal", path=filepath)
+        print(f"{opti = }")
+        assert opti == expected
+
+        utils.save_optimization(optimal_params={"rank": 2}, algorithm="iterative_svd", dataset="", optimizer="b", file_name=None, verbose=True)
+        utils.save_optimization(optimal_params={"rank": 2}, algorithm="iterative_svd", dataset="", optimizer="b", file_name=None, verbose=False)
+
+        with pytest.raises(ValueError):
+            _, _ = utils.sets_splitter_based_on_training(tr=1.1, verbose=True)
+
+        with pytest.raises(ValueError):
+            _ = utils.config_forecaster("dsfsadfsd", params=None)
+
+        M = np.arange(1, 101).reshape(10, 10)
+
+        alp = utils.window_truncation(M, 2, deep_verbose=True)
+
+        print(f"\n\n{alp = }")
+        print(f"{alp.shape = }\n\n")
+        assert alp.shape == (5, 2, 10)
+
+        alpha = utils.dataset_add_dimensionality(M, 3, deep_verbose=True, window=True)
+        assert alpha.shape == (13, 10)
+
+        alpha1 = utils.dataset_add_dimensionality(M, 3, deep_verbose=True, window=False, reshapable=True, adding_nans=False, verbose=True)
+        print(f"{alpha1 = }")
+        print(f"{alpha1.shape = }")
+        assert alpha1.shape == (4, 3, 10)
+
+        alpha2 = utils.dataset_add_dimensionality(M, 3, deep_verbose=True, window=False, reshapable=True, adding_nans=True, verbose=True)
+        print(f"{alpha2 = }")
+        print(f"{alpha2.shape = }")
+        assert alpha2.shape == (4, 3, 10)
+
+        alpha3 = utils.dataset_add_dimensionality(M, 3, deep_verbose=True, window=False, reshapable=True, adding_nans=False)
+        print(f"{alpha3 = }")
+        print(f"{alpha3.shape = }")
+        assert alpha3.shape == (4, 3, 10)
+
+        alpha4 = utils.dataset_add_dimensionality(M, 3, deep_verbose=True, window=False, reshapable=False, adding_nans=False, verbose=True)
+        print(f"{alpha4 = }")
+        print(f"{alpha4.shape = }")
+        assert alpha4.shape == (3, 3, 10)
+
+        with pytest.raises(TypeError):
+            _ = utils.dataset_reverse_dimensionality([1,1,2], 10, verbose=True)
+
+        M4 = M[:, :, None, None]  # shape (10, 10, 1, 1)
+        with pytest.raises(ValueError):
+            alphaX4 = utils.dataset_reverse_dimensionality(M4, 10, verbose=True)
+
+        M4 = M[None, None, :, :]  # shape (10, 10, 1, 1)
+        alphaX4 = utils.dataset_reverse_dimensionality(M4, 10, verbose=True)
+
+        with pytest.raises(ValueError):
+            _ = utils.dataset_reverse_dimensionality(alpha2, 15, verbose=True)
+
+        print(f"{alphaX4 = }")
+        print(f"{alphaX4.shape = }")
+        assert alphaX4.shape == (10, 10)
+
+        M5 = M[None, None, None, :, :]  # shape (10, 10, 1, 1)
+        with pytest.raises(ValueError):
+            _ = utils.dataset_reverse_dimensionality(M5, 10, verbose=True)
+
+        seq_len, batch_size = utils.auto_seq_llms(M, subset=False, verbose=True, deep_verbose=True)
+        print(f"{seq_len = }")
+        print(f"{batch_size = }")
+
+        M2 = np.arange(1, 1001).reshape(100, 10)
+        seq_len, batch_size = utils.auto_seq_llms(M2, subset=False, verbose=True, deep_verbose=True)
+        print(f"{seq_len = }")
+        print(f"{batch_size = }")
+        assert seq_len == 10
+        assert batch_size == 10
+
+        seq_len, batch_size = utils.auto_seq_llms(M2, subset=False, verbose=True, deep_verbose=True, goal="batch")
+        print(f"{seq_len = }")
+        print(f"{batch_size = }")
+        assert seq_len == 10
+        assert batch_size == 50
+
+        seq_len, batch_size = utils.auto_seq_llms(M2, subset=False, verbose=True, deep_verbose=True, goal="both")
+        print(f"{seq_len = }")
+        print(f"{batch_size = }")
+        assert seq_len == 8
+        assert batch_size == 13
+
+        with pytest.raises(ValueError):
+            _ = utils.verification_limitation(120, 0.1, 1)
+
+        M = M.astype(float)
+        M[2, 1] = np.nan
+        f1 = utils.clean_missing_values(M, substitute="mean")
+        f2 = utils.clean_missing_values(M, substitute="median")
+        f3 = utils.clean_missing_values(M, substitute="zero")
+
+        assert int(f1[2, 1]) == 49
+        assert f2[2, 1] == 52
+        assert f3[2, 1] == 0
+
+        with pytest.raises(ValueError):
+            _ = utils.clean_missing_values(M, substitute="nope")
+        with pytest.raises(ValueError):
+            _ = utils.clean_missing_values(None)
+
+        mask = np.zeros_like(M, dtype=bool)  # same shape as M, all False
+        print(f"{mask = }")
+        f4 = utils.clean_missing_values(M, substitute="median", mask=mask)
+
+        print(f"{f4 = }")
+        print(f"{M = }")
+        assert np.array_equal(M, f4, equal_nan=True)
 
 
     def test_unknown_algorithm_raises(self):

@@ -21,18 +21,9 @@ class TestContaminationDisjoint(unittest.TestCase):
 
         for series_sel in series_impacted:
             ts_contaminate = GenGap.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=0.1)
-            if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                check_position = False
-            else:
-                check_position = True
+            self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_series={series_sel}, offset=0.1)")
             ts_contaminate = GenGap.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=4)
-            if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                check_position_2 = False
-            else:
-                check_position_2 = True
-
-            self.assertTrue(check_position, True)
-            self.assertTrue(check_position_2, True)
+            self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_series={series_sel}, offset=4)")
 
 
     def get_last_nan_series_index(self, matrix):
@@ -45,9 +36,6 @@ class TestContaminationDisjoint(unittest.TestCase):
                 last_nan_index = i + 1  # Update the variable with the index + 1
             else:
                 all_nan = False  # Found a series without NaN, update the flag
-
-        if all_nan:
-            return matrix.shape[0]  # Return the size of shape[0] if all series have NaN
         return last_nan_index  # Otherwise, return the last series index with NaN
 
     def test_disjoint_logic(self):

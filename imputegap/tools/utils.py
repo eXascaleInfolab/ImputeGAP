@@ -38,17 +38,16 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
     if query == "default":
         if path is None:
             filepath = importlib.resources.files('imputegap.env').joinpath("./default_values.toml")
-            if not filepath.is_file():
-                filepath = "./env/default_values.toml"
         else:
             filepath = path
-            if not os.path.exists(filepath):
-                filepath = "./env/default_values.toml"
+        if not os.path.exists(filepath):
+            print(f"\n\tthe selected path is wrong, auto-redirection...")
+            here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            filepath = os.path.join(here, "env/default_values.toml")
 
     elif query == "optimal":
         algorithm = algorithm.lower().replace("-", "").replace("_", "")
         dataset = dataset.lower().replace("-", "").replace("_", "")
-
         if path is None:
             here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             s = "optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
@@ -57,17 +56,14 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
             filepath = path
 
     else:
-        filepath = None
-        print("Query not found for this function ('optimal' or 'default')")
+        raise ValueError("Query not found for this function (expected 'optimal' or 'default')")
 
     if not os.path.exists(filepath):
         filepath = "./params/optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
-
         if not os.path.exists(filepath):  # test
             here = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             s = "optimal_parameters_" + str(optimizer) + "_" + str(dataset) + "_" + str(algorithm) + ".toml"
             filepath = os.path.join(here, "tests/imputegap_assets/params", s)
-
         print(f"file not found: {filepath}, load the default folder.\n")
 
     with open(filepath, "r") as _:
@@ -601,12 +597,16 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
     ----------
     optimal_params : dict
         Dictionary of the optimal parameters.
+
     algorithm : str, optional
         The name of the imputation algorithm (default is 'cdrec').
+
     dataset : str, optional
         The name of the dataset (default is an empty string).
+
     optimizer : str, optional
         The name of the optimizer used (default is 'b').
+
     file_name : str, optional
         The name of the TOML file to save the results (default is None).
 
@@ -878,9 +878,9 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
     #    "param_3": float(optimal_params[2]),
     #}
 
-
     else:
-        print(f"\n\t\t(SYS) Algorithm {algorithm} is not recognized.")
+        if verbose:
+            print(f"\n\t\t(SYS) Algorithm {algorithm} is not recognized.")
         return
 
     toml_payload = {algorithm: params_to_save}
@@ -888,7 +888,8 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
     try:
         with open(file_name, 'w') as file:
             toml.dump(toml_payload, file)
-        print(f"\n(SYS) Optimization parameters successfully saved to {file_name}")
+        if verbose:
+            print(f"\n(SYS) Optimization parameters successfully saved to {file_name}")
     except Exception as e:
         print(f"\n(SYS) An error occurred while saving the file: {e}")
 
@@ -958,7 +959,7 @@ def sets_splitter_based_on_training(tr, split=0.66667, verbose=False):
     val_len = round(1 - tr - test_len, 1)
 
     total = round(tr + test_len + val_len, 1)
-    if total != 1.0:
+    if total != 1.0 or test_len < 0 or val_len < 0:
         raise ValueError(f"Ratios do not sum to 1.0 (train={tr}, test={test_len}, val={val_len}, total={total})")
 
     if verbose:
@@ -1110,7 +1111,6 @@ def get_resuts_unit_tests(algo_name, loader, verbose=True):
         import tomllib  # Python 3.11+
         with open(loader, "rb") as f:
             config = tomllib.load(f)
-
     except ImportError:
         import toml
         with open(loader, "r", encoding="utf-8") as f:
@@ -1297,10 +1297,7 @@ def dataset_add_dimensionality(matrix, seq_length=24, reshapable=True, adding_na
         return new_m
 
     else:
-        new_m = np.array([
-            matrix[i:i + seq_length]
-            for i in range(0, N - seq_length + 1, seq_length)  # step = seq_length for non-overlap
-        ])
+        new_m = np.array([matrix[i:i + seq_length] for i in range(0, N - seq_length + 1, seq_length)])
 
         if verbose:
             print(f"\ntThe new shape is {new_m.shape}\n")
@@ -1831,11 +1828,9 @@ def verification_limitation(percentage, low_limit=0.001, high_limit=1.0):
     """
     if low_limit <= percentage <= high_limit:
         return percentage  # No modification needed
-
     elif 1 <= percentage <= 100:
         print(f"The percentage {percentage} is between 1 and 100. Dividing by 100 to convert to a decimal.")
         return percentage / 100
-
     else:
         raise ValueError(f"The percentage {percentage} is out of the acceptable range.")
 
@@ -2431,49 +2426,6 @@ def control_boundaries(rank, boundary, algorithm="Algorithm", reduction=1):
     else:
         return rank
 
-
-
-def clean_imputegap_assets(root_path, security=True, check="imputegap/imputegap_assets"):
-    """
-    Delete all files under the imputegap assets directory, preserving only `.gitkeep` files.
-
-    Parameters
-    ----------
-    root_path : str or Path-like
-        Path to the root imputegap assets directory to be cleaned.
-
-    security : bool, optional
-        If True, abort cleaning unless `check` is found in `root_path`.
-        This is a safety guard to avoid accidentally deleting unintended paths.
-        Default is True.
-
-    check : str, optional
-        Substring that must be present in `root_path` for the cleaning to proceed.
-        Default is "imputegap/imputegap_assets".
-    """
-    from pathlib import Path
-
-    print("Cleaning imputegap assets...", root_path, "\n")
-
-    root_path_p = Path(root_path).resolve()
-
-    if security:
-        if check not in root_path:
-            print(f"[ABORT] Refusing to clean '{root_path}'.")
-            print(f"The target directory's must have '{check}' in it.")
-            return
-
-    # Walk through all files under root_dir
-    for path in root_path_p.rglob("*"):
-        if path.is_file():
-            # Keep only .gitkeep files
-            if path.name == ".gitkeep":
-                continue
-            try:
-                path.unlink()
-                print(f"Deleted: {path}")
-            except Exception as e:
-                print(f"Failed to delete {path}: {e}")
 
 
 def list_of_algorithms():

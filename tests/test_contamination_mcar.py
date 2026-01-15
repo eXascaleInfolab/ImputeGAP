@@ -28,23 +28,17 @@ class TestContaminationMCAR(unittest.TestCase):
             for missing_rate in missing_rates:
 
                 ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, block_size=block_size, offset=offset, seed=True)
-
-                print(f"{ts_contaminate}")
-                check_nan_series = False
+                print(f"{ts_contaminate}\n")
 
                 for series in range(ts_contaminate.shape[1]):
-                    data = ts_contaminate[:, series]
-                    if str(series+1) in series_check:
-                        if np.isnan(data).any():
-                            check_nan_series = True
-                    else:
-                        if np.isnan(data).any():
-                            check_nan_series = False
-                            break
-                        else:
-                            check_nan_series = True
 
-                self.assertTrue(check_nan_series, True)
+                    has_nan = np.isnan(ts_contaminate[:, series]).any()
+                    should_have_nan = str(series + 1) in series_check
+
+                    print(f"{series+1} = {has_nan} / {should_have_nan}")
+
+                    self.assertEqual(has_nan, should_have_nan, msg=f"Series {series + 1}: has_nan={has_nan} but expected {should_have_nan} " f"(rate_dataset={series_sel}, rate_series={missing_rate})")
+
 
     def test_mcar_position(self):
         """
@@ -66,12 +60,7 @@ class TestContaminationMCAR(unittest.TestCase):
                                                          block_size=2, offset=0.1,
                                                          seed=True)
 
-                if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                    check_position = False
-                else:
-                    check_position = True
-
-                self.assertTrue(check_position, True)
+                self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_dataset={series_sel}, rate_series={missing_rate})")
 
     def test_mcar_selection_datasets(self):
         """
@@ -134,12 +123,7 @@ class TestContaminationMCAR(unittest.TestCase):
 
                     ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, block_size=block_size, offset=offset, seed=True)
 
-                    if np.isnan(ts_contaminate[:ten_percent_index, :]).any():
-                        check_position = False
-                    else:
-                        check_position = True
-
-                    self.assertTrue(check_position, True)
+                    self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_dataset={series_sel}, rate_series={missing_rate})")
 
 
 

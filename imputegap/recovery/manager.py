@@ -561,9 +561,9 @@ class TimeSeries:
 
                     if np.isnan(incomp_data[i, :]).any() or not subplot:
                         if style == "default":
-                            ax.plot(np.arange(min(incomp_data.shape[1], nbr_val)), incomp_data[i, :nbr_val], color=color, linewidth=2.5, linestyle='-', label=f'Series')
+                            ax.plot(np.arange(min(incomp_data.shape[1], nbr_val)), incomp_data[i, :nbr_val], color=color, linewidth=2.5, linestyle='-', label=f'Series_' + str(i+1))
                         else:
-                            ax.plot(np.arange(min(incomp_data.shape[1], nbr_val)), incomp_data[i, :nbr_val], color=color, linewidth=7, linestyle='-', label=f'Series')
+                            ax.plot(np.arange(min(incomp_data.shape[1], nbr_val)), incomp_data[i, :nbr_val], color=color, linewidth=7, linestyle='-', label=f'Series_' + str(i+1))
 
                 if recov_data is not None:  # plot imputed matrix
                     if np.isnan(incomp_data[i, :]).any():
@@ -572,7 +572,7 @@ class TimeSeries:
                         ax.plot(timestamps, input_data[i, :nbr_val], linewidth=1.5, linestyle=':', color=color, label=f'Missing Data')
 
                     if np.isnan(incomp_data[i, :]).any() or not subplot:
-                        ax.plot(np.arange(min(incomp_data.shape[1], nbr_val)), incomp_data[i, :nbr_val], color=color, linewidth=2.5, linestyle='-', label=f'Series')
+                        ax.plot(np.arange(min(incomp_data.shape[1], nbr_val)), incomp_data[i, :nbr_val], color=color, linewidth=2.5, linestyle='-', label=f'Series_' + str(i+1))
 
                 # Label and legend for subplot
                 if subplot:

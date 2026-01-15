@@ -31,18 +31,10 @@ class TestExplainerTSFEL(unittest.TestCase):
             self.assertIn(category, actual_feature_counts, f"Unexpected category: {category}")
             actual_feature_counts[category] += 1
 
-            if feature_name in shap_values:
-                shap_value = shap_values[feature_name]
+            shap_value = shap_values[feature_name]
 
-                # Ensure the SHAP value is numeric and not NaN
-                if isinstance(shap_value, (int, float)):
-                    self.assertFalse(np.isnan(shap_value), f"Feature {feature_name} in category {category} has NaN value")
-                    print(f"Feature {feature_name}\t\tin category {category}\t\twithout NaN value {shap_value}")
-                else:
-                    self.fail(f"Feature {feature_name} in category {category} has a non-numeric value: {shap_value}")
-            else:
-                self.fail(f"Feature {feature_name} in category {category} is missing in shap_values")
-
+            self.assertFalse(np.isnan(shap_value), f"Feature {feature_name} in category {category} has NaN value")
+            print(f"Feature {feature_name}\t\tin category {category}\t\twithout NaN value {shap_value}")
 
         print("\n\n\n")
 

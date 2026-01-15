@@ -262,10 +262,6 @@ class TestPipeline(unittest.TestCase):
             self.assertIsNotNone(feature, "feature is None")
             self.assertIsNotNone(category, "category is None")
 
-            # mean_features can be scalar or array-like
-            if mean_features is None:
-                self.fail("mean_features is None")
-
             arr = np.asarray(mean_features, dtype=float)  # works for scalar, list, np array
             self.assertFalse(np.isnan(arr).any(), "mean_features contains NaNs")
 
