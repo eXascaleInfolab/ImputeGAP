@@ -52,22 +52,12 @@ class TestBenchmarking(unittest.TestCase):
             expected_keys = {"0.1", "0.2", "0.8"}
             for algorithm, algorithm_data in scenario_data.items():
                 for key in expected_keys:
-                    self.assertIn(
-                        key, algorithm_data.get("default_params", {}),
-                        f"Algorithm '{algorithm}' in dataset '{dataset}' is missing key '{key}'."
-                    )
+                    self.assertIn(key, algorithm_data.get("default_params", {}), f"Algorithm '{algorithm}' in dataset '{dataset}' is missing key '{key}'." )
 
                     sub_data = algorithm_data["default_params"].get(key, {})
                     for score_key, score_value in sub_data.get("scores", {}).items():
-                        self.assertIsInstance(
-                            score_value,
-                            (float, int),
-                            f"Score '{score_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is not a float or int."
-                        )
-                        self.assertTrue(
-                            math.isfinite(float(score_value)),
-                            f"Score '{score_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is NaN/inf: {score_value}"
-                        )
+                        self.assertIsInstance( score_value, (float, int), f"Score '{score_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is not a float or int." )
+                        self.assertTrue( math.isfinite(float(score_value)), f"Score '{score_key}' in dataset '{dataset}', algorithm '{algorithm}', key '{key}' is NaN/inf: {score_value}" )
 
 
     def test_benchmarking_matrix(self):
@@ -196,5 +186,6 @@ class TestBenchmarking(unittest.TestCase):
 
 
         validation = bench.generate_heatmap(scores_list=scores_list, algos=algos, sets=sets, metric="RMSE", save_dir="./reports", display=False)
+        validation = bench.generate_heatmap(scores_list=scores_list, algos=algos, sets=sets, metric="RMSE", save_dir="./reports", display=True)
 
         self.assertTrue(validation)

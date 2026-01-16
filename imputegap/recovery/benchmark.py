@@ -297,20 +297,11 @@ class Benchmark:
         import matplotlib.colors as mcolors
         cmap = mcolors.LinearSegmentedColormap.from_list(f"trunc({plt.cm.Greys.name},{0.3:.2f},{0.9:.2f})", plt.cm.Greys(np.linspace(0.3, 0.9, 256)))
 
-        if metric == "RMSE":
-            norm = plt.Normalize(vmin=0, vmax=2)
-        elif metric == "CORRELATION":
-            norm = plt.Normalize(vmin=-2, vmax=2)
-        elif metric == "MAE":
-            norm = plt.Normalize(vmin=0, vmax=1.5)
-        elif metric == "MI":
-            norm = plt.Normalize(vmin=-1, vmax=1.5)
-        elif metric.lower() == "runtime":
-            norm = plt.Normalize(vmin=0, vmax=5000)
-        elif metric.lower() == "runtime_log":
-            norm = plt.Normalize(vmin=-2, vmax=10)
-        else:
-            norm = plt.Normalize(vmin=0, vmax=2000)
+        norm_ranges = {"RMSE": (0, 2), "CORRELATION": (-2, 2), "MAE": (0, 1.5), "MI": (-1, 1.5), "runtime": (0, 5000), "runtime_log": (-2, 10), }
+
+        key = metric if metric in norm_ranges else metric.lower()
+        vmin, vmax = norm_ranges.get(key, (0, 2000))
+        norm = plt.Normalize(vmin=vmin, vmax=vmax)
 
         # Create the heatmap
         heatmap = ax.imshow(scores_list, cmap=cmap, norm=norm, aspect='auto')
@@ -557,7 +548,6 @@ class Benchmark:
                 new_metrics = np.append(new_metrics, "RUNTIME")
             if "RUNTIME_LOG" not in new_metrics:
                 new_metrics = np.append(new_metrics, "RUNTIME_LOG")
-
         opt = None
         for dataset, patterns_items in runs_plots_scores.items():
             for pattern, algorithm_items in patterns_items.items():
@@ -580,8 +570,7 @@ class Benchmark:
                     file.write(f"Report for Dataset: {dataset}\n")
                     file.write(f"Generated on: {current_time}\n")
                     file.write(f"Total runtime: {rt} (ms)\n")
-                    if run >= 0:
-                        file.write(f"Run number: {run}\n")
+                    file.write(f"Run number: {run}\n")
                     file.write("=" * 120 + "\n\n")
 
                     for metric in new_metrics:
@@ -865,31 +854,12 @@ class Benchmark:
                         ax.set_ylabel(ylabel_metric)
                         ax.set_xlim(0.0, 0.85)
 
-                        if metric == "RMSE" or metric == "MAE":
-                            if min_y < 0:
-                                min_y = 0
-                            if max_y > 3:
-                                max_y = 3
-                        elif metric == "CORRELATION":
-                            if min_y < -1:
-                                min_y = -1
-                            if max_y > 1:
-                                max_y = 1
-                        elif metric == "MI":
-                            if min_y < 0:
-                                min_y = 0
-                            if max_y > 2:
-                                max_y = 2
-                        elif metric == "RUNTIME":
-                            if min_y < 0:
-                                min_y = 0
-                            if max_y > 10000:
-                                max_y = 10000
-                        elif metric == "RUNTIME_LOG":
-                            if min_y < -5:
-                                min_y = -5
-                            if max_y > 5:
-                                max_y = 5
+                        bounds = {"RMSE": (0, 3), "MAE": (0, 3), "CORRELATION": (-1, 1), "MI": (0, 2), "RUNTIME": (0, 10000), "RUNTIME_LOG": (-5, 5), }
+
+                        if metric in bounds:
+                            lo, hi = bounds[metric]
+                            min_y = max(min_y, lo)
+                            max_y = min(max_y, hi)
 
                         diff = (max_y - min_y)
                         y_padding = 0.15*diff
@@ -914,12 +884,9 @@ class Benchmark:
                         ax.legend(loc='upper left', fontsize=7, frameon=True, fancybox=True, framealpha=0.8, ncol=len(ax.get_legend_handles_labels()[0]))
 
                     if not subplot:
-                        filename = f"{dataset}_{pattern}_{optimizer}_{metric}.jpg"
-
                         new_dir = save_dir + "/" + pattern
                         os.makedirs(new_dir, exist_ok=True)
-
-                        filepath = os.path.join(new_dir, filename)
+                        filepath = os.path.join(new_dir, f"{dataset}_{pattern}_{optimizer}_{metric}.jpg")
                         plt.savefig(filepath)
                         if not display:
                             plt.close()
@@ -939,7 +906,7 @@ class Benchmark:
 
         self.plots = plt
 
-    def eval(self, algorithms=["cdrec"], datasets=["eeg-alcohol"], patterns=["mcar"], x_axis=[0.05, 0.1, 0.2, 0.4, 0.6, 0.8], optimizer="default_params", metrics=["*"], save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=250, nbr_vals=2500, dl_ratio=None, verbose=False):
+    def eval(self, algorithms=["cdrec"], datasets=["eeg-alcohol"], patterns=["mcar"], x_axis=[0.05, 0.1, 0.2, 0.4, 0.6, 0.8], optimizer="default_params", metrics=["*"], save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=250, nbr_vals=2000, dl_ratio=None, verbose=False):
         """
         Execute a comprehensive evaluation of imputation algorithms over multiple datasets and patterns.
 

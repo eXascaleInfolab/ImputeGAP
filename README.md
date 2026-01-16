@@ -19,7 +19,7 @@ In detail, the package provides:
 
 <br>
 
-![Python](https://img.shields.io/badge/Python-v3.13-blue) ![Release](https://img.shields.io/badge/Release-v1.1.1-brightgreen)  ![Coverage](https://img.shields.io/badge/Coverage-93%25-brightgreen) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20MacOS-informational) [![Docs](https://img.shields.io/badge/Docs-available-brightgreen?style=flat&logo=readthedocs)](https://imputegap.readthedocs.io/)
+![Python](https://img.shields.io/badge/Python-v3.13-blue) ![Release](https://img.shields.io/badge/Release-v1.1.1-brightgreen)  ![Coverage](https://img.shields.io/badge/Coverage-94%25-brightgreen) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20MacOS-informational) [![Docs](https://img.shields.io/badge/Docs-available-brightgreen?style=flat&logo=readthedocs)](https://imputegap.readthedocs.io/)
 
 <i>If you like our library, please add a ⭐ in our GitHub repository.</i>
 

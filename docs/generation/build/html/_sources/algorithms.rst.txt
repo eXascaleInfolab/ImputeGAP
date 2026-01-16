@@ -262,7 +262,7 @@ References
    <br><br>
 
 
-🚧 = *under integration
+🚧 = under integration*
 
 .. raw:: html
 

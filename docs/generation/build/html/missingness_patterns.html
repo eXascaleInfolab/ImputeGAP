@@ -297,7 +297,7 @@
 <section id="mono-block">
 <span id="scenario-mono-block"></span><h2>MONO-BLOCK<a class="headerlink" href="#mono-block" title="Link to this heading">¶</a></h2>
 <p>One missing block per series</p>
-<p><strong>Aligned</strong></p>
+<br><p><strong>Aligned</strong></p>
 <p>The missing blocks are aligned.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -307,7 +307,9 @@
 <li><p>The starting position is the same and begins at <code class="docutils literal notranslate"><span class="pre">W</span></code> and progresses until the size of the missing block is reached, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
 </ul>
 </div>
-<br><p><strong>Disjoint</strong></p>
+<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="_images/aligned.png" />
+<p><code class="docutils literal notranslate"><span class="pre">ts_m</span> <span class="pre">=</span> <span class="pre">GenGap.aligned(ts.data,</span> <span class="pre">rate_dataset=0.6,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p>
+<br><br><p><strong>Disjoint</strong></p>
 <p>The missing blocks are disjoint.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -318,7 +320,9 @@
 <li><p>Each subsequent missing block starts immediately after the previous one ends, continuing this pattern until the limit of the dataset or <code class="docutils literal notranslate"><span class="pre">N</span></code> is reached.</p></li>
 </ul>
 </div>
-<br><p><strong>Overlap</strong></p>
+<br><img alt="ImputeGAP Disjoint Pattern" class="portrait align-left" src="_images/disjoint.png" />
+<p><code class="docutils literal notranslate"><span class="pre">ts_m</span> <span class="pre">=</span> <span class="pre">GenGap.disjoint(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p>
+<br><br><p><strong>Overlap</strong></p>
 <p>The missing blocks are overlapping.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -330,7 +334,9 @@
 <li><p>This pattern continues until the limit or <code class="docutils literal notranslate"><span class="pre">N</span></code> is reached.</p></li>
 </ul>
 </div>
-<br><p><strong>Scattered</strong></p>
+<br><img alt="ImputeGAP Overlap Pattern" class="portrait align-left" src="_images/overlap.png" />
+<p><code class="docutils literal notranslate"><span class="pre">ts_m</span> <span class="pre">=</span> <span class="pre">GenGap.overlap(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p>
+<br><br><p><strong>Scattered</strong></p>
 <p>The missing blocks are scattered.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -340,11 +346,13 @@
 <li><p>The starting position is randomly shifted by adding a random value to <code class="docutils literal notranslate"><span class="pre">W</span></code>, then progresses until the size of the missing block is reached, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
 </ul>
 </div>
-<br></section>
+<br><img alt="ImputeGAP Scatter Pattern" class="portrait align-left" src="_images/scatter.png" />
+<p><code class="docutils literal notranslate"><span class="pre">ts_m</span> <span class="pre">=</span> <span class="pre">GenGap.scattered(ts.data,</span> <span class="pre">rate_dataset=0.6,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p>
+<br><br></section>
 <section id="multi-block">
 <span id="scenario-multi-block"></span><h2>MULTI-BLOCK<a class="headerlink" href="#multi-block" title="Link to this heading">¶</a></h2>
 <p>Multiple missing blocks per series</p>
-<p><strong>MCAR</strong></p>
+<br><p><strong>MCAR</strong></p>
 <p>The blocks are missing completely at random</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -353,7 +361,9 @@
 <li><p>Data blocks of the same size are removed from arbitrary series at a random position between <code class="docutils literal notranslate"><span class="pre">W</span></code> and <code class="docutils literal notranslate"><span class="pre">N</span></code>, until the total number of missing values per series is reached.</p></li>
 </ul>
 </div>
-<br><p><strong>Block Distribution</strong></p>
+<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="_images/mcar.png" />
+<p><code class="docutils literal notranslate"><span class="pre">ts_m</span> <span class="pre">=</span> <span class="pre">GenGap.mcar(ts.data,</span> <span class="pre">rate_dataset=0.6,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">block_size=2,</span> <span class="pre">offset=25)</span></code></p>
+<br><br><p><strong>Block Distribution</strong></p>
 <p>The missing blocks follow a distribution.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -363,7 +373,9 @@
 </ul>
 </div>
 <p>To configure the block distribution pattern, please refer to this <a class="reference external" href="tutorials_distribution.html">page</a>.</p>
-</section>
+<br><img alt="ImputeGAP Distribution Pattern" class="portrait align-left" src="_images/distribution.png" />
+<p><code class="docutils literal notranslate"><span class="pre">ts_m</span> <span class="pre">=</span> <span class="pre">GenGap.distribution(ts.data,</span> <span class="pre">rate_dataset=0.6,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">probabilities_list=probs,</span> <span class="pre">offset=25)</span></code></p>
+<br><br></section>
 </section>
 
         </article>

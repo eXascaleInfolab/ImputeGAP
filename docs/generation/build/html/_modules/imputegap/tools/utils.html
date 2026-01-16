@@ -314,17 +314,16 @@
     <span class="k">if</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">filepath</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s1">&#39;imputegap.env&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;./default_values.toml&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">filepath</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;./env/default_values.toml&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">filepath</span> <span class="o">=</span> <span class="n">path</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-                <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;./env/default_values.toml&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">the selected path is wrong, auto-redirection...&quot;</span><span class="p">)</span>
+            <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;env/default_values.toml&quot;</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;optimal&quot;</span><span class="p">:</span>
         <span class="n">algorithm</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
@@ -333,17 +332,14 @@
             <span class="n">filepath</span> <span class="o">=</span> <span class="n">path</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">filepath</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Query not found for this function (&#39;optimal&#39; or &#39;default&#39;)&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Query not found for this function (expected &#39;optimal&#39; or &#39;default&#39;)&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
         <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;./params/optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
-
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>  <span class="c1"># test</span>
             <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))))</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;optimal_parameters_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.toml&quot;</span>
             <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;tests/imputegap_assets/params&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
-
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;file not found: </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">, load the default folder.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
@@ -883,12 +879,16 @@
 <span class="sd">    ----------</span>
 <span class="sd">    optimal_params : dict</span>
 <span class="sd">        Dictionary of the optimal parameters.</span>
+
 <span class="sd">    algorithm : str, optional</span>
 <span class="sd">        The name of the imputation algorithm (default is &#39;cdrec&#39;).</span>
+
 <span class="sd">    dataset : str, optional</span>
 <span class="sd">        The name of the dataset (default is an empty string).</span>
+
 <span class="sd">    optimizer : str, optional</span>
 <span class="sd">        The name of the optimizer used (default is &#39;b&#39;).</span>
+
 <span class="sd">    file_name : str, optional</span>
 <span class="sd">        The name of the TOML file to save the results (default is None).</span>
 
@@ -1055,7 +1055,7 @@
     <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;grin&quot;</span><span class="p">:</span>
         <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;seq_len&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-            <span class="s2">&quot;sim_type&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="s2">&quot;sim_type&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
             <span class="s2">&quot;epochs&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
             <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
             <span class="s2">&quot;sliding_windows&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">optimal_params</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span>
@@ -1160,9 +1160,9 @@
     <span class="c1">#    &quot;param_3&quot;: float(optimal_params[2]),</span>
     <span class="c1">#}</span>
 
-
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="s2">(SYS) Algorithm </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is not recognized.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="s2">(SYS) Algorithm </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is not recognized.&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="n">toml_payload</span> <span class="o">=</span> <span class="p">{</span><span class="n">algorithm</span><span class="p">:</span> <span class="n">params_to_save</span><span class="p">}</span>
@@ -1170,7 +1170,8 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">toml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">toml_payload</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Optimization parameters successfully saved to </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Optimization parameters successfully saved to </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) An error occurred while saving the file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -1246,7 +1247,7 @@
     <span class="n">val_len</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">tr</span> <span class="o">-</span> <span class="n">test_len</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">total</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">tr</span> <span class="o">+</span> <span class="n">test_len</span> <span class="o">+</span> <span class="n">val_len</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">total</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">total</span> <span class="o">!=</span> <span class="mf">1.0</span> <span class="ow">or</span> <span class="n">test_len</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">val_len</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ratios do not sum to 1.0 (train=</span><span class="si">{</span><span class="n">tr</span><span class="si">}</span><span class="s2">, test=</span><span class="si">{</span><span class="n">test_len</span><span class="si">}</span><span class="s2">, val=</span><span class="si">{</span><span class="n">val_len</span><span class="si">}</span><span class="s2">, total=</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -1407,7 +1408,6 @@
         <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>  <span class="c1"># Python 3.11+</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">toml</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -1600,10 +1600,7 @@
         <span class="k">return</span> <span class="n">new_m</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">new_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-            <span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">seq_length</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="n">seq_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">)</span>  <span class="c1"># step = seq_length for non-overlap</span>
-        <span class="p">])</span>
+        <span class="n">new_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">seq_length</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="n">seq_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">)])</span>
 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">tThe new shape is </span><span class="si">{</span><span class="n">new_m</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2161,11 +2158,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">low_limit</span> <span class="o">&lt;=</span> <span class="n">percentage</span> <span class="o">&lt;=</span> <span class="n">high_limit</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">percentage</span>  <span class="c1"># No modification needed</span>
-
     <span class="k">elif</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">percentage</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The percentage </span><span class="si">{</span><span class="n">percentage</span><span class="si">}</span><span class="s2"> is between 1 and 100. Dividing by 100 to convert to a decimal.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">percentage</span> <span class="o">/</span> <span class="mi">100</span>
-
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The percentage </span><span class="si">{</span><span class="n">percentage</span><span class="si">}</span><span class="s2"> is out of the acceptable range.&quot;</span><span class="p">)</span></div>
 
@@ -2788,52 +2783,6 @@
 
 
 
-<div class="viewcode-block" id="clean_imputegap_assets">
-<a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.clean_imputegap_assets">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">clean_imputegap_assets</span><span class="p">(</span><span class="n">root_path</span><span class="p">,</span> <span class="n">security</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="s2">&quot;imputegap/imputegap_assets&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Delete all files under the imputegap assets directory, preserving only `.gitkeep` files.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    root_path : str or Path-like</span>
-<span class="sd">        Path to the root imputegap assets directory to be cleaned.</span>
-
-<span class="sd">    security : bool, optional</span>
-<span class="sd">        If True, abort cleaning unless `check` is found in `root_path`.</span>
-<span class="sd">        This is a safety guard to avoid accidentally deleting unintended paths.</span>
-<span class="sd">        Default is True.</span>
-
-<span class="sd">    check : str, optional</span>
-<span class="sd">        Substring that must be present in `root_path` for the cleaning to proceed.</span>
-<span class="sd">        Default is &quot;imputegap/imputegap_assets&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cleaning imputegap assets...&quot;</span><span class="p">,</span> <span class="n">root_path</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="n">root_path_p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">security</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">check</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">root_path</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[ABORT] Refusing to clean &#39;</span><span class="si">{</span><span class="n">root_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The target directory&#39;s must have &#39;</span><span class="si">{</span><span class="n">check</span><span class="si">}</span><span class="s2">&#39; in it.&quot;</span><span class="p">)</span>
-            <span class="k">return</span>
-
-    <span class="c1"># Walk through all files under root_dir</span>
-    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">root_path_p</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-            <span class="c1"># Keep only .gitkeep files</span>
-            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;.gitkeep&quot;</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Deleted: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to delete </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
-
-
-
 <div class="viewcode-block" id="list_of_algorithms">
 <a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.list_of_algorithms">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">list_of_algorithms</span><span class="p">():</span>
@@ -2945,7 +2894,7 @@
         <span class="s2">&quot;meteo&quot;</span><span class="p">,</span>
         <span class="s2">&quot;motion&quot;</span><span class="p">,</span>
         <span class="s2">&quot;soccer&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;solar&quot;</span><span class="p">,</span>
+        <span class="c1">#&quot;solar&quot;,</span>
         <span class="s2">&quot;sport-activity&quot;</span><span class="p">,</span>
         <span class="s2">&quot;stock-exchange&quot;</span><span class="p">,</span>
         <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>

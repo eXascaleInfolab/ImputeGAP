@@ -5,7 +5,9 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/imputegap" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/docs" />
+      <excludeFolder url="file://$MODULE_DIR$/imputegap/algorithms/lib" />
       <excludeFolder url="file://$MODULE_DIR$/imputegap/imputegap_assets" />
+      <excludeFolder url="file://$MODULE_DIR$/imputegap/notebooks" />
       <excludeFolder url="file://$MODULE_DIR$/imputegap/runners" />
       <excludeFolder url="file://$MODULE_DIR$/imputegap/wrapper" />
     </content>

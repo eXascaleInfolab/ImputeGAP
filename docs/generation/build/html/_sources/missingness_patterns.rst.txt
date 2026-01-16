@@ -28,6 +28,9 @@ MONO-BLOCK
 ----------
 One missing block per series
 
+.. raw:: html
+
+   <br>
 
 **Aligned**
 
@@ -43,6 +46,18 @@ The missing blocks are aligned.
 .. raw:: html
 
    <br>
+
+
+.. image:: _img/aligned.png
+   :alt: ImputeGAP Aligned Pattern
+   :align: left
+   :class: portrait
+
+``ts_m = GenGap.aligned(ts.data, rate_dataset=0.6, rate_series=0.4, offset=25)``
+
+.. raw:: html
+
+   <br><br>
 
 
 **Disjoint**
@@ -61,6 +76,18 @@ The missing blocks are disjoint.
 
    <br>
 
+.. image:: _img/disjoint.png
+   :alt: ImputeGAP Disjoint Pattern
+   :align: left
+   :class: portrait
+
+``ts_m = GenGap.disjoint(ts.data, rate_series=0.4, offset=25)``
+
+
+.. raw:: html
+
+   <br><br>
+
 
 **Overlap**
 
@@ -74,10 +101,22 @@ The missing blocks are overlapping.
     -   Each subsequent missing block starts after the previous one ends, but with a shift back of ``X%``, creating an overlap.
     -   This pattern continues until the limit or ``N`` is reached.
 
-
 .. raw:: html
 
    <br>
+
+.. image:: _img/overlap.png
+   :alt: ImputeGAP Overlap Pattern
+   :align: left
+   :class: portrait
+
+``ts_m = GenGap.overlap(ts.data, rate_series=0.4, offset=25)``
+
+
+.. raw:: html
+
+   <br><br>
+
 
 
 **Scattered**
@@ -95,6 +134,17 @@ The missing blocks are scattered.
 
    <br>
 
+.. image:: _img/scatter.png
+   :alt: ImputeGAP Scatter Pattern
+   :align: left
+   :class: portrait
+
+``ts_m = GenGap.scattered(ts.data, rate_dataset=0.6, rate_series=0.4, offset=25)``
+
+.. raw:: html
+
+   <br><br>
+
 
 .. _scenario_multi_block:
 
@@ -103,6 +153,9 @@ MULTI-BLOCK
 
 Multiple missing blocks per series
 
+.. raw:: html
+
+   <br>
 
 **MCAR**
 
@@ -118,6 +171,18 @@ The blocks are missing completely at random
 
    <br>
 
+.. image:: _img/mcar.png
+   :alt: ImputeGAP Aligned Pattern
+   :align: left
+   :class: portrait
+
+``ts_m = GenGap.mcar(ts.data, rate_dataset=0.6, rate_series=0.4, block_size=2, offset=25)``
+
+
+.. raw:: html
+
+   <br><br>
+
 
 **Block Distribution**
 
@@ -130,3 +195,20 @@ The missing blocks follow a distribution.
 
 To configure the block distribution pattern, please refer to this `page <tutorials_distribution.html>`_.
 
+
+.. raw:: html
+
+   <br>
+
+.. image:: _img/distribution.png
+   :alt: ImputeGAP Distribution Pattern
+   :align: left
+   :class: portrait
+
+
+``ts_m = GenGap.distribution(ts.data, rate_dataset=0.6, rate_series=0.4, probabilities_list=probs, offset=25)``
+
+
+.. raw:: html
+
+   <br><br>

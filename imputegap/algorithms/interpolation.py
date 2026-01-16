@@ -48,11 +48,8 @@ def interpolation(incomp_data, method="linear", poly_order=2, logs=True, verbose
 
         n_known = int(mask_known.sum())
         if n_known == 0:
-            # nothing to interpolate; leave as NaN or choose a fallback, e.g. 0.0
-            # recov_data[:, j] = 0.0
             continue
         if n_known == 1:
-            # only one known point -> fill with that constant
             recov_data[np.isnan(col), j] = col[mask_known][0]
             continue
 
@@ -66,13 +63,11 @@ def interpolation(incomp_data, method="linear", poly_order=2, logs=True, verbose
             if len(x_known) > poly_order:
                 interp_func = np.poly1d(np.polyfit(x_known, y_known, poly_order))  # Polynomial fit
             else:
-                print(f"Not enough polynomial degree for method {method}, fall into linear")
                 interp_func = interp1d(x_known, y_known, kind="linear", fill_value="extrapolate", bounds_error=False)
         elif method == "spline":
             if len(x_known) > poly_order:
                 interp_func = interp1d(x_known, y_known, kind="cubic", fill_value="extrapolate", bounds_error=False)
             else:
-                print(f"Not enough polynomial degree for method {method}, fall into linear")
                 interp_func = interp1d(x_known, y_known, kind="linear", fill_value="extrapolate", bounds_error=False)
         else:
             raise ValueError("Invalid interpolation method. Choose from 'linear', 'polynomial', 'spline', or 'nearest'")

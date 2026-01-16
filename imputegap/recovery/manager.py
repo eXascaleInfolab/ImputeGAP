@@ -26,8 +26,6 @@ def select_backend():
             matplotlib.use("TkAgg")  # fallback
         except (ImportError, RuntimeError):
             matplotlib.use("Agg")
-
-    # Linux or Windows
     else:
         for backend in ["TkAgg", "QtAgg", "Qt5Agg", "Agg"]:
             try:
@@ -184,9 +182,8 @@ class TimeSeries:
                     data = importlib.resources.files('imputegap.datasets').joinpath(data)
 
                 if not os.path.exists(data):
-                    data = ".." + saved_data
-                    if not os.path.exists(data):
-                        data = data[1:]
+                    here = os.path.dirname(os.path.dirname(__file__))
+                    data = os.path.join(here, "datasets/", data)
 
                 self.data = np.genfromtxt(data, delimiter=' ', max_rows=nbr_val, skip_header=int(header))
 
@@ -580,7 +577,7 @@ class TimeSeries:
 
                     ax.set_title('Series ' + str(i+1), fontsize=9)
                     #ax.plot([], [], ' ', label='Series ' + str(i + 1))  # invisible line with label
-                    ax.set_xlabel('Timestamp', fontsize=7)
+                    ax.set_xlabel('Timestamps', fontsize=7)
                     ax.set_ylabel('Values', fontsize=7)
                     if legends:
                         ax.legend(handles[::-1], labels[::-1], loc='upper left', fontsize=6, frameon=True, fancybox=True, framealpha=0.8, ncol=len(ax.get_legend_handles_labels()[0]))
@@ -598,8 +595,11 @@ class TimeSeries:
                 axes[idx].axis('off')
 
         if not subplot:
-            plt.xlabel('Timestamp')
-            plt.ylabel('Values')
+            ax = plt.gca()
+            ax.tick_params(axis='both', labelsize=14)  # increase tick label size
+
+            plt.xlabel('Timestamps', fontsize=15)
+            plt.ylabel('Values', fontsize=15)
             if legends:
                 plt.legend(
                     loc='upper left',
@@ -620,7 +620,7 @@ class TimeSeries:
             current_time = now.strftime("%y_%m_%d_%H_%M_%S")
 
             if not legends:
-                current_time = "img"
+                current_time = "imputegap"
 
             if cont_rate is None:
                 file_path = os.path.join(save_path + "/" + current_time + "_" + algorithm + "_plot.jpg")

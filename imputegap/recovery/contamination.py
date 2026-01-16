@@ -168,10 +168,7 @@ class GenGap:
             B = int(W / block_size)  # number of block to remove
 
             if B <= 0:
-                raise ValueError("The number of block to remove must be greater than 0. "
-                                 "The dataset or the number of blocks may not be appropriate."
-                                 "One series has", str(N), "population is ", str((N - P)), "the number to remove",
-                                 str(W), "and block site", str(block_size), "")
+                raise ValueError("The number of block to remove must be greater than 0. The dataset or the number of blocks may not be appropriate. One series has", str(N), "population is ", str((N - P)), "the number to remove str(W), and block site", str(block_size), "")
 
             data_to_remove = np.random.choice(range(P, N), B, replace=False)
 

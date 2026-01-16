@@ -512,8 +512,7 @@ class Optimization:
 
                 configs = [(np.random.choice(temp_rank_range), np.random.choice(sh_params.CDREC_EPS_RANGE), np.random.choice(sh_params.CDREC_ITERS_RANGE)) for _ in range(num_configs)]
             elif algorithm == 'iim':
-                configs = [(np.random.choice(sh_params.IIM_LEARNING_NEIGHBOR_RANGE))
-                           for _ in range(num_configs)]
+                configs = [(np.random.choice(sh_params.IIM_LEARNING_NEIGHBOR_RANGE)) for _ in range(num_configs)]
             elif algorithm == 'mrnn':
                 configs = [(np.random.choice(sh_params.MRNN_HIDDEN_DIM_RANGE), np.random.choice(sh_params.MRNN_LEARNING_RATE_CHANGE), np.random.choice(sh_params.MRNN_NUM_ITER_RANGE)) for _ in range(num_configs)]
             elif algorithm == 'stmvl':
@@ -541,17 +540,14 @@ class Optimization:
             if algorithm == 'iim':
                 best_config = min(configs, key=lambda single_config: self._objective(Imputation.evaluate_params(input_data, incomp_data, [single_config], algorithm), metrics))
             else:
-                best_config = min(configs, key=lambda config: self._objective(
-                    Imputation.evaluate_params(input_data, incomp_data, config, algorithm), metrics))
+                best_config = min(configs, key=lambda config: self._objective(Imputation.evaluate_params(input_data, incomp_data, config, algorithm), metrics))
 
             best_score = self._objective(
                 Imputation.evaluate_params(input_data, incomp_data, best_config, algorithm), metrics)
 
             # Check the size of param_names[algorithm]
             if len(param_names[algorithm]) == 1:
-                # If only one parameter name, wrap best_config in a list if it's not already
                 best_config = [best_config] if not isinstance(best_config, list) else best_config
-            # Create the dictionary using zip
             best_config_dict = {name: value for name, value in zip(param_names[algorithm], best_config)}
 
             end_time = time.time()
@@ -570,9 +566,6 @@ class Optimization:
             """
             imputer = utils.config_impute_algorithm(incomp_data, algorithm, verbose=False)
             imputer.impute(user_def=True, params=params)
-
-            print(f"{params = }")
-
             imputer.score(input_data=input_data)
             score = imputer.metrics.get(used_metric, "Key not found")
             return score
@@ -625,7 +618,6 @@ class Optimization:
 
             def objective_wrapper(config):
                 params = {key: config[key] for key in config}
-
                 try:
                     score = self._objective(params, input_data, incomp_data, algorithm, used_metric)
                     if score is None or not isinstance(score, (int, float)):
@@ -633,7 +625,6 @@ class Optimization:
                 except Exception as e:
                     print(f"\n\n\n\t\t\t(RAY_TUNE OBJECTIVE ERROR) >> Error in objective function: {e}")
                     score = float("inf")  # Return worst possible score
-
                 return {used_metric: score}  # Ensures correct format
 
             analysis = tune.run(

@@ -2531,7 +2531,7 @@ def list_of_datasets(txt=False):
         "meteo",
         "motion",
         "soccer",
-        "solar",
+        #"solar",
         "sport-activity",
         "stock-exchange",
         "temperature",

@@ -152,11 +152,15 @@ class TestException(unittest.TestCase):
         ts.plot(ts.data, style="mono")
         ts.plot(ts.data, legends=False, nbr_series=1)
 
+
         imputer.recov_data = imputer.recov_data *1000
         # compute and print the imputation metrics
-        imputer.score(ts.data, imputer.recov_data)
-        imputer.score(ts.data, ts.data)
-        imputer.score(ts.data, np.zeros_like(ts.data))
+        imputer.score(ts.data, imputer.recov_data, verbose=True)
+        imputer.score(ts.data, ts.data, verbose=True)
+        imputer.score(ts.data, np.zeros_like(ts.data), verbose=True)
+        imputer.score(ts.data, imputer.recov_data, verbose=False)
+        imputer.score(ts.data, ts.data, verbose=False)
+        imputer.score(ts.data, np.zeros_like(ts.data), verbose=False)
 
         imputer.recov_data[1, :] = np.nan
         imputer.score(ts.data, imputer.recov_data, mask=np.isnan(imputer.recov_data))
@@ -212,6 +216,18 @@ class TestException(unittest.TestCase):
 
         _ = utils.clean_missing_values(ts.data)
         _ = utils.handle_nan_input(ts.data, ts2.data)
+
+        MM = ts.data
+        MM[1, :] = np.nan
+        ts.plot(ts.data,incomp_data=MM, style="mono")
+        ts.plot(ts.data,incomp_data=MM, style="mono", subplot=False)
+        ts.plot(ts.data,incomp_data=MM, subplot=False)
+        ts.plot(ts.data,incomp_data=MM, subplot=False, nbr_series=0)
+
+        ts.shift(1,2)
+        ts.range(1,2)
+
+
 
     def test_paths_raises(self):
         import os
@@ -371,13 +387,23 @@ class TestException(unittest.TestCase):
         ts = TimeSeries()
         ts.import_matrix(np.array([[12.0, 12, 12, 12], [12, 12, 12, 12], [12, 12, 12, 12], [12, 12, 12, 12], [12, 12, 12, 12], [12, 12, 12, 12], [12, 12, 12, 12], [12, 12, 12, 12]]))
         for pattern in s:
+            print(f"\n\n\n{pattern = }")
             _ = utils.config_contamination(ts=ts, pattern=pattern)
+            _ = utils.config_contamination(ts=ts, pattern=pattern, logic_by_series=False)
+
+            if pattern != "distribution":
+                with pytest.raises(ValueError) as excinfo:
+                    _ = utils.config_contamination(ts=ts, pattern=pattern, offset=(ts.data.shape[0] + 10), verbose=True)
+                    print(f"{excinfo = }")
 
         _ = GenGap.mcar(ts.data, rate_dataset=0.5, rate_series=0.5, logic_by_series=False, block_size=1, offset=0)
         self.assertTrue(alpha, True)
 
         with pytest.raises(ValueError) as excinfo:
             _ = utils.config_contamination(ts=ts, pattern="dfds", offset=100)
+
+        with pytest.raises(ValueError) as excinfo:
+            _ = GenGap.distribution(ts.data, probabilities_list=[1])
 
         for pattern in s:
             if pattern != "distribution":
@@ -387,6 +413,10 @@ class TestException(unittest.TestCase):
 
         _ = GenGap.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
         _ = GenGap.aligned(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        _ = GenGap.gaussian(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        _ = GenGap.scattered(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        with pytest.raises(ValueError):
+            _ = GenGap.distribution(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True, probabilities_list=[1])
 
         ts.data[1, 3] = np.nan
         _ = GenGap.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)

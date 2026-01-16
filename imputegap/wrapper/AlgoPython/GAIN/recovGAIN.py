@@ -76,16 +76,16 @@ def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9,
   m_mask = np.isnan(ts_m)
   input_data = np.copy(ts_m)
 
-  args = handle_parser()
+  _ = handle_parser()
+
+  if batch_size > input_data.shape[0]:
+    old_batch_size = batch_size
+    batch_size = input_data.shape[0] // 2
+    print(f"\n(ERROR): {old_batch_size} > {input_data.shape[0]}, in order to train the model, reduction of the batch_size: {batch_size}.")
 
   if verbose:
     print(f"(IMPUTATION) GAIN\n\tMatrix: {input_data.shape[0]}, {input_data.shape[1]}\n\tbatch_size: {batch_size}\n\tepochs: {iterations}\n\talpha: {alpha}\n\thint_rate: {hint_rate}\n\ttr_ratio: {tr_ratio}\n")
     print(f"call: gain.impute(params={{'batch_size': {batch_size}, 'epochs': {iterations}, 'alpha': {alpha}, 'hint_rate': {hint_rate}}})\n")
-
-    if batch_size > input_data.shape[0]:
-      old_batch_size = batch_size
-      batch_size = input_data.shape[0]//2
-      print(f"\n(ERROR): {old_batch_size} > {input_data.shape[0]}, in order to train the model, reduction of the batch_size: {batch_size}.")
 
   inc = 1
   tries, max_tries = 0, 10
