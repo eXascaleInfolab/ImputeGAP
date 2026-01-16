@@ -2,7 +2,7 @@
 Datasets
 ========
 
-The library currently hosts 16 datasets spanning 8 domains! Those datasets were collected from various time series imputation works in recent years. The datasets are stored in ``./imputegap/datasets`` and are represented using a ``numpy.ndarray`` structure.
+The library currently hosts 14 datasets spanning 8 domains! Those datasets were collected from various time series imputation works in recent years. The datasets are stored in ``./imputegap/datasets`` and are represented using a ``numpy.ndarray`` structure.
 
 .. raw:: html
 
@@ -49,8 +49,6 @@ The library currently hosts 16 datasets spanning 8 domains! Those datasets were 
 **Neuroscience**
 
     -   `eeg-alcohol <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-ALCOHOL>`_
-    -   `eeg-reading <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-READING>`_
-    -   `fmri-stoptask <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#fMRI-STOPTASK>`_
 
 
 **IoT Sensing**
@@ -69,7 +67,6 @@ The library currently hosts 16 datasets spanning 8 domains! Those datasets were 
 **Energy**
 
     -   `electricity <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#electricity>`_
-    -   `solar <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#solar>`_
 
 
 **Finance**
