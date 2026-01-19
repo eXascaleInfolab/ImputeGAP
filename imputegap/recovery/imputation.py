@@ -2158,7 +2158,7 @@ class Imputation:
 
             Example
             -------
-            $ imputer.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 200, "sliding_windows":1, "target_strategy":"random", "nsamples": 100, "num_workers":0})
+            $ imputer.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 20, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})
 
             Changes
             -------
@@ -2225,7 +2225,7 @@ class Imputation:
                 -------
                     >>> pristi_imputer = Imputation.DeepLearning.PriSTI(incomp_data)
                     >>> pristi_imputer.impute()  # default parameters for imputation > or
-                    >>> pristi_imputer.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 200, "sliding_windows":1, "target_strategy":"random", "nsamples": 100, "num_workers":0})  # user-defined > or
+                    >>> pristi_imputer.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 20, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})  # user-defined > or
                     >>> pristi_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
                     >>> recov_data = pristi_imputer.recov_data
 

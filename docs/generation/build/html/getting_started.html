@@ -375,9 +375,10 @@ sudo<span class="w"> </span>apt-get<span class="w"> </span>update
 <li><p>Update your package list and install prerequisites:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+
 sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>build-essential<span class="w"> </span>libssl-dev<span class="w"> </span>zlib1g-dev<span class="w"> </span>libncurses5-dev<span class="w"> </span>libncursesw5-dev<span class="w"> </span><span class="se">\</span>
 libreadline-dev<span class="w"> </span>libsqlite3-dev<span class="w"> </span>libgdbm-dev<span class="w"> </span>libdb5.3-dev<span class="w"> </span>libbz2-dev<span class="w"> </span>libexpat1-dev<span class="w"> </span>liblzma-dev<span class="w"> </span><span class="se">\</span>
-tk-dev<span class="w"> </span>python3-tk<span class="w"> </span>libopenblas0<span class="w"> </span>software-properties-common<span class="w"> </span>python3-pip
+tk-dev<span class="w"> </span>python3-tk<span class="w"> </span>libopenblas0<span class="w"> </span>libarmadillo-dev<span class="w"> </span>software-properties-common<span class="w"> </span>python3-pip
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
@@ -421,19 +422,25 @@ sudo<span class="w"> </span>apt-get<span class="w"> </span>update
 <br><br></div><div aria-labelledby="tab-1-1-2" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-2" name="1-2" role="tabpanel" tabindex="0"><p><strong>Prepare Python 3.12 Environment</strong></p>
 <p>To ensure a proper Python setup, we recommend creating a dedicated Python environment for the project. Python 3.12 is a suitable and supported choice.</p>
 <ol class="arabic simple">
+<li><p>Install Xcode Command Line Tools (required by Homebrew):</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>xcode-select<span class="w"> </span>--install
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
 <li><p>Install Homebrew (if not already installed):</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Update Homebrew and install Python 3.12:</p></li>
+<ol class="arabic simple" start="3">
+<li><p>Update Homebrew, install prerequisites, and install Python 3.12:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>update
-brew<span class="w"> </span>install<span class="w"> </span>python@3.12
+brew<span class="w"> </span>install<span class="w"> </span>openssl<span class="w"> </span>zlib<span class="w"> </span>ncurses<span class="w"> </span>readline<span class="w"> </span>sqlite<span class="w"> </span>gdbm<span class="w"> </span>berkeley-db@5<span class="w"> </span>bzip2<span class="w"> </span>expat<span class="w"> </span>xz<span class="w"> </span>tcl-tk<span class="w"> </span>openblas<span class="w"> </span>armadillo<span class="w"> </span>python@3.12
 </pre></div>
 </div>
-<ol class="arabic simple" start="3">
+<ol class="arabic simple" start="4">
 <li><p>Verify the installation:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3.12<span class="w"> </span>--version
@@ -458,6 +465,10 @@ brew<span class="w"> </span>install<span class="w"> </span>python@3.12
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>imputegap
 </pre></div>
 </div>
+<ol class="arabic simple" start="4">
+<li><p>⚠️ Warning</p></li>
+</ol>
+<p>Depending on your macOS security settings, you may need to manually approve the C++ wrapper library (<cite>.dylib</cite> file) in <strong>System Settings → Privacy &amp; Security</strong> before it can be loaded.</p>
 </div></div>
 </div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><p>If you would like to extend the library, you can install from source:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>init

@@ -220,7 +220,8 @@ class Controller:
                 if self.early_stop_patience > 0:
                     self.early_stop_patience -= 1
                 elif self.early_stop_patience == 0:
-                    logger.info("early_stop_patience has been exhausted, stop training now")
+                    if verbose:
+                        logger.info("early_stop_patience has been exhausted, stop training now")
                     self.state_dict["should_stop"] = True  # to stop training process
                 else:
                     pass  # which means early_stop_patience_value is set as -1, not work
@@ -256,10 +257,11 @@ def save_model(model, optimizer, model_state_info, args, saving_path):
     torch.save(checkpoint, saving_path)
 
 
-def load_model(model, checkpoint_path, logger):
+def load_model(model, checkpoint_path, logger, verbose=True):
     checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
     model.load_state_dict(checkpoint["model_state_dict"])
-    logger.info(f"Already restored model from checkpoint: {checkpoint_path}")
+    if verbose:
+        logger.info(f"Already restored model from checkpoint: {checkpoint_path}")
     return model
 
 

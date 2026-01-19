@@ -75,7 +75,7 @@ def sait_loader_w_imputegap(incomp_data, seq_len, features, here, sliding_window
     saving_path = "datasets"
     dataset_name = "saits"
 
-    ts_r, val_r = utils_imp.sets_splitter_based_on_training(tr_ratio, verbose=True)
+    ts_r, val_r = utils_imp.sets_splitter_based_on_training(tr_ratio, verbose=verbose)
     #ts_m = utils_imp.dataset_add_dimensionality(matrix_in, seq_length=seq_len, three_dim=True, verbose=True)
 
     dataset_saving_dir = os.path.join(here, saving_path, dataset_name)
@@ -145,8 +145,7 @@ def sait_loader_w_imputegap(incomp_data, seq_len, features, here, sliding_window
 
     if verbose:
         print(f"\n\t{train_sample_num} windows in train set of length {seq_len}\n\t{val_sample_num} windows in val set of length {seq_len}\n\t{test_sample_num} windows in test set of length {seq_len}\n\n")
-
-    print(f"{dataset_saving_dir = }")
+        print(f"{dataset_saving_dir = }")
     saving_into_h5(dataset_saving_dir, processed_data, classification_dataset=False)
 
     if norm:

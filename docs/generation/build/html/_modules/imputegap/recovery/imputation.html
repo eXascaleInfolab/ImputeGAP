@@ -2621,7 +2621,7 @@
 
 <span class="sd">            Example</span>
 <span class="sd">            -------</span>
-<span class="sd">            $ imputer.impute(params={&quot;seq_len&quot;:-1, &quot;batch_size&quot;:-1, &quot;epochs&quot;: 200, &quot;sliding_windows&quot;:1, &quot;target_strategy&quot;:&quot;random&quot;, &quot;nsamples&quot;: 100, &quot;num_workers&quot;:0})</span>
+<span class="sd">            $ imputer.impute(params={&quot;seq_len&quot;:-1, &quot;batch_size&quot;:-1, &quot;epochs&quot;: 20, &quot;sliding_windows&quot;:1, &quot;target_strategy&quot;:&quot;random&quot;, &quot;nsamples&quot;: 1, &quot;num_workers&quot;:0})</span>
 
 <span class="sd">            Changes</span>
 <span class="sd">            -------</span>
@@ -2690,7 +2690,7 @@
 <span class="sd">                -------</span>
 <span class="sd">                    &gt;&gt;&gt; pristi_imputer = Imputation.DeepLearning.PriSTI(incomp_data)</span>
 <span class="sd">                    &gt;&gt;&gt; pristi_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; pristi_imputer.impute(params={&quot;seq_len&quot;:-1, &quot;batch_size&quot;:-1, &quot;epochs&quot;: 200, &quot;sliding_windows&quot;:1, &quot;target_strategy&quot;:&quot;random&quot;, &quot;nsamples&quot;: 100, &quot;num_workers&quot;:0})  # user-defined &gt; or</span>
+<span class="sd">                    &gt;&gt;&gt; pristi_imputer.impute(params={&quot;seq_len&quot;:-1, &quot;batch_size&quot;:-1, &quot;epochs&quot;: 20, &quot;sliding_windows&quot;:1, &quot;target_strategy&quot;:&quot;random&quot;, &quot;nsamples&quot;: 1, &quot;num_workers&quot;:0})  # user-defined &gt; or</span>
 <span class="sd">                    &gt;&gt;&gt; pristi_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # automl with ray_tune</span>
 <span class="sd">                    &gt;&gt;&gt; recov_data = pristi_imputer.recov_data</span>
 

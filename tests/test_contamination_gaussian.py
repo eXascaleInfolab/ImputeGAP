@@ -40,6 +40,37 @@ class TestContaminationGaussian(unittest.TestCase):
                                      (f"\nExpected {expected_nan} total missing values but found {n_nan}\n\t"
                                       f"for dataset_rate {S * 100}% and series_rate {R * 100}% / ({M},{N})\n\t"))
 
+    def test_gaussian_selection_vls(self):
+        """
+        the goal is to test if the number of NaN values expected are provided in the contamination output
+        """
+
+        datasets = ["drift", "chlorine", "eeg-alcohol"]
+        series_impacted = [0.1, 0.5, 1]  # percentage of series impacted
+        missing_rates = [0.1, 0.5, 0.9]  # percentage of missing values with NaN
+
+        for dataset in datasets:
+            ts = TimeSeries()
+            ts.load_series(utils.search_path(dataset))
+            P = math.ceil(ts.data.shape[0] * 0.1)
+
+            for S in series_impacted:
+                for R in missing_rates:
+                    incomp_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P, selected_mean="position")
+                    N, M = incomp_data.shape
+
+                    n_nan = np.isnan(incomp_data).sum()
+                    expected_nan_series = math.ceil(S * M)
+                    expected_nan_values = int(N * R)
+                    expected_nan = expected_nan_series * expected_nan_values
+
+                    print(f"\nExpected {expected_nan} total missing values but found {n_nan}\n\t"
+                          f"for dataset_rate {S * 100}% and series_rate {R * 100}% / ({M},{N})\n\t")
+
+                    self.assertEqual(expected_nan, n_nan,
+                                     (f"\nExpected {expected_nan} total missing values but found {n_nan}\n\t"
+                                      f"for dataset_rate {S * 100}% and series_rate {R * 100}% / ({M},{N})\n\t"))
+
 
     def test_gaussian_position(self):
         """
@@ -81,7 +112,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
                     for std_dev in std_devs:
                         # Generate contamination with the current standard deviation
-                        contaminated_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, std_dev=std_dev, offset=P)
+                        contaminated_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, std_dev=std_dev, offset=P, selected_mean="values")
                         contaminated_data = contaminated_data.T
 
                         # Calculate positions of NaN values
@@ -98,6 +129,40 @@ class TestContaminationGaussian(unittest.TestCase):
                         f"Medium deviation density {densities[0.2]} should be more tightly packed than high deviation density {densities[0.5]}, "
                         f"for dataset {dataset}, series impacted {S}, and missing rate {R}. (Center: {center})")
 
+    def test_gaussian_logic(self):
+        """
+        Test that Gaussian contamination behaves as expected with the POSITION strategy:
+        a higher std_dev should produce NaNs that are, on average, farther from the center
+        (i.e., more spread out) than a lower std_dev.
+        """
+
+        datasets = ["chlorine"]
+        nbr_series_impacted = [0.2, 0.5, 0.80]
+        missing_rates_per_series = [0.4, 0.6]
+        std_devs = [0.2, 0.5]
+        offset = 0.1
+
+        for dataset in datasets:
+            ts = TimeSeries()
+            ts.load_series(utils.search_path(dataset))
+            T = ts.data.shape[0]
+            P_idx = int(np.ceil(offset * T))
+            center = (P_idx + (T - 1)) / 2
+
+            for S in nbr_series_impacted:
+                for R in missing_rates_per_series:
+                    densities = {}
+                    for std_dev in std_devs:
+                        contaminated_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, std_dev=std_dev, offset=offset, selected_mean="position", )
+                        contaminated_data = contaminated_data.T
+                        nan_positions = np.where(np.isnan(contaminated_data))
+                        valid = nan_positions[1] >= P_idx
+                        time_idx = nan_positions[1][valid]
+
+                        density = np.abs(time_idx - center).mean()
+                        densities[std_dev] = density
+
+                    self.assertLess(densities[0.2], densities[0.5], f"Low std_dev should be more tightly packed than high std_dev. (densities: {densities}) for dataset {dataset}, series impacted {S}, missing rate {R}. (Center: {center}, P_idx: {P_idx})")
 
     def test_gaussian_missing_percentage_total(self):
         """

@@ -2,7 +2,7 @@
 Datasets
 ========
 
-The library currently hosts 16 datasets spanning 8 domains! Those datasets were collected from various time series imputation works in recent years. The datasets are stored in ``./imputegap/datasets`` and are represented using a ``numpy.ndarray`` structure.
+The library currently hosts 14 datasets spanning 8 domains! Those datasets were collected from various time series imputation works in recent years. The datasets are stored in ``./imputegap/datasets`` and are represented using a ``numpy.ndarray`` structure.
 
 .. raw:: html
 
@@ -28,53 +28,50 @@ The library currently hosts 16 datasets spanning 8 domains! Those datasets were 
 
 **Weather**
 
-    -   `climate <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#climate>`_
-    -   `meteo <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#meteoswiss>`_
-    -   `temperature <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#temperature>`_
+    -   `climate <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Climate-Change-Dataset>`_
+    -   `meteo <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#MeteoSwiss-Weather-Dataset>`_
+    -   `temperature <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#China-Climate-Temperature-Dataset>`_
 
 
 **Air Quality**
 
-    -   `airq <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#AIR-QUALITY>`_
-    -   `drift <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#drift>`_
+    -   `airq <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Air-Quality-Dataset>`_
+    -   `drift <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Gas-Sensor-Array-Drift-Dataset>`_
 
 
 
 **Water Quality**
 
-    -   `bafu <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#bafu>`_
-    -   `chlorine <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#chlorine>`_
+    -   `bafu <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#BAFU-Water-Discharge-Dataset>`_
+    -   `chlorine <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Chlorine-Residual-Dataset>`_
 
 
 **Neuroscience**
 
-    -   `eeg-alcohol <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-ALCOHOL>`_
-    -   `eeg-reading <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-READING>`_
-    -   `fmri-stoptask <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#fMRI-STOPTASK>`_
+    -   `eeg-alcohol <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-Alcohol-Dataset>`_
 
 
 **IoT Sensing**
 
-    -   `motion <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#motion>`_
-    -   `traffic <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#traffic>`_
+    -   `motion <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Motion-Sensor-Dataset>`_
+    -   `traffic <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#PEMS-Traffic-Dataset>`_
 
 
 **Sports**
 
-    -   `soccer <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#soccer>`_
-    -   `sport-activity <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#sport-activity>`_
+    -   `soccer <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Soccer-Player-Tracking-Dataset>`_
+    -   `sport-activity <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Sport-Activity-Dataset>`_
 
 
 
 **Energy**
 
-    -   `electricity <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#electricity>`_
-    -   `solar <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#solar>`_
+    -   `electricity <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Electricity-Consumption-Dataset>`_
 
 
 **Finance**
 
-    -   `stock-exchange <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#stock-exchange>`_
+    -   `stock-exchange <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Stock-Exchange-Rates-Dataset>`_
 
 
 

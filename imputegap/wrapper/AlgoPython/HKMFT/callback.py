@@ -82,11 +82,12 @@ class EpochConvergeCallback(AbstractConvergeCallback):
             self._max_epoch = 100000000
         else:
             self._max_epoch = int(max_epoch)
+        self.verbose=verbose
 
     def on_epoch(self, p, it_set, err, old_A_hat, new_A_hat,
                  Hpx_mask, Hpx_tag, verbose, *args, **kwargs) -> bool:
         super().on_epoch(p, it_set, err, old_A_hat, new_A_hat,
-                         Hpx_mask, Hpx_tag, verbose, *args, **kwargs)
+                         Hpx_mask, Hpx_tag, self.verbose, *args, **kwargs)
         self._max_epoch -= 1
         if self._max_epoch <= 0:
             return False

@@ -34,13 +34,14 @@ One missing block per series
 
 **Aligned**
 
-The missing blocks are aligned.
+Missing blocks start and end at the same selected positions across the chosen series, resulting in aligned missing intervals.
 
 .. note::
 
     -   ``R ∈ [1%, (100-W)%]``
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position is the same and begins at ``W`` and progresses until the size of the missing block is reached, affecting the first series from the top up to ``S%`` of the dataset.
+    -   Cde: ``GenGap.aligned(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -48,12 +49,12 @@ The missing blocks are aligned.
    <br>
 
 
-.. image:: _img/aligned.png
+.. image:: _img/imputegap_aligned.png
    :alt: ImputeGAP Aligned Pattern
    :align: left
    :class: portrait
 
-``ts_m = GenGap.aligned(ts.data, rate_dataset=0.6, rate_series=0.4, offset=25)``
+
 
 .. raw:: html
 
@@ -62,7 +63,7 @@ The missing blocks are aligned.
 
 **Disjoint**
 
-The missing blocks are disjoint.
+Each missing block begins where the previous one ends, so the missing intervals are consecutive and do not overlap.
 
 .. note::
 
@@ -70,18 +71,17 @@ The missing blocks are disjoint.
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position of the first missing block begins at ``W``.
     -   Each subsequent missing block starts immediately after the previous one ends, continuing this pattern until the limit of the dataset or ``N`` is reached.
+    -   Code: ``GenGap.disjoint(ts.data, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
 
    <br>
 
-.. image:: _img/disjoint.png
+.. image:: _img/imputegap_disjoint.png
    :alt: ImputeGAP Disjoint Pattern
    :align: left
    :class: portrait
-
-``ts_m = GenGap.disjoint(ts.data, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -91,7 +91,7 @@ The missing blocks are disjoint.
 
 **Overlap**
 
-The missing blocks are overlapping.
+Each missing block starts at the end of the previous one with a specified shift, so the missing intervals are consecutive and overlap.
 
 .. note::
 
@@ -100,17 +100,16 @@ The missing blocks are overlapping.
     -   The starting position of the first missing block begins at ``W``.
     -   Each subsequent missing block starts after the previous one ends, but with a shift back of ``X%``, creating an overlap.
     -   This pattern continues until the limit or ``N`` is reached.
+    -   Code: ``GenGap.overlap(ts.data, rate_series=0.4, offset=25, shift=0.1)``
 
 .. raw:: html
 
    <br>
 
-.. image:: _img/overlap.png
+.. image:: _img/imputegap_overlap.png
    :alt: ImputeGAP Overlap Pattern
    :align: left
    :class: portrait
-
-``ts_m = GenGap.overlap(ts.data, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -121,25 +120,26 @@ The missing blocks are overlapping.
 
 **Scattered**
 
-The missing blocks are scattered.
+The missing blocks all have the same size, but their starting positions are chosen at random.
 
 .. note::
 
     -   ``R ∈ [1%, (100-W)%]``
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position is randomly shifted by adding a random value to ``W``, then progresses until the size of the missing block is reached, affecting the first series from the top up to ``S%`` of the dataset.
+    -   Code: ``GenGap.scattered(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
 
    <br>
 
-.. image:: _img/scatter.png
+.. image:: _img/imputegap_scattered.png
    :alt: ImputeGAP Scatter Pattern
    :align: left
    :class: portrait
 
-``ts_m = GenGap.scattered(ts.data, rate_dataset=0.6, rate_series=0.4, offset=25)``
+
 
 .. raw:: html
 
@@ -159,24 +159,24 @@ Multiple missing blocks per series
 
 **MCAR**
 
-The blocks are missing completely at random
+Missing blocks are introduced completely at random. Time series are selected at random, and blocks of a fixed size are removed at randomly chosen positions.
 
 .. note::
 
     -   ``R ∈ [1%, (100-W)%]``
     -   Data blocks of the same size are removed from arbitrary series at a random position between ``W`` and ``N``, until the total number of missing values per series is reached.
+    -   Code: ``GenGap.mcar(ts.data, rate_dataset=1, rate_series=0.2, offset=25, seed=False, block_size=20)``
 
 
 .. raw:: html
 
    <br>
 
-.. image:: _img/mcar.png
+.. image:: _img/imputegap_mcar.png
    :alt: ImputeGAP Aligned Pattern
    :align: left
    :class: portrait
 
-``ts_m = GenGap.mcar(ts.data, rate_dataset=0.6, rate_series=0.4, block_size=2, offset=25)``
 
 
 .. raw:: html
@@ -186,12 +186,13 @@ The blocks are missing completely at random
 
 **Block Distribution**
 
-The missing blocks follow a distribution.
+Missingness follows a probability distribution, each position has a certain chance of being missing.
 
 .. note::
 
     -   ``R ∈ [1%, (100-W)%]``
     -   Data is removed following a distribution given by the user for every values of the series, affecting the first series from the top up to ``S%`` of the dataset.
+    -   Code: ``GenGap.gaussian(ts.data, rate_dataset=1, rate_series=0.4, offset=25, selected_mean="position", std_dev=0.2)``
 
 To configure the block distribution pattern, please refer to this `page <tutorials_distribution.html>`_.
 
@@ -200,13 +201,11 @@ To configure the block distribution pattern, please refer to this `page <tutoria
 
    <br>
 
-.. image:: _img/distribution.png
+.. image:: _img/imputegap_distribution.png
    :alt: ImputeGAP Distribution Pattern
    :align: left
    :class: portrait
 
-
-``ts_m = GenGap.distribution(ts.data, rate_dataset=0.6, rate_series=0.4, probabilities_list=probs, offset=25)``
 
 
 .. raw:: html

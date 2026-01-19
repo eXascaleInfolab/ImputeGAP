@@ -153,8 +153,9 @@ class DataLoaderImputeGAP(object):
                     'tag_0': tags
                 })
 
-                print(f"{df.shape = }")
-                print(f"{df = }")
+                if verbose:
+                    print(f"{df.shape = }")
+                    print(f"{df = }")
 
             elif strat == "full":
                 df.columns = [f"data_{i}" for i in range(n_series)]

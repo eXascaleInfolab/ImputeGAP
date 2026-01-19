@@ -174,7 +174,6 @@ class TimeSeries:
 
         if data is not None:
             if isinstance(data, str):
-                saved_data = data
 
                 #  update path form inner library datasets
                 if data in utils.list_of_datasets(txt=True):

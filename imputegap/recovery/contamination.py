@@ -52,7 +52,10 @@ class GenGap:
 
     def mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
         """
-        Apply Missing Completely at Random (MCAR) contamination to selected series.
+        Missing blocks are introduced completely at random. Time series are selected at random, and blocks of a fixed size are removed at randomly chosen positions.
+
+        Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
+
 
         Parameters
         ----------
@@ -205,7 +208,10 @@ class GenGap:
 
     def aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True):
         """
-        Create aligned missing blocks across the selected series.
+        Missing blocks start and end at the same selected positions across the chosen series, resulting in aligned missing intervals.
+
+        Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
+
 
         Parameters
         ----------
@@ -306,7 +312,9 @@ class GenGap:
 
     def scattered(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
         """
-        Apply percentage shift contamination with random starting position to selected series.
+        The missing blocks all have the same size, but their starting positions are chosen at random.
+
+        Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
 
         Parameters
         ----------
@@ -440,9 +448,14 @@ class GenGap:
         """
         return GenGap.aligned(input_data, rate_dataset=1, rate_series=rate_series, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
 
-    def gaussian(input_data, rate_dataset=0.2, rate_series=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
+
+
+    def gaussian(input_data, rate_dataset=0.2, rate_series=0.2, selected_mean="position", std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
         """
-        Apply contamination with a Gaussian distribution to selected series
+        Missingness follows a probability distribution, each position has a certain chance of being missing.
+
+        Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
+
 
         Parameters
         ----------
@@ -454,6 +467,10 @@ class GenGap:
 
         rate_series : float, optional
             Percentage of missing values per series (default is 0.2).
+
+        selected_mean: str, optional
+            Strategy to compute the mean value (default : "position").
+            Possibilities : "position", "values".
 
         std_dev : float, optional
             Standard deviation of the Gaussian distribution for missing values (default is 0.4).
@@ -522,6 +539,7 @@ class GenGap:
                   f"\n\trate of missing data per series: {rate_series * 100}%"
                   f"\n\tsecurity offset: [0-{offset_nbr}]"
                   f"\n\tseed value: {seed_value}"
+                  f"\n\tmean strategy : {selected_mean}"
                   f"\n\tstandard deviation : {std_dev}\n")
 
         if offset_nbr + values_nbr > NS:
@@ -539,7 +557,14 @@ class GenGap:
             mean = np.mean(ts_contaminated[S])
             mean = max(min(mean, 1), -1)
 
-            probabilities = norm.pdf(R, loc=P + mean * (N - P), scale=std_dev * (N - P))
+            if selected_mean == "position":
+                center = (P + N) / 2
+            else:
+                center = P + mean * (N - P)
+
+            scale = std_dev * (N - P)
+
+            probabilities = norm.pdf(R, loc=center, scale=scale)
 
             # normalizes the probabilities so that their sum equals 1
             probabilities /= probabilities.sum()
@@ -557,7 +582,10 @@ class GenGap:
 
     def distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities_list=None, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
         """
-        Apply any distribution contamination to the time series data based on their probabilities.
+        Missingness follows a probability distribution, each position has a certain chance of being missing.
+
+        Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
+
 
         Parameters
         ----------
@@ -670,7 +698,10 @@ class GenGap:
 
     def disjoint(input_data, rate_series=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True):
         """
-        Apply disjoint contamination to selected series
+        Each missing block begins where the previous one ends, so the missing intervals are consecutive and do not overlap.
+
+        Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
+
 
         Parameters
         ----------
@@ -759,7 +790,9 @@ class GenGap:
 
     def overlap(input_data, rate_series=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True):
         """
-        Apply overlap contamination to selected series
+        Each missing block starts at the end of the previous one with a specified shift, so the missing intervals are consecutive and overlap.
+
+        Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
 
         Parameters
         ----------

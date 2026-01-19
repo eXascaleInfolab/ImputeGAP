@@ -52,15 +52,10 @@ def train(
                 loss.backward()
                 avg_loss += loss.item()
                 optimizer.step()
-                it.set_postfix(
-                    ordered_dict={
-                        "avg_epoch_loss": avg_loss / batch_no,
-                        "epoch": epoch_no,
-                        "total": config["epochs"],
-                    },
-                    refresh=False,
-                )
-            logging.info("avg_epoch_loss:" + str(avg_loss / batch_no) + ", epoch:" + str(epoch_no))
+                it.set_postfix(ordered_dict={"avg_epoch_loss": avg_loss / batch_no, "epoch": epoch_no, "total": config["epochs"], }, refresh=False, )
+            if verbose:
+                logging.info("avg_epoch_loss:" + str(avg_loss / batch_no) + ", epoch:" + str(epoch_no))
+
             if is_lr_decay:
                 lr_scheduler.step()
 
@@ -72,13 +67,7 @@ def train(
                     for batch_no, valid_batch in enumerate(it, start=1):
                         loss = model(valid_batch, is_train=0)
                         avg_loss_valid += loss.item()
-                        it.set_postfix(
-                            ordered_dict={
-                                "valid_avg_epoch_loss": avg_loss_valid / batch_no,
-                                "epoch": epoch_no,
-                            },
-                            refresh=False,
-                        )
+                        it.set_postfix(ordered_dict={"valid_avg_epoch_loss": avg_loss_valid / batch_no, "epoch": epoch_no, }, refresh=False, )
                     if verbose:
                         logging.info("valid_avg_epoch_loss"+str(avg_loss_valid / batch_no)+", epoch:"+str(epoch_no))
             if best_valid_loss > avg_loss_valid:
@@ -185,9 +174,11 @@ def evaluate(model, test_loader, nsample=100, scaler=1, mean_scaler=0, foldernam
                     },
                     refresh=True,
                 )
-                logging.info("rmse_total={}".format(np.sqrt(mse_total / evalpoints_total)))
-                logging.info("mae_total={}".format(mae_total / evalpoints_total))
-                logging.info("batch_no={}".format(batch_no))
+
+                if verbose:
+                    logging.info("rmse_total={}".format(np.sqrt(mse_total / evalpoints_total)))
+                    logging.info("mae_total={}".format(mae_total / evalpoints_total))
+                    logging.info("batch_no={}".format(batch_no))
 
                 if imputegap:
                     all_generated_samples.append(samples_median)

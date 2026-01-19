@@ -331,13 +331,16 @@ class Dataset_Custom(Dataset):
         else:
             if self.set_type == 0:
                 df_data = df_raw[self.train_sensors]
-                print(f"training set : {df_data.shape=}\n")
+                if self.verbose:
+                    print(f"training set : {df_data.shape=}\n")
             elif self.set_type == 1:
                 df_data = df_raw[self.val_sensors]
-                print(f"validation set : {df_data.shape=}\n")
+                if self.verbose:
+                    print(f"validation set : {df_data.shape=}\n")
             else:
                 df_data = df_raw[self.test_sensors]
-                print(f"testing set : {df_data.shape=}\n")
+                if self.verbose:
+                    print(f"testing set : {df_data.shape=}\n")
 
         if self.scale:
             self.scaler.fit(df_data.values)

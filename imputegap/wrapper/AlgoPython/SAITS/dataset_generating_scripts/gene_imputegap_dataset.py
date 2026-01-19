@@ -74,7 +74,7 @@ def sait_loader_imputegap(incomp_data, seq_len, here, tr_ratio=0.9, norm=False, 
     #    scaler = StandardScaler()
     #    matrix_in = scaler.fit_transform(matrix_in)
 
-    ts_r, val_r = utils_imp.sets_splitter_based_on_training(tr_ratio, verbose=True)
+    ts_r, val_r = utils_imp.sets_splitter_based_on_training(tr_ratio, verbose=verbose)
     ts_m = utils_imp.dataset_add_dimensionality(matrix_in, seq_length=seq_len, three_dim=True, verbose=True)
 
     dataset_saving_dir = os.path.join(here, saving_path, dataset_name)

@@ -336,9 +336,9 @@ def impute_all_missing_data(model, train_data, val_data, test_data, args=None, l
     if multivariate:
         imputed_matrix = np.vstack([imputed_data_dict["train"], imputed_data_dict["val"], imputed_data_dict["test"]])
     else:
-        train = utils_imp.reconstruction_windowd_based(preds=imputed_data_dict["train"], nbr_timestamps=origins[0], sliding_windows=origins[3], verbose=True, deep_verbose=False)
-        val = utils_imp.reconstruction_windowd_based(preds=imputed_data_dict["val"], nbr_timestamps=origins[1], sliding_windows=origins[3], verbose=True, deep_verbose=False)
-        test = utils_imp.reconstruction_windowd_based(preds=imputed_data_dict["test"], nbr_timestamps=origins[2], sliding_windows=origins[3], verbose=True, deep_verbose=False)
+        train = utils_imp.reconstruction_windowd_based(preds=imputed_data_dict["train"], nbr_timestamps=origins[0], sliding_windows=origins[3], verbose=verbose, deep_verbose=False)
+        val = utils_imp.reconstruction_windowd_based(preds=imputed_data_dict["val"], nbr_timestamps=origins[1], sliding_windows=origins[3], verbose=verbose, deep_verbose=False)
+        test = utils_imp.reconstruction_windowd_based(preds=imputed_data_dict["test"], nbr_timestamps=origins[2], sliding_windows=origins[3], verbose=verbose, deep_verbose=False)
         imputed_matrix = np.vstack([train, val, test])
 
     return np.array(imputed_matrix)
@@ -512,12 +512,12 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     args.result_saving_path = os.path.join(dshere, "models/saits")
 
     os.makedirs(args.result_saving_path) if not os.path.exists(args.result_saving_path) else None
-    model = load_model(model, args.model_path, logger)
+    model = load_model(model, args.model_path, logger, verbose=verbose)
     test_dataloader = unified_dataloader.get_test_dataloader()
     check_train_model(model=model, test_dataloader=test_dataloader, args=args, logger=logger, verbose=verbose)
 
     (train_data, val_data, test_data,) = unified_dataloader.prepare_all_data_for_imputation()
-    imputed_matrix = impute_all_missing_data(model, train_data, val_data, test_data, args, logger, origins=origins, multivariate=multivariate)
+    imputed_matrix = impute_all_missing_data(model, train_data, val_data, test_data, args, logger, origins=origins, multivariate=multivariate, verbose=verbose)
 
     if multivariate:
         imputed_matrix = utils_imp.dataset_reverse_dimensionality(imputed_matrix, expected_n=recov.shape[0], verbose=verbose)

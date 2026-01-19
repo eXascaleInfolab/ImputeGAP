@@ -88,11 +88,13 @@ def dtw_metric(gt: np.ndarray, rs: np.ndarray):
     return dtw_v / gt.shape[-1]  # same normalization as your original code
 
 
-def get_method_handle(method: str) -> Union[Callable, None]:
+def get_method_handle(method: str, verbose: bool = True) -> Union[Callable, None]:
     if method not in {'hkmft', 'tagmean', 'linear', 'matag'}:
         return None
     if method == 'hkmft':
-        return hkmft_core
+        def _core(data, mask, tag, gt, original, *args, **kwargs):
+            return hkmft_core(data, mask, tag, gt, original, *args, verbose=verbose, **kwargs)
+        return _core
     elif method == 'tagmean':
         return tagmean_core
     elif method == 'linear':
@@ -408,7 +410,8 @@ def recovHKMFT(dataset,
                 dl = utils.dataset_load(dataset)
             if dl is None:
                 return -1
-            method_core = get_method_handle(method)
+
+            method_core = get_method_handle(method, verbose=verbose)
             if method_core is None:
                 logging.error(f'method {method} is does not supported yet.')
                 return -1
