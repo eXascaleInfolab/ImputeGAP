@@ -2,7 +2,7 @@
 Datasets
 ========
 
-The library currently hosts 14 datasets spanning 8 domains! Those datasets were collected from various time series imputation works in recent years. The datasets are stored in ``./imputegap/datasets`` and are represented using a ``numpy.ndarray`` structure.
+The library currently hosts 14 datasets spanning 8 domains. Those datasets were collected from various time series imputation works in recent years. The datasets are stored in ``./imputegap/datasets`` and are represented using a ``numpy.ndarray`` structure.
 
 .. raw:: html
 
@@ -10,13 +10,13 @@ The library currently hosts 14 datasets spanning 8 domains! Those datasets were 
 
 .. note::
 
-    Please ensure that your input data satisfies the following format:
+    The datasets follow this format:
 
     - Columns are the series/features, separator: empty space
 
     - Rows are the timestamps' values, separator: newline
 
-    - Missing values are NaNs
+    - Missing values are marked as NaNs
 
 
 

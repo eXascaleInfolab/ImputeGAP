@@ -226,10 +226,10 @@
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -285,7 +285,7 @@
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
 <section id="system-requirements">
 <span id="id1"></span><h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading">¶</a></h2>
-<p>ImputeGAP is compatible with Python&gt;=3.10 and Unix-compatible environment.</p>
+<p>ImputeGAP is compatible with Python&gt;=3.11 and Unix-compatible environment.</p>
 </section>
 <section id="installation">
 <span id="id2"></span><h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
@@ -489,7 +489,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </pre></div>
 </div>
 <p>Run the Docker container:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:8888<span class="w"> </span>qnater/imputegap:1.1.2
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">-p</span> <span class="n">8888</span><span class="p">:</span><span class="n">8888</span> <span class="n">qnater</span><span class="p">/</span><span class="n">imputegap</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">2</span>
 </pre></div>
 </div>
 <p>Open the following link:</p>
@@ -501,11 +501,11 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </pre></div>
 </div>
 <p>Pull the ImputeGAP Docker image:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>qnater/imputegap:1.1.2
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">qnater</span><span class="p">/</span><span class="n">imputegap</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">2</span>
 </pre></div>
 </div>
 <p>Run the Docker container:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:8888<span class="w"> </span>qnater/imputegap:1.1.2
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">-p</span> <span class="n">8888</span><span class="p">:</span><span class="n">8888</span> <span class="n">qnater</span><span class="p">/</span><span class="n">imputegap</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">2</span>
 </pre></div>
 </div>
 <p>Open the following link:</p>
@@ -517,11 +517,11 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </pre></div>
 </div>
 <p>Pull the ImputeGAP Docker image:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>--platform<span class="w"> </span>linux/x86_64<span class="w"> </span>qnater/imputegap:1.1.2
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="p">-</span><span class="n">-platform</span> <span class="n">linux</span><span class="p">/</span><span class="n">x86_64</span> <span class="n">qnater</span><span class="p">/</span><span class="n">imputegap</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">2</span>
 </pre></div>
 </div>
 <p>Run the Docker container:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:8888<span class="w"> </span>qnater/imputegap:1.1.2
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">-p</span> <span class="n">8888</span><span class="p">:</span><span class="n">8888</span> <span class="n">qnater</span><span class="p">/</span><span class="n">imputegap</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">2</span>
 </pre></div>
 </div>
 <p>Open the following link:</p>

@@ -78,7 +78,7 @@ To import the time series as a matrix, pass it as an argument of the ``ts.import
 
 GenGap: Missing Data Simulation
 -------------------------------
-We now describe how to simulate missing values using the GenGap module. ImputeGAP implements eight different missingness patterns. The patterns are described `here <patterns.html>`_.
+ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGap module can be invoked externally. The patterns are described `here <missingness_patterns.html>`_.
 
 As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:
 

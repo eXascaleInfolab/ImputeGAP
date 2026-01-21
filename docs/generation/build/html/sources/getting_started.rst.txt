@@ -7,7 +7,7 @@ Getting Started
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-ImputeGAP is compatible with Python>=3.10 and Unix-compatible environment.
+ImputeGAP is compatible with Python>=3.11 and Unix-compatible environment.
 
 .. _installation:
 
@@ -347,7 +347,7 @@ Installation
 
                 Run the Docker container:
 
-                .. code-block:: bash
+                .. code-block:: powershell
 
                     docker run -p 8888:8888 qnater/imputegap:1.1.2
 
@@ -368,13 +368,13 @@ Installation
 
                 Pull the ImputeGAP Docker image:
 
-                .. code-block:: bash
+                .. code-block:: powershell
 
                     docker pull qnater/imputegap:1.1.2
 
                 Run the Docker container:
 
-                .. code-block:: bash
+                .. code-block:: powershell
 
                     docker run -p 8888:8888 qnater/imputegap:1.1.2
 
@@ -395,13 +395,13 @@ Installation
 
                 Pull the ImputeGAP Docker image:
 
-                .. code-block:: bash
+                .. code-block:: powershell
 
                     docker pull --platform linux/x86_64 qnater/imputegap:1.1.2
 
                 Run the Docker container:
 
-                .. code-block:: bash
+                .. code-block:: powershell
 
                     docker run -p 8888:8888 qnater/imputegap:1.1.2
 

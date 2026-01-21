@@ -1131,7 +1131,7 @@ def get_resuts_unit_tests(algo_name, loader, verbose=True):
 def window_truncation(feature_vectors, seq_len, stride=None, info="", verbose=True, deep_verbose=False):
     """
     Segment a sequence of feature vectors into fixed-length windows. In ImputeGAP, this is used in deep learning to reshape a 2D univariate dataset into a 3D windowed representation, enabling multivariate-like processing.
-    See reconstruction_windowd_based() to restore the imputed matrix to its original shape.
+    See reconstruction_window_based() to restore the imputed matrix to its original shape.
 
     The code was inspired by: https://dl.acm.org/doi/10.1016/j.eswa.2023.119619
 

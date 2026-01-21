@@ -225,10 +225,10 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -285,16 +285,24 @@
 <div class="admonition-news admonition">
 <p class="admonition-title">📢 News !</p>
 <ul class="simple">
-<li><p>[21-01-2026] Version 1.1.2 is out! Check out the latest updates and improvements!</p></li>
+<li><dl class="simple">
+<dt>[21-01-2026] Version 1.1.2 is out! The new release includes the following major updates:</dt><dd><ul>
+<li><p>New Deep Learning and LLMs algorithms</p></li>
+<li><p>New utilities to handle multivariate datasets and algorithms</p></li>
+<li><p>New module to simulate missing values: GenGap</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 <li><p>[04-06-2025] ImputeGAP will be presented as a Tutorial at KDD 2025 in Toronto! <a class="reference external" href="https://imputegap-tutorials.github.io/KDD-2025/">[Link]</a></p></li>
 </ul>
 </div>
 <p>ImputeGAP is a comprehensive Python library for imputation of missing values in  time series data. It implements user-friendly APIs to easily visualize, analyze, and repair incomplete time series datasets. The library supports a diverse range of imputation algorithms and modular missing data simulation catering to datasets with varying characteristics. ImputeGAP includes extensive customization options, such as automated hyperparameter tuning, benchmarking, explainability, and downstream evaluation.</p>
 <dl class="simple">
 <dt>In detail, the library provides:</dt><dd><ul class="simple">
+<li><p>Over 40 state-of-the-art time series imputation algorithms from six different families</p></li>
 <li><p>Several imputation univariate time series datasets and utilities to handle multivariate ones</p></li>
 <li><p>Configurable contamination module that simulates real-world missingness patterns</p></li>
-<li><p>Over 40 state-of-the-art time series imputation algorithms from six different families</p></li>
 <li><p>AutoML techniques to parameterize the imputation algorithms</p></li>
 <li><p>Unified benchmarking pipeline to evaluate the performance of imputation algorithms</p></li>
 <li><p>Modular analysis tools to assess the impact of imputation on time series downstream tasks</p></li>
@@ -303,8 +311,8 @@
 </ul>
 </dd>
 </dl>
-<br><section id="get-started">
-<span id="id1"></span><h2>Get Started<a class="headerlink" href="#get-started" title="Link to this heading">¶</a></h2>
+<br><section id="getting-started">
+<span id="get-started"></span><h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
 <script>
    function applyTheme(e)
    {
@@ -379,7 +387,7 @@
 
  </div><br><br></section>
 <section id="cite">
-<span id="id2"></span><h2>Cite<a class="headerlink" href="#cite" title="Link to this heading">¶</a></h2>
+<span id="id1"></span><h2>Cite<a class="headerlink" href="#cite" title="Link to this heading">¶</a></h2>
 <p>If you like our library, please add a ⭐ in our <a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/">GitHub repository</a>.</p>
 <p>If you use ImputeGAP in your research, please cite the following papers:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>@article<span class="o">{</span>nater2025imputegap,
@@ -452,7 +460,7 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">ImputeGAP Documentation</a><ul>
-<li><a class="reference internal" href="#get-started">Get Started</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li><a class="reference internal" href="#cite">Cite</a></li>
 </ul>
 </li>

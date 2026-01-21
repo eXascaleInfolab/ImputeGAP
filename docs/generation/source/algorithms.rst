@@ -17,6 +17,9 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - GPT4TS [34]_
      - LLMs
      - NeurIPS -- 2023
+   * - 🚧 MOMENT [37]_
+     - LLMs
+     - ICLR -- 2025
    * -
      -
      -
@@ -65,6 +68,15 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - GAIN [28]_
      - Deep Learning
      - ICML -- 2018
+   * - 🚧 SSGAN [38]_
+     - Deep Learning
+     - AAAI -- 2021
+   * - 🚧 GP-VAE [40]_
+     - Deep Learning
+     - AISTATS -- 2020
+   * - 🚧 NAOMI [41]_
+     - Deep Learning
+     - NeurIPS -- 2019
    * -
      -
      -
@@ -152,36 +164,6 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - MeanImputeBySeries
      - Statistics
      - _
-   * -
-     -
-     -
-   * -
-     -
-     -
-   * -
-     -
-     -
-   * -
-     -
-     -
-   * -
-     -
-     -
-   * -
-     -
-     -
-   * - 🚧 Moments* [37]_
-     - LLMs
-     - ICLR -- 2025
-   * - 🚧 SSGAN* [38]_
-     - Deep Learning
-     - AAAI -- 21
-   * - 🚧 GP-VAE* [40]_
-     - Deep Learning
-     - AISTATS -- 2020
-   * - 🚧 NAOMI* [41]_
-     - Deep Learning
-     - NeurIPS -- 2019
 
 
 .. list-table::
@@ -276,7 +258,7 @@ References
    <br><br>
 
 
-🚧 = under integration*
+🚧 = under integration
 
 .. raw:: html
 
