@@ -33,7 +33,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libmlpack-dev libopenblas-dev python3-dev build-essential
         pip install --upgrade google protobuf
-        pip install imputegap==1.1.1
+        pip install imputegap==1.1.2
 
 
     - name: Run pytest

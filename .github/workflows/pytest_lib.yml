@@ -34,7 +34,7 @@ jobs:
         sudo apt-get install libmlpack-dev
         sudo apt-get install libopenblas-dev
         sudo apt-get install python3-dev build-essential
-        pip install imputegap==1.1.1
+        pip install imputegap==1.1.2
         pip install mypy
         pip install pytest
 
