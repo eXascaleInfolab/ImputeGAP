@@ -7,12 +7,13 @@
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>Contributing - ImputeGAP 1.1.2</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
     
     
 
@@ -232,6 +233,7 @@
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">imputegap.recovery.contamination package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -259,7 +261,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/contributing.rst.txt" title="View this page">
+  <a class="muted-link" href="sources/contributing.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -334,7 +336,7 @@ $ cd ./ImputeGAP
 <br></section>
 <section id="ii-benchmark">
 <h4>II. Benchmark<a class="headerlink" href="#ii-benchmark" title="Link to this heading">¶</a></h4>
-<p>To access the benchmarking features, please update <code class="docutils literal notranslate"><span class="pre">./imputegap/tools/utils.py</span></code> (lines 547-550) by adding your algorithm in the <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">config_impute_algorithm</span></code> function.</p>
+<p>To access the benchmarking features, please update <code class="docutils literal notranslate"><span class="pre">./imputegap/tools/utils.py</span></code> (lines 580-581) by adding your algorithm in the <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">config_impute_algorithm</span></code> function.</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;new_alg&quot;</span><span class="p">:</span>
     <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MyFamily</span><span class="o">.</span><span class="n">NewAlg</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
@@ -347,7 +349,7 @@ $ cd ./ImputeGAP
 <h4>III. Optimizer<a class="headerlink" href="#iii-optimizer" title="Link to this heading">¶</a></h4>
 <p>To enable the optimization module, please update <code class="docutils literal notranslate"><span class="pre">./imputegap/tools/algorithm_parameters.py</span></code>.</p>
 <ol class="arabic">
-<li><p>Open <code class="docutils literal notranslate"><span class="pre">./imputegap/tools/algorithm_parameters.py</span></code> copy paste lines 296 to 302 and update the algorithm name and parameters, e.g.,</p>
+<li><p>Open <code class="docutils literal notranslate"><span class="pre">./imputegap/tools/algorithm_parameters.py</span></code> copy paste lines 310 to 314 and update the algorithm name and parameters, e.g.,</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;new_alg&#39;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;param_integer&quot;</span><span class="p">:</span> <span class="n">tune</span><span class="o">.</span><span class="n">grid_search</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">20</span> <span class="mi">1</span><span class="p">)]),</span>
@@ -358,7 +360,7 @@ $ cd ./ImputeGAP
 </div>
 </div></blockquote>
 </li>
-<li><p>Add your parameters in the <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">save_optimization()</span></code> function of the file <code class="docutils literal notranslate"><span class="pre">./imputegap/tools/utils.py</span></code> to save the optimal parameters, line 808 to 815:</p>
+<li><p>Add your parameters in the <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">save_optimization()</span></code> function of the file <code class="docutils literal notranslate"><span class="pre">./imputegap/tools/utils.py</span></code> to save the optimal parameters, line 874 to 879:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;new_alg&quot;</span><span class="p">:</span>
     <span class="n">params_to_save</span> <span class="o">=</span> <span class="p">{</span>
@@ -667,12 +669,12 @@ $ cd ./ImputeGAP
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=6f037312"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/tabs.js?v=3030b3cb"></script>
+</div><script src="static/documentation_options.js?v=6f037312"></script>
+    <script src="static/doctools.js?v=9bcbadda"></script>
+    <script src="static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="static/copybutton.js?v=f281be69"></script>
+    <script src="static/tabs.js?v=3030b3cb"></script>
     </body>
 </html>

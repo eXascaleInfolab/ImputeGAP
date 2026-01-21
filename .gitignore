@@ -24,4 +24,4 @@ imputegap/datasets/test-large.txt
 *runner_cleaner.py
 *imputegap/wrapper/AlgoPython/NuwaTS/data_provider/dataset/ETT-small/ETTh1.csv
 .coveragerc
-old_requirements.txt
+./old_requirements.txt

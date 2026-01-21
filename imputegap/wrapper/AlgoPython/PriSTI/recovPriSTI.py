@@ -125,7 +125,8 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
         print("\n\n\nevaluation...\n")
 
     logging.basicConfig(filename=foldername + '/test_model.log', level=logging.DEBUG)
-    logging.info("model_name={}".format(args.modelfolder))
+    if verbose:
+        logging.info("model_name={}".format(args.modelfolder))
 
     _ = evaluate(model, test_loader, nsample=nsamples, scaler=scaler, mean_scaler=mean_scaler, foldername=foldername, imputegap=False, verbose=verbose, deep_verbose=False)
 
@@ -133,7 +134,8 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
         print("\n\n\nreconstruction...\n")
 
     logging.basicConfig(filename=foldername + '/imputegap_model.log', level=logging.DEBUG)
-    logging.info("model_name={}".format(args.modelfolder))
+    if verbose:
+        logging.info("model_name={}".format(args.modelfolder))
     imputed_imputegap = evaluate(
         model,
         imputegap,
@@ -149,7 +151,7 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
     if multivariate:
         recovery = utils_imp.dataset_reverse_dimensionality(imputed_imputegap, recov.shape[0], verbose)
     else:
-        recovery = utils_imp.reconstruction_windowd_based(preds=imputed_imputegap, nbr_timestamps=recov.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
+        recovery = utils_imp.reconstruction_window_based(preds=imputed_imputegap, nbr_timestamps=recov.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
 
     if hasattr(recovery, "detach"):
         rec_pristi = recovery.detach().cpu().numpy()

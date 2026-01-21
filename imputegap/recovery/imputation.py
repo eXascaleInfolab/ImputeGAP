@@ -1925,6 +1925,8 @@ class Imputation:
 
                 tr_ratio: float, optional
                     Split ratio between training and testing sets (default is 0.9).
+                    The ratio only set the number of articifial missing values of the author.
+
 
                     **Algorithm parameters:**
 
@@ -2003,7 +2005,7 @@ class Imputation:
             """
             algorithm = "deep_mvi"
 
-            def impute(self, user_def=True, params=None, tr_ratio=0.6):
+            def impute(self, user_def=True, params=None, tr_ratio=None):
                 """
                 Perform imputation using the DeepMVI algorithm.
 
@@ -2011,10 +2013,12 @@ class Imputation:
                 ----------
                 user_def : bool, optional
                     Whether to use user-defined or default parameters (default is True).
+
                 params : dict, optional
                     Parameters of the DeepMVI algorithm, if None, default ones are loaded.
+
                 tr_ratio: float, optional
-                    Split ratio between training and testing sets (default is 0.9).
+                    The ratio is not used in DeepMVI algorithm.
 
                     **Algorithm parameters:**
 
@@ -2093,7 +2097,7 @@ class Imputation:
                 params : dict, optional
                     Parameters of the MPIN algorithm, if None, default ones are loaded.
                 tr_ratio: float, optional
-                    Split ratio between training and testing sets (default is 0.9).
+                    Split ratio between training and evaluation sets (default is 0.9).
 
                     **Algorithm parameters:**
 
@@ -2379,7 +2383,7 @@ class Imputation:
                     Parameters of the GAIN algorithm or Auto-ML configuration, if None, default ones are loaded.
 
                 tr_ratio: float, optional
-                    Split ratio between training and testing sets (default is 0.9).
+                    Split ratio between training and evaluation sets (default is 0.8).
 
 
                     **Algorithm parameters:**
@@ -2680,7 +2684,7 @@ class Imputation:
                     Parameters of the HKMF-T algorithm or Auto-ML configuration, if None, default ones are loaded.
 
                 tr_ratio: float, optional
-                    Split ratio between training and testing sets (default is 0.9).
+                    Proportion of the data kept *outside* the blackout region and used for training (default: 0.9)
 
 
                     **Algorithm parameters:**

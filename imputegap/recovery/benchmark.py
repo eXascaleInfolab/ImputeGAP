@@ -711,7 +711,7 @@ class Benchmark:
     """
 
 
-    def generate_plots(self, runs_plots_scores, ticks,  metrics=None, subplot=False, y_size=8, title=None, save_dir="./reports",display=False, verbose=True):
+    def generate_plots(self, runs_plots_scores, ticks, metrics=None, subplot=False, y_size=8, title=None, save_dir="./reports",display=False, verbose=True):
         """
         Generate and save plots for each metric and pattern based on provided scores.
 
@@ -753,21 +753,34 @@ class Benchmark:
 
         new_metrics = np.copy(metrics)
 
-
         new_plots = 0
 
         if metrics is None:
             new_metrics = utils.list_of_metrics()
         else:
             if "RUNTIME_LOG" not in new_metrics:
-                new_plots = new_plots + 1
+                new_plots = new_plots+1
                 new_metrics = np.append(new_metrics, "RUNTIME_LOG")
 
         nbr_metrics = len(new_metrics)
 
+        print(f"{new_metrics = }")
+        print(f"{nbr_metrics = }")
+
         n_rows = int((len(new_metrics)+new_plots)/2)
 
         x_size, title_flag = 16, title
+
+        if ticks and len(ticks) > 0:
+            tick_min = float(min(ticks))
+            tick_max = float(max(ticks))
+        else:
+            tick_min, tick_max = 0.0, 1.0  # fallback
+
+        x_pad = 0.025  # 5% points (because rates are in [0,1])
+        x_left = max(0.0, tick_min - x_pad)
+        x_right = min(1.0, tick_max + x_pad)
+
 
         for dataset, pattern_items in runs_plots_scores.items():
             for pattern, algo_items in pattern_items.items():
@@ -781,10 +794,13 @@ class Benchmark:
                         x_size = x_size_screen
                         y_size = y_size_screen
 
-                    print(f"{x_size = }")
-                    print(f"{y_size = }")
+                    ncols = 2
+                    if nbr_metrics % 2 == 1:
+                        ncols, n_rows, y_size = 1, (n_rows*2)-1, y_size*1.25
 
-                    fig, axes = plt.subplots(nrows=n_rows, ncols=2, figsize=(x_size, y_size))  # Adjusted figsize
+                    fig, axes = plt.subplots(nrows=n_rows, ncols=ncols, figsize=(x_size, y_size))  # Adjusted figsize
+                    axes = axes.ravel()
+
                     fig.subplots_adjust(
                         left=0.04,
                         right=0.99,
@@ -797,7 +813,6 @@ class Benchmark:
                     if title_flag is None:
                         title = dataset + " : " + pattern + ", benchmark analysis"
                     fig.canvas.manager.set_window_title(title)
-                    axes = axes.ravel()  # Flatten the 2D array of axes to a 1D array
 
                 # Iterate over each metric, generating separate plots, including new timing metrics
                 for i, metric in enumerate(new_metrics):
@@ -852,7 +867,8 @@ class Benchmark:
                         ax.set_title(metric)
                         ax.set_xlabel("Rate")
                         ax.set_ylabel(ylabel_metric)
-                        ax.set_xlim(0.0, 0.85)
+                        #ax.set_xlim(0.0, 0.85)
+                        ax.set_xlim(x_left, x_right)
 
                         bounds = {"RMSE": (0, 3), "MAE": (0, 3), "CORRELATION": (-1, 1), "MI": (0, 2), "RUNTIME": (0, 10000), "RUNTIME_LOG": (-5, 5), }
 
@@ -906,7 +922,7 @@ class Benchmark:
 
         self.plots = plt
 
-    def eval(self, algorithms=["cdrec"], datasets=["eeg-alcohol"], patterns=["mcar"], x_axis=[0.05, 0.1, 0.2, 0.4, 0.6, 0.8], optimizer="default_params", metrics=["*"], save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=250, nbr_vals=2000, dl_ratio=None, verbose=False):
+    def eval(self, algorithms=["cdrec"], datasets=["eeg-alcohol"], patterns=["mcar"], x_axis=[0.05, 0.1, 0.2, 0.4, 0.6, 0.8], optimizer="default_params", metrics=["*"], save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=200, nbr_vals=2000, dl_ratio=None, verbose=False):
         """
         Execute a comprehensive evaluation of imputation algorithms over multiple datasets and patterns.
 
@@ -933,9 +949,9 @@ class Benchmark:
         report_title : str, optional
             Title of the report (default is "").
         nbr_series : int, optional
-            Number of series to take inside the dataset (default is 250 (as the max values)).
+            Number of series to take inside the dataset (default is 200 (as the max values)). Set to None to remove the limitation.
         nbr_vals : int, optional
-            Number of values to take inside the series (default is 2500 (as the max values)).
+            Number of values to take inside the series (default is 2500 (as the max values)). Set to None to remove the limitation.
         dl_ratio : float, optional
             Training ratio for Deep Learning techniques (default is 0.8)
         verbose : bool, optional
@@ -1014,7 +1030,7 @@ class Benchmark:
 
                 if Ndef > nbr_vals or Mdef > nbr_series:
                     reshp = True
-                    print(f"\nThe dataset contains a large number of values {default_data.data.shape}, which may be too much for some algorithms to handle efficiently. Consider reducing the number of series or the volume of data.")
+                    print(f"\nThe dataset {dataset} contains a large number of values {default_data.data.shape}, which may be too much for some algorithms to handle efficiently. Consider reducing the number of series or the volume of data.")
                 default_data = None
 
                 ts_test.load_series(data=utils.search_path(dataset), nbr_series=nbr_series, nbr_val=nbr_vals, header=header, normalizer=normalizer, verbose=verbose)
@@ -1038,9 +1054,9 @@ class Benchmark:
                         has_been_optimized = False
 
                         if verbose:
-                            print("\n3. algorithm evaluated", algorithm, "with", pattern, "\n")
+                            print(f"3. {algorithm} is tested with {pattern} on {dataset}, started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
                         else:
-                            print(f"{algorithm} is tested with {pattern}, started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
+                            print(f"{algorithm} is tested with {pattern} on {dataset}, started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
 
                         for incx, x in enumerate(x_axis):
                             if verbose:

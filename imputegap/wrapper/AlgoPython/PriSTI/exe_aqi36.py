@@ -70,7 +70,6 @@ def main(args):
         model.load_state_dict(torch.load("./save/" + args.modelfolder + "/model.pth", map_location=args.device))
 
     logging.basicConfig(filename=foldername + '/test_model.log', level=logging.DEBUG)
-    logging.info("model_name={}".format(args.modelfolder))
     evaluate(
         model,
         test_loader,

@@ -394,7 +394,7 @@ def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, s
     if multivariate:
         y_hat = utils_imp.dataset_reverse_dimensionality(y_hat, expected_n=incomp_data.shape[0])
     else:
-        y_hat = utils_imp.reconstruction_windowd_based(preds=y_hat, nbr_timestamps=incomp_data.shape[0], verbose=verbose, deep_verbose=False)
+        y_hat = utils_imp.reconstruction_window_based(preds=y_hat, nbr_timestamps=incomp_data.shape[0], verbose=verbose, deep_verbose=False)
 
     recov[m_mask] = y_hat[m_mask]
 

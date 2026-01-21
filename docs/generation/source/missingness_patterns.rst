@@ -11,9 +11,8 @@ Setup
 
 .. note::
 
-    -   M : number of time series
-    -   N : length of time series
-    -   W : user-defined offset window in the beginning of the series; default = 20
+    -   (N, M) : number of timestamps, number of series
+    -   W : user-defined offset window in the beginning of the series; default = 25
     -   R : user-defined rate of missing values (%); default = 20%
     -   S : user-defined rate of contaminated series (%); default = 20%
 
@@ -34,14 +33,14 @@ One missing block per series
 
 **Aligned**
 
-Missing blocks start and end at the same selected positions across the chosen series, resulting in aligned missing intervals.
+Missing blocks start at the same selected positions and have the same fixed size across the chosen series, resulting in aligned missing intervals.
 
 .. note::
 
     -   ``R ∈ [1%, (100-W)%]``
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position is the same and begins at ``W`` and progresses until the size of the missing block is reached, affecting the first series from the top up to ``S%`` of the dataset.
-    -   Cde: ``GenGap.aligned(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
+    -   ``GenGap.aligned(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -71,7 +70,7 @@ Each missing block begins where the previous one ends, so the missing intervals 
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position of the first missing block begins at ``W``.
     -   Each subsequent missing block starts immediately after the previous one ends, continuing this pattern until the limit of the dataset or ``N`` is reached.
-    -   Code: ``GenGap.disjoint(ts.data, rate_series=0.4, offset=25)``
+    -   ``GenGap.disjoint(ts.data, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -91,7 +90,7 @@ Each missing block begins where the previous one ends, so the missing intervals 
 
 **Overlap**
 
-Each missing block starts at the end of the previous one with a specified shift, so the missing intervals are consecutive and overlap.
+Each missing block begins a specified gap after the end of the previous one, making the missing intervals consecutive and overlapping.
 
 .. note::
 
@@ -100,7 +99,7 @@ Each missing block starts at the end of the previous one with a specified shift,
     -   The starting position of the first missing block begins at ``W``.
     -   Each subsequent missing block starts after the previous one ends, but with a shift back of ``X%``, creating an overlap.
     -   This pattern continues until the limit or ``N`` is reached.
-    -   Code: ``GenGap.overlap(ts.data, rate_series=0.4, offset=25, shift=0.1)``
+    -   ``GenGap.overlap(ts.data, rate_series=0.4, offset=25, shift=0.1)``
 
 .. raw:: html
 
@@ -120,14 +119,14 @@ Each missing block starts at the end of the previous one with a specified shift,
 
 **Scattered**
 
-The missing blocks all have the same size, but their starting positions are chosen at random.
+The starting position of the missing block is chosen at random, all missing blocks share the same fixed size, with only one block removed per series.
 
 .. note::
 
     -   ``R ∈ [1%, (100-W)%]``
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position is randomly shifted by adding a random value to ``W``, then progresses until the size of the missing block is reached, affecting the first series from the top up to ``S%`` of the dataset.
-    -   Code: ``GenGap.scattered(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
+    -   ``GenGap.scattered(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -159,13 +158,13 @@ Multiple missing blocks per series
 
 **MCAR**
 
-Missing blocks are introduced completely at random. Time series are selected at random, and blocks of a fixed size are removed at randomly chosen positions.
+Missing blocks are introduced completely at random. Blocks are removed from randomly chosen positions, every removed block has the same fixed size, and the affected time series are selected at random.
 
 .. note::
 
     -   ``R ∈ [1%, (100-W)%]``
     -   Data blocks of the same size are removed from arbitrary series at a random position between ``W`` and ``N``, until the total number of missing values per series is reached.
-    -   Code: ``GenGap.mcar(ts.data, rate_dataset=1, rate_series=0.2, offset=25, seed=False, block_size=20)``
+    -   ``GenGap.mcar(ts.data, rate_dataset=1, rate_series=0.2, offset=25, seed=False, block_size=20)``
 
 
 .. raw:: html
@@ -192,7 +191,7 @@ Missingness follows a probability distribution, each position has a certain chan
 
     -   ``R ∈ [1%, (100-W)%]``
     -   Data is removed following a distribution given by the user for every values of the series, affecting the first series from the top up to ``S%`` of the dataset.
-    -   Code: ``GenGap.gaussian(ts.data, rate_dataset=1, rate_series=0.4, offset=25, selected_mean="position", std_dev=0.2)``
+    -   ``GenGap.gaussian(ts.data, rate_dataset=1, rate_series=0.4, offset=25, selected_mean="position", std_dev=0.2)``
 
 To configure the block distribution pattern, please refer to this `page <tutorials_distribution.html>`_.
 

@@ -242,7 +242,7 @@ class Exp_ImputeGAP(Exp_Basic):
             print('\nmse:{}, mae:{}, rmse:{}, shape:{}'.format(mse, mae, rmse, preds.shape))
 
         if original_shape is not None:
-            recons = utils_imp.reconstruction_windowd_based(preds=preds, nbr_timestamps=original_shape[0], verbose=verbose, deep_verbose=False)
+            recons = utils_imp.reconstruction_window_based(preds=preds, nbr_timestamps=original_shape[0], verbose=verbose, deep_verbose=False)
             return recons
 
         return None

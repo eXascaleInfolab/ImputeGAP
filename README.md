@@ -8,7 +8,7 @@ ImputeGAP is a comprehensive Python library for imputation of missing values in 
 
 In detail, the package provides:
 
-  - Access to commonly used datasets in the time series imputation field ([Datasets](https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets))
+  - Several imputation univariate time series datasets and utilities to handle multivariate ones ([Datasets](https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets))
   - Configurable contamination module that simulates real-world missingness patterns ([Patterns](https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/recovery))
   - Over 40 state-of-the-art time series imputation algorithms from six different families ([Algorithms](#Available-Imputation-Algorithms))
   - AutoML techniques to parameterize the imputation algorithms ([AutoML](#Parameter-Tuning))
@@ -159,13 +159,13 @@ docker version
 Pull the ImputeGAP Docker image (add `--platform linux/x86_64` in the command for MacOS) :
 
 ```bash
-docker pull qnater/imputegap:1.1.1
+docker pull qnater/imputegap:1.1.2
 ```
 
 Run the Docker container:
 
 ```bash
-docker run -p 8888:8888 qnater/imputegap:1.1.1
+docker run -p 8888:8888 qnater/imputegap:1.1.2
 ``` 
 
 
@@ -715,10 +715,10 @@ If you use ImputeGAP in your research, please cite these papers:
 [41] Wenjie Du, David Côté, Yan Liu : SAITS: : Self-attention-based imputation for time series . ESWA 2023
 
 <a name="ref42"></a>
-.. [42] Vincent Fortuin, Dmitry Baranchuk, Gunnar Rätsch,  Stephan Mandt : GP-VAE: Deep Probabilistic Multivariate Time Series Imputation. AISTATS 2020
+[42] Vincent Fortuin, Dmitry Baranchuk, Gunnar Rätsch,  Stephan Mandt : GP-VAE: Deep Probabilistic Multivariate Time Series Imputation. AISTATS 2020
 
 <a name="ref43W"></a>
-.. [43] Yukai Liu, Rose Yu, Stephan Zheng, Eric Zhan, Yisong Yue : NAOMI: Non-Autoregressive Multiresolution Sequence Imputation. NeurIPS 2019
+[43] Yukai Liu, Rose Yu, Stephan Zheng, Eric Zhan, Yisong Yue : NAOMI: Non-Autoregressive Multiresolution Sequence Imputation. NeurIPS 2019
 
 
 

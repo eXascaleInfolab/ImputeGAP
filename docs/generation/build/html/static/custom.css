@@ -1,0 +1,6 @@
+/* more space between documented functions */
+dl.py.function,
+dl.py.method,
+dl.py.class {
+  margin-bottom: 6.0rem;
+}

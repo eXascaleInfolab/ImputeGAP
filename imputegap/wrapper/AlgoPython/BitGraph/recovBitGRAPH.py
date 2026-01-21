@@ -329,7 +329,7 @@ def recovBitGRAPH(ts_m=None, seq_len=24, sliding_windows=1, pred_len=0, kernel_s
     if multivariate:
         imputed_matrix = utils_imp.dataset_reverse_dimensionality(imputed_matrix, expected_n=recov.shape[0])
     else:
-        imputed_matrix = utils_imp.reconstruction_windowd_based(preds=imputed_matrix, nbr_timestamps=recov.shape[0], verbose=verbose, deep_verbose=False)
+        imputed_matrix = utils_imp.reconstruction_window_based(preds=imputed_matrix, nbr_timestamps=recov.shape[0], verbose=verbose, deep_verbose=False)
 
     if verbose:
         print(f"\t{imputed_matrix.shape =}\n")

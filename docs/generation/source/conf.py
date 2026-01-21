@@ -88,3 +88,7 @@ html_theme_options = {
 }
 
 sys.path.insert(0, os.path.abspath('../../../'))  # Adjust path to the project root
+
+
+def setup(app):
+    app.add_css_file("custom.css")

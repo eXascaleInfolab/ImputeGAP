@@ -7,11 +7,12 @@
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>Missingness Patterns - ImputeGAP 1.1.2</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
     
     
 
@@ -231,6 +232,7 @@
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">imputegap.recovery.contamination package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -258,7 +260,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/missingness_patterns.rst.txt" title="View this page">
+  <a class="muted-link" href="sources/missingness_patterns.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -286,9 +288,8 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>M : number of time series</p></li>
-<li><p>N : length of time series</p></li>
-<li><p>W : user-defined offset window in the beginning of the series; default = 20</p></li>
+<li><p>(N, M) : number of timestamps, number of series</p></li>
+<li><p>W : user-defined offset window in the beginning of the series; default = 25</p></li>
 <li><p>R : user-defined rate of missing values (%); default = 20%</p></li>
 <li><p>S : user-defined rate of contaminated series (%); default = 20%</p></li>
 </ul>
@@ -298,17 +299,17 @@
 <span id="scenario-mono-block"></span><h2>MONO-BLOCK<a class="headerlink" href="#mono-block" title="Link to this heading">¶</a></h2>
 <p>One missing block per series</p>
 <br><p><strong>Aligned</strong></p>
-<p>Missing blocks start and end at the same selected positions across the chosen series, resulting in aligned missing intervals.</p>
+<p>Missing blocks start at the same selected positions and have the same fixed size across the chosen series, resulting in aligned missing intervals.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
 <li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
 <li><p>The starting position is the same and begins at <code class="docutils literal notranslate"><span class="pre">W</span></code> and progresses until the size of the missing block is reached, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
-<li><p>Cde: <code class="docutils literal notranslate"><span class="pre">GenGap.aligned(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.aligned(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
 </ul>
 </div>
-<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="_images/imputegap_aligned.png" />
+<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="images/imputegap_aligned.png" />
 <br><br><p><strong>Disjoint</strong></p>
 <p>Each missing block begins where the previous one ends, so the missing intervals are consecutive and do not overlap.</p>
 <div class="admonition note">
@@ -318,12 +319,12 @@
 <li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
 <li><p>The starting position of the first missing block begins at <code class="docutils literal notranslate"><span class="pre">W</span></code>.</p></li>
 <li><p>Each subsequent missing block starts immediately after the previous one ends, continuing this pattern until the limit of the dataset or <code class="docutils literal notranslate"><span class="pre">N</span></code> is reached.</p></li>
-<li><p>Code: <code class="docutils literal notranslate"><span class="pre">GenGap.disjoint(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.disjoint(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
 </ul>
 </div>
-<br><img alt="ImputeGAP Disjoint Pattern" class="portrait align-left" src="_images/imputegap_disjoint.png" />
+<br><img alt="ImputeGAP Disjoint Pattern" class="portrait align-left" src="images/imputegap_disjoint.png" />
 <br><br><p><strong>Overlap</strong></p>
-<p>Each missing block starts at the end of the previous one with a specified shift, so the missing intervals are consecutive and overlap.</p>
+<p>Each missing block begins a specified gap after the end of the previous one, making the missing intervals consecutive and overlapping.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -332,37 +333,37 @@
 <li><p>The starting position of the first missing block begins at <code class="docutils literal notranslate"><span class="pre">W</span></code>.</p></li>
 <li><p>Each subsequent missing block starts after the previous one ends, but with a shift back of <code class="docutils literal notranslate"><span class="pre">X%</span></code>, creating an overlap.</p></li>
 <li><p>This pattern continues until the limit or <code class="docutils literal notranslate"><span class="pre">N</span></code> is reached.</p></li>
-<li><p>Code: <code class="docutils literal notranslate"><span class="pre">GenGap.overlap(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25,</span> <span class="pre">shift=0.1)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.overlap(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25,</span> <span class="pre">shift=0.1)</span></code></p></li>
 </ul>
 </div>
-<br><img alt="ImputeGAP Overlap Pattern" class="portrait align-left" src="_images/imputegap_overlap.png" />
+<br><img alt="ImputeGAP Overlap Pattern" class="portrait align-left" src="images/imputegap_overlap.png" />
 <br><br><p><strong>Scattered</strong></p>
-<p>The missing blocks all have the same size, but their starting positions are chosen at random.</p>
+<p>The starting position of the missing block is chosen at random, all missing blocks share the same fixed size, with only one block removed per series.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
 <li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
 <li><p>The starting position is randomly shifted by adding a random value to <code class="docutils literal notranslate"><span class="pre">W</span></code>, then progresses until the size of the missing block is reached, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
-<li><p>Code: <code class="docutils literal notranslate"><span class="pre">GenGap.scattered(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.scattered(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
 </ul>
 </div>
-<br><img alt="ImputeGAP Scatter Pattern" class="portrait align-left" src="_images/imputegap_scattered.png" />
+<br><img alt="ImputeGAP Scatter Pattern" class="portrait align-left" src="images/imputegap_scattered.png" />
 <br><br></section>
 <section id="multi-block">
 <span id="scenario-multi-block"></span><h2>MULTI-BLOCK<a class="headerlink" href="#multi-block" title="Link to this heading">¶</a></h2>
 <p>Multiple missing blocks per series</p>
 <br><p><strong>MCAR</strong></p>
-<p>Missing blocks are introduced completely at random. Time series are selected at random, and blocks of a fixed size are removed at randomly chosen positions.</p>
+<p>Missing blocks are introduced completely at random. Blocks are removed from randomly chosen positions, every removed block has the same fixed size, and the affected time series are selected at random.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
 <li><p>Data blocks of the same size are removed from arbitrary series at a random position between <code class="docutils literal notranslate"><span class="pre">W</span></code> and <code class="docutils literal notranslate"><span class="pre">N</span></code>, until the total number of missing values per series is reached.</p></li>
-<li><p>Code: <code class="docutils literal notranslate"><span class="pre">GenGap.mcar(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.2,</span> <span class="pre">offset=25,</span> <span class="pre">seed=False,</span> <span class="pre">block_size=20)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.mcar(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.2,</span> <span class="pre">offset=25,</span> <span class="pre">seed=False,</span> <span class="pre">block_size=20)</span></code></p></li>
 </ul>
 </div>
-<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="_images/imputegap_mcar.png" />
+<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="images/imputegap_mcar.png" />
 <br><br><p><strong>Block Distribution</strong></p>
 <p>Missingness follows a probability distribution, each position has a certain chance of being missing.</p>
 <div class="admonition note">
@@ -370,11 +371,11 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
 <li><p>Data is removed following a distribution given by the user for every values of the series, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
-<li><p>Code: <code class="docutils literal notranslate"><span class="pre">GenGap.gaussian(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25,</span> <span class="pre">selected_mean=&quot;position&quot;,</span> <span class="pre">std_dev=0.2)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.gaussian(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25,</span> <span class="pre">selected_mean=&quot;position&quot;,</span> <span class="pre">std_dev=0.2)</span></code></p></li>
 </ul>
 </div>
 <p>To configure the block distribution pattern, please refer to this <a class="reference external" href="tutorials_distribution.html">page</a>.</p>
-<br><img alt="ImputeGAP Distribution Pattern" class="portrait align-left" src="_images/imputegap_distribution.png" />
+<br><img alt="ImputeGAP Distribution Pattern" class="portrait align-left" src="images/imputegap_distribution.png" />
 <br><br></section>
 </section>
 
@@ -448,11 +449,11 @@
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=6f037312"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
+</div><script src="static/documentation_options.js?v=6f037312"></script>
+    <script src="static/doctools.js?v=9bcbadda"></script>
+    <script src="static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

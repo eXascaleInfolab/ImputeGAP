@@ -221,7 +221,7 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_
         args.data = "ETTh1"
 
     if verbose:
-        print(f"(IMPUTATION) {model}\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tdataloader: {args.data}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\tpred_len: {args.pred_len}\n\tlabel_len: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n")
+        print(f"(IMPUTATION) {model}\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tepochs: {args.train_epochs}\n\tdataloader: {args.data}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\tpred_len: {args.pred_len}\n\tlabel_len: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n")
         print(f"\ncall: timesnet.impute(params={{'seq_len': {args.seq_len}, 'batch_size': {args.batch_size}, 'epochs': {args.train_epochs}, 'gpt_layers': {args.gpt_layers}, 'num_workers': {args.num_workers}, 'seed': {seed}}})\n\n")
 
     if verbose:

@@ -184,7 +184,7 @@ def recovMissNet(X, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=100, to
         print(f"{imputed_matrix.shape = }")
 
     if sliding_windows != 0:
-        imputed_matrix = utils_imp.reconstruction_windowd_based(preds=imputed_matrix, nbr_timestamps=ts.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
+        imputed_matrix = utils_imp.reconstruction_window_based(preds=imputed_matrix, nbr_timestamps=ts.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
 
     recov[m_mask] = imputed_matrix[m_mask]
 

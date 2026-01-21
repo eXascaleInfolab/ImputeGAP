@@ -183,7 +183,7 @@ def recovBRITS(incomp_data, seq_len=24, model_name="rits_i", epochs=1000, batch_
     if sliding_windows == 0:
         recovery = utils_imp.dataset_reverse_dimensionality(imputations, recov.shape[0], verbose)
     else:
-        recovery = utils_imp.reconstruction_windowd_based(preds=imputations, nbr_timestamps=incomp_data.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
+        recovery = utils_imp.reconstruction_window_based(preds=imputations, nbr_timestamps=incomp_data.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
 
     if verbose:
         print(f"{recovery.shape =}")

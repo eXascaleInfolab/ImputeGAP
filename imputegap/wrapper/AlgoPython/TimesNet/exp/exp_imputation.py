@@ -255,7 +255,7 @@ class Exp_Imputation(Exp_Basic):
             print('mse:{}, mae:{}, rmse:{}'.format(mse, mae, rmse))
 
         if original_shape is not None:
-            recons = utils_imp.reconstruction_windowd_based(preds=preds, nbr_timestamps=original_shape[0], verbose=verbose, deep_verbose=False)
+            recons = utils_imp.reconstruction_window_based(preds=preds, nbr_timestamps=original_shape[0], verbose=verbose, deep_verbose=False)
             return recons
 
         return None

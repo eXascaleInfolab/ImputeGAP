@@ -200,7 +200,7 @@ def evaluate(model, test_loader, nsample=100, scaler=1, mean_scaler=0, foldernam
             if multivariate:
                 recovery_matrix = utils_imp.dataset_reverse_dimensionality(matrix=r, expected_n=n_timestamps[0], verbose=verbose)
             else:
-                recovery_matrix = utils_imp.reconstruction_windowd_based(preds=r, nbr_timestamps=n_timestamps[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
+                recovery_matrix = utils_imp.reconstruction_window_based(preds=r, nbr_timestamps=n_timestamps[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
         else:
             recovery_matrix = r
 

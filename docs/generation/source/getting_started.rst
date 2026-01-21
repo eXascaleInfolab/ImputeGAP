@@ -90,7 +90,7 @@ Installation
                     sudo apt-get update
                     sudo apt install -y build-essential libssl-dev zlib1g-dev libncurses5-dev libncursesw5-dev \
                     libreadline-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev \
-                    tk-dev python3-tk libopenblas0 software-properties-common python3-pip
+                    tk-dev python3-tk libopenblas0 libarmadillo-dev software-properties-common python3-pip
 
 
                 3. Add the deadsnakes PPA and update:
@@ -347,7 +347,7 @@ Installation
 
                 Run the Docker container:
 
-                .. code-block:: powershell
+                .. code-block:: bash
 
                     docker run -p 8888:8888 qnater/imputegap:1.1.2
 

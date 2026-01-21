@@ -3,7 +3,7 @@ ImputeGAP Documentation
 
 .. admonition:: 📢 News !
 
-        - [14-01-2026] Version 1.1.2 is out! Check out the latest updates and improvements!
+        - [21-01-2026] Version 1.1.2 is out! Check out the latest updates and improvements!
         - [04-06-2025] ImputeGAP will be presented as a Tutorial at KDD 2025 in Toronto! `[Link] <https://imputegap-tutorials.github.io/KDD-2025/>`_
 
 
@@ -11,7 +11,7 @@ ImputeGAP is a comprehensive Python library for imputation of missing values in 
 
 
 In detail, the library provides:
-    - Access to commonly used datasets in the time series imputation field
+    - Several imputation univariate time series datasets and utilities to handle multivariate ones
     - Configurable contamination module that simulates real-world missingness patterns
     - Over 40 state-of-the-art time series imputation algorithms from six different families
     - AutoML techniques to parameterize the imputation algorithms

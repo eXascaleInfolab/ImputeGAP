@@ -37,7 +37,7 @@ class TestShapesDim(unittest.TestCase):
             assert rec_sample.shape == (10, 10)
             assert np.array_equal(rec_sample, M)
 
-            rec_window =  utils.reconstruction_windowd_based(preds=model_window, nbr_timestamps=10, verbose=True, deep_verbose=True)
+            rec_window =  utils.reconstruction_window_based(preds=model_window, nbr_timestamps=10, verbose=True, deep_verbose=True)
             print(f"\n\n\n\n{rec_window = }")
             print(f"{rec_window.shape = }\n\n")
             assert rec_window.shape == (10, 10)
