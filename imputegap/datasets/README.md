@@ -23,9 +23,9 @@ real-world time series from various of applications and which cover a wide range
 | **IoT Sensing**   | [`motion`](#motion)                 | Motion Sensor (Human Activity Recognition)                |
 | **IoT Sensing**   | [`traffic`](#traffic)               | PEMS Traffic                                              |
 | **Sports**        | [`soccer`](#soccer)                 | Soccer Player Tracking                                    |
-| **Sports**        | [`sport_activity`](#sport-activity) | Sport Activity Dataset (Multi-Modal Exercise Recognition) |
+| **Sports**        | [`sport-activity`](#sport-activity) | Sport Activity Dataset (Multi-Modal Exercise Recognition) |
 | **Energy**        | [`electricity`](#electricity)       | Electricity Consumption                                   |
-| **Finance**       | [`stock_exchange`](#stock-exchange) | Exchange Rates                                            |
+| **Finance**       | [`stock-exchange`](#stock-exchange) | Exchange Rates                                            |
 
 
 <br /><br /><hr /><br /><br />
@@ -453,8 +453,8 @@ Key properties of the dataset include: volatility clustering exhibiting temporal
 
 
 <p align="center">
-  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/stock-exchang/imputegap_stock-exchange_1_plot.jpg" width="45%" />
-  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/stock-exchang/imputegap_stock-exchange_plot.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/stock-exchange/imputegap_stock-exchange_1_plot.jpg" width="45%" />
+  <img src="https://github.com/eXascaleInfolab/ImputeGAP/raw/main/imputegap/datasets/docs/stock-exchange/imputegap_stock-exchange_plot.jpg" width="45%" />
 </p>
 
 <br />
