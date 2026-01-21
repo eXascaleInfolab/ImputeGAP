@@ -43,7 +43,7 @@ class Benchmark:
         self.list_results = None
         self.aggregate_results = None
         self.heatmap = None
-        self.plots = None
+        self.subplots = None
 
 
     def _benchmark_exception(self, data, algorithm, pattern, x, N, F):
@@ -337,10 +337,7 @@ class Benchmark:
             plt.tight_layout()
             plt.show()
         else:
-            if metric == "RMSE":
-                self.heatmap = plt
-            else:
-                plt.close()
+            plt.close()
 
         return True
 
@@ -763,10 +760,6 @@ class Benchmark:
                 new_metrics = np.append(new_metrics, "RUNTIME_LOG")
 
         nbr_metrics = len(new_metrics)
-
-        print(f"{new_metrics = }")
-        print(f"{nbr_metrics = }")
-
         n_rows = int((len(new_metrics)+new_plots)/2)
 
         x_size, title_flag = 16, title
@@ -917,10 +910,8 @@ class Benchmark:
 
                     if display:
                         plt.show()
-                    else:
-                        plt.close()
 
-        self.plots = plt
+        self.subplots = plt
 
     def eval(self, algorithms=["cdrec"], datasets=["eeg-alcohol"], patterns=["mcar"], x_axis=[0.05, 0.1, 0.2, 0.4, 0.6, 0.8], optimizer="default_params", metrics=["*"], save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=200, nbr_vals=2000, dl_ratio=None, verbose=False):
         """

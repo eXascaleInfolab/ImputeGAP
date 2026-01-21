@@ -272,7 +272,7 @@ Installation
                 .. code-block:: bash
 
                     brew update
-                    brew install openssl zlib ncurses readline sqlite gdbm berkeley-db@5 bzip2 expat xz tcl-tk openblas armadillo python@3.12
+                    brew install openssl zlib ncurses readline sqlite gdbm berkeley-db@5 bzip2 expat xz tcl-tk openblas armadillo python@3.12 python-tk@3.12
 
 
                 4. Verify the installation:

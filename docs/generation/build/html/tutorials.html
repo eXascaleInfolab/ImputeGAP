@@ -460,6 +460,9 @@ The list of algorithms is described <a class="reference external" href="algorith
 <span class="c1"># launch the evaluation</span>
 <span class="n">bench</span> <span class="o">=</span> <span class="n">Benchmark</span><span class="p">()</span>
 <span class="n">bench</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">algorithms</span><span class="o">=</span><span class="n">my_algorithms</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="n">my_datasets</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="n">my_patterns</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="nb">range</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">my_opt</span><span class="p">)</span>
+
+<span class="c1"># display the plot</span>
+<span class="n">bench</span><span class="o">.</span><span class="n">subplots</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>You can enable the optimizer using the following command:</p>

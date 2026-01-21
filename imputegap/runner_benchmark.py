@@ -14,3 +14,6 @@ range = [0.05, 0.1, 0.2, 0.4, 0.6, 0.8]
 # launch the evaluation
 bench = Benchmark()
 bench.eval(algorithms=my_algorithms, datasets=my_datasets, patterns=my_patterns, x_axis=range, optimizer=my_opt)
+
+# display the plot
+bench.subplots.show()
