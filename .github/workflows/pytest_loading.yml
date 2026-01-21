@@ -18,13 +18,22 @@ jobs:
       with:
         python-version: '3.12'
 
+    - name: Free disk space
+      run: |
+        df -h
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/.ghcup
+        sudo apt-get clean
+        df -h   
+
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install libmlpack-dev
         sudo apt-get install libopenblas-dev
         sudo apt-get install python3-dev build-essential
-        pip install --upgrade google protobuf
         pip install -r requirements.txt
         pip install mypy
         pip install pytest
@@ -33,6 +42,7 @@ jobs:
     - name: Run pytest
       run: |
         python -m pytest ./tests/test_loading.py
+        python -m pytest ./tests/test_shapes_dim.py
         python -m pytest ./tests/test_contamination_mcar.py
         python -m pytest ./tests/test_contamination_mp.py
         python -m pytest ./tests/test_contamination_blackout.py
@@ -41,5 +51,4 @@ jobs:
         python -m pytest ./tests/test_contamination_overlap.py
         python -m pytest ./tests/test_contamination_distribution.py
         python -m pytest ./tests/test_exception.py
-        python -m pytest ./tests/test_benchmarking.py
         python -m pytest ./tests/test_downstream.py

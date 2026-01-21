@@ -27,7 +27,8 @@ def native_algo(__py_matrix, __py_param, __verbose=True):
 
     """
 
-    shared_lib = utils.load_share_lib("to_adapt", verbose=__verbose)
+    lib_file = "lib_soft_impute" # to adapt
+    shared_lib = utils.load_share_lib(lib_file, verbose=__verbose)
 
     __py_n = len(__py_matrix);
     __py_m = len(__py_matrix[0]);
@@ -38,14 +39,12 @@ def native_algo(__py_matrix, __py_param, __verbose=True):
 
     # depends on your needs
     __py_param = __native_c_types_import.c_ulonglong(__py_param);
-    __py_param = __native_c_types_import.c_double(__py_param);
-    __py_param = __native_c_types_import.c_ulonglong(__py_param);
 
     # Native code uses linear matrix layout, and also it's easier to pass it in like this
     __ctype_matrix = utils.__marshal_as_native_column(__py_matrix);
 
-    # call your algorithm
-    shared_lib.your_algo_name(__ctype_matrix, __ctype_size_n, __ctype_size_m, __py_param);
+    # call your algorithm > replace recoverySoftImpute by your_algo_fct
+    shared_lib.recoverySoftImpute(__ctype_matrix, __ctype_size_n, __ctype_size_m, __py_param);
 
     # convert back to numpy
     __py_imputed_matrix = utils.__marshal_as_numpy_column(__ctype_matrix, __py_n, __py_m);

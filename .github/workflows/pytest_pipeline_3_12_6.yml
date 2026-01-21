@@ -18,13 +18,22 @@ jobs:
       with:
         python-version: '3.12.6'
 
+    - name: Free disk space
+      run: |
+        df -h
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/.ghcup
+        sudo apt-get clean
+        df -h  
+
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install libmlpack-dev
         sudo apt-get install libopenblas-dev
         sudo apt-get install python3-dev build-essential
-        pip install --upgrade google protobuf
         pip install -r requirements.txt
         pip install mypy
         pip install pytest

@@ -1,31 +1,46 @@
+import os
+import platform
 import unittest
-import numpy as np
-from imputegap.recovery.imputation import Imputation
+
+import pytest
+
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 class TestGAIN(unittest.TestCase):
 
-    def test_imputation_gain_dft(self):
+    def test_imputation_gain(self, name="gain", limit=0.10):
         """
-        the goal is to test if only the simple imputation with GAIN has the expected outcome
+        the goal is to test if only the simple imputation with the technique has the expected outcome
         """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
-        ts_1.normalize(normalizer="min_max")
+        here = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(here, "toml/imputegap_results.toml")
 
-        incomp_data = ts_1.Contamination.mcar(ts_1.data, rate_series=0.18)
+        dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
-        algo = Imputation.DeepLearning.GAIN(incomp_data).impute()
+        ts = TimeSeries()
+        ts.load_series(utils.search_path(dataset), normalizer="z_score")
 
-        algo.score(ts_1.data)
-        metrics = algo.metrics
+        incomp_data = GenGap.mcar(ts.data)
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
 
-        ts_1.print_results(algo.metrics, algo.algorithm)
+        system = platform.system()
+        if system == "Darwin":
+            with pytest.raises(NotImplementedError):
+                algo.impute()
+        else:
+            algo.impute()
 
-        expected_metrics = { "RMSE": 0.09343311918947016, "MAE": 0.0707023385813999, "MI": 0.7875021240298573, "CORRELATION": 0.8890104658851162 }
+            algo.score(ts.data)
+            metrics = algo.metrics
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < 0.2, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
-        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < 0.2, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
-        self.assertTrue(abs(metrics["MI"] - expected_metrics["MI"]) < 0.4, f"metrics MI = {metrics['MI']}, expected MI = {expected_metrics['MI']} ")
-        self.assertTrue(abs(metrics["CORRELATION"] - expected_metrics["CORRELATION"]) < 0.4, f"metrics CORRELATION = {metrics['CORRELATION']}, expected CORRELATION = {expected_metrics['CORRELATION']} ")
+            print(f"{name}:{metrics = }\n")
+
+            ts.print_results(algo.metrics, algo.algorithm)
+
+            expected_metrics = {"RMSE": rmse, "MAE": mae}
+
+            self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit , f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+            self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")

@@ -1,16 +1,9 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/Chengyui/NuwaTS/tree/master
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://arxiv.org/pdf/2405.15317
-# ===============================================================================================================
+import os
 
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
+import pandas as pd
 
 plt.switch_backend('agg')
 
@@ -28,7 +21,8 @@ def adjust_learning_rate(optimizer, epoch, args):
         lr = lr_adjust[epoch]
         for param_group in optimizer.param_groups:
             param_group['lr'] = lr
-        #print('Updating learning rate to {}'.format(lr))
+        if args.verbose:
+            print('\nUpdating learning rate to {}'.format(lr))
 
 
 class EarlyStopping:
@@ -38,7 +32,7 @@ class EarlyStopping:
         self.counter = 0
         self.best_score = None
         self.early_stop = False
-        self.val_loss_min = np.Inf
+        self.val_loss_min = np.inf
         self.delta = delta
 
     def __call__(self, val_loss, model, path):

@@ -79,7 +79,7 @@ To install ImputeGAP, pre-configured with Jupyter Notebook, as a Docker containe
 
         Run the Docker container:
 
-        .. code-block:: bash
+        .. code-block:: powershell
 
             docker run -p 8888:8888 qnater/imputegap:1.1.2
 
@@ -105,7 +105,7 @@ To install ImputeGAP, pre-configured with Jupyter Notebook, as a Docker containe
 
         Run the Docker container:
 
-        .. code-block:: bash
+        .. code-block:: powershell
 
             docker run -p 8888:8888 qnater/imputegap:1.1.2
 

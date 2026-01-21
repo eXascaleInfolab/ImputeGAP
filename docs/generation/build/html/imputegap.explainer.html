@@ -6,12 +6,13 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="imputegap.recovery.downstream package" href="imputegap.downstream.html" /><link rel="prev" title="imputegap.recovery.benchmark package" href="imputegap.benchmark.html" />
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>imputegap.recovery.explainer package - ImputeGAP 1.1.1</title>
+        <title>imputegap.recovery.explainer package - ImputeGAP 1.1.2</title>
       <link rel="stylesheet" type="text/css" href="static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
     <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
     
     
 
@@ -168,7 +169,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">ImputeGAP 1.1.1</div></a>
+      <a href="index.html"><div class="brand">ImputeGAP 1.1.2</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -195,7 +196,7 @@
     <img class="sidebar-logo" src="https://www.naterscreations.com/imputegap/logo_imputegab.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">ImputeGAP 1.1.1</span>
+  <span class="sidebar-brand-text">ImputeGAP 1.1.2</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -223,14 +224,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="imputegap.html">API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">imputegap.recovery.contamination package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -389,7 +391,7 @@ file_name=”ts”, display=False, verbose=False)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.extractor_pycatch">
-<span class="sig-name descname"><span class="pre">extractor_pycatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_categories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_catch24</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/explainer.html#Explainer.extractor_pycatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.extractor_pycatch" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">extractor_pycatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_categories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_catch24</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deep_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/explainer.html#Explainer.extractor_pycatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.extractor_pycatch" title="Link to this definition">¶</a></dt>
 <dd><p>Extract features from time series data using pycatch22.</p>
 <section id="id3">
 <h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
@@ -401,6 +403,8 @@ file_name=”ts”, display=False, verbose=False)</p>
 <dt>features_list<span class="classifier">dict</span></dt><dd><p>Dictionary of all features expected.</p>
 </dd>
 <dt>do_catch24<span class="classifier">bool, optional</span></dt><dd><p>Flag to compute the mean and standard deviation for Catch24 (default is True).</p>
+</dd>
+<dt>deep_verbose<span class="classifier">bool, optional</span></dt><dd><p>Print the detail information of the extractor</p>
 </dd>
 </dl>
 </section>
@@ -417,7 +421,7 @@ file_name=”ts”, display=False, verbose=False)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.extractor_tsfel">
-<span class="sig-name descname"><span class="pre">extractor_tsfel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['spectral',</span> <span class="pre">'statistical',</span> <span class="pre">'temporal',</span> <span class="pre">'fractal']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/explainer.html#Explainer.extractor_tsfel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.extractor_tsfel" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">extractor_tsfel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['spectral',</span> <span class="pre">'statistical',</span> <span class="pre">'temporal']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/explainer.html#Explainer.extractor_tsfel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.extractor_tsfel" title="Link to this definition">¶</a></dt>
 <dd><p>Extract features using TSFEL (Time Series Feature Extraction Library).</p>
 <p>This function extracts features from the input time series data based on the specified
 categories. The categories determine the type of features to compute, such as spectral,
@@ -427,8 +431,7 @@ to compute frequency-specific features.</p>
 <h4>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
 <blockquote>
 <div><dl>
-<dt>data (numpy.ndarray):</dt><dd><p>2D array of shape (M, N), where M is the number of time series and N is the number
-of values per time series. Each row represents a separate time series.</p>
+<dt>data (numpy.ndarray):</dt><dd><p>2D array of shape (M, N), where M is the timestamp and N is the number of series</p>
 </dd>
 <dt>frequency (float, optional):</dt><dd><p>The sampling frequency of the time series data. This is used for spectral feature
 calculations (e.g., FFT-based features). If None, spectral features will be computed
@@ -439,7 +442,6 @@ using default assumptions.</p>
 <li><p>“spectral”: Extract frequency-domain features (e.g., FFT, spectral entropy).</p></li>
 <li><p>“statistical”: Extract basic statistical features (e.g., mean, variance, skewness).</p></li>
 <li><p>“temporal”: Extract temporal-domain features (e.g., autocorrelation, zero crossings).</p></li>
-<li><p>“fractal”: Extract fractal-related features (e.g., Hurst exponent, fractal dimension).</p></li>
 </ul>
 </dd>
 </dl>
@@ -491,9 +493,9 @@ statistical, temporal, frequency, and shape-based.</p>
 <h4>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
 <blockquote>
 <div><dl class="simple">
-<dt>data (numpy.ndarray): 2D array of shape (M, N), where M is the number of series</dt><dd><p>and N is the number of values per series.</p>
+<dt>data (numpy.ndarray):</dt><dd><p>2D array of shape (M, N), where M is the timestamp and N is the number of series</p>
 </dd>
-<dt>categories (list): List of categories to extract. Must include one or more of:</dt><dd><p>[“statistical”, “temporal”, “frequency”, “shape”]</p>
+<dt>categories (list):</dt><dd><p>List of categories to extract. Must include one or more of: [“statistical”, “temporal”, “frequency”, “shape”]</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -548,7 +550,7 @@ list: A list of tuples (feature_name, category, formatted_feature_name).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.explainer.Explainer.shap_explainer">
-<span class="sig-name descname"><span class="pre">shap_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cdrec'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extractor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pycatch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mcar'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/explainer.html#Explainer.shap_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.shap_explainer" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">shap_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cdrec'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extractor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pycatch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mcar'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deep_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/explainer.html#Explainer.shap_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.explainer.Explainer.shap_explainer" title="Link to this definition">¶</a></dt>
 <dd><p>Handle parameters and set variables to launch the SHAP model.</p>
 <section id="id13">
 <h4>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
@@ -580,6 +582,8 @@ list: A list of tuples (feature_name, category, formatted_feature_name).</p>
 <dt>display<span class="classifier">bool, optional</span></dt><dd><p>Whether to display the SHAP plots (default is False).</p>
 </dd>
 <dt>verbose<span class="classifier">bool, optional</span></dt><dd><p>Whether to print detailed output (default is False).</p>
+</dd>
+<dt>deep_verbose<span class="classifier">bool, optional</span></dt><dd><p>Whether to print debug output (default is False).</p>
 </dd>
 </dl>
 </section>
@@ -703,7 +707,7 @@ to generate explanations for the imputation results, which are logged in a local
       
     </aside>
   </div>
-</div><script src="static/documentation_options.js?v=58fbf978"></script>
+</div><script src="static/documentation_options.js?v=6f037312"></script>
     <script src="static/doctools.js?v=9bcbadda"></script>
     <script src="static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="static/scripts/furo.js?v=5fa4622c"></script>

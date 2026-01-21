@@ -78,12 +78,15 @@ def grouse(incomp_data, max_rank, logs=True, verbose=True, lib_path=None):
     """
     start_time = time.time()  # Record start time
 
+    if logs and verbose:
+        print(f"\n> logs: imputation GROUSE - Data requires transposition to be effective. New shape: {incomp_data.T.shape}\n")
+
     # Call the C++ function to perform recovery
-    recov_data = native_grouse(incomp_data, max_rank, verbose)
+    recov_data = native_grouse(incomp_data.T, max_rank, verbose)
 
     end_time = time.time()
 
     if logs and verbose:
         print(f"\n> logs: imputation GROUSE - Execution Time: {(end_time - start_time):.4f} seconds\n")
 
-    return recov_data
+    return recov_data.T

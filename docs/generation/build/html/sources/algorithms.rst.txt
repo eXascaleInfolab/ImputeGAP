@@ -2,89 +2,110 @@
 Algorithms
 ==========
 
-To learn how to use an imputation algorithm, please refer to the `tutorial <tutorials.html#imputation>`_.
+To learn how to apply imputation within the library, please refer to the `tutorial <tutorials.html#imputation>`_.
 
 
 .. list-table::
    :header-rows: 1
 
-   * - **Family**
-     - **Algorithm**
+   * - **Algorithm**
+     - **Family**
      - **Venue -- Year**
-   * - LLMs
-     - NuwaTS [33]_
+   * - NuwaTS [33]_
+     - LLMs
      - Arxiv -- 2024
-   * - LLMs
-     - GPT4TS [34]_
+   * - GPT4TS [34]_
+     - LLMs
      - NeurIPS -- 2023
+   * - 🚧 MOMENT [37]_
+     - LLMs
+     - ICLR -- 2025
    * -
      -
      -
    * -
      -
      -
-   * - Deep Learning
-     - MissNet [27]_
+   * - MissNet [27]_
+     - Deep Learning
      - KDD -- 2024
-   * - Deep Learning
-     - MPIN [25]_
+   * - MPIN [25]_
+     - Deep Learning
      - PVLDB -- 2024
-   * - Deep Learning
-     - BitGraph [32]_
+   * - BitGraph [32]_
+     - Deep Learning
      - ICLR -- 2024
-   * - Deep Learning
-     - BayOTIDE [30]_
+   * - BayOTIDE [30]_
+     - Deep Learning
      - PMLR -- 2024
-   * - Deep Learning
-     - PRISTI [26]_
+   * - TimesNet [36]_
+     - Deep Learning
+     - ICLR -- 2023
+   * - SAITS [39]_
+     - Deep Learning
+     - ESWA -- 2023
+   * - PRISTI [26]_
+     - Deep Learning
      - ICDE -- 2023
-   * - Deep Learning
-     - GRIN [29]_
+   * - GRIN [29]_
+     - Deep Learning
      - ICLR -- 2022
-   * - Deep Learning
-     - DeepMVI [24]_
+   * - CSDI [35]_
+     - Deep Learning
+     - NeurIPS -- 2021
+   * - DeepMVI [24]_
+     - Deep Learning
      - PVLDB -- 2021
-   * - Deep Learning
-     - HKMF_T [31]_
+   * - HKMFT [31]_
+     - Deep Learning
      - TKDE -- 2021
-   * - Deep Learning
-     - MRNN [22]_
+   * - MRNN [22]_
+     - Deep Learning
      - IEEE Trans on BE -- 2019
-   * - Deep Learning
-     - BRITS [23]_
+   * - BRITS [23]_
+     - Deep Learning
      - NeurIPS -- 2018
-   * - Deep Learning
-     - GAIN [28]_
+   * - GAIN [28]_
+     - Deep Learning
      - ICML -- 2018
+   * - 🚧 SSGAN [38]_
+     - Deep Learning
+     - AAAI -- 2021
+   * - 🚧 GP-VAE [40]_
+     - Deep Learning
+     - AISTATS -- 2020
+   * - 🚧 NAOMI [41]_
+     - Deep Learning
+     - NeurIPS -- 2019
    * -
      -
      -
    * -
      -
      -
-   * - Matrix Completion
-     - CDRec [1]_
+   * - CDRec [1]_
+     - Matrix Completion
      - KAIS -- 2020
-   * - Matrix Completion
-     - TRMF [8]_
+   * - TRMF [8]_
+     - Matrix Completion
      - NeurIPS -- 2016
-   * - Matrix Completion
-     - GROUSE [3]_
+   * - GROUSE [3]_
+     - Matrix Completion
      - PMLR -- 2016
-   * - Matrix Completion
-     - ROSL [4]_
+   * - ROSL [4]_
+     - Matrix Completion
      - CVPR -- 2014
-   * - Matrix Completion
-     - SoftImpute [6]_
+   * - SoftImpute [6]_
+     - Matrix Completion
      - JMLR -- 2010
-   * - Matrix Completion
-     - SVT [7]_
+   * - SVT [7]_
+     - Matrix Completion
      - SIAM J. OPTIM -- 2010
-   * - Matrix Completion
-     - SPIRIT [5]_
+   * - SPIRIT [5]_
+     - Matrix Completion
      - VLDB -- 2005
-   * - Matrix Completion
-     - IterativeSVD [2]_
+   * - IterativeSVD [2]_
+     - Matrix Completion
      - BIOINFORMATICS -- 2001
    * -
      -
@@ -92,14 +113,14 @@ To learn how to use an imputation algorithm, please refer to the `tutorial <tuto
    * -
      -
      -
-   * - Pattern Search
-     - TKCM [11]_
+   * - TKCM [11]_
+     - Pattern Search
      - EDBT -- 2017
-   * - Pattern Search
-     - STMVL [9]_
+   * - STMVL [9]_
+     - Pattern Search
      - IJCAI -- 2016
-   * - Pattern Search
-     - DynaMMo [10]_
+   * - DynaMMo [10]_
+     - Pattern Search
      - KDD -- 2009
    * -
      -
@@ -107,17 +128,17 @@ To learn how to use an imputation algorithm, please refer to the `tutorial <tuto
    * -
      -
      -
-   * - Machine Learning
-     - IIM [12]_
+   * - IIM [12]_
+     - Machine Learning
      - ICDE -- 2019
-   * - Machine Learning
-     - XGBOOST [13]_
+   * - XGBOOST [13]_
+     - Machine Learning
      - KDD -- 2016
-   * - Machine Learning
-     - MICE [14]_
+   * - MICE [14]_
+     - Machine Learning
      - Statistical Software -- 2011
-   * - Machine Learning
-     - MissForest [15]_
+   * - MissForest [15]_
+     - Machine Learning
      - BioInformatics -- 2011
    * -
      -
@@ -125,26 +146,34 @@ To learn how to use an imputation algorithm, please refer to the `tutorial <tuto
    * -
      -
      -
-   * - Statistics
-     - KNNImpute
+   * - KNNImpute
+     - Statistics
      - _
-   * - Statistics
-     - Interpolation
+   * - Interpolation
+     - Statistics
      - _
-   * - Statistics
-     - MinImpute
+   * - MinImpute
+     - Statistics
      - _
-   * - Statistics
-     - ZeroImpute
+   * - ZeroImpute
+     - Statistics
      - _
-   * - Statistics
-     - MeanImpute
+   * - MeanImpute
+     - Statistics
      - _
-   * - Statistics
-     - MeanImputeBySeries
+   * - MeanImputeBySeries
+     - Statistics
      - _
 
 
+.. list-table::
+   :header-rows: 1
+
+
+
+.. raw:: html
+
+   <br><br>
 
 .. _references:
 
@@ -173,7 +202,7 @@ References
 
 .. [11] Kevin Wellenzohn, Michael H. Böhlen, Anton Dignös, Johann Gamper, Hannes Mitterer: Continuous Imputation of Missing Values in Streams of Pattern-Determining Time Series. EDBT 2017: 330-341
 
-.. [12] Aoqian Zhang, Shaoxu Song, Yu Sun, Jianmin Wang: Learning Individual Models for Imputation (Technical Report). CoRR abs/2004.03436 (2020)
+.. [12] Aoqian Zhang, Shaoxu Song, Yu Sun, Jianmin Wang: Learning Individual Models for Imputation. ICDE (2019)
 
 .. [13] Tianqi Chen, Carlos Guestrin: XGBoost: A Scalable Tree Boosting System. KDD 2016: 785-794
 
@@ -206,3 +235,31 @@ References
 .. [33] Jinguo Cheng, Chunwei Yang, Wanlin Cai, Yuxuan Liang, Qingsong Wen, Yuankai Wu: NuwaTS: a Foundation Model Mending Every Incomplete Time Series. Arxiv 2024
 
 .. [34] Tian Zhou, Peisong Niu, Xue Wang, Liang Sun, Rong Jin: One fits all: power general time series analysis by pretrained LM. NeurIPS 2023
+
+.. [35] Yusuke Tashiro, Jiaming Song, Yang Song, Stefano Ermon: CSDI: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation. NeurIPS 2021
+
+.. [36] Haixu Wu, Tengge Hu, Yong Liu, Hang Zhou, Jianmin Wang, Mingsheng Long: TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis. ICLR 2023
+
+
+.. [37] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. ICLR 2025
+
+.. [38] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin : Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI 2021
+
+.. [39] Wenjie Du, David Côté, Yan Liu : SAITS: : Self-attention-based imputation for time series . ESWA 2023
+
+.. [40] Vincent Fortuin, Dmitry Baranchuk, Gunnar Rätsch,  Stephan Mandt : GP-VAE: Deep Probabilistic Multivariate Time Series Imputation. AISTATS 2020
+
+.. [41] Yukai Liu, Rose Yu, Stephan Zheng, Eric Zhan, Yisong Yue : NAOMI: Non-Autoregressive Multiresolution Sequence Imputation. NeurIPS 2019
+
+
+
+.. raw:: html
+
+   <br><br>
+
+
+🚧 = under integration
+
+.. raw:: html
+
+   <br><br>

@@ -9,7 +9,7 @@ Module contents
    :maxdepth: 4
 
    imputegap.manager
-   imputegap.manager.contamination
+   imputegap.gengap
    imputegap.imputation
    imputegap.optimization
    imputegap.benchmark

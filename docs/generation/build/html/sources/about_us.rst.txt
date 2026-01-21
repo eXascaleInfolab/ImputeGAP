@@ -2,7 +2,7 @@
 About Us
 ========
 
-Driven by our passion for time series, machine learning, technology, and programming, we aim to build innovative tools that bridge cutting-edge research and practical applications.
+Driven by our passion for time series, data cleaning, and systems, we aim to build innovative time series tools that bridge academia and practical applications.
 
 For project-related inquiries, you are welcome to contact our team.
 
@@ -10,6 +10,7 @@ Core Maintainers
 ================
 
 Active developers and researchers who contribute to the design, implementation, and maintenance of our core libraries and tools. They oversee discussions, supervise technical decisions, and ensure consistent quality across the project.
+
 
 Quentin Nater
 -------------
@@ -21,7 +22,7 @@ Quentin Nater
    :class: portrait
    :target: https://exascale.info/members/quentin-nater/
 
-Quentin Nater is a PhD student jointly supervised by `Mourad Khayati <https://exascale.info/members/mourad-khayati/>`_ and `Philippe Cudré-Mauroux <https://exascale.info/phil/>`_ at the Department of Computer Science of the `University of Fribourg <https://www.unifr.ch/home/en/>`_ in Switzerland. His main research interests revolve around time series analytics, with a focus on data imputation, machine learning and multimodal learning.
+Quentin Nater is a PhD student jointly supervised by `Mourad Khayati <https://mkhayati.github.io/>`_ and `Philippe Cudré-Mauroux <https://exascale.info/phil/>`_ at the Department of Computer Science of the `University of Fribourg <https://www.unifr.ch/home/en/>`_ in Switzerland. His main research interests revolve around time series analytics, with a focus on data imputation, machine learning and multimodal learning.
 
 .. raw:: html
 
@@ -42,13 +43,13 @@ Mourad Khayati
    :width: 150px
    :align: left
    :class: portrait
-   :target: https://exascale.info/members/mourad-khayati/
+   :target: https://mkhayati.github.io/
 
-Mourad Khayati is a Senior Researcher and a Lecturer with the eXascale Infolab and the Advanced Software Engineering group, respectively, at the Department of Computer Science of the `University of Fribourg <https://www.unifr.ch/home/en/>`_, Switzerland. He obtained his PhD from the University of Zurich, Switzerland, under the supervision of Prof. Michael Böhlen. His research interests include Time Series analytics and data quality with a special focus on temporal data repair/cleaning. He is the recipient of the VLDB 2020 Best Experiments and Analysis Paper Award.
+Mourad Khayati is a Senior Lecturer at the Department of Computer Science of the `University of Fribourg <https://www.unifr.ch/home/en/>`_, Switzerland. Prior to that he was a Senior Researcher in the eXascale Infolab group at the same university. He obtained his PhD from the University of Zurich, Switzerland, under the supervision of Prof. Michael Böhlen. His research interests lie in the field of Time Series analytics, with a special focus on data cleaning, missing values imputation, and time series data management.
 
 .. raw:: html
 
-    <a href="https://exascale.info/members/mourad-khayati/" target="_blank" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none; margin-left:185px; ">
+    <a href="https://mkhayati.github.io/" target="_blank" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none; margin-left:185px; ">
          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
            <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5H2v7a.5.5 0 0 0 .5.5H6a.5.5 0 0 0 .5-.5V10h3v4.5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5v-7h.5a.5.5 0 0 0 .354-.854l-6-6z"/>
          </svg>

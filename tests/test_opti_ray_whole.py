@@ -2,7 +2,7 @@ import unittest
 
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
-
+from imputegap.recovery.contamination import GenGap
 
 class TestOptiRAY(unittest.TestCase):
 
@@ -21,7 +21,7 @@ class TestOptiRAY(unittest.TestCase):
         ts_1.normalize(normalizer="min_max")
 
         # 3. contamination of the data
-        ts_mask = ts_1.Contamination.mcar(ts_1.data, rate_series=0.18)
+        ts_mask = GenGap.mcar(ts_1.data, rate_series=0.18)
 
         # 4. imputation of the contaminated data
         # imputation with AutoML which will discover the optimal hyperparameters for your dataset and your algorithm
@@ -40,6 +40,13 @@ class TestOptiRAY(unittest.TestCase):
 
             # 7. save hyperparameters
             utils.save_optimization(optimal_params=imputer.parameters, algorithm=alg, dataset="eeg", optimizer="ray")
+
+            self.assertIsInstance(imputer.metrics, dict)
+            self.assertTrue(len(imputer.metrics) > 0, "Metrics dict is empty")
+            self.assertIn("MAE", imputer.metrics)
+            mae = float(imputer.metrics["MAE"])
+            self.assertGreaterEqual(mae, 0.0, f"MAE should be >= 0, got {mae} for {alg}")
+            self.assertLessEqual(mae, 100.0, f"MAE should be <= 1, got {mae} for {alg}")
 
         check = True
         self.assertTrue(check)

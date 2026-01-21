@@ -13,22 +13,22 @@ class TestLoading(unittest.TestCase):
         utils.display_title()
 
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test.txt"))
+        ts_1.load_series(utils.search_path("test.txt"), normalizer=None)
 
-        self.assertEqual(ts_1.data.shape, (10, 25))
-        self.assertEqual(ts_1.data[0, 1], 2.5)
-        self.assertEqual(ts_1.data[1, 0], 0.5)
+        self.assertEqual(ts_1.data.shape, (25, 10))
+        self.assertEqual(ts_1.data[1, 0], 2.5)
+        self.assertEqual(ts_1.data[0, 1], 0.5)
 
     def test_loading_chlorine(self):
         """
         Verify if the manager of a dataset is working
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series(utils.search_path("chlorine"), normalizer=None)
 
-        self.assertEqual(ts_1.data.shape, (50, 1000))
-        self.assertEqual(ts_1.data[0, 1], 0.0154797)
-        self.assertEqual(ts_1.data[1, 0], 0.0236836)
+        self.assertEqual(ts_1.data.shape, (1000, 50))
+        self.assertEqual(ts_1.data[1, 0], 0.0154797)
+        self.assertEqual(ts_1.data[0, 1], 0.0236836)
 
     def test_loading_plot(self):
         """

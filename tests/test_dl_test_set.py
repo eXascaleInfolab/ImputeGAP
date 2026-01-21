@@ -1,8 +1,8 @@
 import unittest
 
 import numpy as np
+from imputegap.recovery.contamination import GenGap
 
-from imputegap.recovery.benchmark import Benchmark
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
 
@@ -19,10 +19,12 @@ class TestDLTestSet(unittest.TestCase):
 
         # load and normalize the dataset
         ts.load_series(utils.search_path("chlorine"))
-        ts.normalize(normalizer="z_score")
 
         # contaminate the time series
-        ts_m = ts.Contamination.mcar(ts.data)
+        ts_m = GenGap.mcar(ts.data)
+
+        ts_m = ts_m.T
+        ts.data = ts.data.T
 
         M, N = ts_m.shape
 
@@ -82,7 +84,7 @@ class TestDLTestSet(unittest.TestCase):
         assert num_val_test == 0, f"Mismatch val set count: {num_val_test} != {0}"
 
 
-        mask_train = utils.generate_random_mask(gt=cont_data_matrix, mask_test=mask_test, mask_valid=mask_valid, droprate=artificial_training_drop, offset=offset, verbose=verbose, seed=seed)
+        mask_train = utils.generate_random_mask(gt=cont_data_matrix, mask_test=mask_test, mask_valid=mask_valid, droprate=artificial_training_drop, offset=offset, series_like=False, verbose=verbose, seed=seed)
 
         exp_tr = int(M * N * artificial_training_drop)-miss
         num_tr = np.sum(mask_train)

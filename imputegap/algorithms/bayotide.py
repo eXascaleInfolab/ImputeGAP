@@ -1,9 +1,9 @@
 import time
 
-from imputegap.wrapper.AlgoPython.BayOTIDE.BayOTIDE import recovBayOTIDE
+from imputegap.wrapper.AlgoPython.BayOTIDE.recovBayOTIDE import recovBayOTIDE
 
 
-def bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_scale=1, a0=0.6, b0=2.5, v=0.5, num_workers=0, tr_ratio=0.9, logs=True, verbose=False):
+def bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_scale=1, a0=0.6, b0=2.5, v=0.5, num_fold=1, tr_ratio=0.8, logs=True, verbose=False):
     """
     BayOTIDE class to impute missing values using Bayesian Online Multivariate Time series Imputation with functional decomposition
 
@@ -36,8 +36,8 @@ def bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_sc
     v : float, (optional) (default: 0.5)
         Variance parameter.
 
-    num_workers: int, optional
-         Number of worker for multiprocess (default is 0).
+    num_fold: int, optional
+         Number of fold used for training (default is 1).
 
     tr_ratio : float, (optional) (default: 0.6)
         Ratio of the training set for the model.
@@ -61,7 +61,7 @@ def bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_sc
 
     Example
     -------
-        >>> recov_data = bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_scale=1, a0=0.6, b0=2.5, v=0.5, tr_ratio=0.6)
+        >>> recov_data = bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_scale=1, a0=0.6, b0=2.5, v=0.5, num_fold=1, tr_ratio=0.8)
         >>> print(recov_data)
 
     References
@@ -71,7 +71,8 @@ def bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_sc
     """
     start_time = time.time()  # Record start time
 
-    recov_data = recovBayOTIDE(incomp_m=incomp_data, K_trend=K_trend, K_season=K_season, n_season=n_season, K_bias=K_bias, time_scale=time_scale, a0=a0, b0=b0, v=v, num_workers=num_workers, tr_ratio=tr_ratio, verbose=verbose)
+    #recov_data = recovBayOTIDE(incomp_m=incomp_data, K_trend=K_trend, K_season=K_season, n_season=n_season, K_bias=K_bias, time_scale=time_scale, a0=a0, b0=b0, v=v, num_workers=0, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = recovBayOTIDE(incomp_data=incomp_data, K_trend=K_trend, K_season=K_season, n_season=n_season, K_bias=K_bias, time_scale=time_scale, a0=a0, b0=b0, v=v, num_fold=num_fold, tr_ratio=tr_ratio, verbose=verbose)
 
     end_time = time.time()
 

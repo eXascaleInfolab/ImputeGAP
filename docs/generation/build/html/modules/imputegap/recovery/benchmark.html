@@ -5,12 +5,13 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>imputegap.recovery.benchmark - ImputeGAP 1.1.1</title>
+        <title>imputegap.recovery.benchmark - ImputeGAP 1.1.2</title>
       <link rel="stylesheet" type="text/css" href="../../../static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
     <link rel="stylesheet" type="text/css" href="../../../static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
     
     
 
@@ -167,7 +168,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">ImputeGAP 1.1.1</div></a>
+      <a href="../../../index.html"><div class="brand">ImputeGAP 1.1.2</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +195,7 @@
     <img class="sidebar-logo" src="https://www.naterscreations.com/imputegap/logo_imputegab.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">ImputeGAP 1.1.1</span>
+  <span class="sidebar-brand-text">ImputeGAP 1.1.2</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -222,14 +223,15 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../algorithms.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../imputegap.gengap.html">imputegap.recovery.contamination package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -279,11 +281,9 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">xlsxwriter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
-
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
 
 
 <div class="viewcode-block" id="Benchmark">
@@ -321,10 +321,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">list_results</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aggregate_results</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">heatmap</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplots</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_benchmark_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_benchmark_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">F</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check whether a specific algorithm-pattern combination should be excluded from benchmarking.</span>
 
@@ -335,12 +335,21 @@
 <span class="sd">        ----------</span>
 <span class="sd">        data : str</span>
 <span class="sd">            Dataset used</span>
+
 <span class="sd">        algorithm : str</span>
 <span class="sd">            Name of the imputation algorithm (e.g., &#39;DEEPMVI&#39;, &#39;PRISTI&#39;).</span>
+
 <span class="sd">        pattern : str</span>
 <span class="sd">            Missing data pattern (e.g., &#39;MCAR&#39;, &#39;ALIGNED&#39;).</span>
+
 <span class="sd">        x : float</span>
 <span class="sd">            Proportion of missing values in the data (between 0 and 1).</span>
+
+<span class="sd">        N: int</span>
+<span class="sd">            Number of values</span>
+
+<span class="sd">        F : int</span>
+<span class="sd">            Number of series</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -352,6 +361,10 @@
 <span class="sd">            - For DeepMVI with MCAR pattern and x &gt; 0.6, skip benchmarking.</span>
 <span class="sd">            - For PRISTI, always skip benchmarking.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">#if M &lt; 5 or N &lt; 5:</span>
+        <span class="c1">#    print(f&quot;\n(BENCH) The imputation algorithm {algorithm} has not enough data to proceed ({M}, {N})&quot;)</span>
+        <span class="k">return</span> <span class="kc">False</span>
 
         <span class="k">if</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DEEPMVI&#39;</span> <span class="ow">or</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DEEP_MVI&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;mcar&quot;</span> <span class="ow">or</span> <span class="n">pattern</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;missing_completely_at_random&quot;</span><span class="p">:</span>
@@ -369,8 +382,6 @@
             <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">0.8</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(BENCH) The imputation algorithm </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is not compatible with this configuration </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">. Not enough series to train the model.&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">True</span>
-
-
 
         <span class="k">return</span> <span class="kc">False</span>
 
@@ -572,20 +583,11 @@
         <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mcolors</span>
         <span class="n">cmap</span> <span class="o">=</span> <span class="n">mcolors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;trunc(</span><span class="si">{</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Greys</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="mf">0.3</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="mf">0.9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Greys</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mi">256</span><span class="p">)))</span>
 
-        <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;RMSE&quot;</span><span class="p">:</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;CORRELATION&quot;</span><span class="p">:</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;MAE&quot;</span><span class="p">:</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;MI&quot;</span><span class="p">:</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">metric</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;runtime&quot;</span><span class="p">:</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">metric</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;runtime_log&quot;</span><span class="p">:</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+        <span class="n">norm_ranges</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RMSE&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;CORRELATION&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;MAE&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span> <span class="s2">&quot;MI&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span> <span class="s2">&quot;runtime&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5000</span><span class="p">),</span> <span class="s2">&quot;runtime_log&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">}</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="n">metric</span> <span class="k">if</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">norm_ranges</span> <span class="k">else</span> <span class="n">metric</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">norm_ranges</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span><span class="p">))</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
 
         <span class="c1"># Create the heatmap</span>
         <span class="n">heatmap</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">scores_list</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
@@ -616,20 +618,175 @@
         <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>  <span class="c1"># Save in HD with tight layout</span>
 
-
-
-
         <span class="c1"># Show the plot</span>
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;RMSE&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">heatmap</span> <span class="o">=</span> <span class="n">plt</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="Benchmark.generate_reports_summary">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_reports_summary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_reports_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_of_values</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">],</span> <span class="n">run</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">rt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate and save a text report of metrics and timing for each dataset, algorithm, and pattern for the whole experiment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run_of_values : dict</span>
+<span class="sd">            Dictionary containing scores and timing information for each dataset, pattern, and algorithm.</span>
+<span class="sd">        save_dir : str, optional</span>
+<span class="sd">            Directory to save the reports file (default is &quot;./reports&quot;).</span>
+<span class="sd">        dataset : str, optional</span>
+<span class="sd">            Name of the data for the report name.</span>
+<span class="sd">        metrics : str, optional</span>
+<span class="sd">            List of metrics asked for in the report.</span>
+<span class="sd">        run : int, optional</span>
+<span class="sd">            Number of the run.</span>
+<span class="sd">        rt : float, optional</span>
+<span class="sd">            Total time of the run.</span>
+<span class="sd">        title : str, optional</span>
+<span class="sd">            Title of the report (default is &quot;&quot;).</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Whether to display the contamination information (default is True).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The report is saved in a &quot;report.txt&quot; file in `save_dir`, organized in sections with headers and results.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">metric_unit</span> <span class="o">=</span> <span class="s2">&quot;ms&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;RMSE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
+            <span class="n">to_call</span> <span class="o">=</span> <span class="p">[</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;RUNTIME&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">to_call</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="s2">&quot;RUNTIME&quot;</span><span class="p">]</span>
+
+        <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">list_of_metrics</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;RUNTIME&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_metrics</span><span class="p">:</span>
+                <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_metrics</span><span class="p">,</span> <span class="s2">&quot;RUNTIME&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;RUNTIME_LOG&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_metrics</span><span class="p">:</span>
+                <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_metrics</span><span class="p">,</span> <span class="s2">&quot;RUNTIME_LOG&quot;</span><span class="p">)</span>
+
+        <span class="n">opt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">all_patterns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">patterns_to_algos</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">scores</span> <span class="ow">in</span> <span class="n">run_of_values</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">patterns_items</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">algorithm_items</span> <span class="ow">in</span> <span class="n">patterns_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">all_patterns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">optimizer_items</span> <span class="ow">in</span> <span class="n">algorithm_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">patterns_to_algos</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">opt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="c1"># grab the first optimizer name we see</span>
+                            <span class="k">for</span> <span class="n">optimizer</span> <span class="ow">in</span> <span class="n">optimizer_items</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                <span class="n">opt</span> <span class="o">=</span> <span class="n">optimizer</span>
+                                <span class="k">break</span>
+
+        <span class="c1"># 2) open the report ONCE (not inside any dataset loop)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">title_report</span> <span class="o">=</span> <span class="s2">&quot;report_&quot;</span> <span class="o">+</span> <span class="n">title</span> <span class="o">+</span> <span class="s2">&quot;.log&quot;</span>
+        <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">title_report</span><span class="p">)</span>
+        <span class="n">current_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated on: </span><span class="si">{</span><span class="n">current_time</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total runtime: </span><span class="si">{</span><span class="n">rt</span><span class="si">}</span><span class="s2"> (ms)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">run</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run number: </span><span class="si">{</span><span class="n">run</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">120</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># 3) one big table per (pattern, metric) including ALL datasets</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">all_patterns</span><span class="p">):</span>
+                <span class="n">algos</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">patterns_to_algos</span><span class="p">[</span><span class="n">pattern</span><span class="p">])</span>
+
+                <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">new_metrics</span><span class="p">:</span>
+                    <span class="c1"># nice title (avoid Python set display)</span>
+                    <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;RUNTIME&quot;</span><span class="p">:</span>
+                        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">metric_unit</span><span class="si">}</span><span class="s2">], </span><span class="si">{</span><span class="n">opt</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">opt</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">title</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># build rows across ALL datasets in runs_plots_scores</span>
+                    <span class="n">row_map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># (dataset, rate) -&gt; {algo: score_str}</span>
+                    <span class="k">for</span> <span class="n">scores</span> <span class="ow">in</span> <span class="n">run_of_values</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">patterns_items</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="n">pattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">patterns_items</span><span class="p">:</span>
+                                <span class="k">continue</span>
+                            <span class="k">for</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">optimizer_items</span> <span class="ow">in</span> <span class="n">patterns_items</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                                <span class="k">for</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">x_data_items</span> <span class="ow">in</span> <span class="n">optimizer_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                                    <span class="k">for</span> <span class="n">rate</span><span class="p">,</span> <span class="n">payload</span> <span class="ow">in</span> <span class="n">x_data_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                                        <span class="n">val</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scores&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                                        <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                                            <span class="n">row_map</span><span class="p">[(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">rate</span><span class="p">)][</span><span class="n">algorithm</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">.10f</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">row_map</span><span class="p">:</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[no results]</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># headers &amp; widths</span>
+                    <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;Rate&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">algos</span><span class="p">)</span>
+                    <span class="n">ds_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="nb">max</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="k">for</span> <span class="n">ds</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">row_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">rate_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="nb">max</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">row_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">algo_width</span> <span class="o">=</span> <span class="mi">18</span>
+                    <span class="n">col_widths</span> <span class="o">=</span> <span class="p">[</span><span class="n">ds_width</span><span class="p">,</span> <span class="n">rate_width</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">algo_width</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">algos</span><span class="p">)</span>
+
+                    <span class="k">def</span><span class="w"> </span><span class="nf">fmt_row</span><span class="p">(</span><span class="n">vals</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">:</span><span class="s2">^</span><span class="si">{</span><span class="n">w</span><span class="si">}}</span><span class="s2"> &quot;</span> <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">col_widths</span><span class="p">))</span>
+
+                    <span class="n">header_row</span> <span class="o">=</span> <span class="n">fmt_row</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+                    <span class="n">sep_row</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">header_row</span><span class="p">)</span>
+
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sep_row</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header_row</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sep_row</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">to_call</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">title</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">sep_row</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">header_row</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">sep_row</span><span class="p">)</span>
+
+                    <span class="k">def</span><span class="w"> </span><span class="nf">row_key</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+                        <span class="n">ds</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">k</span>
+                        <span class="c1"># sort numerics first by value, then non-numerics by string;</span>
+                        <span class="c1"># within the same rate, sort by dataset name</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">rf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rf</span><span class="p">,</span> <span class="n">ds</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">rate</span><span class="p">),</span> <span class="n">ds</span><span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">row_map</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">row_key</span><span class="p">):</span>
+                        <span class="n">ds</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">key</span>
+                        <span class="n">row_vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">ds</span><span class="p">,</span> <span class="n">rate</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">row_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">algos</span><span class="p">]</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="n">fmt_row</span><span class="p">(</span><span class="n">row_vals</span><span class="p">)</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">to_call</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sep_row</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">to_call</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">sep_row</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># optional: dump raw dict(s)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Dictionary of Results:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">run_of_values</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="Benchmark.generate_reports_txt">
@@ -680,7 +837,6 @@
                 <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_metrics</span><span class="p">,</span> <span class="s2">&quot;RUNTIME&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;RUNTIME_LOG&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_metrics</span><span class="p">:</span>
                 <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_metrics</span><span class="p">,</span> <span class="s2">&quot;RUNTIME_LOG&quot;</span><span class="p">)</span>
-
         <span class="n">opt</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">patterns_items</span> <span class="ow">in</span> <span class="n">runs_plots_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">algorithm_items</span> <span class="ow">in</span> <span class="n">patterns_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -703,8 +859,7 @@
                     <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Report for Dataset: </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated on: </span><span class="si">{</span><span class="n">current_time</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total runtime: </span><span class="si">{</span><span class="n">rt</span><span class="si">}</span><span class="s2"> (ms)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">run</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run number: </span><span class="si">{</span><span class="n">run</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run number: </span><span class="si">{</span><span class="n">run</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">120</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
                     <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">new_metrics</span><span class="p">:</span>
@@ -763,114 +918,92 @@
                     <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">runs_plots_scores</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    def generate_reports_excel(self, runs_plots_scores, save_dir=&quot;./reports&quot;, dataset=&quot;&quot;, run=-1, verbose=True):</span>
+<span class="sd">        os.makedirs(save_dir, exist_ok=True)</span>
+<span class="sd">        save_path = os.path.join(save_dir, f&quot;report_{dataset}.xlsx&quot;)</span>
 
-<div class="viewcode-block" id="Benchmark.generate_reports_excel">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_reports_excel">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">generate_reports_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs_plots_scores</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">run</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generate and save an Excel-like text report of metrics and timing for each dataset, algorithm, and pattern.</span>
+<span class="sd">        # Create an Excel workbook</span>
+<span class="sd">        workbook = xlsxwriter.Workbook(save_path)</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        runs_plots_scores : dict</span>
-<span class="sd">            Dictionary containing scores and timing information for each dataset, pattern, and algorithm.</span>
-<span class="sd">        save_dir : str, optional</span>
-<span class="sd">            Directory to save the Excel-like file (default is &quot;./reports&quot;).</span>
-<span class="sd">        dataset : str, optional</span>
-<span class="sd">            Name of the data for the Excel-like file name.</span>
-<span class="sd">        run : int, optional</span>
-<span class="sd">            Number of the run</span>
-<span class="sd">        verbose : bool, optional</span>
-<span class="sd">            Whether to display the contamination information (default is True).</span>
+<span class="sd">        # Add a summary sheet with the header, creation date, dictionary content, and links to other sheets</span>
+<span class="sd">        summary_sheet = workbook.add_worksheet(&quot;Summary&quot;)</span>
+<span class="sd">        current_time = datetime.datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)</span>
+<span class="sd">        summary_sheet.set_column(0, 1, 50)</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;report_</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">.xlsx&quot;</span><span class="p">)</span>
+<span class="sd">        # Title and header</span>
+<span class="sd">        summary_sheet.write(0, 0, &quot;ImputeGAP, A library of Imputation Techniques for Time Series Data&quot;)</span>
+<span class="sd">        summary_sheet.write(2, 0, &quot;Report for Dataset&quot;)</span>
+<span class="sd">        summary_sheet.write(2, 1, dataset)</span>
+<span class="sd">        summary_sheet.write(3, 0, &quot;Generated on&quot;)</span>
+<span class="sd">        summary_sheet.write(3, 1, current_time)</span>
+<span class="sd">        if run &gt;= 0:</span>
+<span class="sd">            summary_sheet.write(4, 0, &quot;Run Number&quot;)</span>
+<span class="sd">            summary_sheet.write(4, 1, run)</span>
 
-        <span class="c1"># Create an Excel workbook</span>
-        <span class="n">workbook</span> <span class="o">=</span> <span class="n">xlsxwriter</span><span class="o">.</span><span class="n">Workbook</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span>
+<span class="sd">        # Add links to metric sheets</span>
+<span class="sd">        row = 6</span>
+<span class="sd">        summary_sheet.write(row, 0, &quot;Metric Sheets:&quot;)</span>
+<span class="sd">        row += 1</span>
+<span class="sd">        metrics = {</span>
+<span class="sd">            &quot;RMSE&quot;: &quot;Root Mean Square Error - Measures the average magnitude of error.&quot;,</span>
+<span class="sd">            &quot;MAE&quot;: &quot;Mean Absolute Error - Measures the average absolute error.&quot;,</span>
+<span class="sd">            &quot;MI&quot;: &quot;Mutual Information - Indicates dependency between variables.&quot;,</span>
+<span class="sd">            &quot;CORRELATION&quot;: &quot;Correlation Coefficient - Indicates linear relationship between variables.&quot;</span>
+<span class="sd">        }</span>
+<span class="sd">        for metric in metrics.keys():</span>
+<span class="sd">            summary_sheet.write_url(row, 0, f&quot;internal:&#39;{metric}&#39;!A1&quot;, string=f&quot;Go to {metric} Sheet&quot;)</span>
+<span class="sd">            row += 1</span>
 
-        <span class="c1"># Add a summary sheet with the header, creation date, dictionary content, and links to other sheets</span>
-        <span class="n">summary_sheet</span> <span class="o">=</span> <span class="n">workbook</span><span class="o">.</span><span class="n">add_worksheet</span><span class="p">(</span><span class="s2">&quot;Summary&quot;</span><span class="p">)</span>
-        <span class="n">current_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">set_column</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="sd">        # Write the dictionary content</span>
+<span class="sd">        summary_sheet.write(row + 1, 0, &quot;Dictionary of Results&quot;)</span>
+<span class="sd">        row += 2</span>
 
-        <span class="c1"># Title and header</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;ImputeGAP, A library of Imputation Techniques for Time Series Data&quot;</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Report for Dataset&quot;</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Generated on&quot;</span><span class="p">)</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">current_time</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">run</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Run Number&quot;</span><span class="p">)</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">run</span><span class="p">)</span>
+<span class="sd">        for key, value in runs_plots_scores.items():</span>
+<span class="sd">            summary_sheet.write(row, 0, str(key))</span>
+<span class="sd">            summary_sheet.write(row, 1, str(value))</span>
+<span class="sd">            row += 1</span>
 
-        <span class="c1"># Add links to metric sheets</span>
-        <span class="n">row</span> <span class="o">=</span> <span class="mi">6</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Metric Sheets:&quot;</span><span class="p">)</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;RMSE&quot;</span><span class="p">:</span> <span class="s2">&quot;Root Mean Square Error - Measures the average magnitude of error.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;MAE&quot;</span><span class="p">:</span> <span class="s2">&quot;Mean Absolute Error - Measures the average absolute error.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;MI&quot;</span><span class="p">:</span> <span class="s2">&quot;Mutual Information - Indicates dependency between variables.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;CORRELATION&quot;</span><span class="p">:</span> <span class="s2">&quot;Correlation Coefficient - Indicates linear relationship between variables.&quot;</span>
-        <span class="p">}</span>
-        <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write_url</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;internal:&#39;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">&#39;!A1&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Go to </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> Sheet&quot;</span><span class="p">)</span>
-            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="sd">        for metric, description in metrics.items():</span>
+<span class="sd">            # Create a worksheet for each metric</span>
+<span class="sd">            worksheet = workbook.add_worksheet(metric)</span>
 
-        <span class="c1"># Write the dictionary content</span>
-        <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Dictionary of Results&quot;</span><span class="p">)</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">2</span>
+<span class="sd">            # Write the metric description at the top and add IMPUTEGAP header</span>
+<span class="sd">            worksheet.write(0, 0, &quot;ImputeGAP, A library of Imputation Techniques for Time Series Data&quot;)</span>
+<span class="sd">            worksheet.write(2, 0, f&quot;{metric}: {description}&quot;)</span>
 
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">runs_plots_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
-            <span class="n">summary_sheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="sd">            # Define consistent column headers and widths</span>
+<span class="sd">            headers = [&quot;Dataset&quot;, &quot;Algorithm&quot;, &quot;Optimizer&quot;, &quot;Pattern&quot;, &quot;X Value&quot;, metric]</span>
+<span class="sd">            column_widths = [15, 15, 15, 15, 12, 20]  # Adjust widths for Excel</span>
 
-        <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">description</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># Create a worksheet for each metric</span>
-            <span class="n">worksheet</span> <span class="o">=</span> <span class="n">workbook</span><span class="o">.</span><span class="n">add_worksheet</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+<span class="sd">            # Write the headers</span>
+<span class="sd">            for col, (header, width) in enumerate(zip(headers, column_widths)):</span>
+<span class="sd">                worksheet.set_column(col, col, width)</span>
+<span class="sd">                worksheet.write(3, col, header)</span>
 
-            <span class="c1"># Write the metric description at the top and add IMPUTEGAP header</span>
-            <span class="n">worksheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;ImputeGAP, A library of Imputation Techniques for Time Series Data&quot;</span><span class="p">)</span>
-            <span class="n">worksheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">            # Populate the data</span>
+<span class="sd">            row = 4</span>
+<span class="sd">            for dataset, algo_items in runs_plots_scores.items():</span>
+<span class="sd">                for algorithm, optimizer_items in algo_items.items():</span>
+<span class="sd">                    for optimizer, pattern_data in optimizer_items.items():</span>
+<span class="sd">                        for pattern, x_data_items in pattern_data.items():</span>
+<span class="sd">                            for x, values in x_data_items.items():</span>
+<span class="sd">                                value = values.get(&quot;scores&quot;, {}).get(metric, None)</span>
+<span class="sd">                                if value is not None:</span>
+<span class="sd">                                    value = f&quot;{value:.10f}&quot;</span>
+<span class="sd">                                    data = [dataset, algorithm, optimizer, pattern, str(x), value]</span>
+<span class="sd">                                    for col, cell_value in enumerate(data):</span>
+<span class="sd">                                        worksheet.write(row, col, cell_value)</span>
+<span class="sd">                                    row += 1</span>
 
-            <span class="c1"># Define consistent column headers and widths</span>
-            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;Algorithm&quot;</span><span class="p">,</span> <span class="s2">&quot;Optimizer&quot;</span><span class="p">,</span> <span class="s2">&quot;Pattern&quot;</span><span class="p">,</span> <span class="s2">&quot;X Value&quot;</span><span class="p">,</span> <span class="n">metric</span><span class="p">]</span>
-            <span class="n">column_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>  <span class="c1"># Adjust widths for Excel</span>
-
-            <span class="c1"># Write the headers</span>
-            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">column_widths</span><span class="p">)):</span>
-                <span class="n">worksheet</span><span class="o">.</span><span class="n">set_column</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
-                <span class="n">worksheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
-
-            <span class="c1"># Populate the data</span>
-            <span class="n">row</span> <span class="o">=</span> <span class="mi">4</span>
-            <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">algo_items</span> <span class="ow">in</span> <span class="n">runs_plots_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">for</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">optimizer_items</span> <span class="ow">in</span> <span class="n">algo_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="k">for</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">pattern_data</span> <span class="ow">in</span> <span class="n">optimizer_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x_data_items</span> <span class="ow">in</span> <span class="n">pattern_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">x_data_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                                <span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scores&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                    <span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.10f</span><span class="si">}</span><span class="s2">&quot;</span>
-                                    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">value</span><span class="p">]</span>
-                                    <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">cell_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-                                        <span class="n">worksheet</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">cell_value</span><span class="p">)</span>
-                                    <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="c1"># Close the workbook</span>
-        <span class="n">workbook</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
+<span class="sd">        # Close the workbook</span>
+<span class="sd">        workbook.close()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="Benchmark.generate_plots">
 <a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_plots">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">generate_plots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs_plots_scores</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span>  <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span><span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_plots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs_plots_scores</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span><span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate and save plots for each metric and pattern based on provided scores.</span>
 
@@ -905,26 +1038,57 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+        <span class="n">markers</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">([</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;^&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;8&quot;</span><span class="p">])</span>
+        <span class="n">marker_by_algo</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The plots have been generated...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+
         <span class="n">new_plots</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">list_of_metrics</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;RUNTIME_LOG&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_metrics</span><span class="p">:</span>
-                <span class="n">new_plots</span> <span class="o">=</span> <span class="n">new_plots</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">new_plots</span> <span class="o">=</span> <span class="n">new_plots</span><span class="o">+</span><span class="mi">1</span>
                 <span class="n">new_metrics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_metrics</span><span class="p">,</span> <span class="s2">&quot;RUNTIME_LOG&quot;</span><span class="p">)</span>
 
+        <span class="n">nbr_metrics</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_metrics</span><span class="p">)</span>
         <span class="n">n_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">new_metrics</span><span class="p">)</span><span class="o">+</span><span class="n">new_plots</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">x_size</span><span class="p">,</span> <span class="n">title_flag</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">title</span>
 
+        <span class="k">if</span> <span class="n">ticks</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tick_min</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">ticks</span><span class="p">))</span>
+            <span class="n">tick_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ticks</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tick_min</span><span class="p">,</span> <span class="n">tick_max</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span>  <span class="c1"># fallback</span>
+
+        <span class="n">x_pad</span> <span class="o">=</span> <span class="mf">0.025</span>  <span class="c1"># 5% points (because rates are in [0,1])</span>
+        <span class="n">x_left</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">tick_min</span> <span class="o">-</span> <span class="n">x_pad</span><span class="p">)</span>
+        <span class="n">x_right</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">tick_max</span> <span class="o">+</span> <span class="n">x_pad</span><span class="p">)</span>
+
+
         <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">pattern_items</span> <span class="ow">in</span> <span class="n">runs_plots_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">algo_items</span> <span class="ow">in</span> <span class="n">pattern_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">subplot</span><span class="p">:</span>
-                    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">x_size</span><span class="o">*</span><span class="mf">1.90</span><span class="p">,</span> <span class="n">y_size</span><span class="o">*</span><span class="mf">2.90</span><span class="p">))</span>  <span class="c1"># Adjusted figsize</span>
+                    <span class="n">x_size</span> <span class="o">=</span> <span class="n">x_size</span> <span class="o">*</span> <span class="mi">2</span>
+                    <span class="n">y_size</span> <span class="o">=</span> <span class="n">y_size</span> <span class="o">*</span> <span class="nb">round</span><span class="p">(</span><span class="n">nbr_metrics</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="n">scale_factor</span> <span class="o">=</span> <span class="mf">0.85</span>
+                    <span class="n">x_size_screen</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1920</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale_factor</span>
+                    <span class="n">y_size_screen</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1080</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale_factor</span>
+                    <span class="k">if</span> <span class="n">n_rows</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+                        <span class="n">x_size</span> <span class="o">=</span> <span class="n">x_size_screen</span>
+                        <span class="n">y_size</span> <span class="o">=</span> <span class="n">y_size_screen</span>
+
+                    <span class="n">ncols</span> <span class="o">=</span> <span class="mi">2</span>
+                    <span class="k">if</span> <span class="n">nbr_metrics</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">ncols</span><span class="p">,</span> <span class="n">n_rows</span><span class="p">,</span> <span class="n">y_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">n_rows</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y_size</span><span class="o">*</span><span class="mf">1.25</span>
+
+                    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">x_size</span><span class="p">,</span> <span class="n">y_size</span><span class="p">))</span>  <span class="c1"># Adjusted figsize</span>
+                    <span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
                     <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span>
                         <span class="n">left</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span>
                         <span class="n">right</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
@@ -937,7 +1101,6 @@
                     <span class="k">if</span> <span class="n">title_flag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">title</span> <span class="o">=</span> <span class="n">dataset</span> <span class="o">+</span> <span class="s2">&quot; : &quot;</span> <span class="o">+</span> <span class="n">pattern</span> <span class="o">+</span> <span class="s2">&quot;, benchmark analysis&quot;</span>
                     <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-                    <span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># Flatten the 2D array of axes to a 1D array</span>
 
                 <span class="c1"># Iterate over each metric, generating separate plots, including new timing metrics</span>
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">metric</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">new_metrics</span><span class="p">):</span>
@@ -965,11 +1128,17 @@
                             <span class="n">sorted_pairs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_vals</span><span class="p">,</span> <span class="n">y_vals</span><span class="p">))</span>
                             <span class="n">x_vals</span><span class="p">,</span> <span class="n">y_vals</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_pairs</span><span class="p">)</span>
 
-                            <span class="c1"># Plot each algorithm as a line with scattered points</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_vals</span><span class="p">,</span> <span class="n">y_vals</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_vals</span><span class="p">,</span> <span class="n">y_vals</span><span class="p">)</span>
-                            <span class="n">has_data</span> <span class="o">=</span> <span class="kc">True</span>
+                            <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">marker_by_algo</span><span class="p">:</span>
+                                <span class="n">marker_by_algo</span><span class="p">[</span><span class="n">algorithm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">markers</span><span class="p">)</span>
+                            <span class="n">m</span> <span class="o">=</span> <span class="n">marker_by_algo</span><span class="p">[</span><span class="n">algorithm</span><span class="p">]</span>
 
+                            <span class="c1"># Plot each algorithm as a line with scattered points</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_vals</span><span class="p">,</span> <span class="n">y_vals</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_vals</span><span class="p">,</span> <span class="n">y_vals</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
+
+                            <span class="c1">#ax.plot(x_vals, y_vals, label=f&quot;{algorithm}&quot;, linewidth=2)</span>
+                            <span class="c1">#ax.scatter(x_vals, y_vals)</span>
+                            <span class="n">has_data</span> <span class="o">=</span> <span class="kc">True</span>
 
                             <span class="k">if</span> <span class="n">min_y</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">y_vals</span><span class="p">):</span>
                                 <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y_vals</span><span class="p">)</span>
@@ -986,33 +1155,15 @@
                         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Rate&quot;</span><span class="p">)</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel_metric</span><span class="p">)</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">)</span>
+                        <span class="c1">#ax.set_xlim(0.0, 0.85)</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x_left</span><span class="p">,</span> <span class="n">x_right</span><span class="p">)</span>
 
-                        <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;RMSE&quot;</span> <span class="ow">or</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;MAE&quot;</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">min_y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-                                <span class="n">min_y</span> <span class="o">=</span> <span class="mi">0</span>
-                            <span class="k">if</span> <span class="n">max_y</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
-                                <span class="n">max_y</span> <span class="o">=</span> <span class="mi">3</span>
-                        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;CORRELATION&quot;</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">min_y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                                <span class="n">min_y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-                            <span class="k">if</span> <span class="n">max_y</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                                <span class="n">max_y</span> <span class="o">=</span> <span class="mi">1</span>
-                        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;MI&quot;</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">min_y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-                                <span class="n">min_y</span> <span class="o">=</span> <span class="mi">0</span>
-                            <span class="k">if</span> <span class="n">max_y</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-                                <span class="n">max_y</span> <span class="o">=</span> <span class="mi">2</span>
-                        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;RUNTIME&quot;</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">min_y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-                                <span class="n">min_y</span> <span class="o">=</span> <span class="mi">0</span>
-                            <span class="k">if</span> <span class="n">max_y</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">:</span>
-                                <span class="n">max_y</span> <span class="o">=</span> <span class="mi">10000</span>
-                        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;RUNTIME_LOG&quot;</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">min_y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">5</span><span class="p">:</span>
-                                <span class="n">min_y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span>
-                            <span class="k">if</span> <span class="n">max_y</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
-                                <span class="n">max_y</span> <span class="o">=</span> <span class="mi">5</span>
+                        <span class="n">bounds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RMSE&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s2">&quot;MAE&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s2">&quot;CORRELATION&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;MI&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;RUNTIME&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="s2">&quot;RUNTIME_LOG&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">}</span>
+
+                        <span class="k">if</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">:</span>
+                            <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span>
+                            <span class="n">min_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_y</span><span class="p">,</span> <span class="n">lo</span><span class="p">)</span>
+                            <span class="n">max_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_y</span><span class="p">,</span> <span class="n">hi</span><span class="p">)</span>
 
                         <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">)</span>
                         <span class="n">y_padding</span> <span class="o">=</span> <span class="mf">0.15</span><span class="o">*</span><span class="n">diff</span>
@@ -1034,15 +1185,12 @@
                         <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">tick</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s2">%&quot;</span> <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">ticks</span><span class="p">])</span>
                         <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()[</span><span class="mi">0</span><span class="p">]))</span>
 
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">subplot</span><span class="p">:</span>
-                        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">optimizer</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">.jpg&quot;</span>
-
                         <span class="n">new_dir</span> <span class="o">=</span> <span class="n">save_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">pattern</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">new_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-                        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">optimizer</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">.jpg&quot;</span><span class="p">)</span>
                         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">display</span><span class="p">:</span>
                             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -1057,15 +1205,13 @@
 
                     <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
                         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="n">plt</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplots</span> <span class="o">=</span> <span class="n">plt</span></div>
 
 
 <div class="viewcode-block" id="Benchmark.eval">
 <a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cdrec&quot;</span><span class="p">],</span> <span class="n">datasets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">],</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mcar&quot;</span><span class="p">],</span> <span class="n">x_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="n">optimizers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;default_params&quot;</span><span class="p">],</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets/benchmark&quot;</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">nbr_vals</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">dl_ratio</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cdrec&quot;</span><span class="p">],</span> <span class="n">datasets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">],</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mcar&quot;</span><span class="p">],</span> <span class="n">x_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;default_params&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets/benchmark&quot;</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">,</span> <span class="n">report_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">nbr_vals</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">dl_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute a comprehensive evaluation of imputation algorithms over multiple datasets and patterns.</span>
 
@@ -1079,8 +1225,8 @@
 <span class="sd">            List of contamination patterns to apply.</span>
 <span class="sd">        x_axis : list of float</span>
 <span class="sd">            List of missing rates for contamination.</span>
-<span class="sd">        optimizers : list</span>
-<span class="sd">            List of optimizers with their configurations.</span>
+<span class="sd">        optimizer : str, dict</span>
+<span class="sd">            Name of the optimizer (str) or optimizer with their configurations (dict).</span>
 <span class="sd">        metrics : list of str</span>
 <span class="sd">            List of metrics for evaluation.</span>
 <span class="sd">        save_dir : str, optional</span>
@@ -1089,10 +1235,12 @@
 <span class="sd">            Number of executions with a view to averaging them</span>
 <span class="sd">        normalizer : str, optional</span>
 <span class="sd">            Normalizer to pre-process the data (default is &quot;z_score&quot;).</span>
+<span class="sd">        report_title : str, optional</span>
+<span class="sd">            Title of the report (default is &quot;&quot;).</span>
 <span class="sd">        nbr_series : int, optional</span>
-<span class="sd">            Number of series to take inside the dataset (default is 2500 (as the max values)).</span>
+<span class="sd">            Number of series to take inside the dataset (default is 200 (as the max values)). Set to None to remove the limitation.</span>
 <span class="sd">        nbr_vals : int, optional</span>
-<span class="sd">            Number of values to take inside the series (default is 2500 (as the max values)).</span>
+<span class="sd">            Number of values to take inside the series (default is 2500 (as the max values)). Set to None to remove the limitation.</span>
 <span class="sd">        dl_ratio : float, optional</span>
 <span class="sd">            Training ratio for Deep Learning techniques (default is 0.8)</span>
 <span class="sd">        verbose : bool, optional</span>
@@ -1107,11 +1255,15 @@
 <span class="sd">        -----</span>
 <span class="sd">        Runs contamination, imputation, and evaluation, then generates plots and a summary reports.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TF_CPP_MIN_LOG_LEVEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3&#39;</span>
 
         <span class="n">run_storage</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">not_optimized</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]</span>
         <span class="n">mean_group</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;MeanImpute&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;MinImpute&quot;</span><span class="p">,</span> <span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="s2">&quot;ZeroImpute&quot;</span><span class="p">,</span> <span class="s2">&quot;MeanImputeBySeries&quot;</span><span class="p">,</span> <span class="s2">&quot;meanimpute&quot;</span><span class="p">,</span> <span class="s2">&quot;minimpute&quot;</span><span class="p">,</span> <span class="s2">&quot;zeroimpute&quot;</span><span class="p">,</span> <span class="s2">&quot;meanimputebyseries&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="s2">&quot;default_params&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">algorithms</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;algorithms&#39; must be a list, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">algorithms</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1121,18 +1273,31 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;patterns&#39; must be a list, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;x_axis&#39; must be a list, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;optimizer&#39; must be a str or dict, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s2">&quot;*&quot;</span> <span class="ow">in</span> <span class="n">metrics</span> <span class="ow">or</span> <span class="s2">&quot;all&quot;</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
             <span class="n">metrics</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">list_of_metrics</span><span class="p">()</span>
         <span class="k">if</span> <span class="s2">&quot;*&quot;</span> <span class="ow">in</span> <span class="n">metrics</span> <span class="ow">or</span> <span class="s2">&quot;all&quot;</span> <span class="ow">in</span> <span class="n">algorithms</span><span class="p">:</span>
-            <span class="n">all_algs</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">list_of_algorithms</span><span class="p">()</span>
-            <span class="n">algorithms</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">all_algs</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;MPIN&quot;</span><span class="p">]</span>
+            <span class="n">algorithms</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">list_of_algorithms</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s2">&quot;default&quot;</span> <span class="ow">in</span> <span class="n">optimizer</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="s2">&quot;default_params&quot;</span>
 
         <span class="n">directory_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="n">directory_time</span> <span class="o">=</span> <span class="n">directory_now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S&quot;</span><span class="p">)</span>
-        <span class="n">save_dir</span> <span class="o">=</span> <span class="n">save_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="s2">&quot;bench_&quot;</span> <span class="o">+</span> <span class="n">directory_time</span>
+        <span class="n">save_dir</span> <span class="o">=</span> <span class="n">save_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="s2">&quot;benchmark_&quot;</span> <span class="o">+</span> <span class="n">report_title</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">directory_time</span>
+
+        <span class="k">if</span> <span class="n">nbr_series</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nbr_series</span> <span class="o">=</span> <span class="mi">10000000</span>
+        <span class="k">if</span> <span class="n">nbr_vals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nbr_vals</span> <span class="o">=</span> <span class="mi">10000000</span>
 
         <span class="n">benchmark_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="n">definition_of_exp</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The benchmark has been called:</span><span class="se">\n\t</span><span class="s2">algorithms: </span><span class="si">{</span><span class="n">algorithms</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">datasets: </span><span class="si">{</span><span class="n">datasets</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">patterns: </span><span class="si">{</span><span class="n">patterns</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">missing_percentages: </span><span class="si">{</span><span class="n">x_axis</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">optimizer: </span><span class="si">{</span><span class="n">optimizer</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">normalizer: </span><span class="si">{</span><span class="n">normalizer</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">runs: </span><span class="si">{</span><span class="n">runs</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">number max series: </span><span class="si">{</span><span class="n">nbr_series</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">number max values: </span><span class="si">{</span><span class="n">nbr_vals</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">definition_of_exp</span><span class="p">)</span>
+
         <span class="k">for</span> <span class="n">i_run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">runs</span><span class="p">)):</span>
             <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
                 <span class="n">runs_plots_scores</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1141,8 +1306,8 @@
 
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">1. evaluation launch for&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">ts_test</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
-                <span class="n">default_data</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
+                <span class="n">ts_test</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">default_data</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
                 <span class="n">header</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;eeg-reading&quot;</span> <span class="ow">or</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;eegreading&quot;</span><span class="p">:</span>
@@ -1150,15 +1315,18 @@
 
                 <span class="n">reshp</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="n">default_data</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">search_path</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="n">Mdef</span><span class="p">,</span> <span class="n">Ndef</span> <span class="o">=</span> <span class="n">default_data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">Ndef</span><span class="p">,</span> <span class="n">Mdef</span> <span class="o">=</span> <span class="n">default_data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
 
                 <span class="k">if</span> <span class="n">Ndef</span> <span class="o">&gt;</span> <span class="n">nbr_vals</span> <span class="ow">or</span> <span class="n">Mdef</span> <span class="o">&gt;</span> <span class="n">nbr_series</span><span class="p">:</span>
                     <span class="n">reshp</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The dataset contains a large number of values </span><span class="si">{</span><span class="n">default_data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, which may be too much for some algorithms to handle efficiently. Consider reducing the number of series or the volume of data.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The dataset </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2"> contains a large number of values </span><span class="si">{</span><span class="n">default_data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, which may be too much for some algorithms to handle efficiently. Consider reducing the number of series or the volume of data.&quot;</span><span class="p">)</span>
                 <span class="n">default_data</span> <span class="o">=</span> <span class="kc">None</span>
 
-                <span class="n">ts_test</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">search_path</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">nbr_series</span><span class="o">=</span><span class="n">nbr_series</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="n">nbr_vals</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
-                <span class="n">M</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">ts_test</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">search_path</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">nbr_series</span><span class="o">=</span><span class="n">nbr_series</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="n">nbr_vals</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="n">normalizer</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+                <span class="n">N</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+
+                <span class="k">if</span> <span class="n">M</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The dataset loaded has no series (series </span><span class="si">{</span><span class="n">M</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">reshp</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Benchmarking module has reduced the shape to </span><span class="si">{</span><span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1166,9 +1334,6 @@
                 <span class="k">if</span> <span class="n">N</span> <span class="o">&lt;</span> <span class="mi">250</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The block size is too high for the number of values per series, reduce to 2</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">block_size_mcar</span> <span class="o">=</span> <span class="mi">2</span>
-
-                <span class="k">if</span> <span class="n">normalizer</span> <span class="ow">in</span> <span class="n">utils</span><span class="o">.</span><span class="n">list_of_normalizers</span><span class="p">():</span>
-                    <span class="n">ts_test</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
                 <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -1178,9 +1343,9 @@
                         <span class="n">has_been_optimized</span> <span class="o">=</span> <span class="kc">False</span>
 
                         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">3. algorithm evaluated&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;3. </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is tested with </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">, started at </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is tested with </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">, started at </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is tested with </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">, started at </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
                         <span class="k">for</span> <span class="n">incx</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x_axis</span><span class="p">):</span>
                             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -1188,24 +1353,34 @@
 
                             <span class="n">incomp_data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">config_contamination</span><span class="p">(</span><span class="n">ts</span><span class="o">=</span><span class="n">ts_test</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">pattern</span><span class="p">,</span> <span class="n">dataset_rate</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">series_rate</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="n">block_size_mcar</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-                            <span class="k">for</span> <span class="n">optimizer</span> <span class="ow">in</span> <span class="n">optimizers</span><span class="p">:</span>
+                            <span class="n">opt_imp</span> <span class="o">=</span> <span class="n">optimizer</span>
+
+                            <span class="k">try</span><span class="p">:</span>
                                 <span class="n">algo</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">config_impute_algorithm</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-                                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                                    <span class="n">optimizer_gt</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;input_data&quot;</span><span class="p">:</span> <span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">optimizer</span><span class="p">}</span>
-                                    <span class="n">optimizer_value</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;optimizer&#39;</span><span class="p">)</span>  <span class="c1"># or optimizer[&#39;optimizer&#39;]</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opt_imp</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">opt_imp</span> <span class="o">!=</span> <span class="s2">&quot;default_params&quot;</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">opt_imp</span> <span class="o">==</span> <span class="s2">&quot;ray-tune&quot;</span><span class="p">:</span>
+                                        <span class="n">opt_imp</span> <span class="o">=</span> <span class="s2">&quot;ray_tune&quot;</span>
+                                    <span class="n">opt_imp</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;optimizer&quot;</span><span class="p">:</span> <span class="n">opt_imp</span><span class="p">}</span>
 
+                                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opt_imp</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                                    <span class="n">optimizer_gt</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;input_data&quot;</span><span class="p">:</span> <span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">opt_imp</span><span class="p">}</span>
+                                    <span class="n">optimizer_value</span> <span class="o">=</span> <span class="n">opt_imp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;optimizer&#39;</span><span class="p">)</span>  <span class="c1"># or optimizer[&#39;optimizer&#39;]</span>
                                     <span class="k">if</span> <span class="ow">not</span> <span class="n">has_been_optimized</span> <span class="ow">and</span> <span class="n">algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mean_group</span> <span class="ow">and</span> <span class="n">algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">not_optimized</span><span class="p">:</span>
+
                                         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">5. AutoML to set the parameters&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">5. AutoML to set the parameters&quot;</span><span class="p">,</span> <span class="n">opt_imp</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                                         <span class="n">i_opti</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_optimization</span><span class="p">(</span><span class="mf">0.20</span><span class="p">,</span> <span class="n">ts_test</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">block_size_mcar</span><span class="p">)</span>
 
                                         <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;DeepLearning&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">):</span>
-                                            <span class="n">i_opti</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">user_def</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">optimizer_gt</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.80</span><span class="p">)</span>
+                                            <span class="k">if</span> <span class="n">dl_ratio</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                                                <span class="n">i_opti</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">user_def</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">optimizer_gt</span><span class="p">)</span>
+                                            <span class="k">else</span><span class="p">:</span>
+                                                <span class="n">i_opti</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">user_def</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">optimizer_gt</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="n">dl_ratio</span><span class="p">)</span>
                                         <span class="k">else</span><span class="p">:</span>
                                             <span class="n">i_opti</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">user_def</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">optimizer_gt</span><span class="p">)</span>
 
-                                        <span class="n">utils</span><span class="o">.</span><span class="n">save_optimization</span><span class="p">(</span><span class="n">optimal_params</span><span class="o">=</span><span class="n">i_opti</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">)</span>
+                                        <span class="n">optimal_params_path</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">save_optimization</span><span class="p">(</span><span class="n">optimal_params</span><span class="o">=</span><span class="n">i_opti</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
                                         <span class="n">has_been_optimized</span> <span class="o">=</span> <span class="kc">True</span>
                                     <span class="k">else</span><span class="p">:</span>
@@ -1214,27 +1389,27 @@
 
                                     <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mean_group</span> <span class="ow">and</span> <span class="n">algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">not_optimized</span><span class="p">:</span>
                                         <span class="k">if</span> <span class="n">i_opti</span><span class="o">.</span><span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                                            <span class="n">opti_params</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">load_parameters</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;optimal&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">)</span>
+                                            <span class="n">opti_params</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">load_parameters</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;optimal&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">optimal_params_path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
                                             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">6. imputation&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;with optimal parameters from files&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">opti_params</span><span class="p">)</span>
+                                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">6. load imputation&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;with optimal parameters from files&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">opti_params</span><span class="p">)</span>
                                         <span class="k">else</span><span class="p">:</span>
                                             <span class="n">opti_params</span> <span class="o">=</span> <span class="n">i_opti</span><span class="o">.</span><span class="n">parameters</span>
                                             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">6. imputation&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;with optimal parameters from object&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">opti_params</span><span class="p">)</span>
+                                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">6. set imputation&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;with optimal parameters from object&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">opti_params</span><span class="p">)</span>
                                     <span class="k">else</span><span class="p">:</span>
                                         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                                             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">5. No AutoML launches without optimal params for&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                                         <span class="n">opti_params</span> <span class="o">=</span> <span class="kc">None</span>
                                 <span class="k">else</span><span class="p">:</span>
                                     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">5. Default parameters have been set the parameters&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="s2">&quot;for&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                                    <span class="n">optimizer_value</span> <span class="o">=</span> <span class="n">optimizer</span>
+                                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">5. Default parameters have been set the parameters&quot;</span><span class="p">,</span> <span class="n">opt_imp</span><span class="p">,</span> <span class="s2">&quot;for&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                                    <span class="n">optimizer_value</span> <span class="o">=</span> <span class="n">opt_imp</span>
                                     <span class="n">opti_params</span> <span class="o">=</span> <span class="kc">None</span>
 
                                 <span class="n">start_time_imputation</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_benchmark_exception</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-                                    <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;DeepLearning&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">)</span> <span class="ow">or</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;LLMs&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">):</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_benchmark_exception</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+                                    <span class="k">if</span> <span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;DeepLearning&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">)</span> <span class="ow">or</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;LLMs&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">))</span> <span class="ow">and</span> <span class="n">dl_ratio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                                         <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">dl_ratio</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
                                             <span class="n">algo</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">incomp_data</span>
                                         <span class="k">else</span><span class="p">:</span>
@@ -1265,18 +1440,43 @@
 
                                 <span class="n">save_dir_plot</span> <span class="o">=</span> <span class="n">save_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">dataset_s</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">pattern</span> <span class="o">+</span> <span class="s2">&quot;/recovery/&quot;</span>
                                 <span class="n">cont_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
-                                <span class="n">ts_test</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="o">=</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">recov_data</span><span class="o">=</span><span class="n">algo</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algo</span><span class="o">.</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">cont_rate</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">cont_rate</span><span class="p">),</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_dir_plot</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                <span class="n">ts_test</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts_test</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="o">=</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">recov_data</span><span class="o">=</span><span class="n">algo</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algo</span><span class="o">.</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">cont_rate</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">cont_rate</span><span class="p">),</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_dir_plot</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
                                 <span class="n">runs_plots_scores</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dataset_s</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pattern</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">optimizer_value</span><span class="p">),</span> <span class="p">{})[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;scores&quot;</span><span class="p">:</span> <span class="n">algo</span><span class="o">.</span><span class="n">metrics</span><span class="p">}</span>
 
+                            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                                <span class="n">dataset_s</span> <span class="o">=</span> <span class="n">dataset</span>
+                                <span class="k">if</span> <span class="s2">&quot;-&quot;</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+                                    <span class="n">dataset_s</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+                                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error during benchmark for </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">, with </span><span class="si">{</span><span class="n">dataset_s</span><span class="si">}</span><span class="s2">, and </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">%: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                                <span class="n">algo</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+                                    <span class="s2">&quot;RMSE&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                    <span class="s2">&quot;MAE&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                    <span class="s2">&quot;MI&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                    <span class="s2">&quot;CORRELATION&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                    <span class="s2">&quot;RUNTIME&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                    <span class="s2">&quot;RUNTIME_LOG&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                <span class="p">}</span>
+
+                                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opt_imp</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                                    <span class="n">val_opt</span> <span class="o">=</span> <span class="n">opt_imp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;optimizer&quot;</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opt_imp</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                                    <span class="n">val_opt</span> <span class="o">=</span> <span class="n">opt_imp</span>
+                                <span class="k">if</span> <span class="n">val_opt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                                    <span class="n">val_opt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+                                <span class="n">runs_plots_scores</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dataset_s</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pattern</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">val_opt</span><span class="p">),</span> <span class="p">{})[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;scores&quot;</span><span class="p">:</span> <span class="n">algo</span><span class="o">.</span><span class="n">metrics</span><span class="p">}</span>
+
+                                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;error.log&quot;</span><span class="p">)</span>
+                                <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2"> | Error during benchmark for </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">, with </span><span class="si">{</span><span class="n">dataset_s</span><span class="si">}</span><span class="s2"> - for a shape of (</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">M</span><span class="si">}</span><span class="s2">) - (</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">val_opt</span><span class="si">}</span><span class="s2">), and </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">%: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;done!</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="c1">#save_dir_runs = save_dir + &quot;/_details/run_&quot; + str(i_run) + &quot;/&quot; + dataset</span>
-                <span class="c1">#if verbose:</span>
-                <span class="c1">#    print(&quot;\nruns saved in : &quot;, save_dir_runs)</span>
-                <span class="c1">#self.generate_plots(runs_plots_scores=runs_plots_scores, ticks=x_axis, metrics=metrics, subplot=True, y_size=y_p_size, save_dir=save_dir_runs, display=False, verbose=verbose)</span>
-                <span class="c1">#self.generate_plots(runs_plots_scores=runs_plots_scores, ticks=x_axis, metrics=metrics, subplot=False, y_size=y_p_size, save_dir=save_dir_runs, display=False, verbose=verbose)</span>
-                <span class="c1">#self.generate_reports_txt(runs_plots_scores=runs_plots_scores, save_dir=save_dir_runs, dataset=dataset, metrics=metrics, run=i_run, verbose=verbose)</span>
-                <span class="c1">#self.generate_reports_excel(runs_plots_scores, save_dir_runs, dataset, i_run, verbose=verbose)</span>
+
                 <span class="n">run_storage</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runs_plots_scores</span><span class="p">)</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>  <span class="c1"># Close all open figures</span>
@@ -1292,7 +1492,14 @@
         <span class="n">total_time_benchmark</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">benchmark_end</span> <span class="o">-</span> <span class="n">benchmark_time</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&gt; logs: benchmark - Execution Time: </span><span class="si">{</span><span class="n">total_time_benchmark</span><span class="si">}</span><span class="s2"> seconds</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="n">verb</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;runtime.log&quot;</span><span class="p">)</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2"> | logs: benchmark - Execution Time: </span><span class="si">{</span><span class="n">total_time_benchmark</span><span class="si">}</span><span class="s2"> seconds</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">verb</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">for</span> <span class="n">scores</span> <span class="ow">in</span> <span class="n">run_averaged</span><span class="p">:</span>
             <span class="n">all_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -1302,10 +1509,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">generate_reports_txt</span><span class="p">(</span><span class="n">runs_plots_scores</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir_agg_set</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">dataset_name</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span> <span class="n">rt</span><span class="o">=</span><span class="n">total_time_benchmark</span><span class="p">,</span> <span class="n">run</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">generate_plots</span><span class="p">(</span><span class="n">runs_plots_scores</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="n">y_p_size</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir_agg_set</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="n">verb</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_reports_summary</span><span class="p">(</span><span class="n">run_of_values</span><span class="o">=</span><span class="n">run_averaged</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span> <span class="n">rt</span><span class="o">=</span><span class="n">total_time_benchmark</span><span class="p">,</span> <span class="n">run</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">report_title</span><span class="p">)</span>
+
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The results are saved in : &quot;</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">list_results</span> <span class="o">=</span> <span class="n">run_averaged</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aggregate_results</span> <span class="o">=</span> <span class="n">scores_list</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aggregate_results</span> <span class="o">=</span> <span class="n">scores_list</span>
+
+        <span class="n">save_def</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;experimentation_setup.log&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_def</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">definition_of_exp</span><span class="p">)</span></div>
 </div>
+
 
 </pre></div>
         </article>
@@ -1339,7 +1553,7 @@
       
     </aside>
   </div>
-</div><script src="../../../static/documentation_options.js?v=58fbf978"></script>
+</div><script src="../../../static/documentation_options.js?v=6f037312"></script>
     <script src="../../../static/doctools.js?v=9bcbadda"></script>
     <script src="../../../static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../static/scripts/furo.js?v=5fa4622c"></script>

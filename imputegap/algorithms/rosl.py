@@ -2,6 +2,7 @@ import ctypes
 import time
 import ctypes as __native_c_types_import;
 import numpy as __numpy_import;
+import numpy as np
 
 from imputegap.tools import utils
 
@@ -34,7 +35,6 @@ def native_rosl(__py_matrix, __py_rank, __py_regularization, __verbose=True):
     X. Shu, F. Porikli, and N. Ahuja. Robust orthonormal subspace learning: Efficient recovery of corrupted low-rank matrices. In 2014 IEEE Conference on Computer Vision and Pattern Recognition, CVPR 2014, Columbus, OH, USA, June 23-28, 2014, pages 3874–3881, 2014.
     """
     shared_lib = utils.load_share_lib("lib_rosl", verbose=__verbose)
-
     __py_n = len(__py_matrix);
     __py_m = len(__py_matrix[0]);
 

@@ -8,10 +8,10 @@
 # https://arxiv.org/abs/2103.01600
 # ===============================================================================================================
 
-from typing import Optional
+from typing import Optional, Any
 import torch
 from torch import Tensor
-from torch.nn import functional as F
+from torch.nn import functional as F    
     
 class MultiheadAttention(torch.nn.Module):
     def __init__(self,d_query:int,d_key:int,d_value:int, nhead:int, dropout=0.1):

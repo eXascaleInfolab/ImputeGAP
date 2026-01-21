@@ -1,9 +1,10 @@
 import time
 
-from imputegap.wrapper.AlgoPython.DeepMVI.recovery import deep_mvi_recovery
+#from imputegap.wrapper.AlgoPython.DeepMVI.recovery import deep_mvi_recovery
+from imputegap.wrapper.AlgoPython.DeepMVI.recovDeepMVI import deep_mvi_recovery
 
 
-def deep_mvi(incomp_data, max_epoch=100, patience=2, lr=0.001, tr_ratio=0.9, logs=True, verbose=True):
+def deep_mvi(incomp_data, max_epoch=100, patience=2, lr=0.001, batch_size=16, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using the DEEP MVI (Deep Multivariate Imputation) algorithm.
 
@@ -17,6 +18,8 @@ def deep_mvi(incomp_data, max_epoch=100, patience=2, lr=0.001, tr_ratio=0.9, log
         Number of threshold error that can be crossed during the training (default is 2)
     lr : float, optional
         Learning rate of the training (default is 0.001)
+    batch_size: int, optional
+        Number of samples processed before the model's weights are updated (default is 16)
     tr_ratio: float, optional
         Split ratio between training and testing sets (default is 0.9).
     logs : bool, optional
@@ -31,7 +34,7 @@ def deep_mvi(incomp_data, max_epoch=100, patience=2, lr=0.001, tr_ratio=0.9, log
 
     Example
     -------
-        >>> recov_data = deep_mvi(incomp_data, 1000, 2, 0.001)
+        >>> recov_data = deep_mvi(incomp_data, 1000, 2, 0.001, 16)
         >>> print(recov_data)
 
     References
@@ -41,7 +44,7 @@ def deep_mvi(incomp_data, max_epoch=100, patience=2, lr=0.001, tr_ratio=0.9, log
     """
     start_time = time.time()  # Record start time
 
-    recov_data = deep_mvi_recovery(input=incomp_data, max_epoch=max_epoch, patience=patience, lr=lr, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = deep_mvi_recovery(input=incomp_data, max_epoch=max_epoch, patience=patience, lr=lr, batch_size=batch_size, tr_ratio=tr_ratio, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

@@ -12,9 +12,9 @@ import torch
 import torch.nn as nn
 from einops import rearrange
 
-from .spatial_attention import SpatialAttention
 from .spatial_conv import SpatialConvOrderK
 from .gcrnn import GCGRUCell
+from .spatial_attention import SpatialAttention
 from ..utils.ops import reverse_tensor
 
 
@@ -140,7 +140,7 @@ class GRIL(nn.Module):
 
         # infer all valid if mask is None
         if mask is None:
-            mask = torch.ones_like(x, dtype=torch.uint8).bool()
+            mask = torch.ones_like(x, dtype=torch.uint8)
 
         # init hidden state using node embedding or the empty state
         if h is None:
@@ -159,14 +159,6 @@ class GRIL(nn.Module):
             # firstly impute missing values with predictions from state
             xs_hat_1 = self.first_stage(h_s)
             # fill missing values in input with prediction
-
-            if x_s.shape != xs_hat_1.shape:
-                #xs_hat_1 = xs_hat_1.repeat(1, 1, x_s.shape[2] // xs_hat_1.shape[2])  # Adjust to match x_s shape
-
-                print("m_s shape:", m_s.shape)
-                print("x_s shape:", x_s.shape)
-                print("xs_hat_1 shape:", xs_hat_1.shape)
-
             x_s = torch.where(m_s, x_s, xs_hat_1)
             # prepare inputs
             # retrieve maximum information from neighbors

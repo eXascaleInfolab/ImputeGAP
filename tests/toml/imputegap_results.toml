@@ -1,0 +1,190 @@
+[timesnet]
+dataset = "chlorine"
+rmse = 0.37
+mae = 0.28
+
+[gpt4ts]
+dataset = "chlorine"
+rmse = 0.24
+mae = 0.194
+
+[csdi]
+dataset = "chlorine"
+rmse = 0.16
+mae = 0.10
+
+[cdrec]
+dataset = "chlorine"
+rmse = 0.389
+mae = 0.271
+
+[dynammo]
+dataset = "chlorine"
+rmse = 0.406
+mae = 0.284
+
+[grouse]
+dataset = "chlorine"
+rmse = 0.542
+mae = 0.408
+
+[softimpute]
+dataset = "chlorine"
+rmse = 0.412
+mae = 0.288
+
+[svt]
+dataset = "chlorine"
+rmse = 0.062
+mae = 0.042
+
+[rosl]
+dataset = "chlorine"
+rmse = 0.456
+mae = 0.295
+
+[iterativesvd]
+dataset = "chlorine"
+rmse = 0.412
+mae = 0.289
+
+[spirit]
+dataset = "chlorine"
+rmse = 2.758
+mae = 2.125
+
+[tkcm]
+dataset = "chlorine"
+rmse = 1.292
+mae = 1.062
+
+[stmvl]
+dataset = "chlorine"
+rmse = 0.336
+mae = 0.251
+
+[mice]
+dataset = "chlorine"
+rmse = 0.148
+mae = 0.090
+
+[xgboost]
+dataset = "chlorine"
+rmse = 0.461
+mae = 0.392
+
+[missforest]
+dataset = "chlorine"
+rmse = 0.639
+mae = 0.452
+
+[knn]
+dataset = "chlorine"
+rmse = 0.183
+mae = 0.118
+
+[interpolation]
+dataset = "chlorine"
+rmse = 0.127
+mae = 0.067
+
+[mean]
+dataset = "chlorine"
+rmse = 0.845
+mae = 0.729
+
+[means]
+dataset = "chlorine"
+rmse = 0.866
+mae = 0.747
+
+
+[zero]
+dataset = "chlorine"
+rmse = 0.845
+mae = 0.728
+
+[min]
+dataset = "chlorine"
+rmse = 4.524
+mae = 4.446
+
+
+
+# ======================================================================
+
+[bitgraph]
+dataset = "chlorine"
+rmse = 0.32
+mae = 0.22
+
+[grin]
+dataset = "chlorine"
+rmse = 0.12
+mae = 0.07
+
+[nuwats]
+dataset = "chlorine"
+rmse = 0.318
+mae = 0.212
+
+[deepmvi]
+dataset = "chlorine"
+rmse = 0.299 # shoud: 0.455
+mae = 0.199 # sould: 0.249
+
+[saits]
+dataset = "chlorine"
+rmse = 0.15
+mae = 0.09
+
+[bayotide]
+dataset = "chlorine"
+rmse = 0.27
+mae = 0.19
+
+[gain]
+dataset = "chlorine"
+rmse = 0.203
+mae = 0.147
+
+[hkmft]
+dataset = "chlorine"
+rmse = 0.53
+mae = 0.41
+
+[iim]
+dataset = "chlorine"
+rmse = 0.622
+mae = 0.421
+
+[missnet]
+dataset = "chlorine"
+rmse = 0.156
+mae = 0.100
+
+[mpin]
+dataset = "chlorine"
+rmse = 0.37
+mae = 0.23
+
+[mrnn]
+dataset = "chlorine"
+rmse = 0.14
+mae = 0.09
+
+[pristi]
+dataset = "chlorine"
+rmse = 0.807 # expected normal run: 0.242
+mae = 0.396  # expected normal run: 0.162
+
+[trmf]
+dataset = "chlorine"
+rmse = 0.325
+mae = 0.249
+
+[brits]
+dataset = "chlorine"
+rmse = 0.16
+mae = 0.11
+

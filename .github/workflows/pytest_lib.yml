@@ -18,13 +18,25 @@ jobs:
       with:
         python-version: '3.12'
 
+    - name: Free disk space
+      run: |
+        df -h
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/.ghcup
+        sudo apt-get clean
+        df -h   
+
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libmlpack-dev libopenblas-dev python3-dev build-essential
-        pip install --upgrade google protobuf
+        sudo apt-get install libmlpack-dev
+        sudo apt-get install libopenblas-dev
+        sudo apt-get install python3-dev build-essential
         pip install imputegap==1.1.1
-
+        pip install mypy
+        pip install pytest
 
     - name: Run pytest
       run: |

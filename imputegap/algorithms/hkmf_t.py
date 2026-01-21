@@ -1,9 +1,8 @@
 import time
 
-from imputegap.wrapper.AlgoPython.hkmft.recov_hkmft import recovery_hkmft
+from imputegap.wrapper.AlgoPython.HKMFT.recovHKMFT import recovHKMFT
 
-
-def hkmf_t(incomp_data, tags=None, data_names=None, epoch=10, tr_ratio=0.9, logs=True, verbose=True):
+def hkmf_t(incomp_data, tags=None, seq_len=24, blackouts_begin=None, blackouts_end=None, epochs=30, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
 
@@ -16,13 +15,20 @@ def hkmf_t(incomp_data, tags=None, data_names=None, epoch=10, tr_ratio=0.9, logs
         An array containing tags that provide additional structure or metadata about
         the input data. If None, no tags are used (default is None).
 
-    data_names : list of str, optional
-        List of names corresponding to each row or column of the dataset for interpretability.
-        If None, names are not used (default is None).
+    seq_length : int, optional
+        Length of the input sequence used by the model. Defines the number of time steps processed at once (default 24).
 
-    epoch : int, optional
+    blackouts_begin : int, optional
+        position of the blackout for the validation (default is None).
+        if None, based on the training ratio
+
+    blackouts_end : int, optional
+        position of the blackout for the validation (default is None).
+        if None, based on the training ratio
+
+    epochs : int, optional
         The maximum number of training epochs for the Hankel Matrix Factorization algorithm.
-        If convergence is reached earlier, the process stops (default is 10).
+        If convergence is reached earlier, the process stops (default is 30).
 
     tr_ratio: float, optional
         Split ratio between training and testing sets (default is 0.9).
@@ -40,7 +46,7 @@ def hkmf_t(incomp_data, tags=None, data_names=None, epoch=10, tr_ratio=0.9, logs
 
     Example
     -------
-        >>> recov_data = hkmf_t(incomp_data, tags=None, data_names=None, epoch=10)
+        >>> recov_data = hkmf_t(incomp_data, tags=None, blackouts_begin=None, blackouts_end=None, epochs=10)
         >>> print(recov_data)
 
     References
@@ -50,9 +56,10 @@ def hkmf_t(incomp_data, tags=None, data_names=None, epoch=10, tr_ratio=0.9, logs
     """
     start_time = time.time()  # Record start time
 
-    recov_data = recovery_hkmft(miss_data=incomp_data,tags=tags, data_names=data_names, epoch=epoch, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = recovHKMFT(dataset=incomp_data, tags=tags, seq_len=seq_len, blackouts_begin=blackouts_begin, blackouts_end=blackouts_end, max_epoch=epochs, tr_ratio=tr_ratio, verbose=verbose)
 
     end_time = time.time()
+
     if logs and verbose:
         print(f"\n> logs: imputation hkmf_t - Execution Time: {(end_time - start_time):.4f} seconds\n")
 

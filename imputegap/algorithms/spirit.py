@@ -96,7 +96,24 @@ def spirit(incomp_data, k, w, lambda_value, logs=True, verbose=True, lib_path=No
     """
     start_time = time.time()  # Record start time
 
-    # Call the C++ function to perform recovery
+    # for loop for uni-dimentional data ===start========================================================================
+    #nan_counts_per_col = np.sum(np.isnan(incomp_data), axis=0)
+    #cols_with_nans = np.where(nan_counts_per_col > 0)[0].shape[0]
+    #series_imputations = []
+    #for series in range(0, incomp_data.shape[1]):
+    #    series_to_impute = incomp_data[:, series]
+    #    has_nans = np.isnan(series_to_impute).any()
+    #    series_to_impute = series_to_impute.reshape(-1, 1)
+    #    if has_nans or cols_with_nans < 1:
+    #    imputed_matrix = native_spirit(series_to_impute, k, w, lambda_value, verbose)
+    #    imputed_matrix = np.asarray(imputed_matrix).reshape(-1)
+    #    series_imputations.append(imputed_matrix)
+    #recov_data = np.column_stack(series_imputations)
+    # for loop for uni-dimentional data ===end==========================================================================
+
+    if utils.check_contamination_series(incomp_data, algo="spirit", verbose=verbose):
+        return incomp_data
+
     recov_data = native_spirit(incomp_data, k, w, lambda_value, verbose)
 
     end_time = time.time()

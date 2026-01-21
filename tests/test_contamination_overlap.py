@@ -1,7 +1,10 @@
+import math
 import unittest
 import numpy as np
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 
 class TestContaminationOverlap(unittest.TestCase):
@@ -18,27 +21,24 @@ class TestContaminationOverlap(unittest.TestCase):
 
         for series_sel in series_impacted:
 
-            ts_contaminate = ts_1.Contamination.overlap(input_data=ts_1.data, rate_series=series_sel, limit=1, shift=0.1, offset=0.1)
+            ts_contaminate = GenGap.overlap(input_data=ts_1.data, rate_series=series_sel, limit=1, shift=0.1, offset=100)
 
-            if np.isnan(ts_contaminate[:, :ten_percent_index]).any():
-                check_position = False
-            else:
-                check_position = True
-
-            self.assertTrue(check_position, True)
+            self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows" )
 
     def get_last_nan_series_index(self, matrix):
         last_nan_index = None  # Initialize the variable to store the result
         all_nan = True  # Assume all series have NaN values initially
 
-        for i in range(matrix.shape[0]):  # Iterate in reverse
-            if np.isnan(matrix[i]).any():  # Check if any NaN exists in the series
+        for i in range(matrix.shape[1]):  # Iterate in reverse
+            d = matrix[:, i]
+            if np.isnan(d).any():  # Check if any NaN exists in the series
                 last_nan_index = i + 1  # Update the variable with the index + 1
             else:
                 all_nan = False  # Found a series without NaN, update the flag
 
         if all_nan:
             return matrix.shape[0]  # Return the size of shape[0] if all series have NaN
+
         return last_nan_index  # Otherwise, return the last series index with NaN
 
     def test_overlap_logic(self):
@@ -48,7 +48,7 @@ class TestContaminationOverlap(unittest.TestCase):
         of the previous series and continuing with overlap.
         """
 
-        datasets = ["test.txt", "chlorine", "eeg-alcohol", "fmri-stoptask"]
+        datasets = ["test-logic-llm.txt", "chlorine", "eeg-alcohol"]
         series_rate = [0.2, 0.5, 0.8]  # Percentage of series impacted
         P = 0.1  # Offset zone
         shift = [0.05, 0.1]
@@ -62,16 +62,18 @@ class TestContaminationOverlap(unittest.TestCase):
 
                 for A in shift:
                     # Generate disjoint contamination
-                    ts_miss = ts.Contamination.overlap(input_data=ts.data, rate_series=S, limit=1, shift=A, offset=P)
+                    ts_miss = GenGap.overlap(input_data=ts.data, rate_series=S, limit=1, shift=A, offset=P)
 
-                    M, NS = ts.data.shape
+                    NS, M = ts.data.shape
 
                     INC = 0  # Incremental counter to track contamination shifts
-                    X = int(len(ts.data[0]) * P)  # 100
+                    X = math.ceil(ts.data.shape[0] * P)  # 100
 
                     FINAL_LIMIT = self.get_last_nan_series_index(ts_miss)
 
-                    for series_index, series in enumerate(ts_miss):
+                    for series_index in range(ts_miss.shape[1]):
+                        series = ts_miss[:, series_index]
+
                         N = len(series)  # Total number of values in the series
                         O = int(N * P)  # Values to protect at the beginning of the series
                         W = int(N * S)  # Number of data points to remove

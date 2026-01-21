@@ -6,12 +6,13 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>imputegap.recovery.manager.TimeSeries - ImputeGAP 1.1.1</title>
+        <title>imputegap.recovery.manager.TimeSeries - ImputeGAP 1.1.2</title>
       <link rel="stylesheet" type="text/css" href="../../static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../static/custom.css?v=5d077e89" />
     <link rel="stylesheet" type="text/css" href="../../static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/custom.css?v=5d077e89" />
     
     
 
@@ -168,7 +169,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">ImputeGAP 1.1.1</div></a>
+      <a href="../../index.html"><div class="brand">ImputeGAP 1.1.2</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -195,7 +196,7 @@
     <img class="sidebar-logo" src="https://www.naterscreations.com/imputegap/logo_imputegab.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">ImputeGAP 1.1.1</span>
+  <span class="sidebar-brand-text">ImputeGAP 1.1.2</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -223,14 +224,15 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../algorithms.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../imputegap.gengap.html">imputegap.recovery.contamination package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -282,7 +284,7 @@
 <h1>imputegap.recovery.manager.TimeSeries<a class="headerlink" href="#imputegap-recovery-manager-timeseries" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="imputegap.recovery.manager.TimeSeries">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.manager.</span></span><span class="sig-name descname"><span class="pre">TimeSeries</span></span><a class="reference internal" href="../../modules/imputegap/recovery/manager.html#TimeSeries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.manager.TimeSeries" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.manager.</span></span><span class="sig-name descname"><span class="pre">TimeSeries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../modules/imputegap/recovery/manager.html#TimeSeries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.manager.TimeSeries" title="Link to this definition">¶</a></dt>
 <dd><p>Class for managing and manipulating time series data.</p>
 <p>This class allows importing, normalizing, and visualizing time series datasets. It also provides methods
 to contaminate the datasets with missing values and plot results.</p>
@@ -293,22 +295,20 @@ to contaminate the datasets with missing values and plot results.</p>
 </dd>
 <dt>import_matrix(data=None) :</dt><dd><p>Imports a matrix of time series data.</p>
 </dd>
-<dt>load_series(data=None, max_series=None, max_values=None, header=False) :</dt><dd><p>Loads time series data from a file or predefined dataset.</p>
+<dt>load_series(data, nbr_series=None, nbr_val=None, header=False, normalizer=”z_score”, replace_nan=False, reverse=False, verbose=True):</dt><dd><p>Loads time series data from a file or predefined dataset.</p>
 </dd>
 <dt>print(limit=10, view_by_series=False) :</dt><dd><p>Prints a limited number of time series from the dataset.</p>
 </dd>
 <dt>print_results(metrics, algorithm=””) :</dt><dd><p>Prints the results of the imputation process.</p>
 </dd>
-<dt>normalize(normalizer=”z_score”) :</dt><dd><p>Normalizes the time series dataset.</p>
+<dt>normalize(normalizer=”z_score”, data=None, verbose=True):</dt><dd><p>Normalizes the time series dataset.</p>
 </dd>
 <dt>plot(input_data, incomp_data=None, recov_data=None, max_series=None, max_values=None, size=(16, 8), save_path=””, display=True) :</dt><dd><p>Plots the time series data, including raw, contaminated, or imputed data.</p>
-</dd>
-<dt>Contamination :</dt><dd><p>Class containing methods to contaminate time series data with missing values based on different patterns.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.manager.TimeSeries.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../modules/imputegap/recovery/manager.html#TimeSeries.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.manager.TimeSeries.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../modules/imputegap/recovery/manager.html#TimeSeries.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.manager.TimeSeries.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize the TimeSeries object.</p>
 <p>The class works with time series datasets, where each series is separated by space, and values
 are separated by newline characters.</p>
@@ -319,7 +319,7 @@ are separated by newline characters.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#imputegap.recovery.manager.TimeSeries.__init__" title="imputegap.recovery.manager.TimeSeries.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#imputegap.recovery.manager.TimeSeries.__init__" title="imputegap.recovery.manager.TimeSeries.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([verbose])</p></td>
 <td><p>Initialize the TimeSeries object.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../../imputegap.manager.html#imputegap.recovery.manager.TimeSeries.import_matrix" title="imputegap.recovery.manager.TimeSeries.import_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_matrix</span></code></a>([data])</p></td>
@@ -328,7 +328,7 @@ are separated by newline characters.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="../../imputegap.manager.html#imputegap.recovery.manager.TimeSeries.load_series" title="imputegap.recovery.manager.TimeSeries.load_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_series</span></code></a>(data[, nbr_series, nbr_val, ...])</p></td>
 <td><p>Loads time series data from a file or predefined dataset.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../../imputegap.manager.html#imputegap.recovery.manager.TimeSeries.normalize" title="imputegap.recovery.manager.TimeSeries.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize</span></code></a>([normalizer, verbose])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../../imputegap.manager.html#imputegap.recovery.manager.TimeSeries.normalize" title="imputegap.recovery.manager.TimeSeries.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize</span></code></a>([normalizer, data, verbose])</p></td>
 <td><p>Normalize the time series dataset.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../../imputegap.manager.html#imputegap.recovery.manager.TimeSeries.plot" title="imputegap.recovery.manager.TimeSeries.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(input_data[, incomp_data, recov_data, ...])</p></td>
@@ -401,7 +401,7 @@ are separated by newline characters.</p>
       
     </aside>
   </div>
-</div><script src="../../static/documentation_options.js?v=58fbf978"></script>
+</div><script src="../../static/documentation_options.js?v=6f037312"></script>
     <script src="../../static/doctools.js?v=9bcbadda"></script>
     <script src="../../static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../static/scripts/furo.js?v=5fa4622c"></script>

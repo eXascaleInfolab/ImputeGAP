@@ -6,12 +6,13 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="imputegap.tools.utils package" href="imputegap.utils.html" /><link rel="prev" title="imputegap.recovery.downstream package" href="imputegap.downstream.html" />
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>imputegap.recovery.evaluation package - ImputeGAP 1.1.1</title>
+        <title>imputegap.recovery.evaluation package - ImputeGAP 1.1.2</title>
       <link rel="stylesheet" type="text/css" href="static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
     <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
     
     
 
@@ -168,7 +169,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">ImputeGAP 1.1.1</div></a>
+      <a href="index.html"><div class="brand">ImputeGAP 1.1.2</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -195,7 +196,7 @@
     <img class="sidebar-logo" src="https://www.naterscreations.com/imputegap/logo_imputegab.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">ImputeGAP 1.1.1</span>
+  <span class="sidebar-brand-text">ImputeGAP 1.1.2</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -223,14 +224,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="imputegap.html">API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">imputegap.recovery.contamination package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -285,7 +287,7 @@
 <span id="modules"></span><h2>Modules<a class="headerlink" href="#module-imputegap.recovery.evaluation" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="imputegap.recovery.evaluation.Evaluation">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.evaluation.</span></span><span class="sig-name descname"><span class="pre">Evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/evaluation.html#Evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.evaluation.</span></span><span class="sig-name descname"><span class="pre">Evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/evaluation.html#Evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.evaluation.Evaluation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to evaluate the performance of imputation algorithms by comparing imputed time series with the ground truth.</p>
 <section id="methods">
@@ -463,7 +465,7 @@ giving higher weight to large errors.</p>
       
     </aside>
   </div>
-</div><script src="static/documentation_options.js?v=58fbf978"></script>
+</div><script src="static/documentation_options.js?v=6f037312"></script>
     <script src="static/doctools.js?v=9bcbadda"></script>
     <script src="static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="static/scripts/furo.js?v=5fa4622c"></script>

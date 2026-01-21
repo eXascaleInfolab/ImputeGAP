@@ -5,7 +5,6 @@ from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 
 class TestImputation(unittest.TestCase):
-
     def test_imputation_min(self):
         """
         the goal is to test if only the simple imputation with min has the expected outcome

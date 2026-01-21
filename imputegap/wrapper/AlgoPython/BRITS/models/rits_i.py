@@ -1,11 +1,18 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
+
 from torch.autograd import Variable
 from torch.nn.parameter import Parameter
 
 import math
+import imputegap.wrapper.AlgoPython.BRITS.utils
+import argparse
+import imputegap.wrapper.AlgoPython.BRITS.data_loader
 
+from ipdb import set_trace
+from sklearn import metrics
 
 def binary_cross_entropy_with_logits(input, target, weight=None, size_average=True, reduce=True):
     if not (target.size() == input.size()):
@@ -26,13 +33,14 @@ def binary_cross_entropy_with_logits(input, target, weight=None, size_average=Tr
 
 
 class TemporalDecay(nn.Module):
-    def __init__(self, input_size, hidden_layers=None):
+    def __init__(self, input_size, rnn_hid_size):
         super(TemporalDecay, self).__init__()
-        self.build(input_size, hidden_layers)
+        self.rnn_hid_size = rnn_hid_size
+        self.build(input_size)
 
-    def build(self, input_size, hidden_layers=None):
-        self.W = Parameter(torch.Tensor(hidden_layers, input_size))
-        self.b = Parameter(torch.Tensor(hidden_layers))
+    def build(self, input_size):
+        self.W = Parameter(torch.Tensor(self.rnn_hid_size, input_size))
+        self.b = Parameter(torch.Tensor(self.rnn_hid_size))
         self.reset_parameters()
 
     def reset_parameters(self):
@@ -47,21 +55,24 @@ class TemporalDecay(nn.Module):
         return gamma
 
 class Model(nn.Module):
-    def __init__(self, batch_size, nbr_features, hidden_layers, seq_len):
-        self.batch_size = batch_size
-        self.nbr_features = nbr_features
-        self.seq_length = seq_len
-        self.hidden_layers = hidden_layers
+    def __init__(self, rnn_hid_size, impute_weight, label_weight, seq_len, feat_len):
         super(Model, self).__init__()
+
+        self.rnn_hid_size = rnn_hid_size
+        self.impute_weight = impute_weight
+        self.label_weight = label_weight
+        self.seq_len = seq_len
+        self.feat_len = feat_len
+
         self.build()
 
     def build(self):
-        self.rnn_cell = nn.LSTMCell(self.nbr_features * 2, self.hidden_layers)
+        self.rnn_cell = nn.LSTMCell(self.feat_len * 2, self.rnn_hid_size)
 
-        self.regression = nn.Linear(self.hidden_layers, self.nbr_features)
-        self.temp_decay = TemporalDecay(input_size = self.nbr_features, hidden_layers=self.hidden_layers)
+        self.regression = nn.Linear(self.rnn_hid_size, self.feat_len)
+        self.temp_decay = TemporalDecay(input_size = self.feat_len, rnn_hid_size = self.rnn_hid_size)
 
-        self.out = nn.Linear(self.hidden_layers, 1)
+        self.out = nn.Linear(self.rnn_hid_size, 1)
 
     def forward(self, data, direct):
         # Original sequence with 24 time steps
@@ -75,17 +86,18 @@ class Model(nn.Module):
         labels = data['labels'].view(-1, 1)
         is_train = data['is_train'].view(-1, 1)
 
-        h = Variable(torch.zeros((values.size()[0], self.hidden_layers)))
-        c = Variable(torch.zeros((values.size()[0], self.hidden_layers)))
+        h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
 
         if torch.cuda.is_available():
             h, c = h.cuda(), c.cuda()
 
         x_loss = 0.0
+        y_loss = 0.0
 
         imputations = []
 
-        for t in range(self.seq_length):
+        for t in range(self.seq_len):
             x = values[:, t, :]
             m = masks[:, t, :]
             d = deltas[:, t, :]
@@ -114,11 +126,11 @@ class Model(nn.Module):
 
         y_h = F.sigmoid(y_h)
 
-        return {'loss': x_loss / self.seq_length + 0.1 *y_loss, 'predictions': y_h,\
+        return {'loss': x_loss * self.impute_weight + y_loss * self.label_weight, 'predictions': y_h,\
                 'imputations': imputations, 'labels': labels, 'is_train': is_train,\
                 'evals': evals, 'eval_masks': eval_masks}
 
-    def run_on_batch(self, data, optimizer):
+    def run_on_batch(self, data, optimizer, epoch = None):
         ret = self(data, direct = 'forward')
 
         if optimizer is not None:

@@ -1,0 +1,45 @@
+name: Pytest - ImputeGAP - Loading - 12
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        lfs: true
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Free disk space
+      run: |
+        df -h
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/.ghcup
+        sudo apt-get clean
+        df -h   
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install libmlpack-dev
+        sudo apt-get install libopenblas-dev
+        sudo apt-get install python3-dev build-essential
+        pip install --upgrade google protobuf
+        pip install -r requirements.txt
+        pip install mypy
+        pip install pytest
+
+
+    - name: Run pytest
+      run: |
+        python -m pytest ./tests/test_benchmarking.py

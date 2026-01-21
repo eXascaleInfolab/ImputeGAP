@@ -11,6 +11,8 @@
 # sudo apt-get update
 # sudo apt-get install --only-upgrade libstdc++6
 
+# make libSTMVL.dylib libIterativeSVD.dylib libGROUSE.dylib libDynaMMo.dylib libROSL.dylib libSoftImpute.dylib libSPIRIT.dylib libSVT.dylib libTKCM.dylib libCDREC.dylib
+# # make libSTMVL.so libIterativeSVD.so libGROUSE.so libDynaMMo.so libROSL.so libSoftImpute.so libSPIRIT.so libSVT.so libTKCM.so libCDREC.so
 
 all: libAlgoCollection.so AlgoCollection.dll
 # ==================================================================================================================================
@@ -33,7 +35,7 @@ libSTMVL.so:
 	-lopenblas -larpack -lmlpack
 
 libSTMVL.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_stmvl.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_stmvl_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algorithms/ST_MVL.cpp shared/SharedSTMVL.cpp \
@@ -47,7 +49,7 @@ libIterativeSVD.so:
 	-lopenblas -larpack
 
 libIterativeSVD.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_iterative_svd.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_iterative_svd_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algebra/RSVD.cpp Algorithms/IterativeSVD.cpp shared/SharedLibIterativeSVD.cpp \
@@ -62,7 +64,7 @@ libGROUSE.so:
 	-lopenblas -larpack
 
 libGROUSE.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_grouse.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_grouse_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algorithms/GROUSE.cpp shared/SharedLibGROUSE.cpp \
@@ -78,25 +80,10 @@ libDynaMMo.so:
 	-lopenblas -larpack
 
 libDynaMMo.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_dynammo.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_dynammo_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algebra/Auxiliary.cpp Algorithms/DynaMMo.cpp shared/SharedLibDynaMMo.cpp \
-	-larmadillo -lopenblas -larpack
-
-# ==================================================================================================================================
-
-libNMF.so:
-	g++ -O3 -D ARMA_DONT_USE_WRAPPER -fPIC -rdynamic -shared -o lib_rosl.so -Wall -Werror -Wextra -pedantic \
-	-Wconversion -Wsign-conversion -msse2 -msse3 -msse4 -msse4.1 -msse4.2 -fopenmp -I/usr/include/ensmallen -std=gnu++14 \
-	Algorithms/NMFMissingValueRecovery.cpp shared/SharedLibNMF.cpp \
-	-lopenblas -larpack
-
-libNMF.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_nmf.dylib \
-	-I/opt/homebrew/include -I/opt/homebrew/include/ensmallen \
-	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
-	Algorithms/NMFMissingValueRecovery.cpp shared/SharedLibNMF.cpp \
 	-larmadillo -lopenblas -larpack
 
 # ==================================================================================================================================
@@ -108,7 +95,7 @@ libROSL.so:
 	-lopenblas -larpack
 
 libROSL.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_rosl.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_rosl_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algebra/Auxiliary.cpp Algorithms/ROSL.cpp shared/SharedLibROSL.cpp \
@@ -123,7 +110,7 @@ libSoftImpute.so:
 	-lopenblas -larpack
 
 libSoftImpute.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_soft_impute.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_soft_impute_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algebra/RSVD.cpp Algorithms/SoftImpute.cpp shared/SharedLibSoftImpute.cpp \
@@ -138,7 +125,7 @@ libSPIRIT.so:
 	-lopenblas -larpack
 
 libSPIRIT.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_spirit.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_spirit_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algorithms/SPIRIT.cpp shared/SharedLibSPIRIT.cpp \
@@ -153,7 +140,7 @@ libSVT.so:
 	-lopenblas -larpack
 
 libSVT.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_svt.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_svt_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algorithms/SVT.cpp shared/SharedLibSVT.cpp \
@@ -168,7 +155,7 @@ libTKCM.so:
 	-lopenblas -larpack
 
 libTKCM.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_tkcm.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_tkcm_new.dylib \
 	-I/opt/homebrew/include \
 	-L/opt/homebrew/lib -L/opt/homebrew/opt/openblas/lib \
 	Algorithms/TKCM.cpp shared/SharedLibTKCM.cpp \
@@ -183,7 +170,7 @@ libCDREC.so:
 	-lopenblas -larpack -lmlpack
 	
 libCDREC.dylib:
-	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_cdrec.dylib \
+	clang++ -dynamiclib -O3 -fPIC -std=c++17 -o lib_cdrec_new.dylib \
     -I/opt/homebrew/include \
     -L/opt/homebrew/lib \
     -L/opt/homebrew/opt/openblas/lib \

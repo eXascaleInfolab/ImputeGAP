@@ -1,17 +1,7 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/Chengyui/NuwaTS/tree/master
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://arxiv.org/pdf/2405.15317
-# ===============================================================================================================
-
 import torch
 import torch.nn as nn
-from transformers.models.gpt2.modeling_gpt2 import GPT2Model
-from transformers import LlamaConfig, LlamaModel, LlamaTokenizer,BertModel,BertConfig
+from transformers.models.gpt2.modeling_gpt2 import GPT2Model,GPT2Config
+from transformers import LlamaConfig, LlamaModel, LlamaTokenizer,LlamaForCausalLM,AutoTokenizer,AutoModel,AutoConfig,BertModel,BertConfig
 from imputegap.wrapper.AlgoPython.NuwaTS.layers.Embed import DataEmbedding
 from transformers import GPT2Tokenizer
 from einops import rearrange, repeat
@@ -112,14 +102,18 @@ class Model(nn.Module):
                 )
             else:
                 configs.d_model = 768
-                self.gpt2 = GPT2Model.from_pretrained('gpt2', output_attentions=True, output_hidden_states=True, attn_implementation="eager")
-                self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+                #self.gpt2 = GPT2Model.from_pretrained('gpt2/gpt2/', output_attentions=True, output_hidden_states=True, local_files_only=True)
+                self.gpt2 = GPT2Model.from_pretrained('gpt2', output_attentions=True, output_hidden_states=True, attn_implementation="eager", local_files_only=True)
+                #self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2/gpt2/', local_files_only=True)
+                self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2', local_files_only=True)
                 self.gpt2.h = self.gpt2.h[:configs.gpt_layers]
         else:
-            self.llama_config = LlamaConfig.from_pretrained('/usr/local/Wyk_team/Chengjinguo/AutoTimes-main/llama/llama-2-7B')
+            self.llama_config = LlamaConfig.from_pretrained(
+                '/usr/local/Wyk_team/Chengjinguo/AutoTimes-main/llama/llama-2-7B')
             self.llama_config.output_attentions = True
             self.llama_config.output_hidden_states = True
-            self.gpt2 = LlamaModel.from_pretrained("/usr/local/Wyk_team/Chengjinguo/AutoTimes-main/llama/llama-2-7B",
+            self.gpt2 = LlamaModel.from_pretrained(
+                "/usr/local/Wyk_team/Chengjinguo/AutoTimes-main/llama/llama-2-7B",
                 # 'huggyllama/llama-7b',
                 trust_remote_code=True,
                 local_files_only=True,
@@ -272,36 +266,36 @@ class Model(nn.Module):
         past_key_values = self.dropout(past_key_values)
         past_key_values = past_key_values.permute([2, 0, 3, 1, 4]).split(2)
         return past_key_values
-    def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask=None,skip_output=False):
-
-        dec_out = self.imputation(
-            x_enc, x_mark_enc, x_dec, x_mark_dec, mask,skip_output=skip_output)
+    def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask=None, skip_output=False, normalization=False):
+        dec_out = self.imputation(x_enc, x_mark_enc, x_dec, x_mark_dec, mask,skip_output=skip_output, normalization=normalization)
         return dec_out  # [B, L, D]
 
-    def imputation(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask,skip_output=False):
+    def imputation(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask, skip_output=False, normalization=True):
 
-        if mask is None:
+
+        if mask is None and normalization:
             means = x_enc.mean(1, keepdim=True).detach()
             x_enc = x_enc - means
-            stdev = torch.sqrt(
-                torch.var(x_enc, dim=1, keepdim=True, unbiased=False) + 1e-5)
+            stdev = torch.sqrt(torch.var(x_enc, dim=1, keepdim=True, unbiased=False) + 1e-5)
             x_enc /= stdev
         else:
             # Normalization from Non-stationary Transformer
-            means = torch.sum(x_enc, dim=1) / torch.sum(mask == 1, dim=1)
-            means = means.unsqueeze(1).detach()
-            # Prevent division by 0
-            means = torch.where(torch.isnan(means),torch.zeros_like(means),means)
-            x_enc = x_enc - means
-            x_enc = x_enc.masked_fill(mask == 0, 0)
-            stdev = torch.sqrt(torch.sum(x_enc * x_enc, dim=1) /
-                               torch.sum(mask == 1, dim=1) + 1e-5)
-            stdev = stdev.unsqueeze(1).detach()
-            # Prevent division by 0
-            stdev = torch.where(torch.isnan(stdev), torch.ones_like(stdev), stdev)
-            x_enc /= stdev
+            if normalization:
+                means = torch.sum(x_enc, dim=1) / torch.sum(mask == 1, dim=1)
+                means = means.unsqueeze(1).detach()
+                # Prevent division by 0
+                means = torch.where(torch.isnan(means),torch.zeros_like(means),means)
+                x_enc = x_enc - means
+                x_enc = x_enc.masked_fill(mask == 0, 0)
+                stdev = torch.sqrt(torch.sum(x_enc * x_enc, dim=1) /
+                                   torch.sum(mask == 1, dim=1) + 1e-5)
+                stdev = stdev.unsqueeze(1).detach()
+                # Prevent division by 0
+                stdev = torch.where(torch.isnan(stdev), torch.ones_like(stdev), stdev)
+                x_enc /= stdev
         B, T, N = x_enc.size()
         patch_num = T//self.patch_size
+
         if self.configs.cov_prompt:
             x_enc_seg = rearrange(x_enc,'b (patch_num patch_size) n -> (b patch_num) patch_size n',patch_size=self.patch_size)
             mask_seg = rearrange(mask,'b (patch_num patch_size) n -> (b patch_num) patch_size n',patch_size=self.patch_size)
@@ -400,13 +394,16 @@ class Model(nn.Module):
         # dec_out = rearrange(dec_out,'(b c) patch_num patch_size -> b (patch_num patch_size) c',c=N)
         dec_out = rearrange(dec_out, '(b c) seq_len -> b seq_len c', c=N)
         # De-Normalization from Non-stationary Transformer
-        dec_out = dec_out * \
-                  (stdev[:, 0, :].unsqueeze(1).repeat(
-                      1, dec_out.shape[1], 1))
-        dec_out = dec_out + \
-                  (means[:, 0, :].unsqueeze(1).repeat(
-                      1, dec_out.shape[1], 1))
-        return dec_out,outputs
+
+        if normalization:
+            dec_out = dec_out * \
+                      (stdev[:, 0, :].unsqueeze(1).repeat(
+                          1, dec_out.shape[1], 1))
+            dec_out = dec_out + \
+                      (means[:, 0, :].unsqueeze(1).repeat(
+                          1, dec_out.shape[1], 1))
+
+        return dec_out, outputs
 
     def calcute_lags(self, x_enc):
         x_enc = torch.nan_to_num(x_enc, nan=0.0)

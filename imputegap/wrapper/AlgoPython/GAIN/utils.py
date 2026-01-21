@@ -1,3 +1,14 @@
+# ===============================================================================================================
+# SOURCE: https://github.com/jsyoon0823/GAIN
+#
+# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
+#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
+#
+# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
+# https://proceedings.mlr.press/v80/yoon18a/yoon18a.pdf
+# ===============================================================================================================
+
+
 # coding=utf-8
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,10 +37,10 @@
  
 # Necessary packages
 import numpy as np
-import tensorflow as tf
+#import tensorflow as tf
 ##IF USING TF 2 use following import to still use TF < 2.0 Functionalities
-# import tensorflow.compat.v1 as tf
-# tf.disable_v2_behavior()
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 
 def normalization (data, parameters=None):
@@ -136,7 +147,7 @@ def rmse_loss (ori_data, imputed_data, data_m):
   Returns:
     - rmse: Root Mean Squared Error
   '''
-  
+
   ori_data, norm_parameters = normalization(ori_data)
   imputed_data, _ = normalization(imputed_data, norm_parameters)
     
@@ -160,7 +171,7 @@ def xavier_init(size):
   '''
   in_dim = size[0]
   xavier_stddev = 1. / tf.sqrt(in_dim / 2.)
-  return tf.random.normal(shape = size, stddev = xavier_stddev)
+  return tf.random_normal(shape = size, stddev = xavier_stddev)
       
 
 def binary_sampler(p, rows, cols):

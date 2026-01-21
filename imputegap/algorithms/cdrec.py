@@ -93,6 +93,7 @@ def cdrec(incomp_data, truncation_rank, iterations, epsilon, logs=True, verbose=
 
     if verbose:
         print(f"\n(IMPUTATION) CDRec\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\ttruncation rank: {truncation_rank}\n\tepsilon: {epsilon}\n\titerations: {iterations}\n")
+        print(f"call: cdrec.impute(params={{'rank': {truncation_rank}, 'epsilon': {epsilon}, 'iterations': {iterations}}})\n")
 
     start_time = time.time()  # Record start time
 

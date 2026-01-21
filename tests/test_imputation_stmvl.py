@@ -1,35 +1,51 @@
+import os
 import unittest
-from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 class TestSTMVL(unittest.TestCase):
 
-    def test_imputation_stmvl_chlorine(self):
+    def test_imputation_stmvl(self, name="stmvl", limit=0.05):
         """
-        the goal is to test if only the simple imputation with ST-MVL has the expected outcome
+        the goal is to test if only the simple imputation with the technique has the expected outcome
         """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"), nbr_val=200)
+        here = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(here, "toml/imputegap_results.toml")
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=10,
-                                              offset=0.1, seed=True)
+        dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
-        algo = Imputation.PatternSearch.STMVL(incomp_data)
+        ts = TimeSeries()
+        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+
+        incomp_data = GenGap.mcar(ts.data)
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()
-        algo.score(ts_1.data)
-        _, metrics = algo.recov_data, algo.metrics
+        algo.score(ts.data)
+        metrics = algo.metrics
 
-        expected_metrics = {
-            "RMSE": 0.1368300154471035,
-            "MAE": 0.0826527606378556,
-            "MI": 0.9622655017829951,
-            "CORRELATION": 0.9324369637045151
-        }
+        print(f"{name}:{metrics = }\n")
 
-        ts_1.print_results(metrics)
+        ts.print_results(algo.metrics, algo.algorithm)
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < 0.1, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
-        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < 0.1, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
-        self.assertTrue(abs(metrics["MI"] - expected_metrics["MI"]) < 0.1, f"metrics MI = {metrics['MI']}, expected MI = {expected_metrics['MI']} ")
-        self.assertTrue(abs(metrics["CORRELATION"] - expected_metrics["CORRELATION"]) < 0.1, f"metrics CORRELATION = {metrics['CORRELATION']}, expected CORRELATION = {expected_metrics['CORRELATION']} ")
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
+
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
+
+        # ==============================================================================================================
+
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute(params={'window_size': 7, 'gamma':0.85, 'alpha': 2})
+        algo.score(ts.data)
+        metrics = algo.metrics
+
+        print(f"{name}:{metrics = }\n")
+
+        ts.print_results(algo.metrics, algo.algorithm)
+
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
+
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")

@@ -5,12 +5,13 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>imputegap.recovery.optimization - ImputeGAP 1.1.1</title>
+        <title>imputegap.recovery.optimization - ImputeGAP 1.1.2</title>
       <link rel="stylesheet" type="text/css" href="../../../static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
     <link rel="stylesheet" type="text/css" href="../../../static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
     
     
 
@@ -167,7 +168,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">ImputeGAP 1.1.1</div></a>
+      <a href="../../../index.html"><div class="brand">ImputeGAP 1.1.2</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +195,7 @@
     <img class="sidebar-logo" src="https://www.naterscreations.com/imputegap/logo_imputegab.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">ImputeGAP 1.1.1</span>
+  <span class="sidebar-brand-text">ImputeGAP 1.1.2</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -222,14 +223,15 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../algorithms.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../imputegap.gengap.html">imputegap.recovery.contamination package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -485,6 +487,8 @@
                     <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
                     <span class="n">best_params</span> <span class="o">=</span> <span class="n">params_dict</span>
 
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">score</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+
                 <span class="c1"># Increment the run counter</span>
                 <span class="n">run_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -622,15 +626,11 @@
 <span class="sd">            list</span>
 <span class="sd">                Formatted list of parameters.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;cdrec&#39;</span><span class="p">:</span>
+            <span class="n">three_side</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="s2">&quot;mrnn&quot;</span><span class="p">,</span> <span class="s2">&quot;stmvl&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">in</span> <span class="n">three_side</span><span class="p">:</span>
                 <span class="n">particle_params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">particle_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">particle_params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">particle_params</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
             <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;iim&#39;</span><span class="p">:</span>
                 <span class="n">particle_params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">particle_params</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-            <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;mrnn&#39;</span><span class="p">:</span>
-                <span class="n">particle_params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">particle_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">particle_params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">particle_params</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
-            <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;stmvl&#39;</span><span class="p">:</span>
-                <span class="n">particle_params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">particle_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">particle_params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">particle_params</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
-
             <span class="k">return</span> <span class="n">particle_params</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
@@ -816,20 +816,13 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">temp_rank_range</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No suitable rank found within CDREC_RANK_RANGE for the given matrix shape!&quot;</span><span class="p">)</span>
 
-                <span class="n">configs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">temp_rank_range</span><span class="p">),</span>
-                            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">CDREC_EPS_RANGE</span><span class="p">),</span>
-                            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">CDREC_ITERS_RANGE</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)]</span>
+                <span class="n">configs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">temp_rank_range</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">CDREC_EPS_RANGE</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">CDREC_ITERS_RANGE</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)]</span>
             <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;iim&#39;</span><span class="p">:</span>
-                <span class="n">configs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">IIM_LEARNING_NEIGHBOR_RANGE</span><span class="p">))</span>
-                           <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)]</span>
+                <span class="n">configs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">IIM_LEARNING_NEIGHBOR_RANGE</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)]</span>
             <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;mrnn&#39;</span><span class="p">:</span>
-                <span class="n">configs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">MRNN_HIDDEN_DIM_RANGE</span><span class="p">),</span>
-                            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">MRNN_LEARNING_RATE_CHANGE</span><span class="p">),</span>
-                            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">MRNN_NUM_ITER_RANGE</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)]</span>
+                <span class="n">configs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">MRNN_HIDDEN_DIM_RANGE</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">MRNN_LEARNING_RATE_CHANGE</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">MRNN_NUM_ITER_RANGE</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)]</span>
             <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;stmvl&#39;</span><span class="p">:</span>
-                <span class="n">configs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">STMVL_WINDOW_SIZE_RANGE</span><span class="p">),</span>
-                            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">STMVL_GAMMA_RANGE</span><span class="p">),</span>
-                            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">STMVL_ALPHA_RANGE</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)]</span>
+                <span class="n">configs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">STMVL_WINDOW_SIZE_RANGE</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">STMVL_GAMMA_RANGE</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sh_params</span><span class="o">.</span><span class="n">STMVL_ALPHA_RANGE</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid algorithm: </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -850,24 +843,17 @@
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">configs</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No configurations left after successive halving.&quot;</span><span class="p">)</span>
-
             <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;iim&#39;</span><span class="p">:</span>
-                <span class="n">best_config</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">configs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">single_config</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_objective</span><span class="p">(</span>
-                    <span class="n">Imputation</span><span class="o">.</span><span class="n">evaluate_params</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="p">[</span><span class="n">single_config</span><span class="p">],</span> <span class="n">algorithm</span><span class="p">),</span>
-                    <span class="n">metrics</span><span class="p">))</span>
+                <span class="n">best_config</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">configs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">single_config</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_objective</span><span class="p">(</span><span class="n">Imputation</span><span class="o">.</span><span class="n">evaluate_params</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="p">[</span><span class="n">single_config</span><span class="p">],</span> <span class="n">algorithm</span><span class="p">),</span> <span class="n">metrics</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">best_config</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">configs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_objective</span><span class="p">(</span>
-                    <span class="n">Imputation</span><span class="o">.</span><span class="n">evaluate_params</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">),</span> <span class="n">metrics</span><span class="p">))</span>
+                <span class="n">best_config</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">configs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_objective</span><span class="p">(</span><span class="n">Imputation</span><span class="o">.</span><span class="n">evaluate_params</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">),</span> <span class="n">metrics</span><span class="p">))</span>
 
             <span class="n">best_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_objective</span><span class="p">(</span>
                 <span class="n">Imputation</span><span class="o">.</span><span class="n">evaluate_params</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">best_config</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">),</span> <span class="n">metrics</span><span class="p">)</span>
 
             <span class="c1"># Check the size of param_names[algorithm]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">param_names</span><span class="p">[</span><span class="n">algorithm</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="c1"># If only one parameter name, wrap best_config in a list if it&#39;s not already</span>
                 <span class="n">best_config</span> <span class="o">=</span> <span class="p">[</span><span class="n">best_config</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">best_config</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">best_config</span>
-
-            <span class="c1"># Create the dictionary using zip</span>
             <span class="n">best_config_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">param_names</span><span class="p">[</span><span class="n">algorithm</span><span class="p">],</span> <span class="n">best_config</span><span class="p">)}</span>
 
             <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -944,7 +930,6 @@
 
             <span class="k">def</span><span class="w"> </span><span class="nf">objective_wrapper</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
                 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config</span><span class="p">}</span>
-
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_objective</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">used_metric</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">score</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
@@ -952,7 +937,6 @@
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n\n\t\t\t</span><span class="s2">(RAY_TUNE OBJECTIVE ERROR) &gt;&gt; Error in objective function: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>  <span class="c1"># Return worst possible score</span>
-
                 <span class="k">return</span> <span class="p">{</span><span class="n">used_metric</span><span class="p">:</span> <span class="n">score</span><span class="p">}</span>  <span class="c1"># Ensures correct format</span>
 
             <span class="n">analysis</span> <span class="o">=</span> <span class="n">tune</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
@@ -1007,7 +991,7 @@
       
     </aside>
   </div>
-</div><script src="../../../static/documentation_options.js?v=58fbf978"></script>
+</div><script src="../../../static/documentation_options.js?v=6f037312"></script>
     <script src="../../../static/doctools.js?v=9bcbadda"></script>
     <script src="../../../static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../static/scripts/furo.js?v=5fa4622c"></script>

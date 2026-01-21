@@ -3,6 +3,7 @@ import unittest
 from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
 
 
 class TestOptiCDRECSH(unittest.TestCase):
@@ -17,8 +18,7 @@ class TestOptiCDRECSH(unittest.TestCase):
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path(dataset), nbr_series=50, nbr_val=100)
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)
-
+        incomp_data = GenGap.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)
         params = utils.load_parameters(query="default", algorithm=algorithm)
 
         algo_opti = Imputation.MatrixCompletion.CDRec(incomp_data)

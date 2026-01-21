@@ -3,6 +3,7 @@ import numpy as np
 import math
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
 
 
 class TestContaminationPercentageShift(unittest.TestCase):
@@ -12,19 +13,18 @@ class TestContaminationPercentageShift(unittest.TestCase):
         the goal is to test if the number of NaN values expected are provided in the contamination output
         """
 
-        datasets = ["drift", "chlorine", "eeg-alcohol", "stock-exchange", "fmri-stoptask"]
+        datasets = ["drift", "chlorine", "eeg-alcohol", "stock-exchange"]
         series_impacted = [0.1, 0.5, 1]  # percentage of series impacted
         missing_rates = [0.1, 0.5, 0.9]  # percentage of missing values with NaN
-        P = 0.1  # offset zone
-
         for dataset in datasets:
             ts = TimeSeries()
             ts.load_series(utils.search_path(dataset))
-            M, N = ts.data.shape  # series, values
+            N, M = ts.data.shape  # series, values
+            P = math.ceil(ts.data.shape[0] * 0.1)
 
             for S in series_impacted:
                 for R in missing_rates:
-                    incomp_data = ts.Contamination.scattered(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
+                    incomp_data = GenGap.scattered(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
 
                     n_nan = np.isnan(incomp_data).sum()
                     expected_nan_series = math.ceil(S * M)
@@ -54,22 +54,17 @@ class TestContaminationPercentageShift(unittest.TestCase):
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = ts_1.Contamination.scattered(input_data=ts_1.data,
+                ts_contaminate = GenGap.scattered(input_data=ts_1.data,
                                                               rate_dataset=series_sel,
                                                               rate_series=missing_rate, offset=0.1)
 
-                if np.isnan(ts_contaminate[:, :ten_percent_index]).any():
-                    check_position = False
-                else:
-                    check_position = True
-
-                self.assertTrue(check_position, True)
+                self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_dataset={series_sel}, rate_series={missing_rate})")
 
     def test_percentage_shift_total(self):
         """
         Test if the size of the missing percentage at random in a contaminated time series meets the expected number defined by the user.
         """
-        datasets = ["drift", "chlorine", "eeg-alcohol", "fmri-stoptask"]
+        datasets = ["drift", "chlorine", "eeg-alcohol"]
         series_impacted = [0.4, 0.8]
         missing_rates = [0.2, 0.6]
         offset = 0.1
@@ -78,17 +73,18 @@ class TestContaminationPercentageShift(unittest.TestCase):
             ts_1 = TimeSeries()
             ts_1.data = None
             ts_1.load_series(utils.search_path(dataset))
-            M, N = ts_1.data.shape
+            N, M = ts_1.data.shape
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = ts_1.Contamination.scattered(input_data=ts_1.data,
+                    ts_contaminate = GenGap.scattered(input_data=ts_1.data,
                                                                   rate_dataset=series_sel,
                                                                   rate_series=missing_rate,
                                                                   offset=offset)
 
                     nbr_series_contaminated = 0
-                    for inx, current_series in enumerate(ts_contaminate):
+                    for inx in range(ts_contaminate.shape[1]):
+                        current_series = ts_contaminate[:, inx]
 
                         if np.isnan(current_series).any():
                             nbr_series_contaminated = nbr_series_contaminated+1

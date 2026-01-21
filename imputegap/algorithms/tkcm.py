@@ -1,6 +1,8 @@
 import time
 import ctypes as __native_c_types_import;
 
+import numpy as np
+
 from imputegap.tools import utils
 
 def native_tkcm(__py_matrix, __py_rank, __verbose=True):
@@ -79,12 +81,21 @@ def tkcm(incomp_data, rank, logs=True, verbose=True, lib_path=None):
     """
     start_time = time.time()  # Record start time
 
-    # Call the C++ function to perform recovery
-    recov_data = native_tkcm(incomp_data, rank, verbose)
+    ts_m = np.copy(incomp_data)
+    recov = np.copy(incomp_data)
+    m_mask = np.isnan(incomp_data)
+
+    if utils.check_contamination_series(incomp_data):
+        print(f"(IMPUTATION-ERROR) tkcm is a uni-dimensional algorithm; it requires that only series 0 be contaminated.\n")
+        return incomp_data
+
+    recov_data = native_tkcm(ts_m, rank, verbose)
 
     end_time = time.time()
 
     if logs and verbose:
         print(f"\n> logs: imputation TKCM - Execution Time: {(end_time - start_time):.4f} seconds\n")
 
-    return recov_data
+    recov[m_mask] = recov_data[m_mask]
+
+    return recov

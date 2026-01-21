@@ -21,7 +21,7 @@ void Algorithms::GROUSE::doGROUSE(arma::mat &input, uint64_t maxrank)
     std::vector<arma::uvec> indices;
 
     std::cout << "\t\t(C++) GROUSE: Matrix Shape: (" << input.n_rows << ", " << input.n_cols << ") for Max Rank " << maxrank << "..." << std::endl;
-    
+
     for (uint64_t i = 0; i < input.n_cols; ++i)
     {
         indices.emplace_back(arma::find_finite(input.col(i)));

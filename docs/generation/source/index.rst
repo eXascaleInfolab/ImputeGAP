@@ -3,21 +3,25 @@ ImputeGAP Documentation
 
 .. admonition:: 📢 News !
 
-        - [03-07-2025] Version 1.1.1 is out! Check out the latest updates and improvements!
+        - [21-01-2026] Version 1.1.2 is out! The new release includes the following major updates:
+            - New Deep Learning and LLMs algorithms
+            - New utilities to handle multivariate datasets and algorithms
+            - New module to simulate missing values: GenGap
         - [04-06-2025] ImputeGAP will be presented as a Tutorial at KDD 2025 in Toronto! `[Link] <https://imputegap-tutorials.github.io/KDD-2025/>`_
 
 
-ImputeGAP is a comprehensive Python library for imputation of missing values in  time series data. It implements user-friendly APIs to easily visualize, analyze, and repair time series datasets. The library supports a diverse range of imputation algorithms and modular missing data simulation catering to datasets with varying characteristics. ImputeGAP includes extensive customization options, such as automated hyperparameter tuning, benchmarking, explainability, and downstream evaluation.
+ImputeGAP is a comprehensive Python library for imputation of missing values in  time series data. It implements user-friendly APIs to easily visualize, analyze, and repair incomplete time series datasets. The library supports a diverse range of imputation algorithms and modular missing data simulation catering to datasets with varying characteristics. ImputeGAP includes extensive customization options, such as automated hyperparameter tuning, benchmarking, explainability, and downstream evaluation.
 
 
 In detail, the library provides:
-    - Access to commonly used datasets in the time series imputation field
+    - Over 40 state-of-the-art time series imputation algorithms from six different families
+    - Several imputation univariate time series datasets and utilities to handle multivariate ones
     - Configurable contamination module that simulates real-world missingness patterns
-    - Parameterizable state-of-the-art time series imputation algorithms
-    - Extensive benchmarking to compare the performance of imputation algorithms
-    - Modular tools to assess the impact of imputation on key downstream tasks
-    - Fine-grained analysis of the impact of time series features on imputation results
-    - Seamless integration of new algorithms in Python, C++, Matlab, Java, and R
+    - AutoML techniques to parameterize the imputation algorithms
+    - Unified benchmarking pipeline to evaluate the performance of imputation algorithms
+    - Modular analysis tools to assess the impact of imputation on time series downstream tasks
+    - Expainability module to understand the impact of time series features on the imputation results
+    - Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R
 
 
 .. raw:: html
@@ -28,8 +32,8 @@ In detail, the library provides:
 
 .. _get_started:
 
-Get Started
------------
+Getting Started
+---------------
 
 .. raw:: html
 
@@ -160,10 +164,10 @@ If you use ImputeGAP in your research, please cite the following papers:
    index
    getting_started
    tutorials
-   notebooks
    datasets
-   patterns
    algorithms
+   missingness_patterns
+   notebooks
    contributing
    about_us
    imputegap

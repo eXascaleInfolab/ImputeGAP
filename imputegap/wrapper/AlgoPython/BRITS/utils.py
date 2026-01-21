@@ -8,10 +8,8 @@
 # https://papers.nips.cc/paper_files/paper/2018/hash/734e6bfcd358e25ac1db0a4241b95651-Abstract.html
 # ===============================================================================================================
 
-
 import torch
 from torch.autograd import Variable
-
 
 def to_var(var):
     if torch.is_tensor(var):

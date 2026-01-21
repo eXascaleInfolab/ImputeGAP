@@ -25,7 +25,8 @@ class ImputationDataset(TemporalDataset):
                  scaler=None,
                  window=24,
                  stride=1,
-                 exogenous=None):
+                 exogenous=None,
+                 multivariate=False):
         if mask is None:
             mask = np.ones_like(data)
         if exogenous is None:
@@ -42,7 +43,8 @@ class ImputationDataset(TemporalDataset):
                                                 window=window,
                                                 horizon=window,
                                                 delay=-window,
-                                                stride=stride)
+                                                stride=stride,
+                                                multivariate=multivariate)
 
     def get(self, item, preprocess=False):
         res, transform = super(ImputationDataset, self).get(item, preprocess)

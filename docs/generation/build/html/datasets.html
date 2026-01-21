@@ -3,15 +3,16 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Patterns" href="patterns.html" /><link rel="prev" title="Notebooks" href="notebooks.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Algorithms" href="algorithms.html" /><link rel="prev" title="Tutorials" href="tutorials.html" />
 
     <link rel="shortcut icon" href="https://www.naterscreations.com/imputegap/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Datasets - ImputeGAP 1.1.1</title>
+        <title>Datasets - ImputeGAP 1.1.2</title>
       <link rel="stylesheet" type="text/css" href="static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
     <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="static/custom.css?v=5d077e89" />
     
     
 
@@ -168,7 +169,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">ImputeGAP 1.1.1</div></a>
+      <a href="index.html"><div class="brand">ImputeGAP 1.1.2</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -195,7 +196,7 @@
     <img class="sidebar-logo" src="https://www.naterscreations.com/imputegap/logo_imputegab.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">ImputeGAP 1.1.1</span>
+  <span class="sidebar-brand-text">ImputeGAP 1.1.2</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -223,14 +224,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">imputegap.recovery.contamination package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -280,62 +282,68 @@
         <article role="main" id="furo-main-content">
           <section id="datasets">
 <h1>Datasets<a class="headerlink" href="#datasets" title="Link to this heading">¶</a></h1>
-<p>ImputeGAP provides datasets for experimenting with imputation techniques and the library’s modules. The datasets are stored in <code class="docutils literal notranslate"><span class="pre">./imputegap/datasets</span></code>.</p>
+<p>The library currently hosts 14 datasets spanning 8 domains. Those datasets were collected from various time series imputation works in recent years. The datasets are stored in <code class="docutils literal notranslate"><span class="pre">./imputegap/datasets</span></code> and are represented using a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> structure.</p>
+<br><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The datasets follow this format:</p>
+<ul class="simple">
+<li><p>Columns are the series/features, separator: empty space</p></li>
+<li><p>Rows are the timestamps’ values, separator: newline</p></li>
+<li><p>Missing values are marked as NaNs</p></li>
+</ul>
+</div>
 <br><p><strong>Weather</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#climate">climate</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#meteoswiss">meteo</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#temperature">temperature</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Climate-Change-Dataset">climate</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#MeteoSwiss-Weather-Dataset">meteo</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#China-Climate-Temperature-Dataset">temperature</a></p></li>
 </ul>
 </div></blockquote>
 <p><strong>Air Quality</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#AIR-QUALITY">airq</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#drift">drift</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Air-Quality-Dataset">airq</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Gas-Sensor-Array-Drift-Dataset">drift</a></p></li>
 </ul>
 </div></blockquote>
 <p><strong>Water Quality</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#bafu">bafu</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#chlorine">chlorine</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#BAFU-Water-Discharge-Dataset">bafu</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Chlorine-Residual-Dataset">chlorine</a></p></li>
 </ul>
 </div></blockquote>
 <p><strong>Neuroscience</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-ALCOHOL">eeg-alcohol</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-READING">eeg-reading</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#fMRI-STOPTASK">fmri-stoptask</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-Alcohol-Dataset">eeg-alcohol</a></p></li>
 </ul>
 </div></blockquote>
 <p><strong>IoT Sensing</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#motion">motion</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#traffic">traffic</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Motion-Sensor-Dataset">motion</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#PEMS-Traffic-Dataset">traffic</a></p></li>
 </ul>
 </div></blockquote>
 <p><strong>Sports</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#soccer">soccer</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#sport-activity">sport-activity</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Soccer-Player-Tracking-Dataset">soccer</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Sport-Activity-Dataset">sport-activity</a></p></li>
 </ul>
 </div></blockquote>
 <p><strong>Energy</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#electricity">electricity</a></p></li>
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#solar-plant">solar-plant</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Electricity-Consumption-Dataset">electricity</a></p></li>
 </ul>
 </div></blockquote>
 <p><strong>Finance</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#stock-exchange">stock-exchange</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Stock-Exchange-Rates-Dataset">stock-exchange</a></p></li>
 </ul>
 </div></blockquote>
 </section>
@@ -345,23 +353,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="patterns.html">
+          <a class="next-page" href="algorithms.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Patterns</div>
+                <div class="title">Algorithms</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="notebooks.html">
+          <a class="prev-page" href="tutorials.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Notebooks</div>
+                <div class="title">Tutorials</div>
                 
               </div>
             </a>
@@ -389,7 +397,7 @@
       
     </aside>
   </div>
-</div><script src="static/documentation_options.js?v=58fbf978"></script>
+</div><script src="static/documentation_options.js?v=6f037312"></script>
     <script src="static/doctools.js?v=9bcbadda"></script>
     <script src="static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="static/scripts/furo.js?v=5fa4622c"></script>

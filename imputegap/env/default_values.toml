@@ -34,14 +34,14 @@ lvalue = 1.0
 tau = 0.2
 
 [trmf]
-lags = []
-K = 10
-lambda_f = 0.1
-lambda_x = 0.1
-lambda_w = 0.1
+lags = [1,7]
+K = 4
+lambda_f = 1
+lambda_x = 1
+lambda_w = 1
 eta = 1
-alpha = 10
-max_iter = 100
+alpha = 1000
+max_iter = 5000
 
 
 
@@ -57,13 +57,13 @@ initial_strategy = "mean"
 seed = 42
 
 [miss_forest]
-n_estimators = 10
-max_iter = 3
+n_estimators = 100
+max_iter = 5
 max_features = "sqrt"
 seed = 42
 
 [xgboost]
-n_estimators = 3
+n_estimators = 2
 seed = 42
 
 
@@ -93,126 +93,162 @@ poly_order = 2
 
 
 # ALGORITHM DEFAULT VALUES : DEEP LEARNING
+#[mrnn]
+#hidden_dim = -1
+#learning_rate = 0.01
+#iterations = 20
+#sequence_length = 7
+
 [mrnn]
-hidden_dim = -1
-learning_rate = 0.01
-iterations = 20
-sequence_length = 7
+seq_len = 24
+epochs = 50
+batch_size = 64
+sliding_windows = 1
+hidden_layers = 108
+impute_weight = 0.3
+num_workers = 0
 
 [brits]
-model = "brits_i_univ"
-epoch = 100
-batch_size = -1
-nbr_features = 1
-hidden_layers = 64
+model = "brits"
+seq_len = 24
+epochs = 100
+batch_size = 64
+sliding_windows = 0
+hidden_layers = 108
+impute_weight = 0.3
 num_workers = 0
 
 [deep_mvi]
-max_epoch = 100
+max_epoch = 1000
 patience = 2
 lr = 0.001
+batch_size = -1
 
 [mpin]
+window = 6
 incre_mode = "alone"
-window = 1
-k = 10
-learning_rate = 0.01
-weight_decay = 0.1
+base = "SAGE"
 epochs = 200
 num_of_iteration = 5
-threshold = 0.25
-base = "SAGE"
-
-[pristi]
-target_strategy = "block"
-unconditional = false
-batch_size = -1
-embedding = -1
-num_workers = 0
-seed = 42
+k = 10
 
 
 [miss_net]
+n_components = 15
 alpha = 0.5
 beta = 0.1
-L = 10
 n_cl = 1
-max_iter = 10
-tol = 4
+max_iter = 15
+tol = 5
 random_init = false
 
+
 [gain]
-batch_size = -1
+batch_size = 128
+epochs = 10000
+alpha = 100
 hint_rate = 0.9
-alpha = 10
-epoch = 100
+
 
 [grin]
-d_hidden = 64
-lr = 0.001
+seq_len = -1
+sim_type = "corr"
+epochs = 30
 batch_size = -1
-window = 1
+sliding_windows = 1
 alpha = 10.0
-patience = 10
-epochs = 100
-workers = 0
+patience = 40
+num_workers = 0
+
 
 [bay_otide]
 K_trend = 30
 K_season = 1
-n_season = 7
+n_season = 10
 K_bias = 0
 time_scale = 1
 a0 = 1
 b0 = 1
 v = 1
-num_workers = 0
-tr_ratio = 0.6
+num_fold = 1
+
 
 [bit_graph]
-node_number = -1
-kernel_set = [2,3,6,7]
-dropout = 0.05
-subgraph_size = 5
-node_dim = 3
 seq_len = -1
-lr = 0.001
-batch_size = 32
-epoch = 50
+sliding_windows = 1
+kernel_size = 25
+kernel_set = [2,3,6,7]
+epochs = 50
+batch_size = -1
+subgraph_size = 5
 num_workers = 0
-seed = 42
+
 
 [hkmf_t]
 tags = []
-data_names = []
-epoch = 7
+seq_len = 7
+blackouts_begin = 0
+blackouts_end = 0
+epochs = 10
+
+
+[saits]
+seq_len = -1
+batch_size = -1
+epochs = 10000
+sliding_windows = 1
+n_head = 8
+num_workers = 0
+
+
+[timesnet]
+seq_len = -1
+batch_size = -1
+epochs = 10
+gpt_layers = 3
+num_workers = 0
+seed = 2021
+
+
+[csdi]
+seq_len = -1
+batch_size = -1
+epochs = 50
+sliding_windows = 1
+target_strategy = "random"
+nsamples = 1
+num_workers = 0
+
+
+[pristi]
+seq_len = -1
+batch_size = -1
+epochs = 20
+sliding_windows = 1
+target_strategy = "random"
+nsamples = 1
+num_workers = 0
+
 
 # ALGORITHM DEFAULT VALUES : PLMs/LLMs
 [nuwats]
-seq_length = -1
-patch_size = -1
+seq_len = -1
 batch_size = -1
-pred_length = -1
-label_length = -1
-enc_in = -1
-dec_in = -1
-c_out = -1
+epochs = 10
 gpt_layers = 6
 num_workers = 0
-seed = 42
+seed = 2021
+
 
 [gpt4ts]
-seq_length = -1
-patch_size = -1
+seq_len = -1
 batch_size = -1
-pred_length = -1
-label_length = -1
-enc_in = -1
-dec_in = -1
-c_out = -1
-gpt_layers = 6
+epochs = 10
+gpt_layers = 3
 num_workers = 0
-seed = 42
+seed = 2021
+
+
 
 
 
@@ -300,9 +336,9 @@ n_epochs = 10
 pl_trainer_kwargs = "cpu"
 
 [forecaster-hw-add]
-sp = 7
-trend = "add"
-seasonal = "additive"
+trend='add'
+seasonal='additive'
+sp=7
 
 [forecaster-arima]
 sp = 7
@@ -380,7 +416,11 @@ load_missing_rate_contamination = "0"
 
 [colors]
 chart = ["#696969", "#2b908f", "#a6c96a", "#876d5d", "#8f10ba", "#f7a35c", "#434348", "#f15c80", "#910000", "#8085e9", "#365e0c", "#90ed7d"]
-plot = ['dimgrey', 'black', 'grey', 'darkslategrey', 'khaki', 'gold', 'darkslategrey', 'hotpink', 'chocolate', 'lightseagreen', 'wheat']
+plot = ['blue', 'green', 'orange', 'mediumseagreen', 'khaki', 'gold', 'darkslategrey', 'hotpink', 'chocolate', 'lightseagreen', 'wheat']
+
+[colors_blacks]
+chart = ["#696969", "#2b908f", "#a6c96a", "#876d5d", "#8f10ba", "#f7a35c", "#434348", "#f15c80", "#910000", "#8085e9", "#365e0c", "#90ed7d"]
+plot = ['black', 'dimgray', 'darkslategray', 'lightgray', 'khaki', 'gold', 'darkslategrey', 'hotpink', 'chocolate', 'lightseagreen', 'wheat']
 
 
 # MODEL DEFAULT VALUES ==========================================================================

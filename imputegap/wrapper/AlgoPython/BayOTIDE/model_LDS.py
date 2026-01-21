@@ -1,30 +1,11 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/xuangu-fang/BayOTIDE
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://arxiv.org/abs/2308.14906
-# ===============================================================================================================
+import numpy as np
 
+# import scipy
 import torch
 
+# import utils
 """
 base model of LDS system
-
-SDE represent of a (1-d) GP with stationary kernel :
-
-dx/dt = Fx(t) + Lw(t)
-
-the coorespoding LDS model is :
-
-transition: x_k = A_{k-1} * x_{k-1} + q_{k-1}
-enission: y_k = H*x_k + noise(R)
-
-where: A_{k-1} = mat_exp(F*(t_k-t_{k-1})), q_{k-1}~N(0,P_{\inf}-A_{k-1}P_{\inf}A_{k-1}^T)
-
-Attention, with Matern /nu=1, x is 2-d vector = (f, df/dt), H = (1,0)
 
 """
 

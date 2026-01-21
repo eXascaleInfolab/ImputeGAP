@@ -1,14 +1,3 @@
-# ===============================================================================================================
-# SOURCE: https://github.com/xuangu-fang/BayOTIDE
-#
-# THIS CODE HAS BEEN MODIFIED TO ALIGN WITH THE REQUIREMENTS OF IMPUTEGAP (https://arxiv.org/abs/2503.15250),
-#   WHILE STRIVING TO REMAIN AS FAITHFUL AS POSSIBLE TO THE ORIGINAL IMPLEMENTATION.
-#
-# FOR ADDITIONAL DETAILS, PLEASE REFER TO THE ORIGINAL PAPER:
-# https://arxiv.org/abs/2308.14906
-# ===============================================================================================================
-
-
 """
 Implementation of BayTIDE model, try offline / online version
 
@@ -20,14 +9,16 @@ Bellevue,WA, USA, 05/2023
 """
 
 import numpy as np
+#from numpy.lib import utils
 import torch
 from imputegap.wrapper.AlgoPython.BayOTIDE.model_LDS import LDS_GP_streaming
 import os
-from imputegap.wrapper.AlgoPython.BayOTIDE import utils_BayOTIDE
-
+import imputegap.wrapper.AlgoPython.BayOTIDE.utils_BayOTIDE as utils
 from torch.distributions.multivariate_normal import MultivariateNormal
+
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 JITTER = 1e-4
+
 torch.manual_seed(300)
 
 
@@ -461,8 +452,8 @@ class BayTIDE:
             """compute the prob. metric: CRPS and neg-llk"""
             # get the sample of prediction
             sample_X = self.pred_sample(nsample_=100).cpu() # (N,T,nsample)
-            neg_llk = utils_BayOTIDE.neg_llk(self.data.cpu(),sample_X,  self.mask_test.cpu()).cpu().detach().numpy()
-            CRPS = utils_BayOTIDE.CRPS_score(self.data.cpu(),sample_X,  self.mask_test.cpu()).cpu().detach().numpy()
+            neg_llk = utils.neg_llk(self.data.cpu(),sample_X,  self.mask_test.cpu()).cpu().detach().numpy()
+            CRPS = utils.CRPS_score(self.data.cpu(),sample_X,  self.mask_test.cpu()).cpu().detach().numpy()
 
             loss_dict['neg-llk'] = neg_llk  
             loss_dict['CRPS'] = CRPS

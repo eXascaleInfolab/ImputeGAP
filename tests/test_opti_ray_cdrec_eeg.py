@@ -3,6 +3,7 @@ import unittest
 from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
 
 
 class TestOptiRAYCDREC(unittest.TestCase):
@@ -12,12 +13,12 @@ class TestOptiRAYCDREC(unittest.TestCase):
         the goal is to test if only the simple optimization RAY TUNE with CDRec has the expected outcome
         """
         algorithm = "cdrec"
-        dataset = "eeg-alcohol"
+        dataset = "chlorine"
 
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path(dataset), header=False)
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)
+        incomp_data = GenGap.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=100, seed=True)
 
         params = utils.load_parameters(query="default", algorithm=algorithm)
 
@@ -35,6 +36,4 @@ class TestOptiRAYCDREC(unittest.TestCase):
         metrics_default = algo_default.metrics
 
         print("\t\t\t\tmetrics_optimal['RMSE'] < metrics_default['RMSE']", metrics_optimal["RMSE"], " < ", metrics_default["RMSE"], "\n")
-
-
         self.assertTrue(metrics_optimal["RMSE"] < metrics_default["RMSE"], f"Expected {metrics_optimal['RMSE']} < {metrics_default['RMSE']}")

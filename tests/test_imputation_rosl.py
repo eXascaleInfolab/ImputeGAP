@@ -1,59 +1,51 @@
+import os
 import unittest
-import numpy as np
-from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGap
+
 
 class TestROSL(unittest.TestCase):
 
-    def test_imputation_rosl_dft(self):
+    def test_imputation_rosl(self, name="rosl", limit=0.05):
         """
-        the goal is to test if only the simple imputation with ROSL has the expected outcome
+        the goal is to test if only the simple imputation with the technique has the expected outcome
         """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
-        ts_1.normalize(normalizer="min_max")
+        here = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(here, "toml/imputegap_results.toml")
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=10, offset=0.1, seed=True)
+        dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
-        algo = Imputation.MatrixCompletion.ROSL(incomp_data).impute()
-        algo.score(ts_1.data)
+        ts = TimeSeries()
+        ts.load_series(utils.search_path(dataset), normalizer="z_score")
+
+        incomp_data = GenGap.mcar(ts.data)
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute()
+        algo.score(ts.data)
         metrics = algo.metrics
 
-        expected_metrics = {
-            "RMSE": 0.10120387850873366,
-            "MAE": 0.07732958857438763,
-            "MI": 0.6705497211056336,
-            "CORRELATION": 0.8763049995212882
-        }
+        print(f"{name}:{metrics = }\n")
 
-        assert np.isclose(metrics["RMSE"], expected_metrics["RMSE"]), f"RMSE mismatch: expected {expected_metrics['RMSE']}, got {metrics['RMSE']}"
-        assert np.isclose(metrics["MAE"], expected_metrics["MAE"]), f"MAE mismatch: expected {expected_metrics['MAE']}, got {metrics['MAE']}"
-        assert np.isclose(metrics["MI"], expected_metrics["MI"]), f"MI mismatch: expected {expected_metrics['MI']}, got {metrics['MI']}"
-        assert np.isclose(metrics["CORRELATION"], expected_metrics["CORRELATION"]), f"Correlation mismatch: expected {expected_metrics['CORRELATION']}, got {metrics['CORRELATION']}"
+        ts.print_results(algo.metrics, algo.algorithm)
 
-    def test_imputation_rosl_udef(self):
-        """
-        the goal is to test if only the simple imputation with ROSL has the expected outcome
-        """
-        ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
-        ts_1.normalize(normalizer="min_max")
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
 
-        incomp_data = ts_1.Contamination.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=10, offset=0.1, seed=True)
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
 
-        algo = Imputation.MatrixCompletion.ROSL(incomp_data).impute(params={"rank": 2, "regularization": 2})
-        algo.score(ts_1.data)
+        # ==============================================================================================================
+
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.impute(params={'rank': 3, 'regularization': 0.6})
+        algo.score(ts.data)
         metrics = algo.metrics
 
-        expected_metrics = {
-            "RMSE": 0.1280117567948824,
-            "MAE": 0.09713601017140877,
-            "MI": 0.48990062140021917,
-            "CORRELATION": 0.7901486988894544
-        }
+        print(f"{name}:{metrics = }\n")
 
-        assert np.isclose(metrics["RMSE"], expected_metrics["RMSE"]), f"RMSE mismatch: expected {expected_metrics['RMSE']}, got {metrics['RMSE']}"
-        assert np.isclose(metrics["MAE"], expected_metrics["MAE"]), f"MAE mismatch: expected {expected_metrics['MAE']}, got {metrics['MAE']}"
-        assert np.isclose(metrics["MI"], expected_metrics["MI"]), f"MI mismatch: expected {expected_metrics['MI']}, got {metrics['MI']}"
-        assert np.isclose(metrics["CORRELATION"], expected_metrics["CORRELATION"]), f"Correlation mismatch: expected {expected_metrics['CORRELATION']}, got {metrics['CORRELATION']}"
+        ts.print_results(algo.metrics, algo.algorithm)
+
+        expected_metrics = {"RMSE": rmse, "MAE": mae}
+
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")

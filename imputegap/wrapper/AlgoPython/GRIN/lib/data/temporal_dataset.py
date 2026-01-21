@@ -28,7 +28,8 @@ class TemporalDataset(Dataset):
                  window=24,
                  horizon=24,
                  delay=0,
-                 stride=1):
+                 stride=1,
+                 multivariate=True):
         """Wrapper class for dataset whose entry are dependent from a sequence of temporal indices.
 
         Parameters
@@ -78,9 +79,16 @@ class TemporalDataset(Dataset):
         self.window = window
         self.delay = delay
         self.horizon = horizon
-        self.stride = stride
+
+        if not multivariate:
+            self.stride = 1
+        else:
+            self.stride = stride
         # Identify the indices of the samples
-        self._indices = np.arange(self.data.shape[0] - self.sample_span + 1)[::self.stride]
+        if not multivariate:
+            self._indices = np.arange(self.data.shape[0] - self.sample_span + 1)[::self.stride]
+        else:
+            self._indices = np.arange(self.data.shape[0] // self.window)[::1]
         # Store preprocessing options
         self.trend = trend
         self.scaler = scaler

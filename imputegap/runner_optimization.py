@@ -1,4 +1,5 @@
 from imputegap.recovery.imputation import Imputation
+from imputegap.recovery.contamination import GenGap
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
 
@@ -6,12 +7,12 @@ from imputegap.tools import utils
 ts = TimeSeries()
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"))
-ts.normalize(normalizer="z_score")
+ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
 # contaminate and impute the time series
-ts_m = ts.Contamination.mcar(ts.data)
+ts_m = GenGap.mcar(ts.data)
 imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+imputer.verbose = False
 
 # use Ray Tune to fine tune the imputation algorithm
 imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})

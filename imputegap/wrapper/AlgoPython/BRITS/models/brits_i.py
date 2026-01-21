@@ -1,25 +1,38 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
 from torch.autograd import Variable
+from torch.nn.parameter import Parameter
 
-from imputegap.wrapper.AlgoPython.BRITS.models import rits_i
+import math
+import imputegap.wrapper.AlgoPython.BRITS.utils
+import argparse
+import imputegap.wrapper.AlgoPython.BRITS.data_loader
 
-SEQ_LEN = 36
-RNN_HID_SIZE = 64
+import imputegap.wrapper.AlgoPython.BRITS.models.rits_i as rits_i
+
+from sklearn import metrics
+
+from ipdb import set_trace
 
 
 class Model(nn.Module):
-    def __init__(self, batch_size, nbr_features, hidden_layers, seq_len):
+    def __init__(self, rnn_hid_size, impute_weight, label_weight, seq_len, features_len):
         super(Model, self).__init__()
-        self.batch_size = batch_size
-        self.nbr_features = nbr_features
-        self.hidden_layers = hidden_layers
+
+        self.rnn_hid_size = rnn_hid_size
+        self.impute_weight = impute_weight
+        self.label_weight = label_weight
         self.seq_len = seq_len
+        self.features_len = features_len
+
         self.build()
 
     def build(self):
-        self.rits_f = rits_i.Model(self.batch_size, self.nbr_features, self.hidden_layers, self.seq_len)
-        self.rits_b = rits_i.Model(self.batch_size, self.nbr_features, self.hidden_layers, self.seq_len)
+        self.rits_f = rits_i.Model(self.rnn_hid_size, self.impute_weight, self.label_weight, self.seq_len, self.features_len)
+        self.rits_b = rits_i.Model(self.rnn_hid_size, self.impute_weight, self.label_weight, self.seq_len, self.features_len)
 
     def forward(self, data):
         ret_f = self.rits_f(data, 'forward')
@@ -46,7 +59,7 @@ class Model(nn.Module):
         return ret_f
 
     def get_consistency_loss(self, pred_f, pred_b):
-        loss = torch.pow(pred_f - pred_b, 2.0).mean()
+        loss = torch.abs(pred_f - pred_b).mean() * 1e-1
         return loss
 
     def reverse(self, ret):
@@ -66,7 +79,7 @@ class Model(nn.Module):
 
         return ret
 
-    def run_on_batch(self, data, optimizer):
+    def run_on_batch(self, data, optimizer, epoch=None):
         ret = self(data)
 
         if optimizer is not None:

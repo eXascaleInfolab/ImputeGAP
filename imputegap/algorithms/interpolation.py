@@ -38,18 +38,24 @@ def interpolation(incomp_data, method="linear", poly_order=2, logs=True, verbose
     start_time = time.time()  # Record start time
 
     recov_data = np.copy(incomp_data)  # Copy data to avoid modifying original
+    recov = np.copy(incomp_data)
+    m_mask = np.isnan(incomp_data)
     num_rows, num_cols = recov_data.shape
 
-    for i in range(num_rows):  # Process row-wise (like pyts)
-        row_data = recov_data[i, :]
-        mask = ~np.isnan(row_data)  # Identify known values
+    for j in range(num_cols):  # Process row-wise (like pyts)
+        col = recov_data[:, j]
+        mask_known = ~np.isnan(col)
 
-        if np.all(np.isnan(row_data)):  # Skip row if all values are NaN
+        n_known = int(mask_known.sum())
+        if n_known == 0:
+            continue
+        if n_known == 1:
+            recov_data[np.isnan(col), j] = col[mask_known][0]
             continue
 
-        x_known = np.where(mask)[0]  # Indices of known values
-        y_known = row_data[mask]  # Known values
-        x_missing = np.where(~mask)[0]  # Indices of missing values
+        x_known = np.where(mask_known)[0]  # time indices with data
+        y_known = col[mask_known]
+        x_missing = np.where(~mask_known)[0]
 
         if method in ["nearest", "linear"]:
             interp_func = interp1d(x_known, y_known, kind=method, fill_value="extrapolate", bounds_error=False)
@@ -57,21 +63,21 @@ def interpolation(incomp_data, method="linear", poly_order=2, logs=True, verbose
             if len(x_known) > poly_order:
                 interp_func = np.poly1d(np.polyfit(x_known, y_known, poly_order))  # Polynomial fit
             else:
-                print(f"Not enough polynomial degree for method {method}, fall into linear")
                 interp_func = interp1d(x_known, y_known, kind="linear", fill_value="extrapolate", bounds_error=False)
         elif method == "spline":
             if len(x_known) > poly_order:
                 interp_func = interp1d(x_known, y_known, kind="cubic", fill_value="extrapolate", bounds_error=False)
             else:
-                print(f"Not enough polynomial degree for method {method}, fall into linear")
                 interp_func = interp1d(x_known, y_known, kind="linear", fill_value="extrapolate", bounds_error=False)
         else:
             raise ValueError("Invalid interpolation method. Choose from 'linear', 'polynomial', 'spline', or 'nearest'")
 
-        recov_data[i, x_missing] = interp_func(x_missing)  # Fill missing values
+        recov_data[x_missing, j] = interp_func(x_missing)
 
     end_time = time.time()
     if logs and verbose:
         print(f"\n> logs: imputation with interpolation - Execution Time: {(end_time - start_time):.4f} seconds\n")
 
-    return recov_data
+    recov[m_mask] = recov_data[m_mask]
+
+    return recov

@@ -9,17 +9,27 @@
 # ===============================================================================================================
 
 
-
+import os
 import ujson as json
 import numpy as np
-
 import torch
 from torch.utils.data import Dataset, DataLoader
 
 class MySet(Dataset):
-    def __init__(self, filename):
+    def __init__(self, replicat=False):
         super(MySet, self).__init__()
-        self.content = open(filename).readlines()
+
+        saving_path = "json"
+        if replicat:
+            print(f"\nloading from the replicat test: physionet\n")
+            here = os.path.dirname(os.path.abspath(__file__))
+            dataset_saving = os.path.join(here, "json")
+        else:
+            here = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+            dataset_saving = os.path.join(here, "imputegap_assets/models/brits")
+        dataset_saving_dir = os.path.join(here, dataset_saving, saving_path)
+
+        self.content = open(dataset_saving_dir).readlines()
 
         indices = np.arange(len(self.content))
         val_indices = np.random.choice(indices, len(self.content) // 5)
@@ -38,39 +48,51 @@ class MySet(Dataset):
         return rec
 
 def collate_fn(recs):
-    forward = map(lambda x: x['forward'], recs)
-    backward = map(lambda x: x['backward'], recs)
+    # materialize lists (not iterators)
+    forward = [r['forward'] for r in recs]
+    backward = [r['backward'] for r in recs]
 
-    def to_tensor_dict(recs):
-        values = torch.FloatTensor(list(map(lambda r: r['values'], recs)))
-        masks = torch.IntTensor(list(map(lambda r: r['masks'], recs)))
-        deltas = torch.FloatTensor(list(map(lambda r: r['deltas'], recs)))
-        forwards = torch.FloatTensor(list(map(lambda r: r['forwards'], recs)))
-        evals = torch.FloatTensor(list(map(lambda r: r['evals'], recs)))
-        eval_masks = torch.IntTensor(list(map(lambda r: r['eval_masks'], recs)))
-
+    def to_tensor_dict(records):
+        values     = torch.tensor([r['values']     for r in records], dtype=torch.float32)
+        masks      = torch.tensor([r['masks']      for r in records], dtype=torch.float32)
+        evals      = torch.tensor([r['evals']      for r in records], dtype=torch.float32)
+        eval_masks = torch.tensor([r['eval_masks'] for r in records], dtype=torch.float32)
+        deltas     = torch.tensor([r['deltas']     for r in records], dtype=torch.float32)
+        forwards   = torch.tensor([r['forwards']   for r in records], dtype=torch.float32)
         return {
             'values': values,
-            'forwards': forwards,
             'masks': masks,
-            'deltas': deltas,
             'evals': evals,
-            'eval_masks': eval_masks
+            'eval_masks': eval_masks,
+            'deltas': deltas,
+            'forwards': forwards,
         }
 
-    ret_dict = {
-        'forward': to_tensor_dict(list(forward)),
-        'backward': to_tensor_dict(list(backward))
-    }
+        #print(f"{values.shape = }")
+        #print(f"{masks.shape = }")
+        #print(f"{evals.shape = }")
+        #print(f"{eval_masks.shape = }")
+        #print(f"{deltas.shape = }")
+        #print(f"{forwards.shape = }")
 
-    ret_dict['labels'] = torch.FloatTensor(list(map(lambda x: x['label'], recs)))
-    ret_dict['is_train'] = torch.FloatTensor(list(map(lambda x: x['is_train'], recs)))
+    ret_dict = {
+        'forward': to_tensor_dict(forward),
+        'backward': to_tensor_dict(backward),
+        'labels': torch.tensor([r['label'] for r in recs], dtype=torch.float32),
+        'is_train': torch.tensor([r['is_train'] for r in recs], dtype=torch.float32),
+    }
 
     return ret_dict
 
-def get_loader(filename, batch_size = 16, shuffle = False, num_workers=0):
-    data_set = MySet(filename)
 
-    data_iter = DataLoader(dataset = data_set, batch_size = batch_size, num_workers = num_workers, shuffle = shuffle, pin_memory = True, collate_fn = collate_fn)
+def get_loader(batch_size = 64, shuffle = True, num_workers=4, replicat=False):
+    data_set = MySet(replicat)
+    data_iter = DataLoader(dataset = data_set, \
+                              batch_size = batch_size, \
+                              num_workers = num_workers, \
+                              shuffle = shuffle, \
+                              pin_memory = True, \
+                              collate_fn = collate_fn
+    )
 
     return data_iter

@@ -5,7 +5,7 @@
 #include <cassert>
 #include <chrono>
 
-#include "SharedLibSpirit.h"
+#include "SharedLibSPIRIT.h"
 
 #include "../Algorithms/SPIRIT.h"
 
