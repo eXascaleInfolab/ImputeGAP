@@ -19,4 +19,4 @@ jobs:
       run: pip install ruff
 
     - name: Run Ruff Linter with auto-fix
-      run: ruff check --fix imputegap/ --exclude imputegap/wrapper
+      run: ruff check --fix imputegap/ --exclude imputegap/wrapper --exclude imputegap/notebooks
