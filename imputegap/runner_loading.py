@@ -6,8 +6,8 @@ ts = TimeSeries()
 print(f"\nImputeGAP datasets : {ts.datasets}")
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None, nbr_series=3, nbr_val=750)
+ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None, nbr_series=4, nbr_val=750)
 
 # plot and print a subset of time series
-ts.print(nbr_series=3, nbr_val=20)
+ts.print(nbr_series=4, nbr_val=4)
 ts.plot(input_data=ts.data, nbr_series=9, nbr_val=100, save_path="./imputegap_assets")

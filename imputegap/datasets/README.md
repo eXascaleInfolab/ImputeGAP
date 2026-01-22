@@ -10,22 +10,22 @@ real-world time series from various of applications and which cover a wide range
 
 ## 📑 Dataset Index
 
-| Category          | Codename                            | Dataset                                                   |
-|-------------------|-------------------------------------|-----------------------------------------------------------|
-| **Weather**       | [`climate`](#climate)               | Climate Change                                            |
-| **Weather**       | [`meteo`](#meteoswiss)              | MeteoSwiss Weather                                        |
-| **Weather**       | [`temperature`](#temperature)       | Temperature                                               |
-| **Air Quality**   | [`airq`](#air-quality)              | Air Quality                                               |
-| **Air Quality**   | [`drift`](#drift)                   | Gas Sensor Array Drift                                    |
-| **Water Quality** | [`bafu`](#bafu)                     | BAFU Water Discharge                                      |
-| **Water Quality** | [`chlorine`](#chlorine)             | Chlorine Residual                                         |
-| **Neuroscience**  | [`eeg-alcohol`](#eeg-alcohol)       | EEG Alcohol                                               |
-| **IoT Sensing**   | [`motion`](#motion)                 | Motion Sensor (Human Activity Recognition)                |
-| **IoT Sensing**   | [`traffic`](#traffic)               | PEMS Traffic                                              |
-| **Sports**        | [`soccer`](#soccer)                 | Soccer Player Tracking                                    |
-| **Sports**        | [`sport-activity`](#sport-activity) | Sport Activity Dataset (Multi-Modal Exercise Recognition) |
-| **Energy**        | [`electricity`](#electricity)       | Electricity Consumption                                   |
-| **Finance**       | [`stock-exchange`](#stock-exchange) | Exchange Rates                                            |
+| Category          | Codename                                            | Dataset                    |
+|-------------------|-----------------------------------------------------|----------------------------|
+| **Weather**       | [`climate`](#Climate-Change-Dataset)                | Climate Change             |
+| **Weather**       | [`meteo`](#MeteoSwiss-Weather-Dataset)              | MeteoSwiss Weather         |
+| **Weather**       | [`temperature`](#China-Climate-Temperature-Dataset) | China Climate Temperature  |
+| **Air Quality**   | [`airq`](#Air-Quality-Dataset)                      | Air Quality                |
+| **Air Quality**   | [`drift`](#Gas-Sensor-Array-Drift-Dataset)          | Gas Sensor Array Drift     |
+| **Water Quality** | [`bafu`](#BAFU-Water-Discharge-Dataset)             | BAFU Water Discharge       |
+| **Water Quality** | [`chlorine`](#Chlorine-Residual-Dataset)            | Chlorine Residual          |
+| **Neuroscience**  | [`eeg-alcohol`](#EEG-Alcohol-Dataset)               | EEG Alcohol                |
+| **IoT Sensing**   | [`motion`](#Motion-Sensor-Dataset)                  | Motion Sensor              |
+| **IoT Sensing**   | [`traffic`](#PEMS-Traffic-Dataset)                  | PEMS Traffic               |
+| **Sports**        | [`soccer`](#Soccer-Player-Tracking-Dataset)         | Soccer Player Tracking     |
+| **Sports**        | [`sport-activity`](#Sport-Activity-Dataset)         | Sport Activity Dataset     |
+| **Energy**        | [`electricity`](#Electricity-Consumption-Dataset)   | Electricity Consumption    |
+| **Finance**       | [`stock-exchange`](#Stock-Exchange-Rates-Dataset)   | Stock Exchange Rates       |
 
 
 <br /><br /><hr /><br /><br />

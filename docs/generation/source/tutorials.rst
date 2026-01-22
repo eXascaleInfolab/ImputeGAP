@@ -26,7 +26,7 @@ To load and plot the eeg-alcohol dataset from the library:
     ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
     # print and plot a subset of time series
-    ts.print(nbr_series=6, nbr_val=20)
+    ts.print(nbr_series=4, nbr_val=4)
     ts.plot(input_data=ts.data, nbr_series=6, nbr_val=100, save_path="./imputegap_assets")
 
 

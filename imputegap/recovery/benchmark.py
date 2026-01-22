@@ -921,30 +921,43 @@ class Benchmark:
         ----------
         algorithms : list of str
             List of imputation algorithms to test.
+
         datasets : list of str
             List of dataset names to evaluate.
+
         patterns : list of str
             List of contamination patterns to apply.
+
         x_axis : list of float
             List of missing rates for contamination.
+
         optimizer : str, dict
             Name of the optimizer (str) or optimizer with their configurations (dict).
+
         metrics : list of str
             List of metrics for evaluation.
+
         save_dir : str, optional
             Directory to save reports and plots (default is "./reports").
+
         runs : int, optional
             Number of executions with a view to averaging them
+
         normalizer : str, optional
             Normalizer to pre-process the data (default is "z_score").
+
         report_title : str, optional
             Title of the report (default is "").
+
         nbr_series : int, optional
             Number of series to take inside the dataset (default is 200 (as the max values)). Set to None to remove the limitation.
+
         nbr_vals : int, optional
             Number of values to take inside the series (default is 2500 (as the max values)). Set to None to remove the limitation.
+
         dl_ratio : float, optional
             Training ratio for Deep Learning techniques (default is 0.8)
+
         verbose : bool, optional
             Whether to display the contamination information (default is False).
 

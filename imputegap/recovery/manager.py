@@ -174,6 +174,7 @@ class TimeSeries:
 
         if data is not None:
             if isinstance(data, str):
+                old_path = data
 
                 #  update path form inner library datasets
                 if data in utils.list_of_datasets(txt=True):
@@ -183,6 +184,9 @@ class TimeSeries:
                 if not os.path.exists(data):
                     here = os.path.dirname(os.path.dirname(__file__))
                     data = os.path.join(here, "datasets/", data)
+
+                if not os.path.exists(data):
+                    data = old_path
 
                 self.data = np.genfromtxt(data, delimiter=' ', max_rows=nbr_val, skip_header=int(header))
 
@@ -237,10 +241,10 @@ class TimeSeries:
         print(f"\nshape of {self.name} : {self.data.shape}\n\tnumber of series\t\t= {nbr_tot_series}\n\tnumber of timestamps\t= {nbr_tot_values}\n")
 
         if nbr_val == -1:
-            nbr_val = to_print.shape[1]
+            nbr_val = to_print.shape[0]
         if nbr_series == -1:
-            nbr_series = to_print.shape[0]
-        to_print = to_print[:nbr_series, :nbr_val]
+            nbr_series = to_print.shape[1]
+        to_print = to_print[:nbr_val, :nbr_series]
 
         if not view_by_series:
             to_print = to_print.T
