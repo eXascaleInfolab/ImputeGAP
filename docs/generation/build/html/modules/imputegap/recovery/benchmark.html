@@ -1219,30 +1219,43 @@
 <span class="sd">        ----------</span>
 <span class="sd">        algorithms : list of str</span>
 <span class="sd">            List of imputation algorithms to test.</span>
+
 <span class="sd">        datasets : list of str</span>
 <span class="sd">            List of dataset names to evaluate.</span>
+
 <span class="sd">        patterns : list of str</span>
 <span class="sd">            List of contamination patterns to apply.</span>
+
 <span class="sd">        x_axis : list of float</span>
 <span class="sd">            List of missing rates for contamination.</span>
+
 <span class="sd">        optimizer : str, dict</span>
 <span class="sd">            Name of the optimizer (str) or optimizer with their configurations (dict).</span>
+
 <span class="sd">        metrics : list of str</span>
 <span class="sd">            List of metrics for evaluation.</span>
+
 <span class="sd">        save_dir : str, optional</span>
 <span class="sd">            Directory to save reports and plots (default is &quot;./reports&quot;).</span>
+
 <span class="sd">        runs : int, optional</span>
 <span class="sd">            Number of executions with a view to averaging them</span>
+
 <span class="sd">        normalizer : str, optional</span>
 <span class="sd">            Normalizer to pre-process the data (default is &quot;z_score&quot;).</span>
+
 <span class="sd">        report_title : str, optional</span>
 <span class="sd">            Title of the report (default is &quot;&quot;).</span>
+
 <span class="sd">        nbr_series : int, optional</span>
 <span class="sd">            Number of series to take inside the dataset (default is 200 (as the max values)). Set to None to remove the limitation.</span>
+
 <span class="sd">        nbr_vals : int, optional</span>
 <span class="sd">            Number of values to take inside the series (default is 2500 (as the max values)). Set to None to remove the limitation.</span>
+
 <span class="sd">        dl_ratio : float, optional</span>
 <span class="sd">            Training ratio for Deep Learning techniques (default is 0.8)</span>
+
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Whether to display the contamination information (default is False).</span>
 

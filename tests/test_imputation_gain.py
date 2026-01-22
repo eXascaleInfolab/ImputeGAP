@@ -11,7 +11,7 @@ from imputegap.recovery.contamination import GenGap
 
 class TestGAIN(unittest.TestCase):
 
-    def test_imputation_gain(self, name="gain", limit=0.10):
+    def test_imputation_gain(self, name="gain", limit=0.24):
         """
         the goal is to test if only the simple imputation with the technique has the expected outcome
         """

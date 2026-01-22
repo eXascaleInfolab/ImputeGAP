@@ -15,11 +15,15 @@ imputegap/datasets/pollution.txt
 imputegap/datasets/test-large.txt
 *checkpoint.pth
 *script_181.py
+*script_patterns.py
 *script_180.py
 *script_182.py
 *script_lan.py
 *hereliande.py
 *runner_efeatures.py
+*paper_matrixcompletion.py
+*paper_ml.py
+*paper_dl.py
 *saits_run.txt
 *runner_cleaner.py
 *imputegap/wrapper/AlgoPython/NuwaTS/data_provider/dataset/ETT-small/ETTh1.csv
