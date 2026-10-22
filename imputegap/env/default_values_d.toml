@@ -5,6 +5,10 @@
 #param_2 = "test"
 #param_3 = 0.01
 
+[mean_impute]
+logic = "mean"
+
+
 # ALGORITHM DEFAULT VALUES : MATRIX COMPLETION
 [cdrec]
 rank = 2  # 2: default  |  3:opti_f   |

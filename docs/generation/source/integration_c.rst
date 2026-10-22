@@ -1,7 +1,7 @@
 :orphan:
 
-Contributing C++
-================
+Integration C++
+===============
 
 ImputeGAP allows users to integrate their own algorithms. We describe in turn the integration python and other languages.
 
@@ -49,7 +49,7 @@ B. C++ Integration Steps
 
 .. note::
 
-   To integrate an algorithm in Python, please follow the :doc:`integration tutorial <contributing>`.
+   To integrate an algorithm in Python, please follow the :doc:`integration tutorial <integration>`.
 
 .. raw:: html
 

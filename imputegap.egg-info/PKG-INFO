@@ -95,7 +95,7 @@ In detail, the package provides:
   - Unified benchmarking pipeline to evaluate the performance of imputation algorithms ([Benchmark](#benchmark))
   - Modular analysis tools to assess the impact of imputation on time series downstream tasks ([Downstream](#downstream))
   - Expainability module to understand the impact of time series features on the imputation results ([Explainer](#explainer))
-  - Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R ([Contributing](https://imputegap.readthedocs.io/en/latest/contributing.html))
+  - Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R ([Integration](https://imputegap.readthedocs.io/en/latest/contributing.html))
 
 <br>
 
@@ -597,8 +597,8 @@ ImputeGAP provides Google Colab notebooks available through the following links:
 
 ---
 
-## Contribution
-To add your own imputation algorithm, please refer to the detailed [integration guide](https://imputegap.readthedocs.io/en/latest/contributing.html).
+## Integration
+To add your own imputation algorithm, please refer to the detailed [integration guide](https://imputegap.readthedocs.io/en/latest/integration.html).
 
 
 ---

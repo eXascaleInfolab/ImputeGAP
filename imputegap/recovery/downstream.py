@@ -633,7 +633,7 @@ class Downstream:
        baseline : str or None
            Baseline imputation algorithm name. If not None, the baseline is configured via
            `utils.config_impute_algorithm(self.incomp_data, algorithm=baseline)`. If None, defaults to "mean-impute"
-           using `Imputation.Statistics.ZeroImpute`.
+           using `Imputation.Statistics.MeanImpute`.
 
        selected_series : list[int] or np.ndarray
            Indices of the time series (columns) to include in forecasting and evaluation.
@@ -696,7 +696,7 @@ class Downstream:
                     data = impt.recov_data
                 else:
                     baseline = "mean-impute"
-                    mean_impute = Imputation.Statistics.ZeroImpute(self.incomp_data).impute()
+                    mean_impute = Imputation.Statistics.MeanImpute(self.incomp_data).impute()
                     data = mean_impute.recov_data
                 tag = "baseline :" + str(baseline)
                 t = "baseline"
@@ -923,6 +923,7 @@ class Downstream:
         model = self.downstream.model.lower()
         evaluator = self.downstream.task.lower()
 
+
         if evaluator in ["forecast", "forecaster", "forecasting"]:
             evaluator = "forecaster"
         elif evaluator in ["classification", "classifier", "classify"]:
@@ -936,7 +937,7 @@ class Downstream:
             if self.verbose:
                 print("\n\n(DOWNSTREAM) Default parameters of the downstream model loaded.")
             loader = str(evaluator) + "-" + str(model)
-            params = utils.load_parameters(query="default", algorithm=loader)
+            params = utils.load_parameters(query="default", task=evaluator, algorithm=loader)
         else:
             params = self.downstream.params
 

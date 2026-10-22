@@ -74,15 +74,6 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - GAIN [28]_
      - Deep Learning
      - ICML -- 2018
-   * - 🚧 SSGAN [38]_
-     - Deep Learning
-     - AAAI -- 2021
-   * - 🚧 GP-VAE [40]_
-     - Deep Learning
-     - AISTATS -- 2020
-   * - 🚧 NAOMI [41]_
-     - Deep Learning
-     - NeurIPS -- 2019
    * -
      -
      -
@@ -242,16 +233,9 @@ References
 
 .. [36] Haixu Wu, Tengge Hu, Yong Liu, Hang Zhou, Jianmin Wang, Mingsheng Long: TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis. ICLR 2023
 
-
 .. [37] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. In Forty-first International Conference on Machine Learning, ICML 2024, Vienna, Austria, July 21-27, 2024 (Proceedings of Machine Learning Research). PMLR OpenReview.net, 16115–16152.
 
-.. [38] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin : Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI 2021
-
 .. [39] Wenjie Du, David Côté, Yan Liu : SAITS: : Self-attention-based imputation for time series . ESWA 2023
-
-.. [40] Vincent Fortuin, Dmitry Baranchuk, Gunnar Rätsch,  Stephan Mandt : GP-VAE: Deep Probabilistic Multivariate Time Series Imputation. AISTATS 2020
-
-.. [41] Yukai Liu, Rose Yu, Stephan Zheng, Eric Zhan, Yisong Yue : NAOMI: Non-Autoregressive Multiresolution Sequence Imputation. NeurIPS 2019
 
 .. [42] Shanghua Gao, Teddy Koker, Owen Queen, Thomas Hartvigsen, Theodoros Tsiligkaridis, Marinka Zitnik : UniTS: A Unified Multi-Task Time Series Model. NeurIPS 2024
 

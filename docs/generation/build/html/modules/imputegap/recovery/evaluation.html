@@ -247,7 +247,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../algorithms.html">Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -530,9 +530,9 @@
         <span class="n">imputed_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span><span class="p">[</span><span class="n">nan_locations</span><span class="p">]</span>
 
         <span class="c1"># Check if input data is constant (i.e., no variance)</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">input_data_values</span> <span class="o">==</span> <span class="n">input_data_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">imputed_values</span> <span class="o">==</span> <span class="n">imputed_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">security</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">security</span> <span class="ow">and</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">input_data_values</span> <span class="o">==</span> <span class="n">input_data_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">imputed_values</span> <span class="o">==</span> <span class="n">imputed_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t\t\n</span><span class="s2">An input array is constant; the correlation coefficient is not defined, set to 0&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t\t\n</span><span class="s2">An input array is constant; the correlation coefficient is not defined, set to np.nan&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
         <span class="n">correlation</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="n">input_data_values</span><span class="p">,</span> <span class="n">imputed_values</span><span class="p">)</span>

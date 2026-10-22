@@ -247,7 +247,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../algorithms.html">Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -391,8 +391,12 @@
         <span class="k">if</span> <span class="n">file_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s1">&#39;imputegap.env&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;./default_explainer.toml&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">file_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">file_path</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuration file not found: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">config_data</span> <span class="o">=</span> <span class="n">toml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
@@ -832,8 +836,13 @@
         <span class="n">shval_x</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
 
         <span class="n">optimal_display</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#for desc, group in zip(x_descriptions[0], x_categories[0]):</span>
+            <span class="c1">#my_str = desc + &quot; (&quot; + group + &quot;)&quot;</span>
+            <span class="c1">#optimal_display.append(my_str)</span>
         <span class="k">for</span> <span class="n">desc</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_descriptions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_categories</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">optimal_display</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">desc</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="n">group</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span> <span class="k">if</span> <span class="n">desc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">if</span> <span class="n">group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">optimal_display</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">group</span> <span class="k">else</span> <span class="n">desc</span><span class="p">)</span>
 
         <span class="n">series_names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">names</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>

@@ -247,7 +247,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../algorithms.html">Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -327,7 +327,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    average_runs_by_names(self, data):</span>
 <span class="sd">        Average the results of all runs depending on the dataset.</span>
-<span class="sd">    avg_results():</span>
+<span class="sd">    avg_results_task():</span>
 <span class="sd">        Calculate average metrics (e.g., RMSE) across multiple datasets and algorithm runs.</span>
 <span class="sd">    generate_heatmap():</span>
 <span class="sd">        Generate and save a heatmap visualization of RMSE scores for datasets and algorithms.</span>
@@ -566,9 +566,9 @@
         <span class="k">return</span> <span class="n">results_avg</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.avg_results">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.avg_results">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">avg_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">datasets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Benchmark.avg_results_task">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.avg_results_task">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">avg_results_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">datasets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the average of all metrics and times across multiple datasets.</span>
 
@@ -600,10 +600,12 @@
                             <span class="n">group_key</span> <span class="o">=</span> <span class="n">algo</span> <span class="k">if</span> <span class="n">upstream</span> <span class="k">else</span> <span class="n">m</span>
                             <span class="n">aggregated_data</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">group_key</span><span class="p">,</span> <span class="p">[])</span>
 
+                            <span class="c1"># if algo not in aggregated_data[dataset]:</span>
+                            <span class="c1">#    aggregated_data[dataset][algo] = []</span>
                             <span class="k">for</span> <span class="n">missing_values</span><span class="p">,</span> <span class="n">missing_values_item</span> <span class="ow">in</span> <span class="n">m_items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                                 <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">param_data</span> <span class="ow">in</span> <span class="n">missing_values_item</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                                    <span class="k">if</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">param_data</span><span class="p">:</span>
-                                        <span class="n">val</span> <span class="o">=</span> <span class="n">param_data</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span>
+                                    <span class="c1"># rmse = param_data[metric]</span>
+                                    <span class="n">val</span> <span class="o">=</span> <span class="n">param_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
                                     <span class="n">aggregated_data</span><span class="p">[</span><span class="n">dataset</span><span class="p">][</span><span class="n">group_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
 
         <span class="c1"># Step 2: Compute averages using NumPy</span>
@@ -2199,7 +2201,7 @@
 
         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">metrics</span><span class="p">)):</span>
             <span class="c1"># tag = True if x == (len(metrics)-1) else False</span>
-            <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_results</span><span class="p">(</span><span class="o">*</span><span class="n">run_storage</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+            <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_results_task</span><span class="p">(</span><span class="o">*</span><span class="n">run_storage</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
             <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_heatmap</span><span class="p">(</span><span class="n">scores_list</span><span class="o">=</span><span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="o">=</span><span class="n">algos</span><span class="p">,</span> <span class="n">sets</span><span class="o">=</span><span class="n">sets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
                                       <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -2875,7 +2877,7 @@
         <span class="c1"># SAVE PLOTS, REPORTS, LOGS, AND ...</span>
         <span class="c1"># ---------------------------------------------------------------------------------</span>
         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">metrics</span><span class="p">)):</span>
-            <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_results</span><span class="p">(</span><span class="o">*</span><span class="n">run_storage</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="n">evaluate_upstream</span><span class="p">)</span>
+            <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_results_task</span><span class="p">(</span><span class="o">*</span><span class="n">run_storage</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="n">evaluate_upstream</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">generate_plot</span><span class="p">:</span>
                     <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_heatmap</span><span class="p">(</span><span class="n">scores_list</span><span class="o">=</span><span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="o">=</span><span class="n">algos</span><span class="p">,</span> <span class="n">sets</span><span class="o">=</span><span class="n">sets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
@@ -3162,9 +3164,6 @@
             <span class="n">evaluate_upstream</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">forecasters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;no-model&quot;</span><span class="p">]</span>
             <span class="n">model</span> <span class="o">=</span> <span class="n">forecasters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">referential</span><span class="p">:</span>
-            <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mse_imputer&quot;</span><span class="p">,</span><span class="s2">&quot;mae_imputer&quot;</span><span class="p">,</span><span class="s2">&quot;smape_imputer&quot;</span><span class="p">]</span>
 
         <span class="n">directory_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="n">directory_time</span> <span class="o">=</span> <span class="n">directory_now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S&quot;</span><span class="p">)</span>
@@ -3500,11 +3499,10 @@
         <span class="c1"># PLOTTING AND RESULTS</span>
         <span class="c1"># -----------------------------------------------------------------------------</span>
         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">metrics</span><span class="p">)):</span>
-            <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_results</span><span class="p">(</span><span class="o">*</span><span class="n">run_storage</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="n">evaluate_upstream</span><span class="p">)</span>
+            <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_results_task</span><span class="p">(</span><span class="o">*</span><span class="n">run_storage</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="n">evaluate_upstream</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">generate_plot</span><span class="p">:</span>
-                    <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_heatmap</span><span class="p">(</span><span class="n">scores_list</span><span class="o">=</span><span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="o">=</span><span class="n">algos</span><span class="p">,</span> <span class="n">sets</span><span class="o">=</span><span class="n">sets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
-                                              <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_heatmap</span><span class="p">(</span><span class="n">scores_list</span><span class="o">=</span><span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="o">=</span><span class="n">algos</span><span class="p">,</span> <span class="n">sets</span><span class="o">=</span><span class="n">sets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">plots</span><span class="p">:</span>
                     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -3915,7 +3913,7 @@
         <span class="c1"># PLOTTING AND RESULTS</span>
         <span class="c1"># -----------------------------------------------------------------------------</span>
         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">metrics</span><span class="p">)):</span>
-            <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_results</span><span class="p">(</span><span class="o">*</span><span class="n">run_storage</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="n">evaluate_upstream</span><span class="p">)</span>
+            <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_results_task</span><span class="p">(</span><span class="o">*</span><span class="n">run_storage</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="n">evaluate_upstream</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">generate_plot</span><span class="p">:</span>
                     <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_heatmap</span><span class="p">(</span><span class="n">scores_list</span><span class="o">=</span><span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="o">=</span><span class="n">algos</span><span class="p">,</span> <span class="n">sets</span><span class="o">=</span><span class="n">sets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

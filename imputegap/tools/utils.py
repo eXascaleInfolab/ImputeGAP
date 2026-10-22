@@ -49,10 +49,12 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
     file_to_load = "default_values.toml"
 
     if task != "default" or task == "imputation":
-        if task == "classification":
+        if task == "classification" or task == "classifier":
             file_to_load = "default_values_c.toml"
-        else:
+        elif task == "forecasting" or task == "forecaster":
             file_to_load = "default_values_f.toml"
+        else:
+            raise ValueError(f"Unsupported task: {task}")
 
     if query == "default":
         if path is None:
@@ -1089,6 +1091,7 @@ def config_impute_algorithm(incomp_data, algorithm, task="default", verbose=True
         imputer = Imputation.DeepLearning.HKMFT(incomp_data)
     elif alg == "bitgraph":
         imputer = Imputation.DeepLearning.BitGraph(incomp_data)
+
     elif alg == "meanimpute":
         imputer = Imputation.Statistics.MeanImpute(incomp_data)
 

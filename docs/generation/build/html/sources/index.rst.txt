@@ -166,7 +166,7 @@ If you use ImputeGAP in your research, please cite the following papers:
    algorithms
    missingness_patterns
    notebooks
-   contributing
+   integration
    about_us
    imputegap
 

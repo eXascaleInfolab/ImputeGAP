@@ -62,3 +62,15 @@ imputegap/datasets/_old/*
 !/imputegap/imputegap_assets/**/
 !/imputegap/imputegap_assets/**/.gitkeep
 !/imputegap/imputegap_assets/**/*.toml
+
+
+# ============================================================
+# Backup and optimization directories (including all children)
+# ============================================================
+/imputegap/_bck/
+/imputegap/_optimization/
+
+# ============================================================
+# Root files starting with "_"
+# ============================================================
+/imputegap/_*

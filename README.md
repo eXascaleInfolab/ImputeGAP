@@ -14,7 +14,7 @@ In detail, the package provides:
   - Unified benchmarking pipeline to evaluate the performance of imputation algorithms ([Benchmark](#benchmark))
   - Modular analysis tools to assess the impact of imputation on time series downstream tasks ([Downstream](#downstream))
   - Expainability module to understand the impact of time series features on the imputation results ([Explainer](#explainer))
-  - Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R ([Contributing](https://imputegap.readthedocs.io/en/latest/contributing.html))
+  - Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R ([Integration](https://imputegap.readthedocs.io/en/latest/contributing.html))
 
 <br>
 
@@ -56,9 +56,6 @@ In detail, the package provides:
 | MRNN [[22]](#ref22)       | Deep Learning     | IEEE Trans on BE -- 2019     |
 | BRITS [[23]](#ref23)      | Deep Learning     | NeurIPS -- 2018              |
 | GAIN [[28]](#ref28)       | Deep Learning     | ICML -- 2018                 |
-| 🚧 SSGAN [[40]](#ref40)   | Deep Learning     | AAAI -- 2021                 |
-| 🚧 GP-VAE [[42]](#ref42)  | Deep Learning     | AISTATS -- 2020              |
-| 🚧 NAOMI [[43]](#ref43)   | Deep Learning     | NeurIPS -- 2019              |
 | CDRec [[1]](#ref1)        | Matrix Completion | KAIS -- 2020                 |
 | TRMF [[8]](#ref8)         | Matrix Completion | NeurIPS -- 2016              |
 | ROSL [[4]](#ref4)         | Matrix Completion | CVPR -- 2014                 |
@@ -99,7 +96,7 @@ In detail, the package provides:
   - [Notebooks](#Jupyter-Notebooks)  
 
 - **Contribute**  
-  - [Integration Guide](#contribution)  
+  - [Integration Guide](#integration)  
 
 - **Additional Information**  
    - [Maintainers](#maintainers)  
@@ -496,8 +493,8 @@ ImputeGAP provides Google Colab notebooks available through the following links:
 
 ---
 
-## Contribution
-To add your own imputation algorithm, please refer to the detailed [integration guide](https://imputegap.readthedocs.io/en/latest/contributing.html).
+## Integration
+To add your own imputation algorithm, please refer to the detailed [integration guide](https://imputegap.readthedocs.io/en/latest/integration.html).
 
 
 ---
@@ -690,21 +687,11 @@ If you use ImputeGAP in your research, please cite these papers:
 [38] Yusuke Tashiro, Jiaming Song, Yang Song, Stefano Ermon: CSDI: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation. NeurIPS 2021
 
 
-
 <a name="ref39"></a>
 [39] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. In Forty-first International Conference on Machine Learning, ICML 2024, Vienna, Austria, July 21-27, 2024 (Proceedings of Machine Learning Research). PMLR OpenReview.net, 16115–16152.
 
-<a name="ref40"></a>
-[40] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin : Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI 2021
-
 <a name="ref41"></a>
 [41] Wenjie Du, David Côté, Yan Liu : SAITS: : Self-attention-based imputation for time series . ESWA 2023
-
-<a name="ref42"></a>
-[42] Vincent Fortuin, Dmitry Baranchuk, Gunnar Rätsch,  Stephan Mandt : GP-VAE: Deep Probabilistic Multivariate Time Series Imputation. AISTATS 2020
-
-<a name="ref43"></a>
-[43] Yukai Liu, Rose Yu, Stephan Zheng, Eric Zhan, Yisong Yue : NAOMI: Non-Autoregressive Multiresolution Sequence Imputation. NeurIPS 2019
 
 <a name="ref44"></a>
 [44] Shanghua Gao, Teddy Koker, Owen Queen, Thomas Hartvigsen, Theodoros Tsiligkaridis, Marinka Zitnik : UniTS: A Unified Multi-Task Time Series Model. NeurIPS 2024

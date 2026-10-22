@@ -248,7 +248,7 @@
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="imputegap.html">API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -449,7 +449,7 @@ the sktime pipeline is used; otherwise the Darts pipeline is used.</p>
 </dd>
 <dt>baseline<span class="classifier">str or None</span></dt><dd><p>Baseline imputation algorithm name. If not None, the baseline is configured via
 <cite>utils.config_impute_algorithm(self.incomp_data, algorithm=baseline)</cite>. If None, defaults to “mean-impute”
-using <cite>Imputation.Statistics.ZeroImpute</cite>.</p>
+using <cite>Imputation.Statistics.MeanImpute</cite>.</p>
 </dd>
 <dt>selected_series<span class="classifier">list[int] or np.ndarray</span></dt><dd><p>Indices of the time series (columns) to include in forecasting and evaluation.</p>
 </dd>

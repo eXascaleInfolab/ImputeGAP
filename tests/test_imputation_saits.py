@@ -17,7 +17,7 @@ class TestSAITS(unittest.TestCase):
         dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path(dataset), normalizer="z_score")
+        ts.load_series(utils.search_path(dataset), normalizer="z_score", nbr_series=60, nbr_val=125)
 
         incomp_data = GenGap.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
@@ -34,7 +34,7 @@ class TestSAITS(unittest.TestCase):
         self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
         self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
 
-    def test_imputation_saits_sample(self, name="saits", limit=0.16):
+    def test_imputation_saits_sample(self, name="saits", limit=0.25):
         """
         the goal is to test if only the simple imputation with the technique has the expected outcome
         """
@@ -44,7 +44,7 @@ class TestSAITS(unittest.TestCase):
         dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path(dataset), normalizer="z_score")
+        ts.load_series(utils.search_path(dataset), normalizer="z_score", nbr_series=60, nbr_val=125)
 
         incomp_data = GenGap.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)

@@ -1,5 +1,5 @@
-Contributing
-============
+Integration
+===========
 
 ImputeGAP allows users to integrate their own algorithms. We describe in turn the integration python and other languages.
 
@@ -47,7 +47,7 @@ ImputeGAP is organized into six main directories, each responsible for a specifi
 
 .. note::
 
-   To integrate an algorithm in C++, please follow the :doc:`integration tutorial <contributing_c>`.
+   To integrate an algorithm in C++, please follow the :doc:`integration tutorial <integration_c>`.
 
 
 .. raw:: html

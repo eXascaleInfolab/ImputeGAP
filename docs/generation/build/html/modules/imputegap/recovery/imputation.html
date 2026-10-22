@@ -247,7 +247,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../algorithms.html">Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../missingness_patterns.html">Missingness Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
@@ -483,18 +483,18 @@
         <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.optimization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optimization</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;optimizer&#39;</span><span class="p">,</span> <span class="s2">&quot;ray_tune&quot;</span><span class="p">)</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;optimizer&quot;</span><span class="p">,</span> <span class="s2">&quot;ray_tune&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;raytune&quot;</span><span class="p">:</span>
             <span class="n">optimizer</span> <span class="o">=</span> <span class="s2">&quot;ray_tune&quot;</span>
 
+        <span class="n">supported_test_optimizers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;test-bayesian&quot;</span><span class="p">,</span> <span class="s2">&quot;test-pso&quot;</span><span class="p">,</span> <span class="s2">&quot;test-sh&quot;</span><span class="p">,</span> <span class="s2">&quot;test-greedy&quot;</span><span class="p">,</span> <span class="p">}</span>
+
         <span class="c1"># Deprecated optimizers</span>
-        <span class="k">if</span> <span class="n">optimizer</span> <span class="o">!=</span> <span class="s2">&quot;ray_tune&quot;</span> <span class="ow">and</span> <span class="s2">&quot;test&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="o">!=</span> <span class="s2">&quot;ray_tune&quot;</span> <span class="ow">and</span> <span class="n">optimizer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_test_optimizers</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;The optimizer &#39;</span><span class="si">{</span><span class="n">optimizer</span><span class="si">}</span><span class="s2">&#39; is no longer supported. &quot;</span>
                 <span class="s2">&quot;Please use the &#39;ray_tune&#39; optimizer tag instead.&quot;</span>
             <span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FJDKJDKLFJöLJKDFLKDJöJDöLFJSDKLF&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">is_optimized</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">optimizer</span> <span class="o">!=</span> <span class="s2">&quot;ray_tune&quot;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
