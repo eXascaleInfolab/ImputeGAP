@@ -1,6 +1,6 @@
 import numpy as np
 
-from wrapper.AlgoPython.NewImputer.seminar_test import test_impute
+from imputegap.wrapper.AlgoPython.NewImputer.seminar_test import test_impute
 
 
 def seminar_test(incomp_data, imputer="mean"):

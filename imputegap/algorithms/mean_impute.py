@@ -1,6 +1,6 @@
 import numpy as np
 
-from wrapper.AlgoPython.MeanImpute.recovMeanImpute import recovMeanImpute
+from imputegap.wrapper.AlgoPython.MeanImpute.recovMeanImpute import recovMeanImpute
 
 def mean_impute(incomp_data, logic="test", logs=None, verbose=True):
     """

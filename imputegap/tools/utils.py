@@ -2006,7 +2006,7 @@ def config_forecaster(model, params, pred_len=None, s_exception=False):
     if pred_len is not None:
         if "config" in params and "prediction_length" in params["config"]:
             params["config"]["prediction_length"] = pred_len
-            print(f"\tprediction_length adapted with the horizon: {params["config"]["prediction_length"]}\n")
+            print(f"\tprediction_length adapted with the horizon: {params['config']['prediction_length']}\n")
     if s_exception and mdl == "arima":
         params["sp"] = 24
         params["max_p"] = 2

@@ -170,18 +170,18 @@ class BaseImputer:
         from imputegap.recovery.optimization import Optimization
         import warnings
 
-        optimizer = parameters.get('optimizer', "ray_tune")
+        optimizer = str(parameters.get("optimizer", "ray_tune")).lower()
         if optimizer == "raytune":
             optimizer = "ray_tune"
 
+        supported_test_optimizers = {"test-bayesian", "test-pso", "test-sh", "test-greedy", }
+
         # Deprecated optimizers
-        if optimizer != "ray_tune" and "test" not in optimizer.lower():
+        if optimizer != "ray_tune" and optimizer not in supported_test_optimizers:
             raise ValueError(
                 f"The optimizer '{optimizer}' is no longer supported. "
                 "Please use the 'ray_tune' optimizer tag instead."
             )
-
-        print("FJDKJDKLFJöLJKDFLKDJöJDöLFJSDKLF")
 
         if (self.algorithm not in is_optimized) and (optimizer != "ray_tune"):
             raise ValueError(

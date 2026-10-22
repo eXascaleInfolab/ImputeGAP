@@ -82,8 +82,12 @@ class Explainer:
         if file_path is None:
             path = importlib.resources.files('imputegap.env').joinpath("./default_explainer.toml")
         else:
-            if not os.path.exists(file_path):
-                path = file_path[1:]
+            path = file_path
+
+        if not os.path.exists(path):
+            path = path[1:]
+            if not os.path.isfile(path):
+                raise FileNotFoundError(f"Configuration file not found: {path}")
 
         config_data = toml.load(path)
 
@@ -505,8 +509,13 @@ class Explainer:
         shval_x = exp(x_train)
 
         optimal_display = []
+        #for desc, group in zip(x_descriptions[0], x_categories[0]):
+            #my_str = desc + " (" + group + ")"
+            #optimal_display.append(my_str)
         for desc, group in zip(x_descriptions[0], x_categories[0]):
-            optimal_display.append(desc + " (" + group + ")")
+            desc = str(desc) if desc is not None else ""
+            group = str(group) if group is not None else ""
+            optimal_display.append(f"{desc} ({group})" if group else desc)
 
         series_names = []
         for names in range(0, np.array(x_test).shape[0]):

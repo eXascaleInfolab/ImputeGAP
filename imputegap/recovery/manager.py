@@ -246,6 +246,7 @@ class TimeSeries:
                         nbr_series = X_test_IMP.shape[1]
                     if nbr_series is None:
                         nbr_val = X_test_IMP.shape[0]
+
                     n_rows = min(int(nbr_val), X_train_IMP.shape[0])  # values/time steps
                     n_cols = min(int(nbr_series), X_train_IMP.shape[1])  # series
 
@@ -619,7 +620,7 @@ class TimeSeries:
             inc = 0
             for key, value in metrics.items():
                 if inc % 3 == 0:
-                    print(f"\n{key.split("_", 1)[0].upper()}:")
+                    print(f"\n{key.split('_', 1)[0].upper()}:")
                 inc = inc + 1
                 print(f"\t{key:<20} = {value}")
 
