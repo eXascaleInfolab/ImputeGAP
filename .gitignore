@@ -50,8 +50,15 @@ imputegap/datasets/_old/*
 # Ignore all classification datasets
 /imputegap/datasets/classify/*
 
+
 # Except Strawberry and Computers
 !/imputegap/datasets/classify/Strawberry/
 !/imputegap/datasets/classify/Strawberry/**
 !/imputegap/datasets/classify/Computers/
 !/imputegap/datasets/classify/Computers/**
+
+# Ignore generated ImputeGAP assets, except .gitkeep and .toml
+/imputegap/imputegap_assets/**
+!/imputegap/imputegap_assets/**/
+!/imputegap/imputegap_assets/**/.gitkeep
+!/imputegap/imputegap_assets/**/*.toml
