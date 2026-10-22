@@ -28,4 +28,4 @@ class TestOptiMRNN(unittest.TestCase):
         )
 
         with self.assertRaisesRegex(ValueError, expected):
-            algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "bayesian", "options": {"n_calls": 2}})
+            algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "test-bayesian", "options": {"n_calls": 2}})

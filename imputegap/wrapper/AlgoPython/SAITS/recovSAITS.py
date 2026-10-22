@@ -51,6 +51,7 @@ try:
 except ImportError:
     pass
 
+import datetime
 from imputegap.wrapper.AlgoPython.SAITS.modeling.saits import SAITS
 from imputegap.wrapper.AlgoPython.SAITS.modeling.unified_dataloader import UnifiedDataLoader
 from imputegap.wrapper.AlgoPython.SAITS.modeling.utils import (
@@ -254,7 +255,7 @@ def validate(model, val_iter, summary_writer, training_controller, logger, optim
             ),
         )
         # save_model(model, optimizer, state_dict, args, saving_path)
-        save_model(model, optimizer, state_dict, args, os.path.join(args.model_saving, "saits_model"))
+        save_model(model, optimizer, state_dict, args, os.path.join(args.model_saving, args.save_p_model_name))
     return state_dict
 
 
@@ -348,11 +349,12 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)
 
-    multivariate, seq_len, batch_size, sliding_windows, error = utils_imp.prepare_deep_learning_params(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
+    multivariate, seq_len, batch_size, sliding_windows, error = utils_imp.compute_variables_saitslike(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
 
     if error:
         return incomp_data
 
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     np.random.seed(seed)
     torch.manual_seed(seed)
     feature_num = incomp_data.shape[1]
@@ -376,6 +378,7 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     parser = argparse.ArgumentParser()
     args, _ = parser.parse_known_args()
     args.config_path = os.path.join(here, "configs", conf)
+    args.save_p_model_name = timestamp + "saits_model"
 
     # load settings from config file
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
@@ -396,14 +399,18 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     args.n_head = n_head
     dshere = os.path.join(dshere, args.result_saving_base_dir)
 
+    args.seq_len, args.batch_size, sliding_windows, tr_ratio = utils_imp.patch_classifiers_saits(incomp_data=incomp_data,  seq_len=args.seq_len, batch_size=args.batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
+
+    if multivariate:
+        dataset_saving_dir, origins = sait_loader_imputegap(incomp_data, args.seq_len, dshere, tr_ratio=tr_ratio, shuffle=shuffle, verbose=verbose, replicat=replicat)
+    else:
+        dataset_saving_dir, origins = sait_loader_w_imputegap(incomp_data, args.seq_len, features=incomp_data.shape[1], here=dshere, sliding_windows=sliding_windows, tr_ratio=tr_ratio, shuffle=shuffle, verbose=verbose)
+
+
     if verbose:
         print(f"(IMPUTATION) SAITS\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_len: {args.seq_len}\n\tepoch: {args.epochs}\n\tbatch_size: {args.batch_size}\n\tsliding_windows: {sliding_windows}\n\tmultivariate: {multivariate}\n\tn_head: {args.n_head}\n\tnum_workers: {args.num_workers}\n\tseed: {seed}\n\tconfig_path: {args.config_path}\n\ttr_ratio: {tr_ratio}\n\tverbose: {verbose}\n\tdevice: {args.device}\n")
         print(f"\ncall: saits.impute(params={{'seq_len': {args.seq_len}, 'batch_size': {args.batch_size}, 'epochs': {args.epochs}, 'sliding_windows': {sliding_windows}, 'n_head': {args.n_head}, 'num_workers': {args.num_workers}}})\n\n")
 
-    if multivariate:
-        dataset_saving_dir, origins = sait_loader_imputegap(incomp_data, seq_len, dshere, tr_ratio=tr_ratio, shuffle=shuffle, verbose=verbose, replicat=replicat)
-    else:
-        dataset_saving_dir, origins = sait_loader_w_imputegap(incomp_data, seq_len, features=incomp_data.shape[1], here=dshere, sliding_windows=sliding_windows, tr_ratio=tr_ratio, shuffle=shuffle, verbose=verbose)
 
     args.dataset_path = dataset_saving_dir
 
@@ -454,7 +461,7 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     assert (args.optimizer_type in OPTIMIZER.keys()), f"optimizer type should be in {OPTIMIZER.keys()}, but get{args.optimizer_type}"
     assert args.device in ["cpu", "cuda"], "device should be cpu or cuda"
 
-    time_now = "imp_saits_imputegap"  # datetime.now().__format__("%Y-%m-%d_T%H_%M_%S")
+    time_now = args.save_p_model_name #"imp_saits_imputegap"  # datetime.now().__format__("%Y-%m-%d_T%H_%M_%S")
     args.model_saving, args.log_saving = check_saving_dir_for_model(args, time_now, dshere)
 
 
@@ -506,7 +513,7 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     if verbose:
         logger.info("Entering testing mode...")
 
-    args.step_313 = "saits_model"
+    args.step_313 = args.save_p_model_name
     args.model_path = os.path.join(args.model_saving, args.step_313)
 
     args.result_saving_path = os.path.join(dshere, "models/saits")

@@ -1,0 +1,9 @@
+[grin]
+seq_len = 12
+sim_type = "32"
+epochs = 1
+batch_size = 3
+sliding_windows = 1
+alpha = 2
+patience = 1
+num_workers = 1

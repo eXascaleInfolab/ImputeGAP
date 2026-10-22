@@ -157,7 +157,7 @@ def handle_parser(argv=None):
     return args
 
 
-def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, sliding_windows=1, lr=0.001, alpha=10, patience=40, num_workers=0, seed=42, tr_ratio=0.7, verbose=True, deep_verbose=False):
+def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, sliding_windows=1, lr=0.001, adj_threshold=0.1, patience=40, num_workers=0, seed=42, tr_ratio=0.7, verbose=True, deep_verbose=False):
 
     ts_m = np.copy(incomp_data)
     recov = np.copy(incomp_data)
@@ -168,6 +168,9 @@ def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, s
 
     if seq_len ==-1 or batch_size==-1:
         seq_len, batch_size = utils_imp.auto_seq_llms(data_x=ts_m, goal="seq", subset=True, high_limit=50, exception=True, verbose=verbose)
+
+
+    seq_len, batch_size = utils_imp.patch_classifiers_grin(incomp_data=ts_m, seq_len=seq_len, batch_size=batch_size, verbose=verbose)
 
     if sliding_windows == 0:
         multivariate = True
@@ -192,21 +195,24 @@ def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, s
     args.batch_size = batch_size
     args.window = seq_len
     args.stride = sliding_windows
-    args.alpha = alpha
+    args.adj_threshold = adj_threshold
     args.workers = num_workers
     args.test_len, args.val_len = utils_imp.sets_splitter_based_on_training(tr=tr_ratio, verbose=verbose)
 
     if verbose:
-        print(f"\n(IMPUTATION) GRIN\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_len: {args.window}\n\tsim_type: {sim_type}\n\tepochs: {args.epochs}\n\tbatch_size: {args.batch_size}\n\tsliding_windows: {sliding_windows}\n\talpha: {args.alpha}\n\tpatience: {args.patience}\n\tnum_workers: {args.workers}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {args.test_len}\n\tval_ratio: {args.val_len}\n")
-        print(f"call: gain.impute(params={{'seq_len': {seq_len}, 'sim_type': '{sim_type}', 'epochs': {epochs}, 'batch_size': {batch_size}, 'sliding_windows': {sliding_windows}, 'alpha': {alpha}, 'patience': {patience}, 'num_workers': {num_workers}}})\n")
+        print(f"\n(IMPUTATION) GRIN\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_len: {args.window}\n\tsim_type: {sim_type}\n\tepochs: {args.epochs}\n\tbatch_size: {args.batch_size}\n\tsliding_windows: {sliding_windows}\n\tadj_threshold: {args.adj_threshold}\n\tpatience: {args.patience}\n\tnum_workers: {args.workers}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {args.test_len}\n\tval_ratio: {args.val_len}\n")
+        print(f"call: gain.impute(params={{'seq_len': {seq_len}, 'sim_type': '{sim_type}', 'epochs': {epochs}, 'batch_size': {batch_size}, 'sliding_windows': {sliding_windows}, 'adj_threshold': {adj_threshold}, 'patience': {patience}, 'num_workers': {num_workers}}})\n")
 
     if args.seed < 0:
         args.seed = seed
     torch.set_num_threads(1)
     pl.seed_everything(args.seed, verbose=False)
 
+
     if verbose:
         print("\n\npre-processing")
+        print(f"{args=}")
+
     model_cls, filler_cls = get_model_classes(args.model_name)
     dataset = get_dataset(ts_m=ts_m, dataset_name=args.dataset_name)
 

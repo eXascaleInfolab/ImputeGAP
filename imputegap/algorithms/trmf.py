@@ -4,7 +4,7 @@ import time
 from imputegap.wrapper.AlgoPython.TRMF.recovTRMF import recovTRMF
 
 
-def trmf(incomp_data, lags, K, lambda_f, lambda_x, lambda_w, eta, alpha, max_iter, logs=True, verbose=True):
+def trmf(incomp_data, lags=[1,7], K=4, lambda_f=1, lambda_x=1, lambda_w=1, eta=1, alpha=1000, max_iter=5000, logs=True, verbose=True):
     """
     Perform imputation using the Temporal Regularized Matrix Factorization (TRMF) algorithm.
 

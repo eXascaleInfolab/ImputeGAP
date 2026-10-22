@@ -1,7 +1,10 @@
-﻿imputegap.recovery.downstream
+:orphan:
+
+imputegap.recovery.downstream
 =============================
 
 .. automodule:: imputegap.recovery.downstream
+   :no-index:
 
    
    .. rubric:: Classes

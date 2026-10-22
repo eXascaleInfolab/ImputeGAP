@@ -49,7 +49,7 @@ def native_grouse(__py_matrix, __py_rank, __verbose=True):
     return __py_imputed_matrix;
 
 
-def grouse(incomp_data, max_rank, logs=True, verbose=True, lib_path=None):
+def grouse(incomp_data, max_rank=3, logs=True, verbose=True, lib_path=None):
     """
     GROUSE algorithm for matrix imputation.
 

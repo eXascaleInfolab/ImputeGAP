@@ -78,10 +78,13 @@ def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9,
 
   _ = handle_parser()
 
-  if batch_size > input_data.shape[0]:
+  while batch_size > input_data.shape[0] and batch_size >= 8:
     old_batch_size = batch_size
-    batch_size = input_data.shape[0] // 2
-    print(f"\n(ERROR): {old_batch_size} > {input_data.shape[0]}, in order to train the model, reduction of the batch_size: {batch_size}.")
+    if input_data.shape[0] < 100:
+      batch_size = input_data.shape[0] // 4
+    else:
+      batch_size = input_data.shape[0] // 2
+    print(f"\n(ERROR): {old_batch_size=} > {input_data.shape[0]=}, in order to train the model, reduction of the batch_size: {batch_size=}. dataset={ts_m.shape}")
 
   if verbose:
     print(f"(IMPUTATION) GAIN\n\tMatrix: {input_data.shape[0]}, {input_data.shape[1]}\n\tbatch_size: {batch_size}\n\tepochs: {iterations}\n\talpha: {alpha}\n\thint_rate: {hint_rate}\n\ttr_ratio: {tr_ratio}\n")

@@ -1,7 +1,10 @@
-﻿imputegap.recovery.optimization
+:orphan:
+
+imputegap.recovery.optimization
 ===============================
 
 .. automodule:: imputegap.recovery.optimization
+   :no-index:
 
    
    .. rubric:: Classes

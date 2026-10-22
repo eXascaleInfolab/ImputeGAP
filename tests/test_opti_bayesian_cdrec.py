@@ -23,7 +23,7 @@ class TestOptiCDREC(unittest.TestCase):
         params_optimal_load = utils.load_parameters(query="optimal", algorithm=algorithm, dataset=dataset, optimizer="b")
 
         algo_opti = Imputation.MatrixCompletion.CDRec(incomp_data)
-        algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "bayesian", "options": {"n_calls": 5}})
+        algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "test-bayesian", "options": {"n_calls": 5}})
         algo_opti.score(input_data=ts_1.data)
         metrics_optimal = algo_opti.metrics
 

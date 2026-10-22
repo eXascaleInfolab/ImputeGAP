@@ -11,12 +11,16 @@ def native_stmvl(__py_matrix, __py_window, __py_gamma, __py_alpha, __verbose=Tru
     ----------
     __py_matrix : numpy.ndarray
         The input matrix with missing values (NaNs).
+
     __py_window : int
         The window size for the temporal component in the STMVL algorithm.
+
     __py_gamma : float
         The smoothing parameter for temporal weight (0 < gamma < 1).
+
     __py_alpha : float
         The power for the spatial weight.
+
     __verbose : bool, optional
         Whether to display the contamination information (default is False).
 
@@ -71,7 +75,7 @@ def native_stmvl(__py_matrix, __py_window, __py_gamma, __py_alpha, __verbose=Tru
     return __py_recovered;
 
 
-def stmvl(incomp_data, window_size, gamma, alpha, logs=True, verbose=True):
+def stmvl(incomp_data, window_size=7, gamma=0.85, alpha=2, logs=True, verbose=True):
     """
     ST-MVL algorithm for imputation of missing data
 
@@ -110,6 +114,7 @@ def stmvl(incomp_data, window_size, gamma, alpha, logs=True, verbose=True):
     School of Information Science and Technology, Southwest Jiaotong University; Microsoft Research; Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences.
 
     """
+    window_size, gamma, alpha = utils.patch_classifiers_stmvl(incomp_data, window_size, gamma, alpha)
 
     if verbose:
         print(f"(IMPUTATION) ST-MVL\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\twindow_size: {window_size}\n\tgamma: {gamma}\n\talpha: {alpha}")

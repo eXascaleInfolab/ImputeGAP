@@ -3,7 +3,7 @@ import time
 from imputegap.wrapper.AlgoPython.GPT4TS.recovGPT4TS import recovGPT4TS
 
 
-def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, tr_ratio=0.9, seed=42, logs=True, verbose=True):
+def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
     """
     Perform imputation using GPT4TS
 
@@ -23,13 +23,13 @@ def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_
         Number of epoch for training the model (default: 10).
 
     gpt_layers : int, optional
-        Number of layers in the transformer/generator component (default: 6).
+        Number of layers in the transformer/generator component (default: 3).
 
     num_workers: int, optional
          Number of worker for multiprocess (default is 0).
 
     tr_ratio: float, optional
-         Split ratio between training and testing sets (default is 0.9).
+         Split ratio between training and testing sets (default is 0.7).
 
     seed : int, optional
         Random seed for reproducibility (default: 2021).

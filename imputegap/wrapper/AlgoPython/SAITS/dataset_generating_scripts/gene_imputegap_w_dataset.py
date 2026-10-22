@@ -75,7 +75,14 @@ def sait_loader_w_imputegap(incomp_data, seq_len, features, here, sliding_window
     saving_path = "datasets"
     dataset_name = "saits"
 
-    ts_r, val_r = utils_imp.sets_splitter_based_on_training(tr_ratio, verbose=verbose)
+    if 0.33 < tr_ratio <= 0.5:
+        ts_r = 0.25
+        val_r = 0.25
+    elif tr_ratio <= 0.33:
+        ts_r = 0.33
+        val_r = 0.33
+    else:
+        ts_r, val_r = utils_imp.sets_splitter_based_on_training(tr_ratio, verbose=verbose)
     #ts_m = utils_imp.dataset_add_dimensionality(matrix_in, seq_length=seq_len, three_dim=True, verbose=True)
 
     dataset_saving_dir = os.path.join(here, saving_path, dataset_name)
@@ -128,6 +135,19 @@ def sait_loader_w_imputegap(incomp_data, seq_len, features, here, sliding_window
 
     # add missing values in train set manually
     if artificial_missing_rate > 0:
+        n_nans = int(np.isnan(train_set_X).sum())
+        artifice = int(artificial_missing_rate*train_set_X.size)
+        makable = (train_set_X.size-artifice-n_nans)
+        if verbose:
+            print(f"{artificial_missing_rate = } | We need to introduce {artifice} values for the training, and we only have {n_nans} NaNs ({makable}, is makable ? {makable>0}).)")
+        while makable < 1 and artificial_missing_rate >= 0.01:
+            artificial_missing_rate = artificial_missing_rate-0.01
+            n_nans = int(np.isnan(train_set_X).sum())
+            artifice = int(artificial_missing_rate * train_set_X.size)
+            makable = (train_set_X.size - artifice - n_nans)
+            if verbose:
+                print(f"{artificial_missing_rate = } | We need to introduce {artifice} values for the training, and we only have {n_nans} NaNs ({makable}, is makable ? {makable > 0}).)")
+
         train_set_X_shape = train_set_X.shape
         train_set_X = train_set_X.reshape(-1)
         indices = random_mask(train_set_X, artificial_missing_rate)

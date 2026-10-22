@@ -3,7 +3,7 @@ import time
 from imputegap.wrapper.AlgoPython.BayOTIDE.recovBayOTIDE import recovBayOTIDE
 
 
-def bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_scale=1, a0=0.6, b0=2.5, v=0.5, num_fold=1, tr_ratio=0.8, logs=True, verbose=False):
+def bay_otide(incomp_data, K_trend=30, K_season=1, n_season=10, K_bias=0, time_scale=1, a0=1, b0=1, v=1, num_fold=1, tr_ratio=0.8, logs=True, verbose=False):
     """
     BayOTIDE class to impute missing values using Bayesian Online Multivariate Time series Imputation with functional decomposition
 
@@ -12,28 +12,28 @@ def bay_otide(incomp_data, K_trend=20, K_season=2, n_season=5, K_bias=1, time_sc
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
 
-    K_trend : int, (optional) (default: 20)
+    K_trend : int, (optional) (default: 30)
         Number of trend factors.
 
-    K_season : int, (optional) (default: 2)
+    K_season : int, (optional) (default: 1)
         Number of seasonal factors.
 
-    n_season : int, (optional) (default: 5)
+    n_season : int, (optional) (default: 10)
         Number of seasonal components per factor.
 
-    K_bias : int, (optional) (default: 1)
+    K_bias : int, (optional) (default: 0)
         Number of bias factors.
 
     time_scale : float, (optional) (default: 1)
         Time scaling factor.
 
-    a0 : float, (optional) (default: 0.6)
+    a0 : float, (optional) (default: 1)
         Hyperparameter for prior distribution.
 
-    b0 : float, (optional) (default: 2.5)
+    b0 : float, (optional) (default: 1)
         Hyperparameter for prior distribution.
 
-    v : float, (optional) (default: 0.5)
+    v : float, (optional) (default: 1)
         Variance parameter.
 
     num_fold: int, optional

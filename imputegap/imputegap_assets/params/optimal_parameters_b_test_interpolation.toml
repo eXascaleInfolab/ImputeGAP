@@ -1,0 +1,3 @@
+[interpolation]
+method = "linear"
+poly_order = 2

@@ -3,10 +3,9 @@ ImputeGAP Documentation
 
 .. admonition:: 📢 News !
 
-        - [21-01-2026] Version 1.1.2 is out! The new release includes the following major updates:
-            - New Deep Learning and LLMs algorithms
-            - New utilities to handle multivariate datasets and algorithms
-            - New module to simulate missing values: GenGap
+        - [20-10-2026] Version 1.1.3 is out! The new release includes the following major updates:
+            - New LLMs algorithms
+            - New utilities to handle forecasting and classification tasks
         - [04-06-2025] ImputeGAP will be presented as a Tutorial at KDD 2025 in Toronto! `[Link] <https://imputegap-tutorials.github.io/KDD-2025/>`_
 
 
@@ -161,7 +160,6 @@ If you use ImputeGAP in your research, please cite the following papers:
    :hidden:
 
 
-   index
    getting_started
    tutorials
    datasets

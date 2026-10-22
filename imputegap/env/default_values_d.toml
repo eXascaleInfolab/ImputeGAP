@@ -1,0 +1,726 @@
+# IMPUTATION DEFAULT VALUES ==========================================================================
+
+#[your_algo_name]
+#param_1 = 3
+#param_2 = "test"
+#param_3 = 0.01
+
+# ALGORITHM DEFAULT VALUES : MATRIX COMPLETION
+[cdrec]
+rank = 2  # 2: default  |  3:opti_f   |
+epsilon = 0.000001
+epsilon_str = "E-6"
+iteration = 100
+
+[cdrec2] 
+rank = 2
+epsilon = 0.000001
+epsilon_str = "E-6"
+iteration = 100
+
+[iterative_svd]
+rank = 3    # 3: default  |  2:opti_f  |
+
+[grouse]
+max_rank = 3    # 3: default  |  2:opti_f  |
+
+[rosl]
+rank = 3
+regularization = 0.6
+
+[soft_impute]
+max_rank = 6  # 6: default  |  20:opti_f  |
+
+[spirit]
+k = 4
+w = 6
+lvalue = 1.0
+
+
+# optimizer svt
+[svt]
+tau = 0.2     # 0.2: default  |  0.8:opti_f  |
+
+
+
+[trmf]
+lags = [1,7]
+K = 4
+lambda_f = 1
+lambda_x = 1
+lambda_w = 1
+eta = 1
+alpha = 1000
+max_iter = 5000
+
+
+
+# ALGORITHM DEFAULT VALUES : MACHINE LEARNING
+[iim]
+learning_neighbors = 10
+algorithm_code = "iim 2"
+
+#[mice]
+#max_iter = 1
+#tol = 0.001
+#initial_strategy = "mean"
+#seed = 42
+
+
+# optimizer mice
+[mice]
+max_iter = 1
+tol = 0.001
+initial_strategy = "mean"
+sample_posterior = false
+seed = 42
+
+[miss_forest]
+n_estimators = 100
+max_iter = 5
+max_features = "sqrt"
+seed = 42
+
+[xgboost]
+n_estimators = 2      # 2: default  |  10:opti_f  |
+seed = 42
+
+
+
+# ALGORITHM DEFAULT VALUES : PATTERN SEARCH
+[stmvl]
+window_size = 7
+gamma = 0.85
+alpha = 2
+
+[dynammo]
+h = 3     # 3: default  |  20:opti_f  |
+max_iteration = 100
+approximation = true
+
+[tkcm]
+rank = 4
+
+# ALGORITHM DEFAULT VALUES : STATISTICS
+[knn_impute]
+k = 5
+weights = "uniform"
+
+[interpolation]
+method = "linear"
+poly_order = 2
+
+
+# ALGORITHM DEFAULT VALUES : DEEP LEARNING
+#[mrnn]
+#hidden_dim = -1
+#learning_rate = 0.01
+#iterations = 20
+#sequence_length = 7
+
+[mrnn]
+seq_len = 24
+epochs = 50
+batch_size = 64
+sliding_windows = 1
+hidden_layers = 108
+impute_weight = 0.3
+num_workers = 0
+
+[brits]
+model = "brits"
+seq_len = 24
+epochs = 100
+batch_size = 64
+sliding_windows = 1
+hidden_layers = 108
+impute_weight = 0.3
+num_workers = 0
+
+[deep_mvi]
+max_epoch = 1000
+patience = 2
+lr = 0.001
+batch_size = -1
+
+[mpin]
+window = 6
+incre_mode = "alone"
+base = "SAGE"
+epochs = 200
+num_of_iteration = 5
+k = 10
+
+[pristi]
+seq_len = -1
+batch_size = -1
+epochs = 10
+sliding_windows = 1
+target_strategy = "random"
+nsamples = 1
+num_workers = 0
+beta = [0.0001, 0.2]       # [0.0001, 0.2]: default  |  [0.001, 0.1]:opti_f  |
+
+
+[csdi]
+seq_len = -1
+batch_size = -1
+epochs = 25
+sliding_windows = 1
+target_strategy = "random"
+nsamples = 1
+num_workers = 0
+beta = [0.0001, 0.5]       # [0.0001, 0.5]: default  |  [0.0001, 0.2]:opti_f  |
+
+[miss_net]
+n_components = 20
+alpha = 0.5
+beta = 0.1
+n_cl = 1
+max_iter = 20
+tol = 6
+random_init = false
+
+#[miss_net]
+#n_components = 15
+#alpha = 0.5
+#beta = 0.1
+#n_cl = 1
+#max_iter = 15
+#tol = 5
+#random_init = false
+
+[gain]
+batch_size = 128
+epochs = 10000
+alpha = 100
+hint_rate = 0.9
+
+[grin]
+seq_len = -1
+sim_type = "corr"
+epochs = 30
+batch_size = -1
+sliding_windows = 1
+adj_threshold = 0.1
+patience = 40
+num_workers = 0
+
+[bay_otide]
+K_trend = 30
+K_season = 1
+n_season = 10
+K_bias = 0
+time_scale = 1
+a0 = 1
+b0 = 1
+v = 1
+num_fold = 1
+
+[hkmf_t]
+tags = []
+seq_len = 7
+blackouts_begin = 0
+blackouts_end = 0
+epochs = 10
+
+[bit_graph]
+seq_len = -1
+sliding_windows = 1
+kernel_size = 25
+kernel_set = [2,3,6,7]
+epochs = 50
+batch_size = -1
+subgraph_size = 5
+num_workers = 0
+
+[saits]
+seq_len = -1
+batch_size = -1
+epochs = 10000
+sliding_windows = 1
+n_head = 8      # 8: default  |  4:opti_f  |
+num_workers = 0
+
+[timesnet]
+seq_len = -1
+batch_size = -1
+top_k = 5
+epochs = 10
+gpt_layers = 3
+num_workers = 0
+seed = 2021
+
+
+
+
+# ALGORITHM DEFAULT VALUES : PLMs/LLMs
+[nuwats]
+seq_len = -1
+batch_size = -1
+epochs = 6
+gpt_layers = 3
+num_workers = 0
+seed = 2021
+
+[gpt4ts]
+seq_len = -1
+batch_size = -1
+epochs = 10
+gpt_layers = 3
+num_workers = 0
+seed = 2021
+
+[moment]
+model = "training-shot"
+model_size = "high"
+use_mean = false
+seq_len = -1
+sliding_windows = 1
+
+
+
+
+
+# OPTIMIZER DEFAULT VALUES ==========================================================================
+[greedy]
+n_calls = 250
+metrics='RMSE'
+
+[bayesian]
+n_calls = 2
+n_random_starts = 50
+acq_func = 'gp_hedge'
+metrics='RMSE'
+
+[pso]
+n_particles = 50
+c1 = 0.5
+c2 = 0.3
+w = 0.9
+iterations=10
+n_processes=1
+metrics='RMSE'
+
+[sh]
+num_configs = 10
+num_iterations = 2
+reduction_factor = 10
+metrics="RMSE"
+
+[ray_tune]
+metrics = 'RMSE'
+n_calls = 1
+max_concurrent_trials = -1
+
+# DOWNSTREAM DEFAULT VALUES ==========================================================================
+[forecaster-naive]
+strategy = "mean"
+window_length = 10
+sp = 7
+
+[forecaster-exp-smoothing]
+trend = "additive"
+seasonal = "additive"
+sp = 7
+
+[forecaster-prophet]
+seasonality_mode = "additive"
+n_changepoints = 25
+alpha = 0.8
+
+[forecaster-ltsf]
+seq_len = 168
+pred_len = 0.7
+
+[forecaster-nbeats]
+input_chunk_length = 16 #168
+output_chunk_length = 12
+num_blocks = 3
+layer_widths = 20
+random_state = 42
+n_epochs = 50
+pl_trainer_kwargs = "cpu"
+
+[forecaster-dlinear]
+input_chunk_length = 16
+output_chunk_length = 12
+random_state = 42
+n_epochs = 50
+pl_trainer_kwargs = "cpu"
+
+[forecaster-nlinear]
+input_chunk_length = 16
+output_chunk_length = 12
+normalize = true
+random_state = 42
+n_epochs = 50
+pl_trainer_kwargs = "cpu"
+
+#[forecaster-chronos]
+#input_chunk_length = 512
+#output_chunk_length = 48
+#hub_model_name = "amazon/chronos-2"
+#random_state = 42
+#n_epochs = 10
+#pl_trainer_kwargs = "cpu"
+
+[forecaster-chronos] # great my change again
+input_chunk_length = 512
+output_chunk_length = 108
+hub_model_name = "amazon/chronos-2"
+random_state = 42
+n_epochs = 100
+pl_trainer_kwargs = "cpu"
+
+
+[forecaster-patchtst]
+fit_strategy = "full"
+validation_split = 0.1
+patch_length = 12
+context_length = 64
+patch_stride = 12
+d_model = 256
+num_attention_heads = 4
+ffn_dim = 512
+head_dropout = 0.1
+pred_len = 12
+
+#[forecaster-patchtst]
+#fit_strategy = "full"
+#validation_split = 0.2
+#patch_length = 8
+#context_length = 64
+#patch_stride = 8
+#d_model = 128
+#num_attention_heads = 4
+#ffn_dim = 256
+#head_dropout = 0.2
+#pred_len = 12
+
+[forecaster-moment]
+pretrained_model_name_or_path = "AutonLab/MOMENT-1-large"
+dropout = 0.1
+head_dropout = 0.1
+seq_len = 10
+batch_size = 4
+eval_batch_size = 4
+epochs = 10
+max_lr = 0.0001
+pl_trainer_kwargs = "cpu"
+train_val_split= 0.00
+
+[forecaster-xgboost]
+lags = 7
+
+[forecaster-lightgbm]
+lags = 7
+verbose = -1
+
+[forecaster-lstm]
+input_chunk_length = 16 #168
+model = 'LSTM'
+random_state = 42
+n_epochs = 50
+pl_trainer_kwargs = "cpu"
+
+[forecaster-deepar]
+input_chunk_length = 16 #168
+model = 'RNN'
+random_state = 42
+n_epochs = 50
+pl_trainer_kwargs = "cpu"
+
+[forecaster-transformer]
+input_chunk_length = 12
+output_chunk_length = 12
+random_state = 42
+n_epochs = 10
+pl_trainer_kwargs = "cpu"
+
+[forecaster-hw-add]
+trend='add'
+seasonal='additive'
+sp=7
+
+[forecaster-arima]
+sp = 7
+suppress_warnings = true
+start_p = 1
+start_q = 1
+max_p = 3
+max_q = 3
+start_P = 0
+seasonal = true
+d = 1
+D = 1
+
+[forecaster-sf-arima]
+sp= 7
+start_p = 1
+start_q = 1
+max_p = 3
+max_q = 3
+start_P = 0
+seasonal = true
+d = 1
+D = 1
+
+[forecaster-bats]
+sp= 7
+use_trend = true
+use_box_cox = false
+
+
+[forecaster-ets]
+sp= 7
+auto = true
+
+[forecaster-croston]
+smoothing = 0.1
+
+[forecaster-theta]
+sp = 7
+deseasonalize = false
+
+[forecaster-unobs]
+level = true
+trend = true
+sp = 7
+
+[forecaster-rnn]
+input_size = 20
+inference_input_size = 12
+
+# =================================================================
+
+[classifier-forest]
+min_interval = 3
+n_estimators = 200
+n_jobs=1
+random_state=182322303
+
+
+[classifier-muse]
+anova = true
+window_inc = 2
+alphabet_size = 4
+n_jobs= 1
+random_state = 182322303
+
+[classifier-weasel]
+anova = true
+p_threshold = 0.05
+alphabet_size = 2
+window_inc = 2
+n_jobs = 1
+random_state = 182322303
+
+
+[classifier-itde]
+window_size = 10
+word_length = 8
+max_dims = 20
+dim_threshold = 0.85
+n_jobs = 1
+random_state = 182322303
+
+
+[classifier-tde]
+n_parameter_samples = 250
+max_dims = 20
+n_jobs = 1
+random_state = 182322303
+
+
+[classifier-cboss]
+n_parameter_samples = 250
+max_ensemble_size=50
+min_window = 10
+n_jobs = 1
+random_state = 182322303
+
+
+[classifier-knn]
+n_neighbors = 1
+distance = "dtw"
+leaf_size = 30
+n_jobs = 1
+
+
+[classifier-proxforest]
+random_state = 182322303
+n_estimators = 3
+n_jobs = 1
+n_stump_evaluations = 5
+
+
+[classifier-proxtree]
+random_state = 182322303
+max_depth = 1000
+n_jobs = 1
+n_stump_evaluations = 5
+
+
+[classifier-proxstump]
+random_state = 182322303
+verbosity = 0
+n_jobs = 1
+
+[classifier-shapedtw]
+n_neighbors = 1
+subsequence_length = 30
+
+[classifier-tsf]
+min_interval = 3
+n_estimators = 200
+n_jobs = 1
+random_state = 182322303
+
+#[classifier-cif]
+#n_estimators = 200
+#att_subsample_size = 8
+#min_interval = 3
+#n_jobs = 1
+#random_state = 182322303
+
+[classifier-cif]
+n_estimators = 3
+att_subsample_size = 4
+min_interval = 8
+n_jobs = 1
+random_state = 182322303
+
+
+[classifier-stc]
+n_shapelet_samples = 10000
+n_jobs = 1
+batch_size = 100
+random_state = 182322303
+
+
+[classifier-lstm]
+n_epochs=2000
+lstm_size=8
+random_state=182322303
+verbose=0
+
+[classifier-cnn]
+n_epochs=2000
+n_conv_layers=2
+random_state=182322303
+verbose=false
+
+[classifier-svc]
+C=3
+tol=0.001
+max_iter=-1
+cache_size=200
+random_state=182322303
+
+#[classifier-arsenal]
+#num_kernels=10
+#n_estimators=3
+#n_jobs=1
+#random_state=182322303
+
+[classifier-arsenal]
+num_kernels=2000
+n_estimators=25
+n_jobs=1
+random_state=182322303
+
+#[classifier-arsenal]
+##num_kernels=500
+#n_estimators=5
+#n_jobs=1
+#random_state=182322303
+
+[classifier-rocket]
+num_kernels=10000
+n_jobs=1
+random_state=182322303
+
+[classifier-catch22]
+estimator =200
+n_jobs=1
+random_state=182322303
+
+[classifier-mpc]
+subsequence_length=10
+n_jobs=1
+random_state=182322303
+
+[classifier-signature]
+window_name = "dyadic"
+window_depth = 1
+depth=2
+random_state=182322303
+
+[classifier-tsfresh]
+relevant_feature_extractor=true
+n_jobs=1
+random_state=182322303
+
+
+
+
+# FUNCTION DEFAULT VALUES ==========================================================================
+
+# FUNCTION DEFAULT VALUES : EXPLAINER
+[explainer]
+splitter = 10
+nbr_series = 15
+
+# FUNCTION DEFAULT VALUES : LOADER
+[loading]
+load_dataset = "drift"
+load_algorithm = "cdrec"
+load_normalization = "Normal"
+load_series = ["-3:all_except_two"]
+load_missing_rate = "20"
+load_scenario = "missing_pourcentage"
+load_series_contamination = []
+load_missing_rate_contamination = "0"
+
+
+[colors]
+chart = ["#696969", "#2b908f", "#a6c96a", "#876d5d", "#8f10ba", "#f7a35c", "#434348", "#f15c80", "#910000", "#8085e9", "#365e0c", "#90ed7d"]
+plot = ['blue', 'green', 'orange', 'mediumseagreen', 'khaki', 'gold', 'darkslategrey', 'hotpink', 'chocolate', 'lightseagreen', 'wheat']
+
+[colors_blacks]
+chart = ["#696969", "#2b908f", "#a6c96a", "#876d5d", "#8f10ba", "#f7a35c", "#434348", "#f15c80", "#910000", "#8085e9", "#365e0c", "#90ed7d"]
+plot = ['black', 'dimgray', 'darkslategray', 'lightgray', 'khaki', 'gold', 'darkslategrey', 'hotpink', 'chocolate', 'lightseagreen', 'wheat']
+
+
+# MODEL DEFAULT VALUES ==========================================================================
+
+# MODEL PRISTI ==========================================================================
+[train]
+epochs = 20
+batch_size = 16
+lr = 0.01
+valid_epoch_interval = 5
+is_lr_decay = true
+
+[diffusion]
+layers = 2
+channels = 1
+nheads = 1
+diffusion_embedding_dim = 64
+beta_start = 0.0001
+beta_end = 0.2
+num_steps = 100
+schedule = "quad"
+is_adp = true
+proj_t = 8
+is_cross_t = true
+is_cross_s = true
+
+[model]
+is_unconditional = 0
+timeemb = 64
+featureemb = 8
+target_strategy = "hybrid"
+use_guide = true
+mask_sensor = []

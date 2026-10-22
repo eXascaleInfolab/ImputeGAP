@@ -4,7 +4,7 @@ from imputegap.wrapper.AlgoPython.NuwaTS.recovNuwa import recovLLMs
 
 
 
-def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, tr_ratio=0.9, seed=42, logs=True, verbose=True):
+def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=6, gpt_layers=3, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
     """
     Perform imputation using NuwaTS: Transformer-based recovery from missing values in multivariate time series.
 
@@ -21,10 +21,10 @@ def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_
         Number of samples per batch during training/inference. If -1, it will be auto-set (default: -1).
 
     epochs : int, optional
-        Number of epoch for training the model (default: 10).
+        Number of epoch for training the model (default: 6).
 
     gpt_layers : int, optional
-        Number of layers in the transformer/generator component (default: 6).
+        Number of layers in the transformer/generator component (default: 3).
 
     num_workers: int, optional
          Number of worker for multiprocess (default is 0).
@@ -33,7 +33,7 @@ def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_
         Random seed for reproducibility (default: 2021).
 
     tr_ratio: float, optional
-         Split ratio between training and testing sets (default is 0.9).
+         Split ratio between training and testing sets (default is 0.7).
 
     logs : bool, optional
         Whether to print/log execution time and key events (default: True).

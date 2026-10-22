@@ -51,7 +51,7 @@ def native_tkcm(__py_matrix, __py_rank, __verbose=True):
     return __py_imputed_matrix;
 
 
-def tkcm(incomp_data, rank, logs=True, verbose=True, lib_path=None):
+def tkcm(incomp_data, rank=4, logs=True, verbose=True, lib_path=None):
     """
     TKM algorithm for matrix imputation.
 

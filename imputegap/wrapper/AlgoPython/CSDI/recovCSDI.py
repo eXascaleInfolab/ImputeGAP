@@ -36,13 +36,13 @@ def handle_parser(argv=None):
 
     return args
 
-def recovCSDI(ts_m, seq_len=-1, batch_size=-1, epochs=200, num_workers=0, nsamples=100, sliding_windows=1, target_strategy="mix", shuffle=True, normalize=True, tr_ratio=0.7, seed=1, verbose=True, deep_verbose=False, replicat=False):
+def recovCSDI(ts_m, seq_len=-1, batch_size=-1, epochs=200, num_workers=0, nsamples=100, sliding_windows=1, target_strategy="mix", beta=[0.0001, 0.5], shuffle=True, normalize=True, tr_ratio=0.7, seed=1, verbose=True, deep_verbose=False, replicat=False):
 
     data_m = np.copy(ts_m)
     recov = np.copy(ts_m)
     m_mask = np.isnan(ts_m)
 
-    multivariate, seq_len, batch_size, sliding_windows, error = utils_imp.prepare_deep_learning_params(incomp_data=ts_m, seq_len=seq_len, batch_size=batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
+    multivariate, seq_len, batch_size, sliding_windows, error = utils_imp.compute_variables_saitslike(incomp_data=ts_m, seq_len=seq_len, batch_size=batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
 
     if error:
         return ts_m
@@ -85,10 +85,14 @@ def recovCSDI(ts_m, seq_len=-1, batch_size=-1, epochs=200, num_workers=0, nsampl
     config["model"]["target_strategy"] = args.target_strategy
     config["train"]["batch_size"] = batch_size
     config["train"]["epochs"] = epochs
+    b1, bt = beta[0], beta[1]
+    config["diffusion"]["beta_start"] = b1
+    config["diffusion"]["beta_end"] = bt
 
 
-    if verbose:
-        print(f"(IMPUTATION) CSDI\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tbatch_size: {config['train']['batch_size']}\n\tepochs: {config['train']['epochs']}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {args.target_strategy}\n\tnsample: {args.nsample}\n\tfeatures: {args.features}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tshuffle: {args.shuffle}\n\tinner normalizer: {args.normalize}\n\tseed: {seed}\n\tverbose: {verbose}\n\tdevice: {args.device}\n")
+    if verbose or True:
+        print(f"(IMPUTATION) CSDI\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tbatch_size: {config['train']['batch_size']}\n\tepochs: {config['train']['epochs']}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {args.target_strategy}\n\tnsample: {args.nsample}\n\tfeatures: {args.features}\n\tbeta_start: {config["diffusion"]["beta_start"]}\n\tbeta_end: {config["diffusion"]["beta_end"]}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tshuffle: {args.shuffle}\n\tinner normalizer: {args.normalize}\n\tseed: {seed}\n\tverbose: {verbose}\n\tdevice: {args.device}\n")
+        print(f"call: csdi.impute(params={{'seq_len': {seq_len}, 'batch_size': {batch_size}, 'epochs': {config['train']['epochs']}, 'sliding_windows': {sliding_windows}, 'target_strategy': '{config['model']['target_strategy']}', 'nsamples': {nsamples}, 'beta': {beta}, 'num_workers': {args.num_workers}}})\n")
 
     if deep_verbose:
         print(args)

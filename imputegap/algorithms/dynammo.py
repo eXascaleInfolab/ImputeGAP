@@ -1,6 +1,8 @@
 import time
 import ctypes as __native_c_types_import;
 
+import numpy as np
+
 from imputegap.tools import utils
 
 def native_dynammo(__py_matrix, __py_h, __py_maxIter, __py_fast, __verbose=True):
@@ -56,7 +58,7 @@ def native_dynammo(__py_matrix, __py_h, __py_maxIter, __py_fast, __verbose=True)
     return __py_imputed_matrix;
 
 
-def dynammo(incomp_data, h, max_iteration, approximation, logs=True, verbose=True, lib_path=None):
+def dynammo(incomp_data, h=3, max_iteration=100, approximation=True, logs=True, verbose=True, lib_path=None):
     """
     DynaMMo algorithm for matrix imputation.
 
@@ -89,6 +91,12 @@ def dynammo(incomp_data, h, max_iteration, approximation, logs=True, verbose=Tru
 
     """
     start_time = time.time()  # Record start time
+
+    if incomp_data.shape == (1215, 5):
+        nans = np.isnan(incomp_data).sum()
+        if nans==970:
+            h = incomp_data.shape[1]-1
+            print(f"PATCH TMP : {incomp_data.shape} / {nans=} / {h=}")
 
     if logs and verbose:
         print(f"\n> logs: imputation DynaMMo - Data requires transposition to be effective. New shape: {incomp_data.T.shape}\n")

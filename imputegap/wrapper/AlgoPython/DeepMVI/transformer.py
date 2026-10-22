@@ -146,6 +146,7 @@ def transformer_recovery(input_feats, max_epoch=1000, patience=2, lr=0.001, batc
     std = np.nanstd(input_feats, axis=0)
     input_feats = (input_feats-mean)/std
     num_missing = 10*min(max(int(input_feats.shape[0]/100),1),500)
+
     train_feats, val_feats, val_points, test_points, block_size, kernel_size = make_validation(input_feats,num_missing=num_missing)
 
     if deep_verbose:
@@ -189,10 +190,10 @@ def transformer_recovery(input_feats, max_epoch=1000, patience=2, lr=0.001, batc
     val_set = myValDataset(val_feats, val_points,False, use_local, time_context = time_context)
     test_set = myValDataset(val_feats, test_points,True, use_local, time_context = time_context)
 
-    if deep_verbose:
-        print(f"{train_set.feats.shape =}")
-        print(f"{val_set.feats.shape =}")
-        print(f"{test_set.feats.shape =}")
+    if verbose:
+        print(f"\n\t\t{train_set.feats.shape =}")
+        print(f"\t\t{val_set.feats.shape =}")
+        print(f"\t\t{test_set.feats.shape =}\n")
 
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, drop_last=False, shuffle=True, collate_fn=my_collate)
     val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_size, drop_last=False, shuffle=True, collate_fn=my_collate)
@@ -208,5 +209,7 @@ def transformer_recovery(input_feats, max_epoch=1000, patience=2, lr=0.001, batc
 
     matrix = (matrix*std)+mean
 
+    if deep_verbose:
+        print(f"{matrix.shape = }")
 
     return matrix

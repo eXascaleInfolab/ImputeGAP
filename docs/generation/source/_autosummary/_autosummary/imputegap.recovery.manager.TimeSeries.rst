@@ -1,12 +1,16 @@
-﻿imputegap.recovery.manager.TimeSeries
+:orphan:
+
+imputegap.recovery.manager.TimeSeries
 =====================================
 
 .. currentmodule:: imputegap.recovery.manager
 
 .. autoclass:: TimeSeries
+   :no-index:
 
    
    .. automethod:: __init__
+      :no-index:
 
    
    .. rubric:: Methods

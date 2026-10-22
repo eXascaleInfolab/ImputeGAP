@@ -4,7 +4,7 @@ import platform
 from imputegap.wrapper.AlgoPython.GAIN.recovGAIN import recovGAIN
 
 
-def gain(incomp_data, batch_size=-1, epochs=100, alpha=10, hint_rate=0.9, tr_ratio=0.9, logs=True, verbose=True):
+def gain(incomp_data, batch_size=128, epochs=10000, alpha=100, hint_rate=0.9, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using the Multivariate Recurrent Neural Network (MRNN) algorithm.
 
@@ -13,13 +13,13 @@ def gain(incomp_data, batch_size=-1, epochs=100, alpha=10, hint_rate=0.9, tr_rat
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
     batch_size : int, optional
-        Number of samples in each mini-batch during training. Default is 32.
+        Number of samples in each mini-batch during training. Default is 128.
+    epochs : int, optional
+        Number of training epochs. Default is 10000.
+    alpha : float, optional
+        Hyperparameter that controls the balance between the adversarial loss and the reconstruction loss. Default is 100.
     hint_rate : float, optional
         Probability of providing hints for the missing data during training. Default is 0.9.
-    alpha : float, optional
-        Hyperparameter that controls the balance between the adversarial loss and the reconstruction loss. Default is 10.
-    epoch : int, optional
-        Number of training epochs. Default is 100.
     tr_ratio: float, optional
         Split ratio between training and testing sets (default is 0.9).
     logs : bool, optional

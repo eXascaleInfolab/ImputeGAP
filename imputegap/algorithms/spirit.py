@@ -3,7 +3,7 @@ import ctypes as __native_c_types_import;
 
 from imputegap.tools import utils
 
-def native_spirit(__py_matrix, __py_k, __py_w, __py_lambda, __verbose=True):
+def native_spirit(__py_matrix, __py_k, __py_w, __py_lvalue, __verbose=True):
     """
     Perform matrix imputation using the SPIRIT algorithm with native C++ support.
 
@@ -11,15 +11,19 @@ def native_spirit(__py_matrix, __py_k, __py_w, __py_lambda, __verbose=True):
     ----------
     __py_matrix : numpy.ndarray
         The input matrix with missing values (NaNs).
+
     __py_k : int
         The number of eigencomponents (principal components) to retain for dimensionality reduction.
         Example: 2, 5, 10.
+
     __py_w : int
         The window size for capturing temporal dependencies.
         Example: 5 (short-term), 20 (long-term).
-    __py_lambda : float
+
+    __py_lvalue : float
         The forgetting factor controlling how quickly past data is "forgotten".
         Example: 0.8 (fast adaptation), 0.95 (stable systems).
+
     __verbose : bool, optional
         Whether to display the contamination information (default is False).
 
@@ -40,14 +44,14 @@ def native_spirit(__py_matrix, __py_k, __py_w, __py_lambda, __verbose=True):
 
     assert (__py_k > 0);
     assert (__py_w > 0);
-    assert (__py_lambda >= 0);
+    assert (__py_lvalue >= 0);
 
     __ctype_size_n = __native_c_types_import.c_ulonglong(__py_n);
     __ctype_size_m = __native_c_types_import.c_ulonglong(__py_m);
 
     __ctype_k = __native_c_types_import.c_ulonglong(__py_k);
     __ctype_w = __native_c_types_import.c_ulonglong(__py_w);
-    __ctype_lambda = __native_c_types_import.c_double(__py_lambda);
+    __ctype_lambda = __native_c_types_import.c_double(__py_lvalue);
 
     # Native code uses linear matrix layout, and also it's easier to pass it in like this
     __ctype_matrix = utils.__marshal_as_native_column(__py_matrix);
@@ -59,7 +63,7 @@ def native_spirit(__py_matrix, __py_k, __py_w, __py_lambda, __verbose=True):
     return __py_imputed_matrix;
 
 
-def spirit(incomp_data, k, w, lambda_value, logs=True, verbose=True, lib_path=None):
+def spirit(incomp_data, k=4, w=6, lvalue=1.0, logs=True, verbose=True, lib_path=None):
     """
     SPIRIT algorithm for matrix imputation.
 
@@ -73,7 +77,7 @@ def spirit(incomp_data, k, w, lambda_value, logs=True, verbose=True, lib_path=No
     w : int
         The window size for capturing temporal dependencies.
         Example: 5 (short-term), 20 (long-term).
-    lambda_value : float
+    lvalue : float
         The forgetting factor controlling how quickly past data is "forgotten".
         Example: 0.8 (fast adaptation), 0.95 (stable systems).
     logs : bool, optional
@@ -90,7 +94,7 @@ def spirit(incomp_data, k, w, lambda_value, logs=True, verbose=True, lib_path=No
 
     Example
     -------
-        >>> recov_data = spirit(incomp_data=incomp_data, k=2, w=5, lambda_value=0.8, logs=True)
+        >>> recov_data = spirit(incomp_data=incomp_data, k=2, w=5, lvalue=0.8, logs=True)
         >>> print(recov_data)
 
     """
@@ -105,7 +109,7 @@ def spirit(incomp_data, k, w, lambda_value, logs=True, verbose=True, lib_path=No
     #    has_nans = np.isnan(series_to_impute).any()
     #    series_to_impute = series_to_impute.reshape(-1, 1)
     #    if has_nans or cols_with_nans < 1:
-    #    imputed_matrix = native_spirit(series_to_impute, k, w, lambda_value, verbose)
+    #    imputed_matrix = native_spirit(series_to_impute, k, w, lvalue, verbose)
     #    imputed_matrix = np.asarray(imputed_matrix).reshape(-1)
     #    series_imputations.append(imputed_matrix)
     #recov_data = np.column_stack(series_imputations)
@@ -114,7 +118,7 @@ def spirit(incomp_data, k, w, lambda_value, logs=True, verbose=True, lib_path=No
     if utils.check_contamination_series(incomp_data, algo="spirit", verbose=verbose):
         return incomp_data
 
-    recov_data = native_spirit(incomp_data, k, w, lambda_value, verbose)
+    recov_data = native_spirit(incomp_data, k, w, lvalue, verbose)
 
     end_time = time.time()
 

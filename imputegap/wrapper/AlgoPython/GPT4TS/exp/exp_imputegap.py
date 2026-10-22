@@ -21,6 +21,7 @@ import warnings
 import numpy as np
 from tqdm import tqdm
 import imputegap.tools.utils as utils_imp
+import datetime
 
 warnings.filterwarnings('ignore')
 
@@ -36,8 +37,8 @@ class Exp_ImputeGAP(Exp_Basic):
             model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
 
-    def _get_data(self, flag, normalization=False, scaling=False, shuffle=False, reconstruction=False, verbose=True, tr_ratio=0.7, replicat=False):
-        data_set, data_loader, l = data_provider(self.args, flag, normalization=normalization, scaling=scaling, shuffle=shuffle, reconstruction=reconstruction, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat)
+    def _get_data(self, flag, normalization=False, scaling=False, shuffle=False, reconstruction=False, verbose=True, tr_ratio=0.7, replicat=False, size_limitation=False):
+        data_set, data_loader, l = data_provider(self.args, flag, normalization=normalization, scaling=scaling, shuffle=shuffle, reconstruction=reconstruction, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat, size_limitation=size_limitation)
         return data_set, data_loader, l
 
     def _select_optimizer(self):
@@ -81,17 +82,19 @@ class Exp_ImputeGAP(Exp_Basic):
 
         return total_loss
 
-    def train(self, setting, verbose, deep_verbose, normalization=False, scaling=False, shuffle=False, tr_ratio=0.7, replicat=False):
-        train_data, train_loader, len_tr = self._get_data(flag='train', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat)
-        vali_data, vali_loader, len_val = self._get_data(flag='val', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat)
-        test_data, test_loader, len_ts = self._get_data(flag='test', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio,  replicat=replicat)
-        recon_data, recon_loader, len_recon = self._get_data(flag='train', scaling=scaling, shuffle=shuffle, reconstruction=True, verbose=verbose, replicat=replicat)
+    def train(self, setting, verbose, deep_verbose, normalization=False, scaling=False, shuffle=False, tr_ratio=0.7, replicat=False, size_limitation=False):
+        train_data, train_loader, len_tr = self._get_data(flag='train', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat, size_limitation=size_limitation)
+        vali_data, vali_loader, len_val = self._get_data(flag='val', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat, size_limitation=size_limitation)
+        test_data, test_loader, len_ts = self._get_data(flag='test', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio,  replicat=replicat, size_limitation=size_limitation)
+        recon_data, recon_loader, len_recon = self._get_data(flag='train', scaling=scaling, shuffle=shuffle, reconstruction=True, verbose=verbose, replicat=replicat, size_limitation=size_limitation)
 
         if verbose:
-            print(f"\nresults of the pre-processing :\n\t{len(train_loader) = } - {len_tr = }\n\t{len(vali_loader) = } - {len_val = }\n\t{len(test_loader) = } - {len_ts = }\n\t{len(recon_loader) = } - {len_recon = }\n")
+            print(f"\nresults of the pre-processing :\n\t{len(train_loader) = } ; {len_tr = }\n\t{len(vali_loader) = } ; {len_val = }\n\t{len(test_loader) = } ; {len_ts = }\n\t{len(recon_loader) = } ; {len_recon = }\n")
 
         here = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-        path = os.path.join(here, "imputegap_assets/models/checkpoints")
+        directory_now = datetime.datetime.now()
+        directory_time = directory_now.strftime("%y_%m_%d_%H_%M_%S")
+        path = os.path.join(here, "imputegap_assets/models/gpt4ts_checkpoints_"+str(directory_time))
         if not os.path.exists(path):
             os.makedirs(path)
         time_now = time.time()
@@ -175,7 +178,7 @@ class Exp_ImputeGAP(Exp_Basic):
             adjust_learning_rate(model_optim, epoch + 1, self.args, verbose=verbose)
 
         best_model_path = path + '/' + 'checkpoint.pth'
-        self.model.load_state_dict(torch.load(best_model_path))
+        self.model.load_state_dict(torch.load(best_model_path), strict=False)
 
         return self.model, path
 
@@ -187,7 +190,7 @@ class Exp_ImputeGAP(Exp_Basic):
             test_data, test_loader, _ = self._get_data(flag='train', scaling=scaling, shuffle=shuffle, reconstruction=reconstruction, verbose=verbose, replicat=replicat)
 
         if test:
-            self.model.load_state_dict(torch.load(os.path.join(checkpoint, 'checkpoint.pth')))
+            self.model.load_state_dict(torch.load(os.path.join(checkpoint, 'checkpoint.pth')), strict=False)
 
         preds = []
         trues = []

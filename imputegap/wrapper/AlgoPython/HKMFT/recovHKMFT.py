@@ -367,9 +367,18 @@ def recovHKMFT(dataset,
 
     blackout = round(T*(1-tr_ratio))-1
     start = round(T*tr_ratio)
+
+    if blackouts_begin == 0:
+        blackouts_begin = None
+        blackouts_end = None
+
     if blackouts_begin is None:
         blackouts_begin = start
         blackouts_end = blackouts_begin + blackout
+
+    if not tags:
+        tags = None
+
     if tags is None:
         gen = True
     else:

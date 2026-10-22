@@ -33,7 +33,6 @@ def CRPS_score(target, forecast, eval_points):
         q_loss = quantile_loss(target, q_pred, quantiles[i], eval_points)
         CRPS += q_loss / denom
 
-    print(CRPS/len(quantiles))
     return CRPS/len(quantiles)
 
 

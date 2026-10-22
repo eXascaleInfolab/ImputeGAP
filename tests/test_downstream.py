@@ -5,6 +5,10 @@ from imputegap.tools import utils
 from imputegap.recovery.contamination import GenGap
 import pytest
 
+
+from imputegap.recovery.downstream import Classifier, Forecaster, Artifact
+
+
 class TestDownstream(unittest.TestCase):
 
 
@@ -16,7 +20,7 @@ class TestDownstream(unittest.TestCase):
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path("forecast-economy"))
 
-        print(f"{utils.list_of_downstreams() = }")
+        print(f"{utils.list_of_forecasters() = }")
         print(f"{utils.list_of_downstreams_darts() = }")
         print(f"{utils.list_of_downstreams_sktime() = }")
 
@@ -27,23 +31,38 @@ class TestDownstream(unittest.TestCase):
         imputer = Imputation.MatrixCompletion.CDRec(ts_mask)
         imputer.impute()
 
-        models = utils.list_of_downstreams()
+        models = utils.list_of_forecasters()
+        forecasters = []
+        for model in models:
+            if model != "cif":
+                artifact = Artifact(dataset="test-logic-llm", model=model, algorithm="cdrec", pattern="mcar", horizon=2)
+                forecasters.append(Forecaster(task="forecasting", model=artifact.model, y_train=None, season=2, use_cache=False, to_cache=False, artifact=artifact, plots=False, verbose=False))
 
-        # Configure downstream options
-        downstream_options= [{"task": "forecast", "model": str(m), "params": None, "plots": None, "baseline": None, "split": 0.8 } for m in models]
+        print(f"{forecasters = }")
 
-        print(f"{downstream_options = }")
+        for forecaster in forecasters:
 
-        for options in downstream_options:
+            model = forecaster.model
 
-            model = options.get("model")
+            print(f"{model = }")
 
-            if model == "prophet":
-                options = {"task": "forecast", "model": "prophet", "params": None, "plots": True, "baseline": "CDRec", "split": 0.8}
-
-            # Score and evaluate
             imputer.score(ts_1.data, imputer.recov_data)
-            imputer.score(ts_1.data, imputer.recov_data, downstream=options)
+            print(f"{imputer.metrics=}")
+
+            if (isinstance(forecaster, Forecaster) or isinstance(forecaster, Classifier)) and forecaster is not None:
+                assert True, (
+                    f"Unexpected options value: {forecaster} "
+                    f"{type(forecaster)=} vs {Forecaster=}"
+                )
+            else:
+                assert False, (
+                    f"Unexpected options value: {forecaster} "
+                    f"{type(forecaster)=} vs {Forecaster=}"
+                )
+
+            imputer.score(ts_1.data, imputer.recov_data, downstream=forecaster)
+            print(f"{imputer.downstream_metrics=}")
+
 
             # Assert metrics are dictionaries with values
             self.assertIsInstance(imputer.metrics, dict, "imputer.metrics should be a dictionary, for " + model)
@@ -64,7 +83,7 @@ class TestDownstream(unittest.TestCase):
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path("forecast-economy"))
 
-        print(f"{utils.list_of_downstreams() = }")
+        print(f"{utils.list_of_forecasters() = }")
         print(f"{utils.list_of_downstreams_darts() = }")
         print(f"{utils.list_of_downstreams_sktime() = }")
 
@@ -75,16 +94,17 @@ class TestDownstream(unittest.TestCase):
         imputer = Imputation.MatrixCompletion.CDRec(ts_mask)
         imputer.impute()
 
-        models = utils.list_of_downstreams()
+        models = utils.list_of_forecasters()
+
+        artifact = Artifact(dataset="eeg-alcohol", model="exp-smoothing", algorithm="cdrec", pattern="mcar", horizon=12)
+        forecaster = Forecaster(task="nope", model=artifact.model, y_train=None, season=12, use_cache=False, to_cache=True, artifact=artifact, plots=True, verbose=False)
 
         # Configure downstream options
-        downstream_options= [{"task": "nope", "model": "naive", "params": None, "plots": None, "baseline": None, "split": 0.8 }]
+        downstream_options= [forecaster]
 
         print(f"{downstream_options = }")
 
         for options in downstream_options:
-
-            model = options.get("model")
 
             # Score and evaluate
             imputer.score(ts_1.data, imputer.recov_data)

@@ -78,7 +78,7 @@ class TestException(unittest.TestCase):
         """
         input_data = None  # Simulate a scenario where raw_data is None
         with pytest.raises(ValueError, match=f"Need input_data to be able to adapt the hyper-parameters: {input_data}"):
-            _ = Imputation.MatrixCompletion.CDRec(None).impute(user_def=False, params={"input_data":input_data, "optimizer": "bayesian", "options":{"n_calls": 2}})
+            _ = Imputation.MatrixCompletion.CDRec(None).impute(user_def=False, params={"input_data":input_data, "optimizer": "test-bayesian", "options":{"n_calls": 2}})
 
     def test_bench_exc(self):
         """
@@ -149,8 +149,8 @@ class TestException(unittest.TestCase):
         ts_m = GenGap.mcar(ts.data, offset=10, seed=False)
         imputer = Imputation.MatrixCompletion.CDRec(ts_m)
         imputer.impute()
-        ts.plot(ts.data, style="mono")
-        ts.plot(ts.data, legends=False, nbr_series=1)
+        ts.plot(ts.data, style="mono", display=False)
+        ts.plot(ts.data, legends=False, nbr_series=1, display=False)
 
 
         imputer.recov_data = imputer.recov_data *1000
@@ -219,10 +219,10 @@ class TestException(unittest.TestCase):
 
         MM = ts.data
         MM[1, :] = np.nan
-        ts.plot(ts.data,incomp_data=MM, style="mono")
-        ts.plot(ts.data,incomp_data=MM, style="mono", subplot=False)
-        ts.plot(ts.data,incomp_data=MM, subplot=False)
-        ts.plot(ts.data,incomp_data=MM, subplot=False, nbr_series=0)
+        ts.plot(ts.data,incomp_data=MM, style="mono", display=False)
+        ts.plot(ts.data,incomp_data=MM, style="mono", subplot=False, display=False)
+        ts.plot(ts.data,incomp_data=MM, subplot=False, display=False)
+        ts.plot(ts.data,incomp_data=MM, subplot=False, nbr_series=0, display=False)
 
         ts.shift(1,2)
         ts.range(1,2)
@@ -231,7 +231,7 @@ class TestException(unittest.TestCase):
 
     def test_paths_raises(self):
         import os
-        expected = (3, 1e-06, 100)
+        expected = {'rank': 2, 'epsilon': 1e-06, 'iteration': 100}
 
         optimal_params = utils.load_parameters(query="default", algorithm="cdrec")
         print(f"{optimal_params = }")
@@ -252,7 +252,7 @@ class TestException(unittest.TestCase):
         with pytest.raises(ValueError):
             _ = utils.load_parameters(query="error", algorithm="cdrec", path=filepath)
 
-        expected = (3, 0.0004596525401418828, 209)
+        expected = {'epsilon': 0.0004596525401418828, 'iteration': 209, 'rank': 3}
         here = os.path.dirname(os.path.abspath(__file__))
         s = "optimal_parameters_" + str("b") + "_" + str("chlorine") + "_" + str("cdrec") + ".toml"
         filepath = os.path.join(here, "imputegap_assets/params", s)
@@ -489,7 +489,7 @@ class TestException(unittest.TestCase):
         default_iim = utils.load_parameters(query="default", algorithm="iim")
         default_stmvl = utils.load_parameters(query="default", algorithm="stmvl")
         default_greedy = utils.load_parameters(query="default", algorithm="greedy")
-        default_bayesian = utils.load_parameters(query="default", algorithm="bayesian")
+        default_bayesian = utils.load_parameters(query="default", algorithm="test-bayesian")
         default_pso = utils.load_parameters(query="default", algorithm="pso")
         default_color = utils.load_parameters(query="default", algorithm="colors")
         default_false = utils.load_parameters(query="default", algorithm="test-wrong")
@@ -524,7 +524,7 @@ class TestException(unittest.TestCase):
         x = ts.datasets
         x = ts.optimizers
         x = ts.extractors
-        x = ts.forecasting_models
+        x = ts.forecasters
         x = ts.families
         x = ts.algorithms_with_families
         x = utils.list_of_metrics()

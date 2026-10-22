@@ -25,7 +25,7 @@ class TestPipeline(unittest.TestCase):
         test = utils.list_of_datasets()
         test = utils.list_of_extractors()
         test = utils.list_of_metrics()
-        test = utils.list_of_downstreams()
+        test = utils.list_of_forecasters()
 
         ts = TimeSeries()
         print(f"\nImputeGAP datasets : {ts.datasets}")
@@ -309,7 +309,7 @@ class TestPipeline(unittest.TestCase):
         for name in utils.list_of_algorithms_deep_learning():
             # load and normalize the dataset
             ts = TimeSeries()
-            ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
+            ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z-score", nbr_series=11, nbr_val=42)
             incomp_data = GenGap.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             if name == "DeepMVI":
@@ -355,7 +355,7 @@ class TestPipeline(unittest.TestCase):
             # load and normalize the dataset
             if name != "NuwaTS":
                 ts = TimeSeries()
-                ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
+                ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z-score", nbr_series=16, nbr_val=69)
                 incomp_data = GenGap.mcar(ts.data)
                 print(f"\n\n{incomp_data.shape = }")
                 algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)

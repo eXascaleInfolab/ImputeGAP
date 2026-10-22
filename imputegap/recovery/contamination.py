@@ -11,7 +11,7 @@ class GenGap:
     mcar(ts, series_rate=0.2, missing_rate=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True) :
             Apply Missing Completely at Random (MCAR) contamination to selected series.
 
-    def aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True):
+    aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True):
         Apply missing percentage contamination to selected series.
 
     blackout(ts, missing_rate=0.2, offset=0.1, logic_by_series=True, verbose=True) :
@@ -28,6 +28,9 @@ class GenGap:
 
     overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True):
         Apply Overlapping contamination to selected series.
+
+    mirror_gap(raw_data, ts_m, axis=0, verbose=True):
+        Mirror the NaNs values of the current patterns.
 
     References
     ----------
@@ -48,6 +51,33 @@ class GenGap:
             return math.ceil(N * offset)  # values to protect in the beginning of the series
         else:
             return offset
+
+    def mirror_gap(raw_data, ts_m, axis=0, verbose=False):
+        """
+        Configure and execute forecaster model for downstream analytics
+
+        Parameters
+        ----------
+        model : str
+            name of the forcaster model
+        params : list of params
+            List of paramaters for a forcaster model
+
+        Returns
+        -------
+        Forecaster object (SKTIME/DART)
+            Forecaster object for downstream analytics
+        """
+        mask = np.isnan(ts_m)
+        mirrored_mask = np.flip(mask, axis=axis)
+
+        if verbose:
+            print(f"{mask = }")
+            print(f"{mirrored_mask = }")
+
+        mirror = raw_data.copy()
+        mirror[mirrored_mask] = np.nan
+        return mirror
 
 
     def mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):

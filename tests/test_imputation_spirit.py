@@ -40,7 +40,7 @@ class TestSPIRIT(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(params={'k': 4, 'w': 6, 'lambda_value': 1.0})
+        algo.impute(params={'k': 4, 'w': 6, 'lvalue': 1.0})
         algo.score(ts.data)
         metrics = algo.metrics
 

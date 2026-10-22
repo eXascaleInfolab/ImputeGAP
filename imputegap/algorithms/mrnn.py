@@ -2,7 +2,7 @@ import time
 from imputegap.wrapper.AlgoPython.BRITS.recovBRITS import recovBRITS
 
 
-def mrnn(incomp_data, model="m_rnn", seq_len=24, epochs=10, batch_size=7, sliding_windows=1, hidden_layers=64, impute_weight=0.3, num_workers=0, seed=42, tr_ratio=0.9, logs=True, verbose=True):
+def mrnn(incomp_data, model="m_rnn", seq_len=24, epochs=50, batch_size=64, sliding_windows=1, hidden_layers=108, impute_weight=0.3, num_workers=0, seed=42, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using the M-RNN algorithm.
 
@@ -12,7 +12,7 @@ def mrnn(incomp_data, model="m_rnn", seq_len=24, epochs=10, batch_size=7, slidin
         The input matrix with contamination (missing values represented as NaNs).
 
     model : str
-        Specifies the type of model to use for the imputation. Options may include predefined models like 'brits', 'brits-i'.
+        Specifies the type of model to use for the imputation. Options may include predefined models like 'm_rnn', 'brits-i'.
 
     seq_len : int
         Length of the input sequence used by the model. Defines the number of time steps processed at once (default 24).

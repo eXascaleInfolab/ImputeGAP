@@ -11,15 +11,21 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - **Algorithm**
      - **Family**
      - **Venue -- Year**
+   * - MOMENT [37]_
+     - LLMs
+     - ICML -- 2024
    * - NuwaTS [33]_
      - LLMs
      - Arxiv -- 2024
    * - GPT4TS [34]_
      - LLMs
      - NeurIPS -- 2023
-   * - 🚧 MOMENT [37]_
+   * - 🚧 UniTS [42]_
      - LLMs
-     - ICLR -- 2025
+     - NeurIPS -- 2024
+   * - 🚧 Timer [43]_
+     - LLMs
+     - ICML -- 2024
    * -
      -
      -
@@ -29,15 +35,15 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - MissNet [27]_
      - Deep Learning
      - KDD -- 2024
-   * - MPIN [25]_
-     - Deep Learning
-     - PVLDB -- 2024
    * - BitGraph [32]_
      - Deep Learning
      - ICLR -- 2024
    * - BayOTIDE [30]_
      - Deep Learning
-     - PMLR -- 2024
+     - ICML -- 2024
+   * - MPIN [25]_
+     - Deep Learning
+     - PVLDB -- 2023
    * - TimesNet [36]_
      - Deep Learning
      - ICLR -- 2023
@@ -89,12 +95,12 @@ To learn how to apply imputation within the library, please refer to the `tutori
    * - TRMF [8]_
      - Matrix Completion
      - NeurIPS -- 2016
-   * - GROUSE [3]_
-     - Matrix Completion
-     - PMLR -- 2016
    * - ROSL [4]_
      - Matrix Completion
      - CVPR -- 2014
+   * - GROUSE [3]_
+     - Matrix Completion
+     - Arxiv -- 2010
    * - SoftImpute [6]_
      - Matrix Completion
      - JMLR -- 2010
@@ -139,7 +145,7 @@ To learn how to apply imputation within the library, please refer to the `tutori
      - Statistical Software -- 2011
    * - MissForest [15]_
      - Machine Learning
-     - BioInformatics -- 2011
+     - BioInformatics -- 2012
    * -
      -
      -
@@ -166,10 +172,6 @@ To learn how to apply imputation within the library, please refer to the `tutori
      - _
 
 
-.. list-table::
-   :header-rows: 1
-
-
 
 .. raw:: html
 
@@ -184,7 +186,7 @@ References
 
 .. [2] Olga G. Troyanskaya, Michael N. Cantor, Gavin Sherlock, Patrick O. Brown, Trevor Hastie, Robert Tibshirani, David Botstein, Russ B. Altman: Missing value estimation methods for DNA microarrays. Bioinform. 17(6): 520-525 (2001)
 
-.. [3] Dejiao Zhang, Laura Balzano: Global Convergence of a Grassmannian Gradient Descent Algorithm for Subspace Estimation. AISTATS 2016: 1460-1468
+.. [3] Laura Balzano, Robert D. Nowak, and Benjamin Recht. "Online Identification and Tracking of Subspaces from Highly Incomplete Information." CoRR abs/1006.4046, 2010.
 
 .. [4] Xianbiao Shu, Fatih Porikli, Narendra Ahuja: Robust Orthonormal Subspace Learning: Efficient Recovery of Corrupted Low-Rank Matrices. CVPR 2014: 3874-3881
 
@@ -206,7 +208,7 @@ References
 
 .. [13] Tianqi Chen, Carlos Guestrin: XGBoost: A Scalable Tree Boosting System. KDD 2016: 785-794
 
-.. [14] Royston Patrick , White Ian R.: Multiple Imputation by Chained Equations (MICE): Implementation in Stata. Journal of Statistical Software 2010: 45(4), 1–20.
+.. [14] Royston Patrick , White Ian R.: Multiple Imputation by Chained Equations (MICE): Implementation in Stata. Journal of Statistical Software 2011: 45(4), 1–20.
 
 .. [15] Daniel J. Stekhoven, Peter Bühlmann: MissForest - non-parametric missing value imputation for mixed-type data. Bioinform. 28(1): 112-118 (2012)
 
@@ -216,7 +218,7 @@ References
 
 .. [24] Parikshit Bansal, Prathamesh Deshpande, Sunita Sarawagi: Missing Value Imputation on Multidimensional Time Series. Proc. VLDB Endow. 14(11): 2533-2545 (2021)
 
-.. [25] Xiao Li, Huan Li, Hua Lu, Christian S. Jensen, Varun Pandey, Volker Markl: Missing Value Imputation for Multi-attribute Sensor Data Streams via Message Propagation (Extended Version). CoRR abs/2311.07344 (2023)
+.. [25] Xiao Li, Huan Li, Hua Lu, Christian S. Jensen, Varun Pandey, Volker Markl: Missing Value Imputation for Multi-attribute Sensor Data Streams via Message Propagation (Extended Version). Proceedings of the VLDB Endowment, 17(3):345–358, 2023.
 
 .. [26] Mingzhe Liu, Han Huang, Hao Feng, Leilei Sun, Bowen Du, Yanjie Fu: PriSTI: A Conditional Diffusion Framework for Spatiotemporal Imputation. ICDE 2023: 1927-1939
 
@@ -224,9 +226,9 @@ References
 
 .. [28] Jinsung Yoon, James Jordon, Mihaela van der Schaar: GAIN: Missing Data Imputation using Generative Adversarial Nets. ICML 2018: 5675-5684
 
-.. [29] Andrea Cini, Ivan Marisca, Cesare Alippi: Multivariate Time Series Imputation by Graph Neural Networks. CoRR abs/2108.00298 (2021)
+.. [29] Andrea Cini, Ivan Marisca, and Cesare Alippi. "Filling the G_ap_s: Multivariate Time Series Imputation by Graph Neural Networks." The Tenth International Conference on Learning Representations (ICLR), 2022.
 
-.. [30] Shikai Fang, Qingsong Wen, Yingtao Luo, Shandian Zhe, Liang Sun: BayOTIDE: Bayesian Online Multivariate Time Series Imputation with Functional Decomposition. ICML 2024
+.. [30] Shikai Fang, Qingsong Wen, Yingtao Luo, Shandian Zhe, Liang Sun: BayOTIDE: Bayesian Online Multivariate Time Series Imputation with Functional Decomposition. ICML 2024 (PMLR 235): 12993-13009.
 
 .. [31] Liang Wang, Simeng Wu, Tianheng Wu, Xianping Tao, Jian Lu: HKMF-T: Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization. IEEE Trans. Knowl. Data Eng. 33(11): 3582-3593 (2021)
 
@@ -241,7 +243,7 @@ References
 .. [36] Haixu Wu, Tengge Hu, Yong Liu, Hang Zhou, Jianmin Wang, Mingsheng Long: TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis. ICLR 2023
 
 
-.. [37] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. ICLR 2025
+.. [37] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. In Forty-first International Conference on Machine Learning, ICML 2024, Vienna, Austria, July 21-27, 2024 (Proceedings of Machine Learning Research). PMLR OpenReview.net, 16115–16152.
 
 .. [38] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin : Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI 2021
 
@@ -250,6 +252,10 @@ References
 .. [40] Vincent Fortuin, Dmitry Baranchuk, Gunnar Rätsch,  Stephan Mandt : GP-VAE: Deep Probabilistic Multivariate Time Series Imputation. AISTATS 2020
 
 .. [41] Yukai Liu, Rose Yu, Stephan Zheng, Eric Zhan, Yisong Yue : NAOMI: Non-Autoregressive Multiresolution Sequence Imputation. NeurIPS 2019
+
+.. [42] Shanghua Gao, Teddy Koker, Owen Queen, Thomas Hartvigsen, Theodoros Tsiligkaridis, Marinka Zitnik : UniTS: A Unified Multi-Task Time Series Model. NeurIPS 2024
+
+.. [43] Yong Liu, Haoran Zhang, Chenyu Li, Xiangdong Huang, Jianmin Wang, Mingsheng Long : Timer: Generative Pre-trained Transformers Are Large Time Series Models. ICML 2024
 
 
 

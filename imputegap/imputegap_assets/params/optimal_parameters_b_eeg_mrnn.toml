@@ -1,0 +1,8 @@
+[mrnn]
+seq_len = 24
+epoch = 50
+batch_size = 64
+sliding_windows = 1
+hidden_layers = 108
+impute_weight = 0.3
+num_workers = 0

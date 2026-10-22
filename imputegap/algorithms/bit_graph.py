@@ -3,7 +3,7 @@ import time
 from imputegap.wrapper.AlgoPython.BitGraph.recovBitGRAPH import recovBitGRAPH
 
 
-def bit_graph(incomp_data, seq_len=24, sliding_windows=1, kernel_size=2, kernel_set=[1], epochs=50, batch_size=32, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
+def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel_set=[2,3,6,7], epochs=50, batch_size=-1, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
     """
     Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
 
@@ -13,23 +13,23 @@ def bit_graph(incomp_data, seq_len=24, sliding_windows=1, kernel_size=2, kernel_
         The input matrix with contamination (missing values represented as NaNs).
 
     seq_len : int, optional
-        Length of the input sequence for temporal modeling (default: 1).
+        Length of the input sequence for temporal modeling (default: -1).
 
     sliding_windows: int, optional
         Stride between consecutive training windows (default is 1). If set to 0, the window size is equal to seq_len.
         Use values ≥ 1 for univariate datasets (window strategy) and 0 for multivariate datasets (sample strategy).
 
     kernel_size : int, optional
-        Size of the kernel used during training (most be smaller the seq_len). Default is 2.
+        Size of the kernel used during training (most be smaller the seq_len). Default is 25.
 
     kernel_set : list, optional
-        Set of kernel sizes used in the model for graph convolution operations (default: [1]).
+        Set of kernel sizes used in the model for graph convolution operations (default: [2,3,6,7]).
 
     epochs : int, optional
         Number of training epochs (default: 10).
 
     batch_size : int, optional
-        Size of each batch (default: 32).
+        Size of each batch (default: -1).
 
     subgraph_size : int, optional
         The size of each subgraph used in message passing within the graph network (default: 5).

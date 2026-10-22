@@ -160,7 +160,7 @@ def experi_id(datasets):
 
 
 
-def recovMissNet(X, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=100, tol=5, random_init=False, sliding_windows=0, tr_ratio=0.6, verbose=True):
+def recovMissNet(X, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=100, tol=5, random_init=False, sliding_windows=0, verbose=True):
 
     ts_m = np.copy(X)
     recov = np.copy(X)
@@ -184,7 +184,7 @@ def recovMissNet(X, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=100, to
         print(f"{imputed_matrix.shape = }")
 
     if sliding_windows != 0:
-        imputed_matrix = utils_imp.reconstruction_window_based(preds=imputed_matrix, nbr_timestamps=ts.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
+        imputed_matrix = utils_imp.reconstruction_window_based(preds=imputed_matrix, nbr_timestamps=ts_m.shape[0], sliding_windows=sliding_windows, verbose=verbose, deep_verbose=False)
 
     recov[m_mask] = imputed_matrix[m_mask]
 

@@ -345,12 +345,11 @@ def impute_with_algorithm(alg_code: str, matrix: np.ndarray, neighbors=None, ver
             else:
                 _, adaptive_flag = match.groups()
 
-            matrix_imputed = iim_recovery(matrix, adaptive_flag=adaptive_flag.startswith("a"),
-                                          learning_neighbors=int(neighbors))
+            print(f"if: {neighbors}")
+            matrix_imputed = iim_recovery(matrix, adaptive_flag=adaptive_flag.startswith("a"), learning_neighbors=int(neighbors))
         else:
             if neighbors is None:
                 neighbors = int(alg_code_spl[1])
-
             matrix_imputed = iim_recovery(matrix, adaptive_flag=False, learning_neighbors=neighbors)
 
     # verification to check for NaN. If found, assign absurdly high value to them.

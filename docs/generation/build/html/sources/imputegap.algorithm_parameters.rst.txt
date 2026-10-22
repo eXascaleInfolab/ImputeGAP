@@ -15,18 +15,8 @@ Submodules
 Modules
 -------
 
-.. automodule:: imputegap.tools
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Submodule Documentation
------------------------
-
-imputegap.tools.utils module
-----------------------------
-
 .. automodule:: imputegap.tools.algorithm_parameters
    :members:
    :undoc-members:
    :show-inheritance:
+

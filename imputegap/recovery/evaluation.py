@@ -168,18 +168,24 @@ class Evaluation:
         else:
             nan_locations = self.mask
 
-        input_vals = self.input_data[nan_locations]
-        recov_vals = self.recov_data[nan_locations]
+        try:
+                input_vals = self.input_data[nan_locations]
+                recov_vals = self.recov_data[nan_locations]
 
-        if (np.isnan(recov_vals).all() or np.isnan(input_vals).all()) and self.security:
-            return np.nan
+                if (np.isnan(recov_vals).all() or np.isnan(input_vals).all()) and self.security:
+                    return np.nan
 
-        # Discretize the continuous data into bins
-        input_data_binned = np.digitize(input_vals, bins=np.histogram_bin_edges(input_vals, bins=10))
-        imputation_binned = np.digitize(recov_vals, bins=np.histogram_bin_edges(recov_vals, bins=10))
+                # Discretize the continuous data into bins
+                input_data_binned = np.digitize(input_vals, bins=np.histogram_bin_edges(input_vals, bins=10))
+                imputation_binned = np.digitize(recov_vals, bins=np.histogram_bin_edges(recov_vals, bins=10))
 
-        mi_discrete = mutual_info_score(input_data_binned, imputation_binned)
-        # mi_continuous = mutual_info_score(self.input_data[nan_locations], self.input_data[nan_locations])
+                mi_discrete = mutual_info_score(input_data_binned, imputation_binned)
+                # mi_continuous = mutual_info_score(self.input_data[nan_locations], self.input_data[nan_locations])
+        except Exception as e:
+            print(f"Error during MI : {e}")
+            print(f"The data is not corrupted: there are no NaNs, infinities, or abnormally high or low values in the recovery matrix.")
+            return -1
+
 
         return mi_discrete
 

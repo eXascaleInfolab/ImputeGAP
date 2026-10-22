@@ -8,6 +8,7 @@ from torch.nn.parameter import Parameter
 import math
 
 def binary_cross_entropy_with_logits(input, target, weight=None, size_average=True, reduce=True):
+
     if not (target.size() == input.size()):
         raise ValueError("Target size ({}) must be the same as input size ({})".format(target.size(), input.size()))
 
@@ -186,6 +187,10 @@ class Model(nn.Module):
         out, (h, c) = self.pred_rnn(imputations)
 
         y_h = self.out(h.squeeze())
+
+        if y_h.dim() == 1:
+            y_h = y_h.unsqueeze(0)
+
         y_loss = binary_cross_entropy_with_logits(y_h, labels, reduce = False)
         y_loss = torch.sum(y_loss * is_train) / (torch.sum(is_train) + 1e-5)
 

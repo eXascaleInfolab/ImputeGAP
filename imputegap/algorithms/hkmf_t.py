@@ -2,7 +2,7 @@ import time
 
 from imputegap.wrapper.AlgoPython.HKMFT.recovHKMFT import recovHKMFT
 
-def hkmf_t(incomp_data, tags=None, seq_len=24, blackouts_begin=None, blackouts_end=None, epochs=30, tr_ratio=0.9, logs=True, verbose=True):
+def hkmf_t(incomp_data, tags=None, seq_len=7, blackouts_begin=None, blackouts_end=None, epochs=10, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
 
@@ -16,7 +16,7 @@ def hkmf_t(incomp_data, tags=None, seq_len=24, blackouts_begin=None, blackouts_e
         the input data. If None, no tags are used (default is None).
 
     seq_length : int, optional
-        Length of the input sequence used by the model. Defines the number of time steps processed at once (default 24).
+        Length of the input sequence used by the model. Defines the number of time steps processed at once (default 7).
 
     blackouts_begin : int, optional
         position of the blackout for the validation (default is None).
@@ -28,7 +28,7 @@ def hkmf_t(incomp_data, tags=None, seq_len=24, blackouts_begin=None, blackouts_e
 
     epochs : int, optional
         The maximum number of training epochs for the Hankel Matrix Factorization algorithm.
-        If convergence is reached earlier, the process stops (default is 30).
+        If convergence is reached earlier, the process stops (default is 10).
 
     tr_ratio: float, optional
         Split ratio between training and testing sets (default is 0.9).

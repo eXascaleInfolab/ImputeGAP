@@ -23,6 +23,7 @@ class TestHKMF(unittest.TestCase):
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()
         algo.score(ts.data)
+        print(f"{algo.recov_data}")
         metrics = algo.metrics
 
         print(f"{name}:{metrics = }\n")

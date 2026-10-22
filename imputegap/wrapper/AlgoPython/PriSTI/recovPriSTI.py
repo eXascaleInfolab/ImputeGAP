@@ -39,7 +39,7 @@ def handle_parser(argv=None):
 
     return args
 
-def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function="none", nsamples=100, sliding_windows=1, target_strategy="mix", num_workers=0, shuffle=True, normalize=False, tr_ratio=0.7, seed=42, verbose=True, deep_verbose=False, replicat=False):
+def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function="none", nsamples=100, sliding_windows=1, target_strategy="mix", beta=[0.0001, 0.2], num_workers=0, shuffle=True, normalize=False, tr_ratio=0.7, seed=42, verbose=True, deep_verbose=False, replicat=False):
     args = handle_parser()
 
     ts_m = np.copy(incomp_data)
@@ -47,7 +47,7 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
     m_mask = np.isnan(incomp_data)
 
     if not replicat:
-        multivariate, seq_len, batch_size, sliding_windows, error = utils_imp.prepare_deep_learning_params(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
+        multivariate, seq_len, batch_size, sliding_windows, error = utils_imp.compute_variables_saitslike(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
 
         if error:
             return incomp_data
@@ -76,6 +76,11 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
     config["train"]["epochs"] = epochs
     config["train"]["batch_size"] = batch_size
     config["model"]["target_strategy"] = target_strategy
+    b1, bt = beta[0], beta[1]
+    config["diffusion"]["beta_start"] = b1
+    config["diffusion"]["beta_end"] = bt
+
+
 
     if target_strategy == "block":
         args.missing_pattern = "block"
@@ -89,8 +94,8 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
     test_len, val_len = utils_imp.sets_splitter_based_on_training(tr_ratio, verbose=False)
 
     if verbose:
-        print(f"(IMPUTATION) PriSTI\n\tMatrix Shape: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_length: {seq_len}\n\tbatch_size: {batch_size}\n\tepochs: {config['train']['epochs']}\n\tadjacency function: {adj_function}\n\tsamples: {nsamples}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {config['model']['target_strategy']}\n\tunconditional: {config['model']['is_unconditional']}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {test_len}\n\tval_ratio: {val_len}\n\tseed: {config['seed']}\n")
-        print(f"call: pristi.impute(params={{'seq_len': {seq_len}, 'batch_size': {batch_size}, 'epochs': {config['train']['epochs']}, 'sliding_windows': {sliding_windows}, 'target_strategy': '{config['model']['target_strategy']}', 'nsamples': {nsamples}, 'num_workers': {args.num_workers}}})\n")
+        print(f"(IMPUTATION) PriSTI\n\tMatrix Shape: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_length: {seq_len}\n\tbatch_size: {batch_size}\n\tepochs: {config['train']['epochs']}\n\tadjacency function: {adj_function}\n\tsamples: {nsamples}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {config['model']['target_strategy']}\n\tunconditional: {config['model']['is_unconditional']}\n\tbeta_start: {config["diffusion"]["beta_start"]}\n\tbeta_end: {config["diffusion"]["beta_end"]}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {test_len}\n\tval_ratio: {val_len}\n\tseed: {config['seed']}\n")
+        print(f"call: pristi.impute(params={{'seq_len': {seq_len}, 'batch_size': {batch_size}, 'epochs': {config['train']['epochs']}, 'sliding_windows': {sliding_windows}, 'target_strategy': '{config['model']['target_strategy']}', 'nsamples': {nsamples}, 'beta': {beta}, 'num_workers': {args.num_workers}}})\n")
 
         print("\npre-processing...\n")
 

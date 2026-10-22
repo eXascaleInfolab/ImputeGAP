@@ -153,7 +153,7 @@ def handle_parser(argv=None):
 
     return args
 
-def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_workers=0, model="TimesNet", tr_ratio=0.7, seed=2021, verbose=True, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq"):
+def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layers=3, num_workers=0, model="TimesNet", tr_ratio=0.7, seed=2021, verbose=True, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq"):
 
     data_m = np.copy(ts_m)
     recov = np.copy(ts_m)
@@ -186,7 +186,6 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_
     args.d_layers = 1
     args.e_layers = 2
     args.d_ff = 32
-    args.top_k = 3
     args.factor = 3
     args.task_name = "imputation"
 
@@ -201,9 +200,12 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_
     args.scaling = scaling
     args.shuffle = shuffle
     args.train_epochs = epochs
+    args.top_k = top_k
+    size_limitation=False
+    taux_nans = 0
 
     if seq_len ==-1 or batch_size==-1:
-        args.seq_len, args.batch_size = utils_imp.auto_seq_llms(data_x=ts_m, goal=strat, subset=True, high_limit=96, exception=True, verbose=verbose)
+        args.seq_len, args.batch_size, size_limitation, taux_nans, args.tr_ratio = utils_imp.compute_variables_timesnetlike(ts_m=ts_m, strat=strat, tr_ratio=tr_ratio, size_limitation=size_limitation, model=model, high=32, algo="TimesNet", verbose=verbose)
 
     if args.use_gpu and args.use_multi_gpu:
         args.devices = args.devices.replace(' ', '')
@@ -221,8 +223,8 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_
         args.data = "ETTh1"
 
     if verbose:
-        print(f"(IMPUTATION) {model}\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tepochs: {args.train_epochs}\n\tdataloader: {args.data}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\tpred_len: {args.pred_len}\n\tlabel_len: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n")
-        print(f"\ncall: timesnet.impute(params={{'seq_len': {args.seq_len}, 'batch_size': {args.batch_size}, 'epochs': {args.train_epochs}, 'gpt_layers': {args.gpt_layers}, 'num_workers': {args.num_workers}, 'seed': {seed}}})\n\n")
+        print(f"(IMPUTATION) {model}\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tepochs: {args.train_epochs}\n\tdataloader: {args.data}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\ttop_k: {args.top_k}\n\tpred_len: {args.pred_len}\n\tlabel_len: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n")
+        print(f"\ncall: timesnet.impute(params={{'seq_len': {args.seq_len}, 'batch_size': {args.batch_size}, 'top_k': {args.top_k}, 'epochs': {args.train_epochs}, 'gpt_layers': {args.gpt_layers}, 'num_workers': {args.num_workers}, 'seed': {seed}}})\n\n")
 
     if verbose:
         print('Args in experiment:')
@@ -238,12 +240,14 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_
         if args.verbose:
             print(f'\n\n>>>>>>>training>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
-        m, path = exp.train(setting, args.verbose, args.deep_verbose, tr_ratio=args.tr_ratio, normalization=args.normalization, scaling=args.scaling, shuffle=args.shuffle, replicat=replicat)
+        m, path = exp.train(setting, args.verbose, args.deep_verbose, tr_ratio=args.tr_ratio, normalization=args.normalization, scaling=args.scaling, shuffle=args.shuffle, replicat=replicat, size_limitation=size_limitation)
 
         if args.verbose:
             print(f'\n\n>>>>>>>testing<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
 
-        _ = exp.test(setting, test=0, verbose=args.verbose, normalization=args.normalization, scaling=args.scaling, replicat=replicat, checkpoint=path)
+
+        if not size_limitation:
+            _ = exp.test(setting, test=0, verbose=args.verbose, normalization=args.normalization, scaling=args.scaling, replicat=replicat, checkpoint=path)
 
         if args.verbose:
             print(f'\n\n>>>>>>>reconstruction<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
@@ -252,9 +256,7 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_
         torch.cuda.empty_cache()
 
         if np.isnan(reconstruction).any():
-            max_nans = np.isnan(ts_m).sum(axis=0).max()
-            print(f"\n\n(ERROR) Imputation error with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage."
-                f"\n\tCurrently, the number of NaNs might reach {max_nans} for a sequence and the size of seq_len is {args.seq_len}.\n")
+            print(f"\n\n(ERROR) Imputation error with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage. \n\tCurrently, the number of NaNs might reach {taux_nans} for a sequence and the size of seq_len is {args.seq_len}.\n")
             return recov
 
         if replicat:

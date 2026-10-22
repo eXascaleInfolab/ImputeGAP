@@ -2,12 +2,11 @@ import time
 
 import numpy as np
 import pandas as pd
-from imputegap.tools import utils
 
 from xgboost import XGBRegressor
 
 
-def xgboost(incomp_data, n_estimators=10, seed=42, logs=True, verbose=True):
+def xgboost(incomp_data, n_estimators=2, seed=42, logs=True, verbose=True):
     """
     Perform imputation using the Missing Value Imputation for Multi-attribute Sensor Data Streams via Message Propagation algorithm.
 
@@ -43,6 +42,7 @@ def xgboost(incomp_data, n_estimators=10, seed=42, logs=True, verbose=True):
 
     if verbose:
         print(f"(IMPUTATION) XGBOOST\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tn_estimators: {n_estimators}\n\tseed: {seed}\n")
+    print(f"(IMPUTATION) XGBOOST\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tn_estimators: {n_estimators}\n\tseed: {seed}\n")
 
     if isinstance(incomp_data, np.ndarray):
         incomp_data = pd.DataFrame(incomp_data)

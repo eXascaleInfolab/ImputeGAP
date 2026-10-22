@@ -1,7 +1,7 @@
 [timesnet]
 dataset = "chlorine"
-rmse = 0.37
-mae = 0.28
+rmse = 0.516
+mae = 0.412
 
 [gpt4ts]
 dataset = "chlorine"
@@ -15,8 +15,8 @@ mae = 0.10
 
 [cdrec]
 dataset = "chlorine"
-rmse = 0.389
-mae = 0.271
+rmse = 0.489
+mae = 0.337
 
 [dynammo]
 dataset = "chlorine"
@@ -70,8 +70,8 @@ mae = 0.090
 
 [xgboost]
 dataset = "chlorine"
-rmse = 0.461
-mae = 0.392
+rmse = 0.187
+mae = 0.09
 
 [missforest]
 dataset = "chlorine"
@@ -175,8 +175,8 @@ mae = 0.09
 
 [pristi]
 dataset = "chlorine"
-rmse = 0.807 # expected normal run: 0.242
-mae = 0.396  # expected normal run: 0.162
+rmse = 0.721 # expected normal run: 0.242
+mae = 0.363  # expected normal run: 0.162
 
 [trmf]
 dataset = "chlorine"
@@ -187,4 +187,11 @@ mae = 0.249
 dataset = "chlorine"
 rmse = 0.16
 mae = 0.11
+
+
+[moment]
+dataset = "chlorine"
+rmse = 1.01
+mae = 0.83
+
 

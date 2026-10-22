@@ -2,7 +2,7 @@ import time
 from imputegap.wrapper.AlgoPython.IIM.runnerIIM import impute_with_algorithm
 
 
-def iim(incomp_data, number_neighbor, algo_code, logs=True, verbose=True):
+def iim(incomp_data, learning_neighbors=10, algorithm_code="iim 2", logs=True, verbose=True):
     """
     Perform imputation using the Iterative Imputation Method (IIM) algorithm.
 
@@ -10,9 +10,9 @@ def iim(incomp_data, number_neighbor, algo_code, logs=True, verbose=True):
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
-    number_neighbor : int
+    learning_neighbors : int
         The number of neighbors to use for the K-Nearest Neighbors (KNN) classifier (default is 10).
-    algo_code : str
+    algorithm_code : str
         The specific action code for the IIM output. This determines the behavior of the algorithm.
     logs : bool, optional
         Whether to log the execution time (default is True).
@@ -27,13 +27,13 @@ def iim(incomp_data, number_neighbor, algo_code, logs=True, verbose=True):
     Notes
     -----
     The IIM algorithm works by utilizing K-Nearest Neighbors (KNN) to estimate missing values in time series data.
-    Depending on the provided `algo_code`, different versions of the algorithm may be executed.
+    Depending on the provided `algorithm_code`, different versions of the algorithm may be executed.
 
     The function logs the total execution time if `logs` is set to True.
 
     Example
     -------
-        >>> recov_data = iim(incomp_data, number_neighbor=10, algo_code="iim 2")
+        >>> recov_data = iim(incomp_data, learning_neighbors=10, algorithm_code="iim 2")
         >>> print(recov_data)
 
     References
@@ -43,7 +43,7 @@ def iim(incomp_data, number_neighbor, algo_code, logs=True, verbose=True):
     """
     start_time = time.time()  # Record start time
 
-    recov_data = impute_with_algorithm(algo_code, incomp_data.copy(), number_neighbor, verbose=verbose)
+    recov_data = impute_with_algorithm(algorithm_code, incomp_data.copy(), learning_neighbors, verbose=verbose)
 
     end_time = time.time()
 

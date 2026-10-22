@@ -17,7 +17,7 @@ data_dict = {
 }
 
 
-def data_provider(args, flag, normalization=False, scaling=False, shuffle=False, reconstruction=False, verbose=True, tr_ratio=0.7, replicat=False):
+def data_provider(args, flag, normalization=False, scaling=False, shuffle=False, reconstruction=False, verbose=True, tr_ratio=0.7, replicat=False, size_limitation=False):
     Data = data_dict[args.data]
     timeenc = 0 if args.embed != 'timeF' else 1
 
@@ -46,7 +46,8 @@ def data_provider(args, flag, normalization=False, scaling=False, shuffle=False,
         verbose=verbose,
         replicat=replicat,
         normalizer=normalization,
-        scale=scaling
+        scale=scaling,
+        size_limitation=size_limitation
     )
 
     data_loader = DataLoader(

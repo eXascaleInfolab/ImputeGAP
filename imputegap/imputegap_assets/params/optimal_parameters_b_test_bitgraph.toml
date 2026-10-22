@@ -1,0 +1,9 @@
+[bitgraph]
+seq_len = 12
+sliding_windows = 3
+kernel_size = 5
+kernel_set = "kernels"
+epochs = 10
+batch_size = 32
+subgraph_size = 8
+num_workers = 0

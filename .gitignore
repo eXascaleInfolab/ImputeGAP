@@ -29,3 +29,29 @@ imputegap/datasets/test-large.txt
 *imputegap/wrapper/AlgoPython/NuwaTS/data_provider/dataset/ETT-small/ETTh1.csv
 .coveragerc
 ./old_requirements.txt
+imputegap/_optimization
+imputegap/_caching
+imputegap/datasets/_old/*
+imputegap/_optimization/*
+imputegap/_caching/*
+imputegap/datasets/_old/*
+
+# Ignore all .py files in this directory
+/*.py
+# Keep runner_*.py
+!/runner_*.py
+# Except these specific files
+/runner_efeatures.py
+/paper_matrixcompletion.py
+/imputegap/_cleanimp_classifiers_bench_1_upstream.py
+/imputegap/_cleanimp_classifiers_bench_2_downstream.py
+/imputegap/_cleanimp_forecasters_bench_3_upstream.py
+/imputegap/_cleanimp_forecasters_bench_4_downstream.py
+# Ignore all classification datasets
+/imputegap/datasets/classify/*
+
+# Except Strawberry and Computers
+!/imputegap/datasets/classify/Strawberry/
+!/imputegap/datasets/classify/Strawberry/**
+!/imputegap/datasets/classify/Computers/
+!/imputegap/datasets/classify/Computers/**

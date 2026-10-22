@@ -3,7 +3,7 @@ import time
 from imputegap.wrapper.AlgoPython.BRITS.recovBRITS import recovBRITS
 
 
-def brits(incomp_data, model="rits_i", seq_len=24, epochs=10, batch_size=7, sliding_windows=1, hidden_layers=64, impute_weight=0.3, num_workers=0, seed=42, tr_ratio=0.9, logs=True, verbose=True):
+def brits(incomp_data, model="rits_i", seq_len=24, epochs=50, batch_size=64, sliding_windows=1, hidden_layers=108, impute_weight=0.3, num_workers=0, seed=42, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using the BRITS algorithm.
 

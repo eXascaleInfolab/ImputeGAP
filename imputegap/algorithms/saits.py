@@ -3,7 +3,7 @@ import time
 #from imputegap.wrapper.AlgoPython.SAITS.run_models import recov_saits
 from imputegap.wrapper.AlgoPython.SAITS.recovSAITS import recov_saits
 
-def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num_workers, tr_ratio, seed=26, logs=True, verbose=True):
+def saits(incomp_data, seq_len=-1, epochs=10000, batch_size=-1, sliding_windows=1, n_head=8, num_workers=0, tr_ratio=0.7, seed=26, logs=True, verbose=True):
     """
     Perform imputation using the SAITS (Self-Attention-based Imputation for Time Series Imputation) algorithm.
 
@@ -13,12 +13,12 @@ def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num
         The input matrix with contamination (missing values represented as NaNs).
 
     seq_len : int, optional
-        Length of the input sequence for temporal modeling (default: 1).
+        Length of the input sequence for temporal modeling (default: -1).
 
     epochs : int, optional
-        Number of training epochs (default: 10).
+        Number of training epochs (default: 10000).
 
-    batch_size : int, optional, default=32
+    batch_size : int, optional, default=-1
         The number of samples per training batch.
 
     sliding_windows: int, optional
@@ -26,7 +26,7 @@ def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num
             Use values ≥ 1 for univariate datasets (window strategy) and -1 for multivariate datasets (sample strategy).
 
     n_head : int, optional
-        head num of self-attention (default: 4)
+        head num of self-attention (default: 8)
 
     num_workers: int, optional
         Number of worker for multiprocess (default is 0).
@@ -35,7 +35,7 @@ def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num
         Random seed for reproducibility (default: 42).
 
     tr_ratio: float, optional
-        Split ratio between training and testing sets (default is 0.9).
+        Split ratio between training and testing sets (default is 0.7).
 
     logs : bool, optional
         Whether to log the execution time (default is True).

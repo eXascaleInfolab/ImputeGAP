@@ -1,3 +1,5 @@
+:orphan:
+
 ==========
 Downstream
 ==========
@@ -32,13 +34,13 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
 
 
 
-All downstream models developed in ImputeGAP are available in the ``ts.forecasting_models`` module, which can be listed as follows:
+All downstream models developed in ImputeGAP are available in the ``ts.forecasters`` module, which can be listed as follows:
 
 .. code-block:: python
 
     from imputegap.recovery.manager import TimeSeries
     ts = TimeSeries()
-    print(f"ImputeGAP downstream models for forecasting : {ts.forecasting_models}")
+    print(f"ImputeGAP downstream models for forecasting : {ts.forecasters}")
 
 
 

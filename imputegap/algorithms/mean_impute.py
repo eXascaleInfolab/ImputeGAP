@@ -1,7 +1,8 @@
 import numpy as np
 
+from wrapper.AlgoPython.MeanImpute.recovMeanImpute import recovMeanImpute
 
-def mean_impute(incomp_data, params=None):
+def mean_impute(incomp_data, logic="test", logs=None, verbose=True):
     """
     Impute NaN values with the mean value of the time series.
 
@@ -9,8 +10,16 @@ def mean_impute(incomp_data, params=None):
     ----------
     incomp_data : numpy.ndarray
         The input time series with contamination (missing values represented as NaNs).
-    params : dict, optional
-        Optional parameters for the algorithm. If None, the minimum value from the contamination is used (default is None).
+
+    logic = str, optional
+        define the logic of the mean impute
+
+    logs : bool, optional
+        Whether to print/log execution time and key events (default: True).
+
+    verbose : bool, optional
+        Whether to print detailed output information during execution (default: True).
+
 
     Returns
     -------
@@ -32,10 +41,22 @@ def mean_impute(incomp_data, params=None):
 
     """
 
-    # core of the algorithm
-    mean_value = np.nanmean(incomp_data)
+    # information for the user =========================================================================================
+    if verbose:
+        print(f"\n(IMPUTATION) MeanImpute\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tlogic: {logic}\n\tlogs: {logs}\n\tverbose: {verbose}\n")
 
-    # Imputation
-    recov_data = np.nan_to_num(incomp_data, nan=mean_value)
+
+    # if you have multiple files, and you want to store them into ./wrapper ============================================
+    if logic is not None:
+        recov_data = recovMeanImpute(incomp_data, logic=logic)
+
+
+    # if you want to put your algorithm intoput into a single file =====================================================
+    else:
+        # core of the algorithm
+        mean_value = np.nanmean(incomp_data)
+
+        # Imputation
+        recov_data = np.nan_to_num(incomp_data, nan=mean_value)
 
     return recov_data

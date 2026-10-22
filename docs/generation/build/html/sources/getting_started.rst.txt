@@ -17,6 +17,39 @@ Installation
 
 .. tabs::
 
+    .. tab:: scripts
+
+        The installation scripts automatically install the required system dependencies, Python 3.12, create an ``imputegap_env`` virtual environment, and install ImputeGAP.
+
+        .. tabs::
+
+            .. tab:: Library
+
+                To install the latest released version of ImputeGAP from PyPI, clone the repository and run the PyPI installation script:
+
+                .. code-block:: bash
+
+                    git init
+                    git clone https://github.com/eXascaleInfolab/ImputeGAP.git
+                    cd ImputeGAP/
+                    source imputegap_lib.sh
+
+                This installs the latest ImputeGAP library available on PyPI.
+
+            .. tab:: Source GitHub
+
+                To install ImputeGAP directly from the GitHub source in editable mode, clone the repository and run the source installation script:
+
+                .. code-block:: bash
+
+                    git init
+                    git clone https://github.com/eXascaleInfolab/ImputeGAP.git
+                    cd ImputeGAP/
+                    source imputegap_source.sh
+
+                This installs the cloned ImputeGAP source with ``pip install -e .``, making it suitable for development and extending the library.
+
+
     .. tab:: pip
 
         To install/update the latest version of ImputeGAP, run the following command:
@@ -159,7 +192,7 @@ Installation
 
                    <br>
 
-                *Step 1: Check Existing Python Version**
+                *Step 1: Check Existing Python Version*
 
                 Open your terminal and check the currently installed version of Python:
 
@@ -173,7 +206,7 @@ Installation
                    <br>
 
 
-                *Step 2: Install Python 3.12
+                *Step 2: Install Python 3.12*
 
                 If needed, install Python 3.12 on your system, follow these steps:
 

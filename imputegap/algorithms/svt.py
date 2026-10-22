@@ -11,9 +11,11 @@ def native_svt(__py_matrix, __py_tau, __verbose=True):
     ----------
     __py_matrix : numpy.ndarray
         The input matrix with missing values (NaNs).
+
     __py_tau : float
         The thresholding parameter for singular values. Controls how singular values are shrunk during the decomposition process.
         Larger values encourage a sparser, lower-rank solution, while smaller values retain more detail.
+
     __verbose : bool, optional
         Whether to display the contamination information (default is False).
 
@@ -47,7 +49,7 @@ def native_svt(__py_matrix, __py_tau, __verbose=True):
     return __py_imputed_matrix;
 
 
-def svt(incomp_data, tau, logs=True, verbose=True, lib_path=None):
+def svt(incomp_data, tau=0.2, logs=True, verbose=True, lib_path=None):
     """
     SVT algorithm for matrix imputation.
 
@@ -78,6 +80,7 @@ def svt(incomp_data, tau, logs=True, verbose=True, lib_path=None):
     """
     start_time = time.time()  # Record start time
 
+    print(f"OPTI svt: {tau=}")
     # Call the C++ function to perform recovery
     recov_data = native_svt(incomp_data, tau, verbose)
 

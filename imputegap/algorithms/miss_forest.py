@@ -6,7 +6,7 @@ from missforest import MissForest
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 
 
-def miss_forest(incomp_data, n_estimators=10, max_iter=3, max_features='sqrt', seed=42, logs=True, verbose=True):
+def miss_forest(incomp_data, n_estimators=100, max_iter=5, max_features='sqrt', seed=42, logs=True, verbose=True):
     """
     Perform imputation using the MissForest algorithm (Random-Forest-based imputation for mixed data)
 
@@ -21,9 +21,7 @@ def miss_forest(incomp_data, n_estimators=10, max_iter=3, max_features='sqrt', s
     max_features : {'auto', 'sqrt', 'log2', float, int}, optional
         The number of features to consider when looking for the best split during imputation.
         - 'sqrt' (default): Uses the square root of the total number of features.
-        - 'auto': Uses all features.
-        - 'log2': Uses log2 of the total features.
-        - float or int: Can specify a fraction or fixed number of features.
+        - 'log2': Uses log2 of the total featu
     seed : int, optional
         The seed of the pseudo random number generator to use. Randomizes selection of estimator features (default is 42).
     logs : bool, optional
@@ -47,6 +45,9 @@ def miss_forest(incomp_data, n_estimators=10, max_iter=3, max_features='sqrt', s
     https://github.com/yuenshingyan/MissForest
     https://pypi.org/project/MissForest/
     """
+
+    print(f"{n_estimators=} - {max_iter} - {max_features} - {seed} - {logs} - {verbose}")
+
     incomp_data = incomp_data
 
     recov = np.copy(incomp_data)

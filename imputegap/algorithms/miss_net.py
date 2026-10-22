@@ -5,7 +5,7 @@ import numpy as np
 from imputegap.tools import utils
 from imputegap.wrapper.AlgoPython.MissNet.recovMissNet import recovMissNet
 
-def miss_net(incomp_data, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=100, tol=5, random_init=False, tr_ratio=0.9, logs=True, verbose=True):
+def miss_net(incomp_data, n_components=20, alpha=0.5, beta=0.1, n_cl=1, max_iter=20, tol=6, random_init=False, logs=True, verbose=True):
     """
     Perform imputation using the Multivariate Recurrent Neural Network (MRNN) algorithm.
 
@@ -15,7 +15,7 @@ def miss_net(incomp_data, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=1
         The input matrix with contamination (missing values represented as NaNs).
 
     n_components : int
-        number of latent dimentions. (default 15)
+        number of latent dimentions. (default 20)
 
     alpha : float, optional
         Trade-off parameter controlling the contribution of contextual matrix
@@ -31,13 +31,11 @@ def miss_net(incomp_data, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=1
         Maximum number of iterations for convergence. (default 20)
 
     tol : float, optional
-        Tolerance for early stopping criteria.  (default 5)
+        Tolerance for early stopping criteria.  (default 6)
 
     random_init : bool, optional
         Whether to use random initialization for latent variables. (default False)
 
-    tr_ratio: float, optional
-        Split ratio between training and testing sets (default is 0.9).
 
     logs : bool, optional
         Whether to log the execution time (default is True).
@@ -63,7 +61,7 @@ def miss_net(incomp_data, n_components=15, alpha=0.5, beta=1, n_cl=1, max_iter=1
 
     start_time = time.time()  # Record start time
 
-    recov_data = recovMissNet(X=incomp_data, n_components=n_components, alpha=alpha, beta=beta, n_cl=n_cl, max_iter=max_iter, tol=tol, random_init=random_init, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = recovMissNet(X=incomp_data, n_components=n_components, alpha=alpha, beta=beta, n_cl=n_cl, max_iter=max_iter, tol=tol, random_init=random_init, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

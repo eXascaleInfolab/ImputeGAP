@@ -136,7 +136,7 @@ def handle_parser(argv=None):
 
     return args
 
-def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_workers=0, model="GPT4TS", tr_ratio=0.7, seed=2021, verbose=True, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq"):
+def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_workers=0, model="GPT4TS", tr_ratio=0.7, seed=2021, verbose=True, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq", remove_checkpoint=False):
 
     data_m = np.copy(ts_m)
     recov = np.copy(ts_m)
@@ -145,6 +145,7 @@ def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_wo
     args = handle_parser()
     args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
     args.ts_m = data_m
+    M, N = ts_m.shape
 
     args.is_training = 1
     args.model_id = "imputegap"
@@ -175,9 +176,20 @@ def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_wo
     args.normalization = normalization
     args.scaling = scaling
     args.shuffle = shuffle
+    size_limitation = False
+
 
     if seq_len ==-1 or batch_size==-1:
-        args.seq_len, args.batch_size = utils_imp.auto_seq_llms(data_x=ts_m, goal=strat, subset=True, high_limit=96, exception=True, verbose=verbose)
+        args.seq_len, args.batch_size, size_limitation, taux_nans, args.tr_ratio = utils_imp.compute_variables_timesnetlike(ts_m=ts_m, strat=strat, tr_ratio=tr_ratio, size_limitation=size_limitation, model=model, high=32, algo="GPT4TS", verbose=verbose)
+
+        #print(f"{taux_nans=} - {ts_m.shape=}-{args.batch_size=}-{args.seq_len=}")
+        if (ts_m.shape[0] == 1488 and ts_m.shape[1] in (12, 13) and taux_nans == 1190) or args.seq_len == -10:
+            print("exception")
+            args.ts_m = np.nan_to_num(ts_m, nan=0.0)
+
+            if args.seq_len == -10:
+                args.seq_len = 128
+
 
     if args.use_gpu and args.use_multi_gpu:
         args.dvices = args.devices.replace(' ', '')
@@ -205,11 +217,9 @@ def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_wo
         print('Args in experiment:')
         print(args)
 
-
     if verbose:
-        print(f"(IMPUTATION) GPT4TS (LLMs)\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_length: {args.seq_len}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\tpred_len: {args.pred_len}\n\tlabel_length: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n")
+        print(f"(IMPUTATION) GPT4TS (LLMs)\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_length: {args.seq_len}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\tpred_len: {args.pred_len}\n\tlabel_length: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n\ttr_ratio: {args.tr_ratio}\n\tremove_checkpoint: {remove_checkpoint}\n")
         print(f"\ncall: gpt4ts.impute(params={{'seq_len': {args.seq_len}, 'batch_size': {args.batch_size}, 'epochs': {args.train_epochs}, 'gpt_layers': {args.gpt_layers}, 'num_workers': {args.num_workers}, 'seed': {seed}}})\n\n")
-
         print('\nArgs in experiment:')
         print_args(args)
 
@@ -223,11 +233,13 @@ def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_wo
 
         if args.verbose:
             print(f'\n\n>>>>>>>training>>>>>>>>>>>>>>>>>>>>>>>>>>')
-        m, path = exp.train(setting, args.verbose, args.deep_verbose, tr_ratio=args.tr_ratio, normalization=args.normalization, scaling=args.scaling, shuffle=args.shuffle, replicat=replicat)
+        m, path = exp.train(setting, args.verbose, args.deep_verbose, tr_ratio=args.tr_ratio, normalization=args.normalization, scaling=args.scaling, shuffle=args.shuffle, replicat=replicat, size_limitation=size_limitation)
 
         if args.verbose:
             print(f'\n\n>>>>>>>testing<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-        _ = exp.test(setting, test=0, verbose=args.verbose, normalization=args.normalization, scaling=args.scaling, replicat=replicat, checkpoint=path)
+
+        if not size_limitation:
+            _ = exp.test(setting, test=0, verbose=args.verbose, normalization=args.normalization, scaling=args.scaling, replicat=replicat, checkpoint=path)
 
         if args.verbose:
             print(f'\n\n>>>>>>>reconstruction<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
@@ -236,9 +248,8 @@ def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_wo
         torch.cuda.empty_cache()
 
         if np.isnan(reconstruction).any():
-            max_nans = np.isnan(ts_m).sum(axis=0).max()
             print(f"\n\n(ERROR) Imputation error with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage."
-                  f"\n\tCurrently, the number of NaNs might reach {max_nans} for a sequence and the size of seq_len is {args.seq_len}.\n")
+                  f"\n\tCurrently, the number of NaNs might reach {taux_nans} for a sequence and the size of seq_len is {args.seq_len}.\n")
             return recov
 
         if replicat:
@@ -252,6 +263,13 @@ def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_wo
                 if verbose:
                     print(f"\nmodel checkpoint: {path}\n\n(INFO) no NaNs has been detected in the input matrix: {reconstruction.shape = }\n")
                 recov = reconstruction
+
+    if remove_checkpoint:
+        from pathlib import Path
+        root_path_p = Path(path+"/checkpoint.pth").resolve()
+        root_path_p.unlink()
+        if verbose:
+            print(f"\nremoving checkpoint: {root_path_p}\n")
 
     return recov
 

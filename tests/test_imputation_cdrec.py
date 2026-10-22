@@ -37,7 +37,7 @@ class TestCDREC(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(params={'rank': 3, 'epsilon': 1e-06, 'iterations': 100})
+        algo.impute(params={'rank': 2, 'epsilon': 1e-06, 'iteration': 100})
         algo.score(ts.data)
         metrics = algo.metrics
 
@@ -47,5 +47,24 @@ class TestCDREC(unittest.TestCase):
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 
-        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE = {expected_metrics['RMSE']} ")
+        self.assertTrue(abs(metrics["RMSE"] - expected_metrics["RMSE"]) < limit, f"metrics RMSE = {metrics['RMSE']}, expected RMSE - defined = {expected_metrics['RMSE']} ")
         self.assertTrue(abs(metrics["MAE"] - expected_metrics["MAE"]) < limit, f"metrics MAE = {metrics['MAE']}, expected MAE = {expected_metrics['MAE']} ")
+
+        # ==============================================================================================================
+
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.language ="cpp"
+        algo.impute()
+        algo.score(ts.data)
+        metrics = algo.metrics
+        cpp = metrics["RMSE"]
+
+        algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
+        algo.language ="python"
+        algo.impute()
+        algo.score(ts.data)
+        metrics = algo.metrics
+        python = metrics["RMSE"]
+
+        print(f"C++ {cpp} rmse = Python {python} rmse")
+        self.assertTrue(abs(cpp-python) <= 0.05, f"C++ {cpp} rmse = Python {python} rmse")

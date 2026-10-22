@@ -54,7 +54,7 @@ def is_blackout(matrix):
 #         block_size = min(block_size,i)
 #     return int(block_size)
 
-def make_validation (matrix,num_missing=20, deep_verbose=False):
+def make_validation(matrix,num_missing=20, deep_verbose=False):
     np.random.seed(0)
     nan_mask = np.isnan(matrix)
 
@@ -74,21 +74,27 @@ def make_validation (matrix,num_missing=20, deep_verbose=False):
 
     w = int(10*np.log10(block_size))
     val_block_size = int(min(block_size,w))
-
-    if deep_verbose:
-        print(f"NATERQ__LOGS__; {w = }")
-        print(f"NATERQ__LOGS__; {block_size = }")
-        print(f"NATERQ__LOGS__; {num_missing = }")
-        print(f"NATERQ__LOGS__; {val_block_size = }")
-
-    num_missing = int(num_missing/val_block_size)
+    num_missing = max(int(num_missing/val_block_size), 1)
     train_matrix = copy.deepcopy(matrix)
     val_points = []
-    
+
+    if int(w) % int(block_size) != 0:
+        w = ((w + block_size - 1) // block_size) * block_size
+    if int(w) % int(block_size) != 0:
+        w = block_size
+
+    if deep_verbose:
+        print(f"\n\n\t\t\tNATERQ__LOGS__; {w = }")
+        print(f"\t\t\tNATERQ__LOGS__; {block_size = }")
+        print(f"\t\t\tNATERQ__LOGS__; {num_missing = }")
+        print(f"\t\t\tNATERQ__LOGS__; {val_block_size = }")
+        print(f"\t\t\tNATERQ__LOGS__; {matrix.shape[0] = }")
+        print(f"\t\t\tNATERQ__LOGS__; {matrix.shape[1] = }\n\n")
+
     for _ in range(num_missing):
-        validation_points = np.random.uniform(0, matrix.shape[0]-val_block_size,(matrix.shape[1])).astype(int)
-        for i,x in enumerate(validation_points) :
+        validation_points = np.random.uniform(0, matrix.shape[0]-val_block_size, (matrix.shape[1])).astype(int)
+        for i, x in enumerate(validation_points) :
             train_matrix[x:x+val_block_size,i] = np.nan
             val_points.append([x,i,val_block_size])
-            
-    return train_matrix, matrix,np.array(val_points), test_points, int(block_size), w
+
+    return train_matrix, matrix, np.array(val_points), test_points, int(block_size), int(w)

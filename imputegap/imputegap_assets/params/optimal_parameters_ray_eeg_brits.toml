@@ -1,0 +1,4 @@
+model = "brits_i"
+epoch = 5
+batch_size = 8
+hidden_layers = 1

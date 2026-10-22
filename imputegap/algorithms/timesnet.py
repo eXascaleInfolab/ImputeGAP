@@ -3,7 +3,7 @@ import time
 from imputegap.wrapper.AlgoPython.TimesNet.recovTimesNet import recovTimesNet
 
 
-def timesnet(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, tr_ratio=0.9, seed=42, logs=True, verbose=True):
+def timesnet(incomp_data, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layers=3, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
     """
     Perform imputation using TimesNet algorithm.
 
@@ -19,17 +19,20 @@ def timesnet(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, nu
     batch_size : int, optional
         Number of samples per batch during training/inference. If -1, it will be auto-set (default: -1).
 
+    top_k: int, optional
+        Select the most significant frequencies (default: 5).
+
     epochs : int, optional
         Number of epoch for training the model (default: 10).
 
     gpt_layers : int, optional
-        Number of layers in the transformer/generator component (default: 6).
+        Number of layers in the transformer/generator component (default: 3).
 
     num_workers: int, optional
          Number of worker for multiprocess (default is 0).
 
     tr_ratio: float, optional
-         Split ratio between training and testing sets (default is 0.9).
+         Split ratio between training and testing sets (default is 0.7).
 
     seed : int, optional
         Random seed for reproducibility (default: 2021).
@@ -57,7 +60,7 @@ def timesnet(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, nu
     """
     start_time = time.time()  # Record start time
 
-    recov_data = recovTimesNet(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, gpt_layers=gpt_layers, model="TimesNet", num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, verbose=verbose)
+    recov_data = recovTimesNet(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, top_k=top_k, epochs=epochs, gpt_layers=gpt_layers, model="TimesNet", num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

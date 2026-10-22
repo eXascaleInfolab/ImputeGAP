@@ -4,7 +4,7 @@ import time
 from imputegap.wrapper.AlgoPython.DeepMVI.recovDeepMVI import deep_mvi_recovery
 
 
-def deep_mvi(incomp_data, max_epoch=100, patience=2, lr=0.001, batch_size=16, tr_ratio=0.9, logs=True, verbose=True):
+def deep_mvi(incomp_data, max_epoch=1000, patience=2, lr=0.001, batch_size=-1, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using the DEEP MVI (Deep Multivariate Imputation) algorithm.
 
@@ -19,7 +19,7 @@ def deep_mvi(incomp_data, max_epoch=100, patience=2, lr=0.001, batch_size=16, tr
     lr : float, optional
         Learning rate of the training (default is 0.001)
     batch_size: int, optional
-        Number of samples processed before the model's weights are updated (default is 16)
+        Number of samples processed before the model's weights are updated (default is -1)
     tr_ratio: float, optional
         Split ratio between training and testing sets (default is 0.9).
     logs : bool, optional

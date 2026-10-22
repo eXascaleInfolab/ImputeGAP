@@ -49,7 +49,7 @@ def native_soft_impute(__py_matrix, __py_max_rank, __verbose=True):
     return __py_imputed_matrix;
 
 
-def soft_impute(incomp_data, max_rank, logs=True, verbose=True, lib_path=None):
+def soft_impute(incomp_data, max_rank=6, logs=True, verbose=True, lib_path=None):
     """
     Soft Impute algorithm for matrix imputation.
 

@@ -303,9 +303,16 @@ RAYTUNE_PARAMS = {
         "sliding_windows": tune.grid_search([0, 1]),
         "n_head": tune.grid_search([4, 8]),
         "num_workers": 0
+    },
+    "moment": {
+            "model": "zero-shot",
+            "model_size": "small",
+            "use_mean": tune.grid_search([True, False]),
+            "seq_len": tune.grid_search([-1, 48]),
+            "sliding_windows": tune.grid_search([0, 1]),
     }
 
-    # your ray-tune limitation #contributing
+    # your ray-tune limitation #contributing-optimization
     #
     #'your_algo_name': {
     #    "param_1": tune.grid_search([i for i in range(2, 16, 1)]),

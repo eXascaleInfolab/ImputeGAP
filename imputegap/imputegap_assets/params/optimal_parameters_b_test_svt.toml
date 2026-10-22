@@ -1,0 +1,4 @@
+[svt]
+tau = 1.0
+delta = 0.1
+max_iter = 50

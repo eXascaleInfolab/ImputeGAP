@@ -8,7 +8,7 @@ Tutorials
 Dataset Loading
 ---------------
 
-ImputeGAP comes with several time series datasets. The datasets are listed `here <datasets.html>`_.
+ImputeGAP comes with several time series datasets. The datasets are listed here: `datasets.html <datasets.html>`_.
 
 As an example, we use the eeg-alcohol dataset, composed of individuals with a genetic predisposition to alcoholism. The dataset contains measurements from 64 electrodes placed on subject’s scalps, sampled at 256 Hz. The dimensions of the dataset are 64 series, each containing 256 values.
 
@@ -78,7 +78,7 @@ To import the time series as a matrix, pass it as an argument of the ``ts.import
 
 GenGap: Missing Data Simulation
 -------------------------------
-ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGap module can be invoked externally. The patterns are described `here <missingness_patterns.html>`_.
+ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGap module can be invoked externally. The patterns are described here: `missingness_patterns.html <missingness_patterns.html>`_.
 
 As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:
 
@@ -128,7 +128,7 @@ Imputation
 ----------
 
 In this section, we will illustrate how to impute the contaminated time series. Our library implements six families of imputation algorithms: Statistical, Machine Learning, Matrix Completion, Deep Learning, Pattern Search, and Large Language Models.
-The list of algorithms is described `here <algorithms.html>`_.
+The list of algorithms is described here: `algorithms.html <algorithms.html>`_.
 
 
 Let's illustrate the imputation using the CDRec algorithm from the Matrix Completion family.
@@ -165,7 +165,7 @@ Imputation can be performed using either default values or user-defined values. 
 
 .. code-block:: python
 
-    imputer.impute(params={"rank": 5, "epsilon": 0.01, "iterations": 100})
+    imputer.impute(params={"rank": 5, "epsilon": 0.01, "iteration": 100})
 
 
 All algorithms developed in ImputeGAP are available in the ``ts.algorithms`` module. They can be listed as follows:
@@ -232,14 +232,6 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
 
 
 
-All optimizers developed in ImputeGAP are available in the ``ts.optimizers`` module. They can be listed as follows:
-
-.. code-block:: python
-
-    from imputegap.recovery.manager import TimeSeries
-    ts = TimeSeries()
-    print(f"AutoML Optimizers : {ts.optimizers}")
-
 
 
 .. raw:: html
@@ -262,35 +254,17 @@ The benchmarking module can be utilized as follows:
 .. code-block:: python
 
     from imputegap.recovery.benchmark import Benchmark
-    from imputegap.tools import utils
-
-    my_algorithms = ["MeanImpute", "SoftImpute"]
-
-    my_opt = "default_params"
-
-    my_datasets = ["eeg-alcohol"]
-
-    my_patterns = ["mcar"]
-
-    range = [0.05, 0.1, 0.2, 0.4, 0.6, 0.8]
 
     # launch the evaluation
     bench = Benchmark()
-    bench.eval(algorithms=my_algorithms, datasets=my_datasets, patterns=my_patterns, x_axis=range, optimizer=my_opt)
+    bench.eval_imputation(algorithms=["MeanImpute", "SoftImpute"],
+               datasets=["eeg-alcohol"],
+               patterns=["mcar"],
+               x_axis=[0.1, 0.2, 0.4, 0.6, 0.8])
 
     # display the plot
     bench.subplots.show()
 
-
-
-
-
-You can enable the optimizer using the following command:
-
-.. code-block:: python
-
-    opt = {"optimizer": "ray_tune", "options": {"n_calls": 1, "max_concurrent_trials": 1}}
-    my_opt = [opt]
 
 
 .. [33] Mourad Khayati, Alberto Lerner, Zakhar Tymchenko, Philippe Cudré-Mauroux: Mind the Gap: An Experimental Evaluation of Imputation of Missing Values Techniques in Time Series. Proc. VLDB Endow. 13(5): 768-782 (2020)
@@ -337,13 +311,13 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
 
 
 
-All downstream models developed in ImputeGAP are available in the ``ts.forecasting_models`` module. They can be listed as follows:
+All downstream models developed in ImputeGAP are available in the ``ts.forecasters`` module. They can be listed as follows:
 
 .. code-block:: python
 
     from imputegap.recovery.manager import TimeSeries
     ts = TimeSeries()
-    print(f"ImputeGAP downstream models for forecasting : {ts.forecasting_models}")
+    print(f"ImputeGAP downstream models for forecasting : {ts.forecasters}")
 
 
 

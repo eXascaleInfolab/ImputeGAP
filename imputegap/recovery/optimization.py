@@ -15,11 +15,13 @@ class BaseOptimizer:
 
     Methods
     -------
-    _objective(**kwargs):
-        Abstract method to evaluate the imputation algorithm with the provided parameters. Must be implemented by subclasses.
+    ``_objective(**kwargs)``
+        Abstract method to evaluate the imputation algorithm with the provided
+        parameters. Must be implemented by subclasses.
 
-    optimize(input_data, incomp_data, metrics, algorithm, **kwargs):
-        Abstract method for the main optimization process. Must be implemented by subclasses.
+    ``optimize(input_data, incomp_data, metrics, algorithm, **kwargs)``
+        Abstract method for the main optimization process. Must be implemented
+        by subclasses.
     """
 
     def __init__(self):
@@ -76,7 +78,7 @@ class BaseOptimizer:
             List of selected metrics for optimization.
         algorithm : str
             The imputation algorithm to optimize.
-        **kwargs : dict
+        kwargs : dict
             Additional parameters specific to the optimization strategy (e.g., number of iterations, particles, etc.).
 
         Returns
@@ -108,6 +110,125 @@ class Optimization:
     SuccessiveHalving.optimize(input_data, incomp_data, metrics, algorithm, num_configs, num_iterations, reduction_factor):
         Perform Successive Halving optimization for hyperparameters.
     """
+
+    def optimize_adv_imputation_algo_upstream(optimizers, task="c", datasets=["Beef"], normalizer="z-score", horizon=12, test_imputation=False, verbose=False):
+        """
+        from imputegap.env.default_opti import OPTI_DICTIONARY
+        from imputegap.env.default_opti import OPTI_DICTIONARY_SMALL
+        from imputegap.env.default_opti import OPTI_TEST_DICTIONARY
+        from imputegap.env.default_opti import OPTI_DICTIONARY_MICROBENCH
+        """
+        from imputegap.recovery.manager import TimeSeries
+        from recovery.contamination import GenGap
+        import os
+        import time
+        import pandas as pd
+
+        for key, entry in optimizers.items():  # loop on each algorithm to optimize
+            algorithm, param_to_opti = key.split("-", 1)
+            results = []
+            print(f"{task} - {algorithm} | {param_to_opti}: {entry=} ")
+            inc_param=0
+            for value in entry:  # add the value of the params
+                params = {param_to_opti: value}
+                inc_param = inc_param+1
+                print("\n")
+
+                for dataset in datasets:  # loop on the 80's datasets
+
+                    try:
+                        ts = TimeSeries(verbose=False)
+                        if task == "c":
+                            ts.load_classify_dataset(dataset, normalizer=normalizer, to_numpy=True, test_imputation=test_imputation, nbr_series=10000, nbr_val=1000, verbose=False)
+
+                            classify_sets = ts.load_proper_output_classify()
+                            X_test, y_train, y_test, _, _, test_imputation, _, dataset = classify_sets
+
+                            start_time_imputation = time.time()
+
+                            params = {param_to_opti: value}
+                            print(f"\t\t\t\topti: {task} - {dataset} - {algorithm} = {params=}")
+                            imputer, _, miss = utils.prepare_series_by_class(labels=y_train, raw_data=ts.data.copy(), imputer=algorithm, params=params, pattern="mcar", rate_dataset=0.2, rate_series=0.2, offset=0.05, verbose=False)
+                            end_time_imputation = time.time()
+                            time_imputation = (end_time_imputation - start_time_imputation) * 1000
+
+                            imputer.score(input_data=ts.data, recov_data=imputer.recov_data, verbose=False)
+                            imputer.metrics["RUNTIME"] = time_imputation
+                        else:
+                            ts.load_forecasting_dataset(dataset, normalizer=normalizer, verbose=verbose, horizon=horizon, nbr_series=10000, nbr_val=10000)
+                            y_train, season = ts.load_proper_output_forecasting()
+                            incomp_data = utils.config_contamination(ts=ts, pattern="mcar", dataset_rate=0.2, series_rate=0.2, verbose=False, offset=0)
+                            miss = GenGap.mirror_gap(raw_data=ts.data, ts_m=incomp_data)
+                            start_time_imputation = time.time()
+
+                            params = {param_to_opti: value}
+                            print(f"\t\t\t\topti: {task} - {dataset} - {algorithm} = {params=}")
+                            imputer = utils.config_impute_algorithm(incomp_data=miss, algorithm=algorithm, verbose=verbose)
+                            imputer.impute(params=params)
+
+                            end_time_imputation = time.time()
+                            time_imputation = (end_time_imputation - start_time_imputation) * 1000
+
+                            imputer.score(input_data=ts.data, recov_data=imputer.recov_data, verbose=False)
+                            imputer.metrics["RUNTIME"] = time_imputation
+
+                        row = {"dataset": dataset, "algorithm": algorithm, param_to_opti: value, "rmse": imputer.metrics["RMSE"], "mae": imputer.metrics["MAE"], "mi": imputer.metrics["MI"], "correlation": imputer.metrics["CORRELATION"], "runtime": imputer.metrics["RUNTIME"], }
+                        results.append(row)
+                    except Exception as e:
+                        print(f"\n\nINSIDE>>> ERROR WITH OPTIMIZATION {algorithm=}, {params=} ! error={e} \n\n")
+                        row = {"dataset": dataset, param_to_opti: value, "rmse": np.nan, "mae": np.nan, "mi": np.nan, "correlation": np.nan, "runtime": np.nan, }
+                        results.append(row)
+
+
+                try:
+                    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                    opti_dir = os.path.join(here, "_optimization")
+                    os.makedirs(opti_dir, exist_ok=True)
+                    path_opti = os.path.join(opti_dir, f"preli_{inc_param}_{algorithm}_{task}_opti_results.xlsx")
+                    df = pd.DataFrame(results)
+
+                    try:
+                        summary = (df.groupby(param_to_opti, dropna=False).agg(avg_rmse=("rmse", "mean"), avg_runtime=("runtime", "mean"), avg_mae=("mae", "mean"), avg_mi=("mi", "mean"), avg_correlation=("correlation", "mean"), n_valid_rmse=("rmse", "count"), n_valid_runtime=( "runtime", "count"), n_total=("dataset", "count"), ).reset_index())
+                        summary["rank_rmse"] = summary["avg_rmse"].rank(method="min", ascending=True, na_option="bottom")
+                        summary["rank_runtime"] = summary["avg_runtime"].rank(method="min", ascending=True, na_option="bottom")
+                        df = df.merge(summary[[param_to_opti, "avg_rmse", "avg_runtime", "rank_rmse", "rank_runtime"]], on=param_to_opti, how="left")
+                    except:
+                        df["avg_rmse"] = 0
+                        df["avg_runtime"] = 0
+                        df["rank_rmse"] = 0
+                        df["rank_runtime"] = 0
+                        print(f"cannot rank for {algorithm}...")
+                    df.to_excel(path_opti, index=False)
+                    print(f"\nINTERMEDIATE : results of {algorithm}, saved in {path_opti=}...\n")
+                except:
+                    print(f"\nINTERMEDIATE : cannot save results of {algorithm}...\n")
+
+
+            try:
+                here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                opti_dir = os.path.join(here, "_optimization")
+                os.makedirs(opti_dir, exist_ok=True)
+                path_opti = os.path.join(opti_dir, f"{algorithm}_{task}_opti_results.xlsx")
+                df = pd.DataFrame(results)
+
+                try:
+                    summary = (df.groupby(param_to_opti, dropna=False).agg(avg_rmse=("rmse", "mean"), avg_runtime=("runtime", "mean"), avg_mae=("mae", "mean"), avg_mi=("mi", "mean"), avg_correlation=("correlation", "mean"), n_valid_rmse=("rmse", "count"), n_valid_runtime=("runtime", "count"), n_total=("dataset", "count"), ).reset_index())
+                    summary["rank_rmse"] = summary["avg_rmse"].rank(method="min", ascending=True, na_option="bottom")
+                    summary["rank_runtime"] = summary["avg_runtime"].rank(method="min", ascending=True, na_option="bottom")
+                    df = df.merge(summary[[param_to_opti, "avg_rmse", "avg_runtime", "rank_rmse", "rank_runtime"]], on=param_to_opti, how="left")
+                except:
+                    df["avg_rmse"] = 0
+                    df["avg_runtime"] = 0
+                    df["rank_rmse"] = 0
+                    df["rank_runtime"] = 0
+                    print(f"cannot rank for {algorithm}...")
+
+                df.to_excel(path_opti, index=False)
+                print(f"\n\nresults of {algorithm}, saved in {path_opti=}...")
+
+            except:
+                print(f"\n\nFINAL: cannot save results of {algorithm}...")
+
 
     class Greedy(BaseOptimizer):
         """

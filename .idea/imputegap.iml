@@ -8,8 +8,13 @@
       <excludeFolder url="file://$MODULE_DIR$/imputegap/imputegap_assets" />
       <excludeFolder url="file://$MODULE_DIR$/imputegap/notebooks" />
       <excludeFolder url="file://$MODULE_DIR$/imputegap/runners" />
+      <excludeFolder url="file://$MODULE_DIR$/imputegap/_caching" />
+      <excludeFolder url="file://$MODULE_DIR$/imputegap/_optimization" />
+      <excludeFolder url="file://$MODULE_DIR$/imputegap/datasets/_old" />
+      <excludeFolder url="file://$MODULE_DIR$/imputegap/_bck" />
+      <excludeFolder url="file://$MODULE_DIR$/imputegap/slides" />
     </content>
-    <orderEntry type="jdk" jdkName="Remote Python 3.12.3 (sftp://ubuntu@134.21.219.181:22/home/ubuntu/.virtualenvs/imputegap/bin/python)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 3.12.3 (sftp://ubuntu@134.21.219.182:22/home/ubuntu/.virtualenvs/imputegap/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

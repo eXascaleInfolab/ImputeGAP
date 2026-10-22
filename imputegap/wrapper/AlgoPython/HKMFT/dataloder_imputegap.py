@@ -136,7 +136,7 @@ class DataLoaderImputeGAP(object):
                 data_flat = df.to_numpy().ravel(order='F')  # column-major: [col0, col1, ..., col49]
 
                 # 2) Create the tag_0 column: series index repeated 1000 times each
-                if tags is None:
+                if tags is None or tags == []:
                     if verbose:
                         print(f"\ngenerating the tags meta-information based on the seq_len {seq_len}\n")
                     tags = (np.arange(n_rows) % seq_len).astype(str)

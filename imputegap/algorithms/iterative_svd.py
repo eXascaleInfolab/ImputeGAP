@@ -50,7 +50,7 @@ def native_iterative_svd(__py_matrix, __py_rank, __verbose=True):
     return __py_imputed_matrix;
 
 
-def iterative_svd(incomp_data, truncation_rank, logs=True, verbose=True, lib_path=None):
+def iterative_svd(incomp_data, rank=3, logs=True, verbose=True, lib_path=None):
     """
     Iterative SVD algorithm for matrix imputation.
 
@@ -58,7 +58,7 @@ def iterative_svd(incomp_data, truncation_rank, logs=True, verbose=True, lib_pat
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
-    truncation_rank : int
+    rank : int
         The truncation rank for matrix decomposition (must be greater than 1 and smaller than the number of series).
     logs : bool, optional
         Whether to log the execution time (default is True).
@@ -81,7 +81,7 @@ def iterative_svd(incomp_data, truncation_rank, logs=True, verbose=True, lib_pat
     start_time = time.time()  # Record start time
 
     # Call the C++ function to perform recovery
-    recov_data = native_iterative_svd(incomp_data, truncation_rank, verbose)
+    recov_data = native_iterative_svd(incomp_data, rank, verbose)
 
     end_time = time.time()
 

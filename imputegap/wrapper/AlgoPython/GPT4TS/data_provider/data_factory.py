@@ -17,7 +17,7 @@ data_dict = {
 }
 
 
-def data_provider(args, flag, normalization=False, scaling=False, shuffle=False, reconstruction=False, verbose=True, tr_ratio=0.7, replicat=False):
+def data_provider(args, flag, normalization=False, scaling=False, shuffle=False, reconstruction=False, verbose=True, tr_ratio=0.7, replicat=False, size_limitation=False):
     Data = data_dict[args.data]
     timeenc = 0 if args.embed != 'timeF' else 1
     percent = args.percent
@@ -57,7 +57,8 @@ def data_provider(args, flag, normalization=False, scaling=False, shuffle=False,
         verbose = verbose,
         replicat=replicat,
         normalizer=normalization,
-        scale=scaling
+        scale=scaling,
+        size_limitation=size_limitation
     )
 
     batch_size = args.batch_size
@@ -68,4 +69,5 @@ def data_provider(args, flag, normalization=False, scaling=False, shuffle=False,
         shuffle=shuffle_flag,
         num_workers=args.num_workers,
         drop_last=drop_last)
+
     return data_set, data_loader, len(data_set)

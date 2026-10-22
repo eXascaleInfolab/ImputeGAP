@@ -1,0 +1,3 @@
+[xgboost]
+n_estimators = 200
+seed = 42

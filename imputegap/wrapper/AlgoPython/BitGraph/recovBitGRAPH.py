@@ -276,6 +276,8 @@ def recovBitGRAPH(ts_m=None, seq_len=24, sliding_windows=1, pred_len=0, kernel_s
     if seq_len ==-1 or batch_size==-1:
         seq_len, batch_size = utils_imp.auto_seq_llms(data_x=ts_m, goal="seq", subset=True, high_limit=96, exception=True, b=True, verbose=verbose)
 
+    seq_len, kernel_set, kernel_size, subgraph_size, batch_size = utils_imp.patch_classifiers_bitgraph(incomp_data=ts_m, seq_len=seq_len, kernel_set=kernel_set, kernel_size=kernel_size, subgraph_size=subgraph_size, batch_size=batch_size, verbose=verbose)
+
     ts_r, val_r = utils_imp.sets_splitter_based_on_training(tr_ratio, split=0.5, verbose=verbose)
 
     if sliding_windows == 0:
@@ -314,6 +316,7 @@ def recovBitGRAPH(ts_m=None, seq_len=24, sliding_windows=1, pred_len=0, kernel_s
     if not replicat:
         args.mask_ratio = round(1 - tr_ratio, 1)
     args.norma = norma
+
 
     if verbose:
         print(f"\n(IMPUTATION) BitGRAPH\n\tMatrix Shape: ({ts_m.shape[0]}, {ts_m.shape[1]})\n\tseq_len: {args.seq_len}\n\tsliding_windows: {sliding_windows}\n\tkernel_size: {args.kernel_size}\n\tkernel_set: {args.kernel_set}\n\tbatch_size: {args.batch_size}\n\tepochs: {args.epochs}\n\tsubgraph_size: {args.subgraph_size}\n\tnum_workers: {num_workers}"

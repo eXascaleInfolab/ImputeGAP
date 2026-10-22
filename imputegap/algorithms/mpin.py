@@ -3,7 +3,7 @@ import time
 from imputegap.wrapper.AlgoPython.MPIN.recovMPIN import recovMPIN
 
 
-def mpin(incomp_data=None, window=6, incre_mode="alone", base="SAGE", epochs=15, num_of_iteration=5, k=10, tr_ratio=0.9, logs=True, verbose=True):
+def mpin(incomp_data=None, window=6, incre_mode="alone", base="SAGE", epochs=200, num_of_iteration=5, k=10, tr_ratio=0.9, logs=True, verbose=True):
     """
     Perform imputation using the Missing Value Imputation for Multi-attribute Sensor Data Streams via Message Propagation algorithm.
 

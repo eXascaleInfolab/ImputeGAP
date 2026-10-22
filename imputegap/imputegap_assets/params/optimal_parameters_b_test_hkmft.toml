@@ -1,0 +1,6 @@
+[hkmft]
+tags = "tag"
+seq_len = 12
+blackouts_begin = 1
+blackouts_end = 2
+epochs = 5

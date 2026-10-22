@@ -4,7 +4,7 @@ import time
 from imputegap.wrapper.AlgoPython.GRIN.runnerGRIN import runGRIN
 
 
-def grin(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, sliding_windows=1, alpha=10.0, patience=40, num_workers=0, tr_ratio=0.7, logs=True, verbose=True):
+def grin(incomp_data, seq_len=-1, sim_type="corr", epochs=30, batch_size=-1, sliding_windows=1, adj_threshold=0.1, patience=40, num_workers=0, tr_ratio=0.7, logs=True, verbose=True):
     """
     Perform imputation using the Multivariate Recurrent Neural Network (MRNN) algorithm.
 
@@ -13,26 +13,26 @@ def grin(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, slid
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
 
-    seq_len : int, optional, default=1
+    seq_len : int, optional, default=-1
         Length of the input sequence used by the model. Defines the number of time steps inside each sample.
 
     sim_type : string, optional, default="corr"
         Select the function used to compute the similarity measure: (uniform, corr, dcrnn, stcn)
 
-    epochs : int, optional, default=20
+    epochs : int, optional, default=30
             The maximum number of training epochs.
 
-    batch_size : int, optional, default=32
+    batch_size : int, optional, default=-1
         The number of samples per training batch.
 
     sliding_windows: int, optional
         Stride between consecutive training windows (default is 1). If set to 0, the window size is equal to seq_len.
         Use values ≥ 1 for univariate datasets (window strategy) and 0 for multivariate datasets (sample strategy).
 
-    alpha : float, optional, default=10.0
-        The weight assigned to the adversarial loss term during training.
+    adj_threshold : float, optional, default=0.1
+        Threshold for adjecency matrix.
 
-    patience : int, optional, default=4
+    patience : int, optional, default=40
         Number of epochs without improvement before early stopping is triggered.
 
     num_workers : int, optional, default=0
@@ -65,7 +65,7 @@ def grin(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, slid
     start_time = time.time()  # Record start time
 
     #recov_data = recoveryGRIN(input=incomp_data, d_hidden=d_hidden, lr=lr, batch_size=batch_size, window=window, alpha=alpha, patience=patience, epochs=epochs, workers=workers, tr_ratio=tr_ratio, verbose=verbose)
-    recov_data = runGRIN(incomp_data=incomp_data, seq_len=seq_len, sim_type=sim_type, epochs=epochs, batch_size=batch_size, sliding_windows=sliding_windows, alpha=alpha, patience=patience, num_workers=num_workers, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = runGRIN(incomp_data=incomp_data, seq_len=seq_len, sim_type=sim_type, epochs=epochs, batch_size=batch_size, sliding_windows=sliding_windows, adj_threshold=adj_threshold, patience=patience, num_workers=num_workers, tr_ratio=tr_ratio, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

@@ -1,5 +1,4 @@
 import datetime
-import math
 import os
 import platform
 import time
@@ -85,9 +84,11 @@ class TimeSeries:
         self.datasets = utils.list_of_datasets()
         self.optimizers = utils.list_of_optimizers()
         self.extractors = utils.list_of_extractors()
-        self.forecasting_models = utils.list_of_downstreams()
+        self.forecasters = utils.list_of_forecasters()
+        self.classifiers = utils.list_of_classifiers()
         self.families = utils.list_of_families()
         self.algorithms_with_families = utils.list_of_algorithms_with_families()
+        self.denorm = None
         self.reversed = False
         select_backend()
 
@@ -123,6 +124,327 @@ class TimeSeries:
                 raise ValueError("Invalid input for import_matrix")
 
             return self
+
+
+    def load_classify_dataset(self, dataset, nbr_series=None, nbr_val=None, normalizer="z_score", to_numpy=True, test_imputation=False, verbose=True):
+        """
+        Load and prepare a time-series dataset for classification tasks.
+
+        The function loads the predefined TRAIN and TEST ``.ts`` files associated with
+        the requested dataset. When ``to_numpy=True``, the data is converted to matrices
+        with shape ``(timestamps, series)`` and can optionally be limited in the number
+        of timestamps or series.
+
+        The training and test sets can also be normalized before being stored in
+        ``self.data`` together with their corresponding class labels.
+
+        Parameters
+        ----------
+        dataset : str
+            Name or path of the classification dataset to load.
+
+            The function expects the following structure:
+
+            datasets/classify/<dataset>/<dataset>_TRAIN.ts
+            datasets/classify/<dataset>/<dataset>_TEST.ts
+
+        nbr_series : int, optional
+            Maximum number of time series to retain from the TRAIN and TEST sets.
+            If ``None``, all available series are retained.
+
+        nbr_val : int, optional
+            Maximum number of timestamps to retain for each time series.
+            If ``None``, all available timestamps are retained.
+
+        normalizer : str or None, default="z_score"
+            Normalization technique applied independently to the TRAIN and TEST data.
+            Supported options include:
+
+            - ``"z_score"`` : Z-score normalization.
+            - ``"min_max"`` : Min-max normalization.
+            - ``None``      : Keep the original data without normalization.
+
+        to_numpy : bool, default=True
+            Whether to convert the ``sktime`` DataFrame representation into NumPy
+            matrices with shape ``(timestamps, series)``.
+
+        test_imputation : bool, default=False
+            Flag stored with the dataset configuration to indicate whether imputation
+            is intended to be performed on the test set.
+
+        verbose : bool, default=True
+            Whether to display information about dataset loading and normalization.
+
+        Returns
+        -------
+        TimeSeries
+            The current ``TimeSeries`` object with ``self.data`` containing:
+                (X_train_IMP, X_test_IMP, y_train, y_test, None, None, test_imputation, None, dataset_name)
+
+                where:
+
+                - ``X_train_IMP`` : training time-series matrix.
+                - ``X_test_IMP``  : test time-series matrix.
+                - ``y_train``     : training class labels.
+                - ``y_test``      : test class labels.
+                - ``test_imputation`` : test-imputation configuration.
+                - ``dataset_name`` : original dataset name.
+
+        Raises
+        ------
+        ValueError
+            If ``dataset`` is not provided as a string.
+
+        Example
+        -------
+        .. code-block:: python
+
+            ts.load_classify_dataset("Car", normalizer="z-score", to_numpy=True)
+        """
+        from sktime.datasets import load_from_tsfile_to_dataframe
+
+        if dataset is not None:
+            if isinstance(dataset, str):
+                old_path = dataset
+
+                here = os.path.dirname(os.path.dirname(__file__))
+                dset_tr = old_path + "_TRAIN.ts"
+                dset_ts = old_path + "_TEST.ts"
+                data_tr = os.path.join(here, "datasets/classify/", old_path, dset_tr)
+                data_ts = os.path.join(here, "datasets/classify/", old_path, dset_ts)
+
+                if not os.path.exists(dataset):
+                    dataset = old_path
+
+                X_train_DF, y_train = load_from_tsfile_to_dataframe(data_tr)
+                x_test_DF, y_test  = load_from_tsfile_to_dataframe(data_ts)
+
+                if verbose:
+                    print("\n(SYS) The dataset is loaded from " + str(data_tr) + "\n")
+                    print("\n(SYS) The dataset is loaded from " + str(data_ts) + "\n")
+            else:
+                print("\nThe dataset has not been loaded, format unknown\n")
+                self.data = None
+                raise ValueError("Invalid input for load_series")
+
+            if to_numpy:
+                X_train_IMP = np.vstack(X_train_DF.iloc[:, 0].to_numpy()).T
+                X_test_IMP = np.vstack(x_test_DF.iloc[:, 0].to_numpy()).T
+
+                if nbr_series or nbr_val is not None:
+                    if nbr_val is None:
+                        nbr_series = X_train_IMP.shape[1]
+                    if nbr_series is None:
+                        nbr_val = X_train_IMP.shape[0]
+                    n_rows = min(int(nbr_val), X_train_IMP.shape[0])  # values/time steps
+                    n_cols = min(int(nbr_series), X_train_IMP.shape[1])  # series
+
+                    X_train_IMP = X_train_IMP[:n_rows, :n_cols]
+                    y_train = y_train[:n_cols]
+
+                    if nbr_val is None:
+                        nbr_series = X_test_IMP.shape[1]
+                    if nbr_series is None:
+                        nbr_val = X_test_IMP.shape[0]
+                    n_rows = min(int(nbr_val), X_train_IMP.shape[0])  # values/time steps
+                    n_cols = min(int(nbr_series), X_train_IMP.shape[1])  # series
+
+                    X_test_IMP = X_test_IMP[:n_rows, :n_cols]
+                    y_test = y_test[:n_cols]
+
+            if normalizer is not None:
+                X_train_IMP = self.normalize(normalizer=normalizer, data=X_train_IMP, verbose=verbose)
+                X_test_IMP = self.normalize(normalizer=normalizer, data=X_test_IMP, verbose=verbose)
+            else:
+                if verbose:
+                    print("the data is not normalized\n")
+
+
+            self.data = (X_train_IMP, X_test_IMP, y_train, y_test, None, None, test_imputation, None, old_path)
+
+            return self
+
+
+    def load_proper_output_classify(self):
+        """
+        Extract the classification metadata and restore the training data.
+
+        The function expects ``self.data`` to contain the classification structure
+        generated by ``load_classify_dataset``: (X_train, X_test, y_train, y_test, ... additional classification metadata)
+
+        The training matrix ``X_train`` is restored as the main ``self.data``, while
+        all remaining classification data and metadata are returned separately.
+
+        Returns
+        -------
+        classify_sets : list
+            List containing all elements stored after ``X_train`` in the original classification data structure, including the test data, training and test labels, and additional classification configuration.
+
+        Notes
+        -----
+        After calling this function, ``self.data`` contains only ``X_train``.
+        """
+
+        X_train, *classify_sets = self.data
+        self.data = X_train
+        return classify_sets
+
+
+    def load_forecasting_dataset(self, dataset, nbr_series=None, nbr_val=None, horizon=0.2, normalizer="z_score", header=False, verbose=True):
+        """
+        Load and prepare a time-series dataset for forecasting tasks.
+
+        The dataset is loaded as a two-dimensional matrix with shape
+        ``(timestamps, series)``. The number of timestamps and series can optionally
+        be limited, and the data can be normalized before being split into training
+        and forecasting-horizon portions.
+
+        The seasonal period associated with the dataset is loaded from the
+        corresponding ``_season.txt`` file.
+
+        Parameters
+        ----------
+        dataset : str
+            File path or name of the forecasting dataset to load.
+
+            The function expects the dataset files:
+
+            - ``<dataset>_matrix.txt`` : time-series values.
+            - ``<dataset>_season.txt`` : seasonal period.
+
+        nbr_series : int, optional
+            Maximum number of time series to load. If ``None``, all available series
+            are retained.
+
+        nbr_val : int, optional
+            Maximum number of timestamps to load for each series. If ``None``, all
+            available values are loaded.
+
+        horizon : float or int, default=0.2
+            Forecasting horizon used to split the dataset into training and target
+            portions.
+
+            - ``horizon == 0``: No train/test split is performed and the normalized data matrix is returned directly.
+            - ``0 < horizon <= 1``: The horizon is interpreted as a fraction of the dataset. The training ratio is computed as ``1 - horizon`` and truncated to one decimal place.
+            - ``horizon > 1``: The horizon is interpreted as an absolute number of timestamps reservedfor forecasting.
+
+        normalizer : str or None, default="z_score"
+            Normalization technique applied to the loaded data.
+            Supported options include:
+
+            - ``"z_score"`` : Z-score normalization.
+            - ``"min_max"`` : Min-max normalization.
+            - ``None``      : Keep the original data without normalization.
+
+        header : bool, default=False
+            Whether the input dataset files contain a header row.
+
+        verbose : bool, default=True
+            Whether to display information about dataset and season loading.
+
+        Returns
+        -------
+        TimeSeries or numpy.ndarray
+            If ``horizon != 0``, returns the current ``TimeSeries`` object with ``self.data`` containing: (X_train, y_train, season, horizon)
+
+            where:
+
+            - ``X_train`` contains the training portion of the time series.
+            - ``y_train`` contains the forecasting horizon.
+            - ``season`` is the dataset seasonal period.
+            - ``horizon`` is the requested forecasting horizon.
+
+            If ``horizon == 0``, returns the loaded and optionally normalized data
+            directly as a ``numpy.ndarray``.
+
+        Raises
+        ------
+        ValueError
+            If ``dataset`` is not provided as a string.
+
+        Example
+        -------
+        .. code-block:: python
+
+            ts.load_forecasting_dataset("paris", normalizer="z-score", verbose=True, horizon=12)
+        """
+        if dataset is not None:
+            if isinstance(dataset, str):
+                old_path = dataset
+
+                here = os.path.dirname(os.path.dirname(__file__))
+                dset_ma = old_path + "_matrix.txt"
+                dset_se = old_path + "_season.txt"
+                data_ma = os.path.join(here, "datasets/forecast/", dset_ma)
+                data_se = os.path.join(here, "datasets/forecast/", dset_se)
+
+                if not os.path.exists(dataset):
+                    dset_ma = old_path
+
+                if verbose:
+                    print(f"{data_ma} has been loaded from {dataset}")
+
+                self.data = np.genfromtxt(data_ma, delimiter=' ', max_rows=nbr_val, skip_header=int(header))
+                season = np.genfromtxt(data_se, delimiter=' ', skip_header=int(header))
+                season = int(season)
+
+                if verbose:
+                    print("\n(SYS) The dataset is loaded from " + str(data_ma) + "\n")
+                    print(f"\n(SYS) The season is loaded from {str(data_se)} > {season}\n")
+
+                if nbr_series is not None:
+                    self.data = self.data[:, :nbr_series]
+            else:
+                print("\nThe dataset has not been loaded, format unknown\n")
+                self.data = None
+                raise ValueError("Invalid input for load_series")
+
+            if normalizer is not None:
+                self.data = self.normalize(normalizer=normalizer, data=self.data, verbose=verbose)
+
+            if horizon == 0:
+                return self.data
+
+            elif horizon <=1 :
+                split = int((1 - horizon) * 10) / 10
+                time_len = self.data.shape[0]
+                train_len = int(time_len * split)
+            else:
+                train_len = self.data.shape[0] - horizon
+
+            X_train = self.data[:train_len, :]
+            y_train = self.data[train_len:, :]
+
+            self.data = (X_train, y_train, season, horizon)
+
+            return self
+
+    def load_proper_output_forecasting(self):
+        """
+        Extract the forecasting target and season from the loaded forecasting dataset.
+
+        The function expects ``self.data`` to contain the forecasting structure generated by ``load_forecasting_dataset``:
+
+            (X_train, y_train, season, horizon)
+
+        The training data ``X_train`` is restored as the main ``self.data``, while the forecasting target and seasonal period are returned separately.
+
+        Returns
+        -------
+        y_train : numpy.ndarray
+            Target values corresponding to the forecasting horizon.
+
+        season : int
+            Seasonal period associated with the forecasting dataset.
+
+        Notes
+        -----
+        After calling this function, ``self.data`` contains only ``X_train``. The stored ``horizon`` value is discarded.
+        """
+        X_train, *classify_sets = self.data
+        self.data = X_train
+        y_train, season, _ = classify_sets
+        return y_train, season
 
     def load_series(self, data, nbr_series=None, nbr_val=None, header=False, normalizer="z_score", replace_nan=False, reverse=False, verbose=True):
         """
@@ -168,8 +490,7 @@ class TimeSeries:
 
         Example
         -------
-            >>> ts.load_series(utils.search_path("eeg-alcohol"), nbr_series=50, nbr_val=100)
-
+        >>> ts.load_series(utils.search_path("eeg-alcohol"), nbr_series=50, nbr_val=100)
         """
 
         if data is not None:
@@ -294,8 +615,17 @@ class TimeSeries:
         else:
             print(f"\n{text} :")
 
-        for key, value in metrics.items():
-            print(f"{key:<20} = {value}")
+        if "Downstream" in text:
+            inc = 0
+            for key, value in metrics.items():
+                if inc % 3 == 0:
+                    print(f"\n{key.split("_", 1)[0].upper()}:")
+                inc = inc + 1
+                print(f"\t{key:<20} = {value}")
+
+        else:
+            for key, value in metrics.items():
+                print(f"{key:<20} = {value}")
 
     def normalize(self, normalizer="z_score", data=None, verbose=True):
         """
@@ -333,7 +663,10 @@ class TimeSeries:
         if self.reversed:
             self.data = self.data.T
 
-        if normalizer == "min_max":
+        self.denorm = {"normalizer": normalizer, "params": None}
+
+        if normalizer == "min_max" or normalizer == "min-max":
+            #self.data = self.data.T
             start_time = time.time()  # Record start time
 
             # Compute the min and max for each series (column-wise), ignoring NaN
@@ -346,6 +679,9 @@ class TimeSeries:
 
             # Apply min-max normalization
             self.data = (self.data - ts_min) / range_ts
+
+            #self.data = self.data.T
+            self.denorm["params"] = {"min": ts_min, "range": range_ts}
 
             end_time = time.time()
         elif normalizer == "z_lib":
@@ -366,7 +702,7 @@ class TimeSeries:
             self.data = scaler.fit_transform(self.data)
 
             end_time = time.time()
-        elif normalizer == "z_score":
+        elif normalizer == "z_score" or normalizer=="z-score":
             start_time = time.time()  # Record start time
 
             mean = np.nanmean(self.data, axis=0)
@@ -377,6 +713,8 @@ class TimeSeries:
 
             # Apply z-score normalization
             self.data = (self.data - mean) / std_dev
+
+            self.denorm["params"] = {"mean": mean, "std": std_dev}
 
             end_time = time.time()
         else:
@@ -393,6 +731,57 @@ class TimeSeries:
 
         if data is not None:
             return self.data
+
+    def denormalize(self, values=None, verbose=True):
+        """
+        Denormalize values back to the original scale using the most recent normalization.
+
+        For z-score: x = x_norm * std + mean
+
+        Parameters
+        ----------
+        values : ndarray, optional
+            If provided, denormalize this array. If None, denormalizes self.data in-place.
+
+        verbose : bool
+            Display the time of the operation (default is True).
+
+        Returns
+        -------
+        numpy.ndarray
+            Denormalized array.
+        """
+        if not hasattr(self, "denorm") or self.denorm.get("params") is None:
+            raise ValueError("No denormalization parameters found. Call normalize(...) first.")
+
+        normalizer = self.denorm["normalizer"]
+        params = self.denorm["params"]
+
+        x = self.data if values is None else values
+
+        if self.reversed:
+            x = x.T
+
+        start_time = time.time()
+
+        if normalizer == "z_score":
+            mean = params["mean"]
+            std = params["std"]
+            x = x * std + mean
+        elif normalizer == "min_max":
+            ts_min = params["min"]
+            range_ts = params["range"]
+            x = x * range_ts + ts_min
+        else:
+            raise ValueError(f"Denormalization not supported for normalizer='{normalizer}'")
+
+        end_time = time.time()
+
+        if verbose:
+            print(f"> logs: de-normalization ({normalizer}) of the data - runtime: {(end_time - start_time):.4f} seconds")
+
+        return x
+
 
     def plot(self, input_data, incomp_data=None, recov_data=None, nbr_series=None, nbr_val=None, series_range=None, subplot=False, size=(16, 8), algorithm=None, save_path="./imputegap_assets", style="default", cont_rate=None, grid=True, reverse=True, legends=True, display=True, verbose=True):
         """

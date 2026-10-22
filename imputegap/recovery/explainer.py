@@ -13,46 +13,33 @@ from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
 
 
+
 class Explainer:
     """
-    A class to manage SHAP-based model explanations and feature extraction for time series datasets.
+    Manage SHAP-based model explanations and feature extraction for time series datasets.
 
     Methods
     -------
     show()
-        Show the shap result plot
-
-    load_configuration(file_path=None)
-        Load categories and features from a TOML file.
-
-    extractor_pycatch(data, features_categories, features_list, do_catch24=True)
-        Extract features from time series data using pycatch22.
-
-    extractor_tsfresh(data, categories=["statistical", "temporal", "frequency", "shape"])
-        Extract features from time series data using TSFresh.
-        The function supports filtering by feature categories and calculates a large set of features
-        (up to 783) related to statistics, temporal dynamics, frequency analysis, and shape.
-
-    extractor_tsfel(data, frequency=None, categories=["spectral", "statistical", "temporal", "fractal"])
-        Extract features from time series data using TSFEL (Time Series Feature Extraction Library).
-        This method calculates features based on the selected categories and optionally uses the
-        sampling frequency to compute frequency-domain features.
-
-    print(shap_values, shap_details=None)
-        Print SHAP values and details for display.
-
-    convert_results(tmp, file, algo, descriptions, features, categories, mean_features, to_save)
-        Convert SHAP raw results into a refined format for display.
-
-    execute_shap_model(x_dataset, x_information, y_dataset, file, algorithm, splitter=10, display=False, verbose=False)
-        Launch the SHAP model to explain the dataset features.
-
-    shap_explainer(input_data, algorithm="cdrec", params=None, extractor="pycatch", incomp_data="mcar",
-                   missing_rate=0.4, block_size=10, offset=0.1, seed=True, limitation=15, splitter=0,
-                   file_name="ts", display=False, verbose=False)
-        Handle parameters and set variables to launch the SHAP model.
-
+        Display the SHAP results plot.
+    load_configuration()
+        Load feature categories and configurations from a TOML file.
+    extractor_pycatch()
+        Extract time series features using pycatch22.
+    extractor_tsfresh()
+        Extract statistical, temporal, frequency, and shape features using TSFresh.
+    extractor_tsfel()
+        Extract time series features using TSFEL.
+    print()
+        Print SHAP values and explanation details.
+    convert_results()
+        Convert raw SHAP results into a structured format for display.
+    execute_shap_model()
+        Execute the SHAP model to explain dataset features.
+    shap_explainer()
+        Configure and launch the SHAP explanation process.
     """
+
 
     def __init__(self):
         """
@@ -190,7 +177,7 @@ class Explainer:
 
         Parameters
         ----------
-            data (numpy.ndarray):
+            data : numpy.ndarray
                 2D array of shape (M, N), where M is the timestamp and N is the number of series
 
             frequency (float, optional):
@@ -200,9 +187,9 @@ class Explainer:
 
             categories (list, optional):
                 A list of categories to extract. Valid categories are:
-                    - "spectral": Extract frequency-domain features (e.g., FFT, spectral entropy).
-                    - "statistical": Extract basic statistical features (e.g., mean, variance, skewness).
-                    - "temporal": Extract temporal-domain features (e.g., autocorrelation, zero crossings).
+                - "spectral": Extract frequency-domain features (e.g., FFT, spectral entropy).
+                - "statistical": Extract basic statistical features (e.g., mean, variance, skewness).
+                - "temporal": Extract temporal-domain features (e.g., autocorrelation, zero crossings).
                 By default, all four categories are extracted.
 
         Returns
@@ -212,20 +199,22 @@ class Explainer:
                 for the entire dataset (aggregated over all time series).
             list:
                 A list of tuples, where each tuple contains:
-                    - Feature name (str): The name of the feature.
-                    - Category (str): The category to which the feature belongs.
-                    - Formatted feature name (str): A human-readable version of the feature name.
+                - Feature name (str): The name of the feature.
+                - Category (str): The category to which the feature belongs.
+                - Formatted feature name (str): A human-readable version of the feature name.
 
-        Example:
-            >>> import numpy as np
-            >>> data = np.random.rand(5, 100)  # 5 time series, each with 100 values
-            >>> results, descriptions = extractor_tsfel(data, frequency=50, categories=["statistical", "temporal"])
-            >>> print(results)
-            >>> print(descriptions)
+        Example
+        -------
+        >>> import numpy as np
+        >>> data = np.random.rand(5, 100)  # 5 time series, each with 100 values
+        >>> results, descriptions = extractor_tsfel(data, frequency=50, categories=["statistical", "temporal"])
+        >>> print(results)
+        >>> print(descriptions)
 
-        Notes:
-            - This function requires TSFEL to be installed: `pip install tsfel`.
-            - Categories can be customized to extract only the desired features, reducing computation time.
+        Notes
+        -----
+        - This function requires TSFEL to be installed: `pip install tsfel`.
+        - Categories can be customized to extract only the desired features, reducing computation time.
         """
         import tsfel
 
@@ -850,3 +839,137 @@ class Explainer:
 
         self.shap_values = shap_values
         self.shap_details = shap_details
+
+    # =================
+
+    def _validate_feature_data(self, data):
+        """Validate an ImputeGAP matrix: timestamps × series."""
+        data = np.asarray(data, dtype=float)
+        if data.ndim != 2:
+            raise ValueError("data must have shape (n_timestamps, n_series)")
+        if not np.isfinite(data).all():
+            raise ValueError("data contains NaN or infinite values")
+        return data
+
+    def feature_forecasting(self, data, season):
+        results = []
+        results.append(self.feature_shifting(data))
+        results.append(self.feature_transition(data))
+        results.append(self.feature_trend(data, period=season))
+        results.append(self.feature_stationarity(data))
+        results.append(self.feature_correlation(data))
+        return results
+
+    def feature_shifting(self, data, absolute=True):
+        """
+        Compute the mean Catch22 shifting characteristic.
+        """
+        import pycatch22
+
+        print(f"> launched, feature extraction for shifting : {data.shape}...")
+
+        data = self._validate_feature_data(data)
+
+        values = [pycatch22.DN_OutlierInclude_p_001_mdrmd(data[:, column].tolist()) for column in range(data.shape[1])]
+
+        if absolute:
+            return ("shifting", float(abs(np.mean(values))))
+        else:
+            return ("shifting", float(np.mean(values)))
+
+    def feature_transition(self, data):
+        """
+        Compute the mean Catch22 transition characteristic.
+        """
+        import pycatch22
+
+        print(f"> launched, feature extraction for transition : {data.shape}...")
+
+        data = self._validate_feature_data(data)
+        values = [pycatch22.SB_TransitionMatrix_3ac_sumdiagcov(data[:, column].tolist()) for column in range(data.shape[1]) ]
+
+        return ("transition", float(np.mean(values)))
+
+    def feature_trend(self, data, period):
+        """
+        Compute the mean STL trend strength.
+        """
+        from statsmodels.tsa.seasonal import STL
+
+        print(f"> launched, feature extraction for trend : {data.shape}...")
+
+        data = self._validate_feature_data(data)
+        if period < 2:
+            raise ValueError("period must be at least 2")
+        values = []
+
+        for column in range(data.shape[1]):
+            series = data[:, column]
+            result = STL(series, period=int(period)).fit()
+            residual_variance = np.var(result.resid, ddof=1)
+            deseasonalized_variance = np.var(series - result.seasonal, ddof=1, )
+            if deseasonalized_variance == 0:
+                strength = 0.0
+            else:
+                strength = max(0.0, 1.0 - residual_variance / deseasonalized_variance, )
+            values.append(strength)
+
+        return ("trend", float(np.mean(values)))
+
+    def feature_stationarity(self, data):
+        """
+        Compute the mean Augmented Dickey-Fuller p-value.
+        Smaller values indicate stronger evidence of stationarity.
+        """
+        from statsmodels.tsa.stattools import adfuller
+        data = self._validate_feature_data(data)
+
+        print(f"> launched, feature extraction for stationarity : {data.shape}...")
+
+        values = []
+        for column in range(data.shape[1]):
+            try:
+                p_value = adfuller(data[:, column], autolag="AIC", )[1]
+                values.append(p_value)
+            except (ValueError, np.linalg.LinAlgError):
+                values.append(np.nan)
+
+        if np.all(np.isnan(values)):
+            return np.nan
+
+        return ("stationarity", float(np.nanmean(values)))
+
+    def feature_correlation(self, data):
+        """
+        Compute the TFB correlation characteristic.
+
+        The 22 Catch22 features are extracted for each time series.
+        """
+        import pycatch22
+        from sklearn.preprocessing import MinMaxScaler
+
+        print(f"> launched, feature extraction for correlation : {data.shape}...")
+
+        data = self._validate_feature_data(data)
+
+        if data.shape[1] < 2:
+            return np.nan
+        catch22_values = []
+        for column in range(data.shape[1]):
+            result = pycatch22.catch22_all(data[:, column], catch24=False, )
+            catch22_values.append(result["values"])
+        catch22_values = np.asarray(catch22_values, dtype=float)
+
+        catch22_values = MinMaxScaler().fit_transform(catch22_values)
+        correlation_matrix = np.abs(np.corrcoef(catch22_values))
+
+        correlations = correlation_matrix[np.triu_indices_from(correlation_matrix, k=1)]
+        correlations = correlations[np.isfinite(correlations)]
+
+        if correlations.size == 0:
+            return np.nan
+
+        correlation_mean = np.mean(correlations)
+        correlation_variance = np.var(correlations)
+
+        return ("correlation", float(2 * (correlation_mean + 1 / (correlation_variance + 2) )/ 3))

@@ -1,0 +1,5 @@
+[deepmvi]
+max_epoch = 12
+patience = 32
+lr = 5.0
+batch_size = 3.0

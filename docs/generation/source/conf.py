@@ -9,10 +9,10 @@ import os
 import sys
 
 project = 'imputegap'
-copyright = '2025, Quentin Nater'
+copyright = '2026, Quentin Nater'
 author = 'Quentin Nater'
-html_title = 'ImputeGAP 1.1.2'
-html_short_title = 'ImputeGAP 1.1.2 Documentation'
+html_title = 'ImputeGAP 1.1.3'
+html_short_title = 'ImputeGAP 1.1.3 Documentation'
 
 
 # -- General configuration ---------------------------------------------------
@@ -34,6 +34,7 @@ html_sidebars = {
         "sidebar/brand.html",  # Logo and project name
         "sidebar/search.html",  # Search bar
         "sidebar/github.html",
+       # "sidebar/tutorial.html",  # NEW: KDD tutorial
         "sidebar/navigation.html",  # Collapsible navigation
         "sidebar/scroll-start.html",
         "sidebar/scroll-end.html",
@@ -41,28 +42,15 @@ html_sidebars = {
 }
 
 
-
-
-html_logo = "https://www.naterscreations.com/imputegap/logo_imputegab.png"
-html_favicon = "https://www.naterscreations.com/imputegap/favicon.png"
+html_logo = "https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/logo_imputegab.png"
+html_favicon = "https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"
 
 html_static_path = ['static']
 html_css_files = ['custom.css']
 
 # Set the version and release info
-version = '1.1.2'
-release = '1.1.2'
-
-
-html_theme_options = {
-    "sidebar_hide_name": False,
-    "light_css_variables": {
-        "color-sidebar-background": "#1e1e1e",  # Dark sidebar background
-        "color-sidebar-text": "#ffffff",  # White text
-        "sidebar-width": "300px",  # Adjust sidebar width
-    },
-}
-
+version = '1.1.3'
+release = '1.1.3'
 
 
 
@@ -81,11 +69,6 @@ napoleon_google_docstring = True
 napoleon_numpy_docstring = False
 
 
-html_theme_options = {
-    "collapse_navigation": False,
-    "sticky_navigation": True,
-    "navigation_depth": 3,
-}
 
 sys.path.insert(0, os.path.abspath('../../../'))  # Adjust path to the project root
 

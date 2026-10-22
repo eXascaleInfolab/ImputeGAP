@@ -37,7 +37,7 @@ class TestXGBoost(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(user_def=True, params={"n_estimators":2, "seed": 42})
+        algo.impute(user_def=True, params={"n_estimators":100, "seed": 42})
         algo.score(ts.data)
         metrics = algo.metrics
 

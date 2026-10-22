@@ -1,0 +1,4 @@
+[dynammo]
+h = 3
+max_iteration = 20
+approximation = true
