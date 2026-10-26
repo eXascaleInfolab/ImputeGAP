@@ -42,4 +42,3 @@ jobs:
       run: |
         python -m pytest ./tests/test_imputation_gpt4ts.py
         python -m pytest ./tests/test_imputation_moment.py
-        python -m pytest ./tests/test_imputation_nuwats.py

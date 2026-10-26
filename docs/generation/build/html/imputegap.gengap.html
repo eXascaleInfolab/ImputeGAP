@@ -319,21 +319,21 @@
 <section id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h3>
 <dl class="simple">
-<dt>mcar(ts, series_rate=0.2, missing_rate=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True) :</dt><dd><p>Apply Missing Completely at Random (MCAR) contamination to selected series.</p>
+<dt>mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True)</dt><dd><p>Apply Missing Completely at Random (MCAR) contamination to selected series.</p>
 </dd>
-<dt>aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True):</dt><dd><p>Apply missing percentage contamination to selected series.</p>
+<dt>aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True)</dt><dd><p>Apply missing percentage contamination to selected series.</p>
 </dd>
-<dt>blackout(ts, missing_rate=0.2, offset=0.1, logic_by_series=True, verbose=True) :</dt><dd><p>Apply blackout contamination to selected series.</p>
+<dt>blackout(input_data, rate_series=0.2, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply blackout contamination to selected series.</p>
 </dd>
-<dt>gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True):</dt><dd><p>Apply Gaussian contamination to selected series.</p>
+<dt>gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True)</dt><dd><p>Apply Gaussian contamination to selected series.</p>
 </dd>
-<dt>distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True):</dt><dd><p>Apply any distribution contamination to the time series data based on their probabilities.</p>
+<dt>distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True)</dt><dd><p>Apply any distribution contamination to the time series data based on their probabilities.</p>
 </dd>
-<dt>disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True):</dt><dd><p>Apply Disjoint contamination to selected series.</p>
+<dt>disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply Disjoint contamination to selected series.</p>
 </dd>
-<dt>overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True):</dt><dd><p>Apply Overlapping contamination to selected series.</p>
+<dt>overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply Overlapping contamination to selected series.</p>
 </dd>
-<dt>mirror_gap(raw_data, ts_m, axis=0, verbose=True):</dt><dd><p>Mirror the NaNs values of the current patterns.</p>
+<dt>mirror_gap(raw_data, ts_m, axis=0, verbose=True):</dt><dd><p>Mirror the missing-value positions of the input pattern.</p>
 </dd>
 </dl>
 </section>
@@ -345,20 +345,25 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.contamination.GenGap.mirror_gap">
 <span class="sig-name descname"><span class="pre">mirror_gap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts_m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/contamination.html#GenGap.mirror_gap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.contamination.GenGap.mirror_gap" title="Link to this definition">¶</a></dt>
-<dd><p>Configure and execute forecaster model for downstream analytics</p>
+<dd><p>Mirror the missing-value positions of a contaminated time series.</p>
 <section id="parameters">
 <h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h4>
+<p>raw_data : numpy.ndarray
+Original time series matrix.</p>
 <dl class="simple">
-<dt>model<span class="classifier">str</span></dt><dd><p>name of the forcaster model</p>
+<dt>ts_m<span class="classifier">numpy.ndarray</span></dt><dd><p>Contaminated matrix whose NaN positions define the missing-value mask.</p>
 </dd>
-<dt>params<span class="classifier">list of params</span></dt><dd><p>List of paramaters for a forcaster model</p>
+<dt>axis<span class="classifier">int, optional</span></dt><dd><p>Axis along which the missing-value mask is flipped (default is 0).</p>
+</dd>
+<dt>verbose<span class="classifier">bool, optional</span></dt><dd><p>Whether to display the original and mirrored masks (default is False).</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h4>
 <dl class="simple">
-<dt>Forecaster object (SKTIME/DART)</dt><dd><p>Forecaster object for downstream analytics</p>
+<dt>numpy.ndarray</dt><dd><p>Copy of raw_data with NaN values inserted at the mirrored
+missing-value positions.</p>
 </dd>
 </dl>
 </section>
@@ -403,9 +408,11 @@ If offset &gt;= 1, it is interpreted as the exact number of initial values to ke
 </section>
 <section id="example">
 <h4>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h4>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 </pre></div>
 </div>
+</div></blockquote>
 </section>
 </dd></dl>
 
@@ -446,17 +453,19 @@ If offset &gt;= 1, it is interpreted as the exact number of initial values to ke
 </section>
 <section id="id5">
 <h4>Example<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
 </pre></div>
 </div>
+</div></blockquote>
 </section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.contamination.GenGap.scattered">
 <span class="sig-name descname"><span class="pre">scattered</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logic_by_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explainer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/contamination.html#GenGap.scattered"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.contamination.GenGap.scattered" title="Link to this definition">¶</a></dt>
-<dd><p>The missing blocks all have the same size, but their starting positions are chosen at random.</p>
-<p>Docs: <a class="reference external" href="https://imputegap.readthedocs.io/en/latest/missingness_patterns.html">https://imputegap.readthedocs.io/en/latest/missingness_patterns.html</a></p>
+<dd><p>A contiguous interval of missing values is introduced at a randomly selected position within each selected series.
+Docs: <a class="reference external" href="https://imputegap.readthedocs.io/en/latest/missingness_patterns.html">https://imputegap.readthedocs.io/en/latest/missingness_patterns.html</a></p>
 <section id="id6">
 <h4>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
 <dl class="simple">
@@ -487,9 +496,11 @@ If offset &gt;= 1, it is interpreted as the exact number of initial values to ke
 </section>
 <section id="id8">
 <h4>Example<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">scattered</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">scattered</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
+</div></blockquote>
 </section>
 </dd></dl>
 
@@ -521,9 +532,11 @@ If offset &gt;= 1, it is interpreted as the exact number of initial values to ke
 </section>
 <section id="id11">
 <h4>Example<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_m</span> <span class="o">=</span><span class="n">GenGap</span><span class="o">.</span><span class="n">blackout</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">series_rate</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts_m</span> <span class="o">=</span><span class="n">GenGap</span><span class="o">.</span><span class="n">blackout</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">series_rate</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
+</div></blockquote>
 </section>
 </dd></dl>
 
@@ -544,7 +557,7 @@ If offset &gt;= 1, it is interpreted as the exact number of initial values to ke
 <dt>selected_mean: str, optional</dt><dd><p>Strategy to compute the mean value (default : “position”).
 Possibilities : “position”, “values”.</p>
 </dd>
-<dt>std_dev<span class="classifier">float, optional</span></dt><dd><p>Standard deviation of the Gaussian distribution for missing values (default is 0.4).</p>
+<dt>std_dev<span class="classifier">float, optional</span></dt><dd><p>Standard deviation of the Gaussian distribution for missing values (default is 0.2).</p>
 </dd>
 <dt>offset<span class="classifier">float, optional</span></dt><dd><p>Size of the uncontaminated section at the beginning of the series (default is 0.1).</p>
 </dd>
@@ -567,9 +580,11 @@ Possibilities : “position”, “values”.</p>
 </section>
 <section id="id14">
 <h4>Example<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">std_dev</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">std_dev</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
 </pre></div>
 </div>
+</div></blockquote>
 </section>
 </dd></dl>
 
@@ -611,9 +626,11 @@ Most match the shape of input data without the offset : (e.g. [[0.1, 0, 0.3, 0],
 </section>
 <section id="id17">
 <h4>Example<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">probabilities_list</span><span class="o">=</span><span class="n">probabilities_list</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">probabilities_list</span><span class="o">=</span><span class="n">probabilities_list</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
+</div></blockquote>
 </section>
 </dd></dl>
 
@@ -629,7 +646,7 @@ Most match the shape of input data without the offset : (e.g. [[0.1, 0, 0.3, 0],
 </dd>
 <dt>rate_series<span class="classifier">float, optional</span></dt><dd><p>Percentage of missing values per series (default is 0.1).</p>
 </dd>
-<dt>limit<span class="classifier">float, optional</span></dt><dd><p>Percentage expressing the limit index of the end of the contamination (default is 1: all length).</p>
+<dt>limit<span class="classifier">float, optional</span></dt><dd><p>Fraction of the series length defining the maximum timestamp affected by contamination (default is 1.0, the full length).</p>
 </dd>
 <dt>offset<span class="classifier">float, optional</span></dt><dd><p>Size of the uncontaminated section at the beginning of the series (default is 0.1).</p>
 </dd>
@@ -648,9 +665,11 @@ Most match the shape of input data without the offset : (e.g. [[0.1, 0, 0.3, 0],
 </section>
 <section id="id20">
 <h4>Example<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">disjoint</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">disjoint</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
+</div></blockquote>
 </section>
 </dd></dl>
 
@@ -666,9 +685,9 @@ Most match the shape of input data without the offset : (e.g. [[0.1, 0, 0.3, 0],
 </dd>
 <dt>rate_series<span class="classifier">float, optional</span></dt><dd><p>Percentage of missing values per series (default is 0.2).</p>
 </dd>
-<dt>limit<span class="classifier">float, optional</span></dt><dd><p>Percentage expressing the limit index of the end of the contamination (default is 1: all length).</p>
+<dt>limit<span class="classifier">float, optional</span></dt><dd><p>Fraction of the series length defining the maximum timestamp affected by contamination (default is 1.0, the full length).</p>
 </dd>
-<dt>shift<span class="classifier">float, optional</span></dt><dd><p>Percentage of shift inside each the last disjoint contamination.</p>
+<dt>shift<span class="classifier">float, optional</span></dt><dd><p>Fraction of the series length by which each new missing block starts before the previous block ends (default is 0.05).</p>
 </dd>
 <dt>offset<span class="classifier">float, optional</span></dt><dd><p>Size of the uncontaminated section at the beginning of the series (default is 0.1).</p>
 </dd>
@@ -687,9 +706,11 @@ Most match the shape of input data without the offset : (e.g. [[0.1, 0, 0.3, 0],
 </section>
 <section id="id23">
 <h4>Example<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
+</div></blockquote>
 </section>
 </dd></dl>
 

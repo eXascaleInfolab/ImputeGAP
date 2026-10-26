@@ -103,69 +103,31 @@ class Benchmark:
 
         return imputer_tr, runs_plots_scores
 
-    def _benchmark_exception(self, data, algorithm, pattern, x, N, F):
-        """
-        Check whether a specific algorithm-pattern combination should be excluded from benchmarking.
+    #def _benchmark_exception(self, data, algorithm, pattern, x, N, F):
+        #return False
 
-        This function flags exceptions where benchmarking is not appropriate or known to fail,
-        based on the algorithm name, the missingness pattern, and the missingness rate `x`.
-
-        Parameters
-        ----------
-        data : str
-            Dataset used
-
-        algorithm : str
-            Name of the imputation algorithm (e.g., 'DEEPMVI', 'PRISTI').
-
-        pattern : str
-            Missing data pattern (e.g., 'MCAR', 'ALIGNED').
-
-        x : float
-            Proportion of missing values in the data (between 0 and 1).
-
-        N: int
-            Number of values
-
-        F : int
-            Number of series
-
-        Returns
-        -------
-        bool
-            True if the benchmark should be skipped for the given configuration, False otherwise.
-
-        Rules
-        -----
-            - For DeepMVI with MCAR pattern and x > 0.6, skip benchmarking.
-            - For PRISTI, always skip benchmarking.
-        """
-
-        # if M < 5 or N < 5:
-        #    print(f"\n(BENCH) The imputation algorithm {algorithm} has not enough data to proceed ({M}, {N})")
-        return False
-
-        if algorithm.upper() == 'DEEPMVI' or algorithm.upper() == 'DEEP_MVI':
-            if pattern.lower() == "mcar" or pattern.lower() == "missing_completely_at_random":
-                if x > 0.6:
-                    print(
-                        f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {pattern} with missingness rate more than 0.6.")
-                    return True
-            if pattern.lower() == "mp" or pattern.lower() == "aligned":
-                if x < 0.15:
-                    print(
-                        f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {pattern} with missingness rate less then 0.15.")
-                    return True
-            if data == "meteo":
-                return True
-
-        if data == "meteo":
-            if x >= 0.8:
-                print(
-                    f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {data}. Not enough series to train the model.")
-                return True
-
-        return False
+        #if algorithm.upper() == 'DEEPMVI' or algorithm.upper() == 'DEEP_MVI':
+        #    if pattern.lower() == "mcar" or pattern.lower() == "missing_completely_at_random":
+        #        if x > 0.6:
+        #            print(
+        #                 f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {pattern} with missingness rate more than 0.6.")
+        #            return True
+        #    if pattern.lower() == "mp" or pattern.lower() == "aligned":
+        #        if x < 0.15:
+        #           print(
+        #                f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {pattern} with missingness rate less then 0.15.")
+        #            return True
+        #    if data == "meteo":
+        #        return True
+        #
+        #if data == "meteo":
+        #    if x >= 0.8:
+        #        print(
+        #            f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {data}. Not enough series to train the model.")
+        #       return True
+        #
+        #
+        #return False
 
     def _config_optimization(self, opti_mean, ts_test, pattern, algorithm, block_size_mcar):
         """
@@ -1786,17 +1748,16 @@ class Benchmark:
 
                                 start_time_imputation = time.time()
 
-                                if not self._benchmark_exception(dataset, algorithm, pattern, x, N, M):
-                                    if (utils.check_family("DeepLearning", algorithm) or utils.check_family("LLMs",
-                                                                                                            algorithm)) and dl_ratio is not None:
-                                        if x > round(1 - dl_ratio, 2):
-                                            algo.recov_data = incomp_data
-                                        else:
-                                            algo.impute(params=opti_params, tr_ratio=dl_ratio)
+                                #if not self._benchmark_exception(dataset, algorithm, pattern, x, N, M):
+                                if (utils.check_family("DeepLearning", algorithm) or utils.check_family("LLMs", algorithm)) and dl_ratio is not None:
+                                    if x > round(1 - dl_ratio, 2):
+                                        algo.recov_data = incomp_data
                                     else:
-                                        algo.impute(params=opti_params)
+                                        algo.impute(params=opti_params, tr_ratio=dl_ratio)
                                 else:
-                                    algo.recov_data = incomp_data
+                                    algo.impute(params=opti_params)
+                                #else:
+                                #algo.recov_data = incomp_data
 
                                 end_time_imputation = time.time()
 

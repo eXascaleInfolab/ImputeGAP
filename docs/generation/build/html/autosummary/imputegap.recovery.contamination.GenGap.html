@@ -315,21 +315,21 @@
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>mcar(ts, series_rate=0.2, missing_rate=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True) :</dt><dd><p>Apply Missing Completely at Random (MCAR) contamination to selected series.</p>
+<dt>mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True)</dt><dd><p>Apply Missing Completely at Random (MCAR) contamination to selected series.</p>
 </dd>
-<dt>aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True):</dt><dd><p>Apply missing percentage contamination to selected series.</p>
+<dt>aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True)</dt><dd><p>Apply missing percentage contamination to selected series.</p>
 </dd>
-<dt>blackout(ts, missing_rate=0.2, offset=0.1, logic_by_series=True, verbose=True) :</dt><dd><p>Apply blackout contamination to selected series.</p>
+<dt>blackout(input_data, rate_series=0.2, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply blackout contamination to selected series.</p>
 </dd>
-<dt>gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True):</dt><dd><p>Apply Gaussian contamination to selected series.</p>
+<dt>gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True)</dt><dd><p>Apply Gaussian contamination to selected series.</p>
 </dd>
-<dt>distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True):</dt><dd><p>Apply any distribution contamination to the time series data based on their probabilities.</p>
+<dt>distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True)</dt><dd><p>Apply any distribution contamination to the time series data based on their probabilities.</p>
 </dd>
-<dt>disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True):</dt><dd><p>Apply Disjoint contamination to selected series.</p>
+<dt>disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply Disjoint contamination to selected series.</p>
 </dd>
-<dt>overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True):</dt><dd><p>Apply Overlapping contamination to selected series.</p>
+<dt>overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply Overlapping contamination to selected series.</p>
 </dd>
-<dt>mirror_gap(raw_data, ts_m, axis=0, verbose=True):</dt><dd><p>Mirror the NaNs values of the current patterns.</p>
+<dt>mirror_gap(raw_data, ts_m, axis=0, verbose=True):</dt><dd><p>Mirror the missing-value positions of the input pattern.</p>
 </dd>
 </dl>
 </section>
@@ -370,13 +370,13 @@
 <td><p>Missing blocks are introduced completely at random.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.mirror_gap" title="imputegap.recovery.contamination.GenGap.mirror_gap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mirror_gap</span></code></a>(ts_m[, axis, verbose])</p></td>
-<td><p>Configure and execute forecaster model for downstream analytics</p></td>
+<td><p>Mirror the missing-value positions of a contaminated time series.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.overlap" title="imputegap.recovery.contamination.GenGap.overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlap</span></code></a>([rate_series, limit, shift, offset, ...])</p></td>
 <td><p>Each missing block starts at the end of the previous one with a specified shift, so the missing intervals are consecutive and overlap.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.scattered" title="imputegap.recovery.contamination.GenGap.scattered"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scattered</span></code></a>([rate_dataset, rate_series, ...])</p></td>
-<td><p>The missing blocks all have the same size, but their starting positions are chosen at random.</p></td>
+<td><p>A contiguous interval of missing values is introduced at a randomly selected position within each selected series.</p></td>
 </tr>
 </tbody>
 </table>

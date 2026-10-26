@@ -33,7 +33,7 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         Custom file path for the TOML file (default is None).
 
     verbose : bool, optional
-        Whether to display the contamination information (default is False).
+         Whether to display information about the loaded parameter file (default is False).
 
     task: string, optional
         Task of the model (default is "default"). It will load the default parameters for the specific task.
@@ -46,15 +46,15 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         The return type depends on the selected algorithm.
     """
 
-    file_to_load = "default_values.toml"
+    if task in ("classification", "classifier"):
+        file_to_load = "default_values_c.toml"
+    elif task in ("forecasting", "forecaster"):
+        file_to_load = "default_values_f.toml"
+    else:
+        file_to_load = "default_values.toml"
 
-    if task != "default" or task == "imputation":
-        if task == "classification" or task == "classifier":
-            file_to_load = "default_values_c.toml"
-        elif task == "forecasting" or task == "forecaster":
-            file_to_load = "default_values_f.toml"
-        else:
-            raise ValueError(f"Unsupported task: {task}")
+    if verbose:
+        print(f"{query=} - {task=} - {file_to_load=}")
 
     if query == "default":
         if path is None:

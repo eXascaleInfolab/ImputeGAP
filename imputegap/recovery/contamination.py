@@ -8,29 +8,29 @@ class GenGap:
 
     Methods
     -------
-    mcar(ts, series_rate=0.2, missing_rate=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True) :
-            Apply Missing Completely at Random (MCAR) contamination to selected series.
+    mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True)
+        Apply Missing Completely at Random (MCAR) contamination to selected series.
 
-    aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True):
+    aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True)
         Apply missing percentage contamination to selected series.
 
-    blackout(ts, missing_rate=0.2, offset=0.1, logic_by_series=True, verbose=True) :
+    blackout(input_data, rate_series=0.2, offset=0.1, logic_by_series=True, verbose=True)
         Apply blackout contamination to selected series.
 
-    gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True):
+    gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True)
         Apply Gaussian contamination to selected series.
 
-    distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True):
+    distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True)
         Apply any distribution contamination to the time series data based on their probabilities.
 
-    disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True):
+    disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True)
         Apply Disjoint contamination to selected series.
 
-    overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True):
+    overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True)
         Apply Overlapping contamination to selected series.
 
     mirror_gap(raw_data, ts_m, axis=0, verbose=True):
-        Mirror the NaNs values of the current patterns.
+        Mirror the missing-value positions of the input pattern.
 
     References
     ----------
@@ -54,19 +54,27 @@ class GenGap:
 
     def mirror_gap(raw_data, ts_m, axis=0, verbose=False):
         """
-        Configure and execute forecaster model for downstream analytics
+        Mirror the missing-value positions of a contaminated time series.
 
         Parameters
         ----------
-        model : str
-            name of the forcaster model
-        params : list of params
-            List of paramaters for a forcaster model
+        raw_data : numpy.ndarray
+        Original time series matrix.
+
+        ts_m : numpy.ndarray
+            Contaminated matrix whose NaN positions define the missing-value mask.
+
+        axis : int, optional
+            Axis along which the missing-value mask is flipped (default is 0).
+
+        verbose : bool, optional
+            Whether to display the original and mirrored masks (default is False).
 
         Returns
         -------
-        Forecaster object (SKTIME/DART)
-            Forecaster object for downstream analytics
+        numpy.ndarray
+            Copy of raw_data with NaN values inserted at the mirrored
+            missing-value positions.
         """
         mask = np.isnan(ts_m)
         mirrored_mask = np.flip(mask, axis=axis)
@@ -125,7 +133,9 @@ class GenGap:
 
         Example
         -------
-            >>> ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):
+         .. code-block:: python
+
+            ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):
 
         """
 
@@ -278,7 +288,9 @@ class GenGap:
 
         Example
         -------
-            >>> ts_m = GenGap.aligned(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1):
+         .. code-block:: python
+
+            ts_m = GenGap.aligned(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1):
 
         """
 
@@ -342,8 +354,7 @@ class GenGap:
 
     def scattered(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
         """
-        The missing blocks all have the same size, but their starting positions are chosen at random.
-
+        A contiguous interval of missing values is introduced at a randomly selected position within each selected series.
         Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
 
         Parameters
@@ -379,7 +390,9 @@ class GenGap:
 
         Example
         -------
-            >>> ts_m = GenGap.scattered(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1)
+         .. code-block:: python
+
+            ts_m = GenGap.scattered(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1)
 
         """
 
@@ -473,7 +486,9 @@ class GenGap:
 
         Example
         -------
-            >>> ts_m =GenGap.blackout(ts.data, series_rate=0.2)
+          .. code-block:: python
+
+            ts_m =GenGap.blackout(ts.data, series_rate=0.2)
 
         """
         return GenGap.aligned(input_data, rate_dataset=1, rate_series=rate_series, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
@@ -503,7 +518,7 @@ class GenGap:
             Possibilities : "position", "values".
 
         std_dev : float, optional
-            Standard deviation of the Gaussian distribution for missing values (default is 0.4).
+            Standard deviation of the Gaussian distribution for missing values (default is 0.2).
 
         offset : float, optional
             Size of the uncontaminated section at the beginning of the series (default is 0.1).
@@ -527,7 +542,9 @@ class GenGap:
 
         Example
         -------
-            >>> ts_m = GenGap.gaussian(ts.data, rate_series=0.2, std_dev=0.4, offset=0.1):
+          .. code-block:: python
+
+            ts_m = GenGap.gaussian(ts.data, rate_series=0.2, std_dev=0.4, offset=0.1):
 
         """
         from scipy.stats import norm
@@ -654,7 +671,9 @@ class GenGap:
 
         Example
         -------
-            >>> ts_m = GenGap.distribution(ts.data, rate_dataset=0.2, rate_series=0.2, probabilities_list=probabilities_list, offset=0.1)
+         .. code-block:: python
+
+            ts_m = GenGap.distribution(ts.data, rate_dataset=0.2, rate_series=0.2, probabilities_list=probabilities_list, offset=0.1)
 
         """
 
@@ -742,7 +761,7 @@ class GenGap:
             Percentage of missing values per series (default is 0.1).
 
         limit : float, optional
-            Percentage expressing the limit index of the end of the contamination (default is 1: all length).
+            Fraction of the series length defining the maximum timestamp affected by contamination (default is 1.0, the full length).
 
         offset : float, optional
             Size of the uncontaminated section at the beginning of the series (default is 0.1).
@@ -760,7 +779,9 @@ class GenGap:
 
         Example
         -------
-            >>> ts_m = GenGap.disjoint(ts.data, rate_series=0.1, limit=1, offset=0.1)
+         .. code-block:: python
+
+            ts_m = GenGap.disjoint(ts.data, rate_series=0.1, limit=1, offset=0.1)
 
         """
 
@@ -782,7 +803,6 @@ class GenGap:
 
         if verbose:
             print(f"\n(CONT) missigness pattern: DISJOINT"
-                  f"\n\tpercentage of contaminated series: {rate_series * 100}%"
                   f"\n\trate of missing data per series: {rate_series * 100}%"
                   f"\n\tsecurity offset: [0-{offset_nbr}]"
                   f"\n\tlimit: {limit}\n")
@@ -833,10 +853,10 @@ class GenGap:
             Percentage of missing values per series (default is 0.2).
 
         limit : float, optional
-            Percentage expressing the limit index of the end of the contamination (default is 1: all length).
+            Fraction of the series length defining the maximum timestamp affected by contamination (default is 1.0, the full length).
 
         shift : float, optional
-            Percentage of shift inside each the last disjoint contamination.
+            Fraction of the series length by which each new missing block starts before the previous block ends (default is 0.05).
 
         offset : float, optional
             Size of the uncontaminated section at the beginning of the series (default is 0.1).
@@ -854,7 +874,9 @@ class GenGap:
 
         Example
         -------
-            >>> ts_m = GenGap.overlap(ts.data, rate_series=0.1, limit=1, shift=0.05, offset=0.1)
+          .. code-block:: python
+
+            ts_m = GenGap.overlap(ts.data, rate_series=0.1, limit=1, shift=0.05, offset=0.1)
 
         """
 
@@ -876,7 +898,6 @@ class GenGap:
 
         if verbose:
             print(f"\n(CONT) missigness pattern: OVERLAP"
-                  f"\n\tpercentage of contaminated series: {rate_series * 100}%"
                   f"\n\trate of missing data per series: {rate_series * 100}%"
                   f"\n\tsecurity offset: [0-{offset_nbr}]"
                   f"\n\tshift: {shift * 100} %"

@@ -407,69 +407,31 @@
 
         <span class="k">return</span> <span class="n">imputer_tr</span><span class="p">,</span> <span class="n">runs_plots_scores</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_benchmark_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">F</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check whether a specific algorithm-pattern combination should be excluded from benchmarking.</span>
+    <span class="c1">#def _benchmark_exception(self, data, algorithm, pattern, x, N, F):</span>
+        <span class="c1">#return False</span>
 
-<span class="sd">        This function flags exceptions where benchmarking is not appropriate or known to fail,</span>
-<span class="sd">        based on the algorithm name, the missingness pattern, and the missingness rate `x`.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data : str</span>
-<span class="sd">            Dataset used</span>
-
-<span class="sd">        algorithm : str</span>
-<span class="sd">            Name of the imputation algorithm (e.g., &#39;DEEPMVI&#39;, &#39;PRISTI&#39;).</span>
-
-<span class="sd">        pattern : str</span>
-<span class="sd">            Missing data pattern (e.g., &#39;MCAR&#39;, &#39;ALIGNED&#39;).</span>
-
-<span class="sd">        x : float</span>
-<span class="sd">            Proportion of missing values in the data (between 0 and 1).</span>
-
-<span class="sd">        N: int</span>
-<span class="sd">            Number of values</span>
-
-<span class="sd">        F : int</span>
-<span class="sd">            Number of series</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        bool</span>
-<span class="sd">            True if the benchmark should be skipped for the given configuration, False otherwise.</span>
-
-<span class="sd">        Rules</span>
-<span class="sd">        -----</span>
-<span class="sd">            - For DeepMVI with MCAR pattern and x &gt; 0.6, skip benchmarking.</span>
-<span class="sd">            - For PRISTI, always skip benchmarking.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># if M &lt; 5 or N &lt; 5:</span>
-        <span class="c1">#    print(f&quot;\n(BENCH) The imputation algorithm {algorithm} has not enough data to proceed ({M}, {N})&quot;)</span>
-        <span class="k">return</span> <span class="kc">False</span>
-
-        <span class="k">if</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DEEPMVI&#39;</span> <span class="ow">or</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DEEP_MVI&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;mcar&quot;</span> <span class="ow">or</span> <span class="n">pattern</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;missing_completely_at_random&quot;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">0.6</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(BENCH) The imputation algorithm </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is not compatible with this configuration </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2"> with missingness rate more than 0.6.&quot;</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;mp&quot;</span> <span class="ow">or</span> <span class="n">pattern</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;aligned&quot;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.15</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(BENCH) The imputation algorithm </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is not compatible with this configuration </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2"> with missingness rate less then 0.15.&quot;</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s2">&quot;meteo&quot;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s2">&quot;meteo&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">0.8</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(BENCH) The imputation algorithm </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2"> is not compatible with this configuration </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">. Not enough series to train the model.&quot;</span><span class="p">)</span>
-                <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1">#if algorithm.upper() == &#39;DEEPMVI&#39; or algorithm.upper() == &#39;DEEP_MVI&#39;:</span>
+        <span class="c1">#    if pattern.lower() == &quot;mcar&quot; or pattern.lower() == &quot;missing_completely_at_random&quot;:</span>
+        <span class="c1">#        if x &gt; 0.6:</span>
+        <span class="c1">#            print(</span>
+        <span class="c1">#                 f&quot;\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {pattern} with missingness rate more than 0.6.&quot;)</span>
+        <span class="c1">#            return True</span>
+        <span class="c1">#    if pattern.lower() == &quot;mp&quot; or pattern.lower() == &quot;aligned&quot;:</span>
+        <span class="c1">#        if x &lt; 0.15:</span>
+        <span class="c1">#           print(</span>
+        <span class="c1">#                f&quot;\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {pattern} with missingness rate less then 0.15.&quot;)</span>
+        <span class="c1">#            return True</span>
+        <span class="c1">#    if data == &quot;meteo&quot;:</span>
+        <span class="c1">#        return True</span>
+        <span class="c1">#</span>
+        <span class="c1">#if data == &quot;meteo&quot;:</span>
+        <span class="c1">#    if x &gt;= 0.8:</span>
+        <span class="c1">#        print(</span>
+        <span class="c1">#            f&quot;\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {data}. Not enough series to train the model.&quot;)</span>
+        <span class="c1">#       return True</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
+        <span class="c1">#return False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_config_optimization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opti_mean</span><span class="p">,</span> <span class="n">ts_test</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">block_size_mcar</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2116,17 +2078,16 @@
 
                                 <span class="n">start_time_imputation</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_benchmark_exception</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
-                                    <span class="k">if</span> <span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;DeepLearning&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">)</span> <span class="ow">or</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;LLMs&quot;</span><span class="p">,</span>
-                                                                                                            <span class="n">algorithm</span><span class="p">))</span> <span class="ow">and</span> <span class="n">dl_ratio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                        <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">dl_ratio</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-                                            <span class="n">algo</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">incomp_data</span>
-                                        <span class="k">else</span><span class="p">:</span>
-                                            <span class="n">algo</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">opti_params</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="n">dl_ratio</span><span class="p">)</span>
+                                <span class="c1">#if not self._benchmark_exception(dataset, algorithm, pattern, x, N, M):</span>
+                                <span class="k">if</span> <span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;DeepLearning&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">)</span> <span class="ow">or</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_family</span><span class="p">(</span><span class="s2">&quot;LLMs&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">))</span> <span class="ow">and</span> <span class="n">dl_ratio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="nb">round</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">dl_ratio</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                                        <span class="n">algo</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">incomp_data</span>
                                     <span class="k">else</span><span class="p">:</span>
-                                        <span class="n">algo</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">opti_params</span><span class="p">)</span>
+                                        <span class="n">algo</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">opti_params</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="n">dl_ratio</span><span class="p">)</span>
                                 <span class="k">else</span><span class="p">:</span>
-                                    <span class="n">algo</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">incomp_data</span>
+                                    <span class="n">algo</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">opti_params</span><span class="p">)</span>
+                                <span class="c1">#else:</span>
+                                <span class="c1">#algo.recov_data = incomp_data</span>
 
                                 <span class="n">end_time_imputation</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 

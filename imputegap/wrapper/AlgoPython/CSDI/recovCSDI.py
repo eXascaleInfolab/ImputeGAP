@@ -91,7 +91,7 @@ def recovCSDI(ts_m, seq_len=-1, batch_size=-1, epochs=200, num_workers=0, nsampl
 
 
     if verbose or True:
-        print(f"(IMPUTATION) CSDI\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tbatch_size: {config['train']['batch_size']}\n\tepochs: {config['train']['epochs']}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {args.target_strategy}\n\tnsample: {args.nsample}\n\tfeatures: {args.features}\n\tbeta_start: {config["diffusion"]["beta_start"]}\n\tbeta_end: {config["diffusion"]["beta_end"]}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tshuffle: {args.shuffle}\n\tinner normalizer: {args.normalize}\n\tseed: {seed}\n\tverbose: {verbose}\n\tdevice: {args.device}\n")
+        print(f"(IMPUTATION) CSDI\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tbatch_size: {config['train']['batch_size']}\n\tepochs: {config['train']['epochs']}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {args.target_strategy}\n\tnsample: {args.nsample}\n\tfeatures: {args.features}\n\tbeta_start: {config['diffusion']['beta_start']}\n\tbeta_end: {config['diffusion']['beta_end']}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tshuffle: {args.shuffle}\n\tinner normalizer: {args.normalize}\n\tseed: {seed}\n\tverbose: {verbose}\n\tdevice: {args.device}\n")
         print(f"call: csdi.impute(params={{'seq_len': {seq_len}, 'batch_size': {batch_size}, 'epochs': {config['train']['epochs']}, 'sliding_windows': {sliding_windows}, 'target_strategy': '{config['model']['target_strategy']}', 'nsamples': {nsamples}, 'beta': {beta}, 'num_workers': {args.num_workers}}})\n")
 
     if deep_verbose:

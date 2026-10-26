@@ -157,7 +157,8 @@ class TimeSeries:
             If ``None``, all available timestamps are retained.
 
         normalizer : str or None, default="z_score"
-            Normalization technique applied independently to the TRAIN and TEST data.
+            Normalization technique applied independently to the train and test data.
+
             Supported options include:
 
             - ``"z_score"`` : Z-score normalization.
@@ -326,7 +327,7 @@ class TimeSeries:
             portions.
 
             - ``horizon == 0``: No train/test split is performed and the normalized data matrix is returned directly.
-            - ``0 < horizon <= 1``: The horizon is interpreted as a fraction of the dataset. The training ratio is computed as ``1 - horizon`` and truncated to one decimal place.
+            - ``0 < horizon <= 1``: The horizon is interpreted as a fraction of the dataset, with the remaining fraction used for training.
             - ``horizon > 1``: The horizon is interpreted as an absolute number of timestamps reservedfor forecasting.
 
         normalizer : str or None, default="z_score"
@@ -389,10 +390,6 @@ class TimeSeries:
                 season = np.genfromtxt(data_se, delimiter=' ', skip_header=int(header))
                 season = int(season)
 
-                if verbose:
-                    print("\n(SYS) The dataset is loaded from " + str(data_ma) + "\n")
-                    print(f"\n(SYS) The season is loaded from {str(data_se)} > {season}\n")
-
                 if nbr_series is not None:
                     self.data = self.data[:, :nbr_series]
             else:
@@ -403,18 +400,21 @@ class TimeSeries:
             if normalizer is not None:
                 self.data = self.normalize(normalizer=normalizer, data=self.data, verbose=verbose)
 
+            time_len = self.data.shape[0]
             if horizon == 0:
                 return self.data
-
-            elif horizon <=1 :
+            elif horizon <=1:
                 split = int((1 - horizon) * 10) / 10
-                time_len = self.data.shape[0]
                 train_len = int(time_len * split)
             else:
                 train_len = self.data.shape[0] - horizon
 
             X_train = self.data[:train_len, :]
             y_train = self.data[train_len:, :]
+
+            if verbose:
+                print("\n(SYS) The dataset is loaded from " + str(data_ma) + "\n")
+                print(f"\n(SYS) The season is loaded from {str(data_se)} > {season=} > horizon={time_len-train_len}\n")
 
             self.data = (X_train, y_train, season, horizon)
 

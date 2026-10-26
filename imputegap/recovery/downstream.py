@@ -954,7 +954,9 @@ class Downstream:
         elif self.downstream.selected_series == -1:
             selected_series = range(self.input_data.shape[1])
 
-        if self.verbose:
+        if self.verbose and evaluator == "forecaster":
+            print(f"\n(DOWNSTREAM) Analysis launched !\n\ttask: {evaluator}\n\tmodel: {model}\n\tparams: {params}\n\tbase algorithm: {str(self.algorithm).lower()}\n\treference algorithm: {str(self.downstream.baseline).lower()}\n\tselected series: {selected_series}\n\thorizon: {self.downstream.artifact.horizon}\n")
+        elif self.verbose and evaluator == "classifier":
             print(f"\n(DOWNSTREAM) Analysis launched !\n\ttask: {evaluator}\n\tmodel: {model}\n\tparams: {params}\n\tbase algorithm: {str(self.algorithm).lower()}\n\treference algorithm: {str(self.downstream.baseline).lower()}\n\tselected series: {selected_series}\n")
 
         if evaluator == "forecaster":

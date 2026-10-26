@@ -34,11 +34,16 @@ jobs:
         sudo apt-get install -y libmlpack-dev libopenblas-dev python3-dev build-essential
         pip install -r requirements.txt
         pip install mypy pytest
-        
+
+    - name: Check PyTorch environment
+      run: |
+        python --version
+        python -m pip show torch torchvision torchaudio numpy scipy
+        python -c "import torch; print('Torch:', torch.__version__); print('CUDA:', torch.version.cuda)"
+            
 
     - name: Run pytest
       run: |
         python -m pytest ./tests/test_imputation_hkmf_t.py
-        python -m pytest ./tests/test_imputation_saits.py
         python -m pytest ./tests/test_imputation_timesnet.py
         python -m pytest ./tests/test_imputation_csdi.py

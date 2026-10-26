@@ -404,8 +404,8 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 <dt>nbr_val<span class="classifier">int, optional</span></dt><dd><p>Maximum number of timestamps to retain for each time series.
 If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all available timestamps are retained.</p>
 </dd>
-<dt>normalizer<span class="classifier">str or None, default=”z_score”</span></dt><dd><p>Normalization technique applied independently to the TRAIN and TEST data.
-Supported options include:</p>
+<dt>normalizer<span class="classifier">str or None, default=”z_score”</span></dt><dd><p>Normalization technique applied independently to the train and test data.</p>
+<p>Supported options include:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;z_score&quot;</span></code> : Z-score normalization.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;min_max&quot;</span></code> : Min-max normalization.</p></li>
@@ -486,7 +486,7 @@ available values are loaded.</p>
 portions.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">horizon</span> <span class="pre">==</span> <span class="pre">0</span></code>: No train/test split is performed and the normalized data matrix is returned directly.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">horizon</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code>: The horizon is interpreted as a fraction of the dataset. The training ratio is computed as <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">horizon</span></code> and truncated to one decimal place.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">horizon</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code>: The horizon is interpreted as a fraction of the dataset, with the remaining fraction used for training.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">horizon</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>: The horizon is interpreted as an absolute number of timestamps reservedfor forecasting.</p></li>
 </ul>
 </dd>

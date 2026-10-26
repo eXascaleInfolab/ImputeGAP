@@ -312,29 +312,29 @@
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
-<span class="sd">    mcar(ts, series_rate=0.2, missing_rate=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True) :</span>
-<span class="sd">            Apply Missing Completely at Random (MCAR) contamination to selected series.</span>
+<span class="sd">    mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True)</span>
+<span class="sd">        Apply Missing Completely at Random (MCAR) contamination to selected series.</span>
 
-<span class="sd">    aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True):</span>
+<span class="sd">    aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True)</span>
 <span class="sd">        Apply missing percentage contamination to selected series.</span>
 
-<span class="sd">    blackout(ts, missing_rate=0.2, offset=0.1, logic_by_series=True, verbose=True) :</span>
+<span class="sd">    blackout(input_data, rate_series=0.2, offset=0.1, logic_by_series=True, verbose=True)</span>
 <span class="sd">        Apply blackout contamination to selected series.</span>
 
-<span class="sd">    gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True):</span>
+<span class="sd">    gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True)</span>
 <span class="sd">        Apply Gaussian contamination to selected series.</span>
 
-<span class="sd">    distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True):</span>
+<span class="sd">    distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True)</span>
 <span class="sd">        Apply any distribution contamination to the time series data based on their probabilities.</span>
 
-<span class="sd">    disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True):</span>
+<span class="sd">    disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True)</span>
 <span class="sd">        Apply Disjoint contamination to selected series.</span>
 
-<span class="sd">    overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True):</span>
+<span class="sd">    overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True)</span>
 <span class="sd">        Apply Overlapping contamination to selected series.</span>
 
 <span class="sd">    mirror_gap(raw_data, ts_m, axis=0, verbose=True):</span>
-<span class="sd">        Mirror the NaNs values of the current patterns.</span>
+<span class="sd">        Mirror the missing-value positions of the input pattern.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -363,19 +363,27 @@
 <a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.mirror_gap">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">mirror_gap</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">ts_m</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Configure and execute forecaster model for downstream analytics</span>
+<span class="sd">        Mirror the missing-value positions of a contaminated time series.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        model : str</span>
-<span class="sd">            name of the forcaster model</span>
-<span class="sd">        params : list of params</span>
-<span class="sd">            List of paramaters for a forcaster model</span>
+<span class="sd">        raw_data : numpy.ndarray</span>
+<span class="sd">        Original time series matrix.</span>
+
+<span class="sd">        ts_m : numpy.ndarray</span>
+<span class="sd">            Contaminated matrix whose NaN positions define the missing-value mask.</span>
+
+<span class="sd">        axis : int, optional</span>
+<span class="sd">            Axis along which the missing-value mask is flipped (default is 0).</span>
+
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Whether to display the original and mirrored masks (default is False).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Forecaster object (SKTIME/DART)</span>
-<span class="sd">            Forecaster object for downstream analytics</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            Copy of raw_data with NaN values inserted at the mirrored</span>
+<span class="sd">            missing-value positions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ts_m</span><span class="p">)</span>
         <span class="n">mirrored_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
@@ -437,7 +445,9 @@
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
-<span class="sd">            &gt;&gt;&gt; ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):</span>
+<span class="sd">         .. code-block:: python</span>
+
+<span class="sd">            ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -593,7 +603,9 @@
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
-<span class="sd">            &gt;&gt;&gt; ts_m = GenGap.aligned(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1):</span>
+<span class="sd">         .. code-block:: python</span>
+
+<span class="sd">            ts_m = GenGap.aligned(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1):</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -660,8 +672,7 @@
 <a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.scattered">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">scattered</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The missing blocks all have the same size, but their starting positions are chosen at random.</span>
-
+<span class="sd">        A contiguous interval of missing values is introduced at a randomly selected position within each selected series.</span>
 <span class="sd">        Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html</span>
 
 <span class="sd">        Parameters</span>
@@ -697,7 +708,9 @@
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
-<span class="sd">            &gt;&gt;&gt; ts_m = GenGap.scattered(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1)</span>
+<span class="sd">         .. code-block:: python</span>
+
+<span class="sd">            ts_m = GenGap.scattered(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -794,7 +807,9 @@
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
-<span class="sd">            &gt;&gt;&gt; ts_m =GenGap.blackout(ts.data, series_rate=0.2)</span>
+<span class="sd">          .. code-block:: python</span>
+
+<span class="sd">            ts_m =GenGap.blackout(ts.data, series_rate=0.2)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">rate_series</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span></div>
@@ -827,7 +842,7 @@
 <span class="sd">            Possibilities : &quot;position&quot;, &quot;values&quot;.</span>
 
 <span class="sd">        std_dev : float, optional</span>
-<span class="sd">            Standard deviation of the Gaussian distribution for missing values (default is 0.4).</span>
+<span class="sd">            Standard deviation of the Gaussian distribution for missing values (default is 0.2).</span>
 
 <span class="sd">        offset : float, optional</span>
 <span class="sd">            Size of the uncontaminated section at the beginning of the series (default is 0.1).</span>
@@ -851,7 +866,9 @@
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
-<span class="sd">            &gt;&gt;&gt; ts_m = GenGap.gaussian(ts.data, rate_series=0.2, std_dev=0.4, offset=0.1):</span>
+<span class="sd">          .. code-block:: python</span>
+
+<span class="sd">            ts_m = GenGap.gaussian(ts.data, rate_series=0.2, std_dev=0.4, offset=0.1):</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
@@ -981,7 +998,9 @@
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
-<span class="sd">            &gt;&gt;&gt; ts_m = GenGap.distribution(ts.data, rate_dataset=0.2, rate_series=0.2, probabilities_list=probabilities_list, offset=0.1)</span>
+<span class="sd">         .. code-block:: python</span>
+
+<span class="sd">            ts_m = GenGap.distribution(ts.data, rate_dataset=0.2, rate_series=0.2, probabilities_list=probabilities_list, offset=0.1)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1072,7 +1091,7 @@
 <span class="sd">            Percentage of missing values per series (default is 0.1).</span>
 
 <span class="sd">        limit : float, optional</span>
-<span class="sd">            Percentage expressing the limit index of the end of the contamination (default is 1: all length).</span>
+<span class="sd">            Fraction of the series length defining the maximum timestamp affected by contamination (default is 1.0, the full length).</span>
 
 <span class="sd">        offset : float, optional</span>
 <span class="sd">            Size of the uncontaminated section at the beginning of the series (default is 0.1).</span>
@@ -1090,7 +1109,9 @@
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
-<span class="sd">            &gt;&gt;&gt; ts_m = GenGap.disjoint(ts.data, rate_series=0.1, limit=1, offset=0.1)</span>
+<span class="sd">         .. code-block:: python</span>
+
+<span class="sd">            ts_m = GenGap.disjoint(ts.data, rate_series=0.1, limit=1, offset=0.1)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1112,7 +1133,6 @@
 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(CONT) missigness pattern: DISJOINT&quot;</span>
-                  <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">percentage of contaminated series: </span><span class="si">{</span><span class="n">rate_series</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">}</span><span class="s2">%&quot;</span>
                   <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">rate of missing data per series: </span><span class="si">{</span><span class="n">rate_series</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">}</span><span class="s2">%&quot;</span>
                   <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">security offset: [0-</span><span class="si">{</span><span class="n">offset_nbr</span><span class="si">}</span><span class="s2">]&quot;</span>
                   <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">limit: </span><span class="si">{</span><span class="n">limit</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1166,10 +1186,10 @@
 <span class="sd">            Percentage of missing values per series (default is 0.2).</span>
 
 <span class="sd">        limit : float, optional</span>
-<span class="sd">            Percentage expressing the limit index of the end of the contamination (default is 1: all length).</span>
+<span class="sd">            Fraction of the series length defining the maximum timestamp affected by contamination (default is 1.0, the full length).</span>
 
 <span class="sd">        shift : float, optional</span>
-<span class="sd">            Percentage of shift inside each the last disjoint contamination.</span>
+<span class="sd">            Fraction of the series length by which each new missing block starts before the previous block ends (default is 0.05).</span>
 
 <span class="sd">        offset : float, optional</span>
 <span class="sd">            Size of the uncontaminated section at the beginning of the series (default is 0.1).</span>
@@ -1187,7 +1207,9 @@
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
-<span class="sd">            &gt;&gt;&gt; ts_m = GenGap.overlap(ts.data, rate_series=0.1, limit=1, shift=0.05, offset=0.1)</span>
+<span class="sd">          .. code-block:: python</span>
+
+<span class="sd">            ts_m = GenGap.overlap(ts.data, rate_series=0.1, limit=1, shift=0.05, offset=0.1)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1209,7 +1231,6 @@
 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(CONT) missigness pattern: OVERLAP&quot;</span>
-                  <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">percentage of contaminated series: </span><span class="si">{</span><span class="n">rate_series</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">}</span><span class="s2">%&quot;</span>
                   <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">rate of missing data per series: </span><span class="si">{</span><span class="n">rate_series</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">}</span><span class="s2">%&quot;</span>
                   <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">security offset: [0-</span><span class="si">{</span><span class="n">offset_nbr</span><span class="si">}</span><span class="s2">]&quot;</span>
                   <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">shift: </span><span class="si">{</span><span class="n">shift</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">}</span><span class="s2"> %&quot;</span>

@@ -433,7 +433,7 @@ class Imputation:
 
                 Returns
                 -------
-                self : MinImpute
+                self : MeanImpute
                     The object with `recov_data` set.
                 """
                 from imputegap.algorithms.mean_impute import mean_impute
@@ -486,7 +486,7 @@ class Imputation:
             impute(self, params=None):
                 Perform imputation by replacing missing values with the mean value by series
             """
-            algorithm = "mean_impute"
+            algorithm = "mean_impute_by_series"
 
             def impute(self, params=None):
                 """
