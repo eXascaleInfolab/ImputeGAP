@@ -1,14 +1,18 @@
+# Standard library
 import math
 import os
 import time
-import importlib.resources
 
+# Third-party libraries
+import toml
+import importlib.resources
 import numpy as np
 import pandas as pd
-import toml
+
 from matplotlib import pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
 
+# ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
 
@@ -98,7 +102,7 @@ class Explainer:
         return categories, features, config_data
 
 
-    def extractor_tsfresh(self, data, categories=["statistical", "temporal", "shape", "frequency"]):
+    def extractor_tsfresh(self, data, categories=None):
         """
         Extract features using tsfresh and group them into 4 categories:
         statistical, temporal, frequency, and shape-based.
@@ -109,7 +113,7 @@ class Explainer:
                 2D array of shape (M, N), where M is the timestamp and N is the number of series
 
             categories (list):
-                List of categories to extract. Must include one or more of: ["statistical", "temporal", "frequency", "shape"]
+                List of categories to extract. Must include one or more of: ["statistical", "temporal", "frequency", "shape"]. If None, defaults to  ["statistical", "temporal", "shape", "frequency"].
 
         Returns
         -------
@@ -117,6 +121,9 @@ class Explainer:
             list: A list of tuples (feature_name, category, formatted_feature_name).
         """
         import tsfresh
+
+        if categories is None:
+            categories = ["statistical", "temporal", "shape", "frequency"]
 
         M, N = data.shape
         data = [[0 if num is None else num for num in sublist] for sublist in data]
@@ -170,7 +177,7 @@ class Explainer:
 
 
 
-    def extractor_tsfel(self, data, frequency=None, categories=["spectral", "statistical", "temporal"]):
+    def extractor_tsfel(self, data, frequency=None, categories=None):
         """
         Extract features using TSFEL (Time Series Feature Extraction Library).
 
@@ -195,6 +202,7 @@ class Explainer:
                 - "statistical": Extract basic statistical features (e.g., mean, variance, skewness).
                 - "temporal": Extract temporal-domain features (e.g., autocorrelation, zero crossings).
                 By default, all four categories are extracted.
+                If None, defaults categories = ["spectral", "statistical", "temporal"]
 
         Returns
         -------
@@ -221,6 +229,9 @@ class Explainer:
         - Categories can be customized to extract only the desired features, reducing computation time.
         """
         import tsfel
+
+        if categories is None:
+            categories = ["spectral", "statistical", "temporal"]
 
         data = [[0 if num is None else num for num in sublist] for sublist in data]
         data = [[0 if num is None or (isinstance(num, (float, np.float32, np.float64)) and np.isnan(num)) else num for num in sublist] for sublist in data]
@@ -398,16 +409,15 @@ class Explainer:
             if not math.isnan(rate):
                 rate = float(round(rate, 2))
 
-            result_display.append(
-                (x, algo, rate, descriptions[0][x], features[0][x], categories[0][x], mean_features[x]))
+            result_display.append((x, algo, rate, descriptions[0][x], features[0][x], categories[0][x], mean_features[x]))
 
         result_display = sorted(result_display, key=lambda tup: (tup[1], tup[2]), reverse=True)
 
         with open(to_save + "_values.txt", 'w') as file_output:
-            for (x, algo, rate, description, feature, category, mean_features) in result_display:
+            for (x, algo_, rate, description, feature, category, mean_features_) in result_display:
                 file_output.write(
-                    f"Feature : {x:<5} {algo:<10} with a score of {rate:<10} {category:<18} {description:<65} {feature}\n")
-                result_shap.append([file, algo, rate, description, feature, category, mean_features])
+                    f"Feature : {x:<5} {algo_:<10} with a score of {rate:<10} {category:<18} {description:<65} {feature}\n")
+                result_shap.append([file, algo_, rate, description, feature, category, mean_features_])
 
         return result_shap
 
@@ -773,9 +783,7 @@ class Explainer:
             training_ratio = 0.6
 
         training_ratio = int(limit * training_ratio)
-
-        if limit >= M:
-            limit = M
+        limit = min(M, limit)
 
         if verbose:
             print("\nFrom", limit, "/", M, "elements, the training dataset has been set with", training_ratio,"elements and the testing dataset with", (limit-training_ratio), "elements")

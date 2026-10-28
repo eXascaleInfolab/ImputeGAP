@@ -1,8 +1,9 @@
+# Standard library
 import re
+
+# ImputeGAP imports
 from imputegap.tools import utils
 from imputegap.recovery.evaluation import Evaluation
-
-is_optimized = ["cdrec", "stmvl", "iim"]
 
 
 class BaseImputer:
@@ -100,7 +101,7 @@ class BaseImputer:
         if recov_data is not None:
             self.recov_data = recov_data
 
-        if (isinstance(downstream, Forecaster) or isinstance(downstream, Classifier)) and downstream is not None:
+        if isinstance(downstream, (Forecaster, Classifier)):
             downstream_score = Downstream(input_data, self.recov_data, self.incomp_data, self.algorithm, downstream, self.verbose)
             self.downstream_metrics, self.downstream_plot = downstream_score.downstream_analysis()
         else:
@@ -143,38 +144,40 @@ class BaseImputer:
                     params = tuple(params.values())
                     self.parameters = params
 
-            if self.algorithm == "iim":
-                if len(self.parameters) == 1:
-                    learning_neighbors = self.parameters["learning_neighbors"]
-                    algo_code = "iim " + re.sub(r'[\W_]', '', str(learning_neighbors))
-                    if not to_tuples:
-                        self.parameters["algorithm_code"] = algo_code
-                    else:
-                        self.parameters = (learning_neighbors, algo_code)
+            if self.algorithm == "iim" and len(self.parameters) == 1:
+                learning_neighbors = self.parameters["learning_neighbors"]
+                algo_code = "iim " + re.sub(r'[\W_]', '', str(learning_neighbors))
+                if not to_tuples:
+                    self.parameters["algorithm_code"] = algo_code
+                else:
+                    self.parameters = (learning_neighbors, algo_code)
 
         return self.parameters
 
-    def _optimize(self, parameters={}):
+    def _optimize(self, parameters=None):
         """
         Conduct the optimization of the hyperparameters using different optimizers.
 
         Parameters
         ----------
         parameters : dict
-            Dictionary containing optimization configurations such as input_data, optimizer, and options.
+            Dictionary containing optimization configurations such as input_data, optimizer, and options. If None, defaults to an empty dictionary.
 
         Returns
         -------
         None
         """
         from imputegap.recovery.optimization import Optimization
-        import warnings
+
+        if parameters is None:
+            parameters = {}
 
         optimizer = str(parameters.get("optimizer", "ray_tune")).lower()
         if optimizer == "raytune":
             optimizer = "ray_tune"
 
         supported_test_optimizers = {"test-bayesian", "test-pso", "test-sh", "test-greedy", }
+        is_optimized = ["cdrec", "stmvl", "iim"]
 
         # Deprecated optimizers
         if optimizer != "ray_tune" and optimizer not in supported_test_optimizers:

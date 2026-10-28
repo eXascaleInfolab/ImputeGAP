@@ -1,8 +1,6 @@
 import time
 
-#from imputegap.wrapper.AlgoPython.DeepMVI.recovery import deep_mvi_recovery
 from imputegap.wrapper.AlgoPython.DeepMVI.recovDeepMVI import deep_mvi_recovery
-
 
 def deep_mvi(incomp_data, max_epoch=1000, patience=2, lr=0.001, batch_size=-1, tr_ratio=0.9, logs=True, verbose=True):
     """

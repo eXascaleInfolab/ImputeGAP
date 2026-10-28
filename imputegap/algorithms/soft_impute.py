@@ -1,9 +1,9 @@
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
 
 from imputegap.tools import utils
 
-def native_soft_impute(__py_matrix, __py_max_rank, __verbose=True):
+def native_soft_impute(__py_matrix, __py_max_rank, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the Soft Impute algorithm with native C++ support.
 

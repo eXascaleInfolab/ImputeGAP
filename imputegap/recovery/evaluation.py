@@ -1,3 +1,4 @@
+# Standard library
 import numpy as np
 
 class Evaluation:
@@ -183,7 +184,7 @@ class Evaluation:
                 # mi_continuous = mutual_info_score(self.input_data[nan_locations], self.input_data[nan_locations])
         except Exception as e:
             print(f"Error during MI : {e}")
-            print(f"The data is not corrupted: there are no NaNs, infinities, or abnormally high or low values in the recovery matrix.")
+            print("The data is not corrupted: there are no NaNs, infinities, or abnormally high or low values in the recovery matrix.")
             return -1
 
 

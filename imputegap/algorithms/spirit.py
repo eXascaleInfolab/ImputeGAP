@@ -1,9 +1,9 @@
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
 
 from imputegap.tools import utils
 
-def native_spirit(__py_matrix, __py_k, __py_w, __py_lvalue, __verbose=True):
+def native_spirit(__py_matrix, __py_k, __py_w, __py_lvalue, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the SPIRIT algorithm with native C++ support.
 

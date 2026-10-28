@@ -3,7 +3,7 @@ import time
 from imputegap.wrapper.AlgoPython.PriSTI.recovPriSTI import recovPriSTI
 
 
-def pristi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, target_strategy="random", nsamples=1, beta=[0.0001, 0.2], num_workers=0, tr_ratio=0.9, seed=1, logs=True, verbose=True):
+def pristi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, target_strategy="random", nsamples=1, beta=None, num_workers=0, tr_ratio=0.9, seed=1, logs=True, verbose=True):
     """
     Perform time series imputation using the PriSTI (Probabilistic Imputation via Sequential Targeted Imputation) algorithm.
 
@@ -70,6 +70,9 @@ def pristi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1,
     https://github.com/LMZZML/PriSTI
     """
     start_time = time.time()  # Record start time
+
+    if beta is None:
+        beta = [0.0001, 0.2]
 
     recov_data = recovPriSTI(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, sliding_windows=sliding_windows, target_strategy=target_strategy, nsamples=nsamples, beta=beta, num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, verbose=verbose)
 

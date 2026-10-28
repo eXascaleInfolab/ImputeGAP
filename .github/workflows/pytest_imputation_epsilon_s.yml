@@ -42,6 +42,13 @@ jobs:
         python -c "import torch; print('Torch:', torch.__version__); print('CUDA:', torch.version.cuda)"
             
 
-    - name: Run pytest
+    - name: Test SAITS
+      env:
+        OMP_NUM_THREADS: "1"
+        MKL_NUM_THREADS: "1"
+        OPENBLAS_NUM_THREADS: "1"
+        NUMEXPR_NUM_THREADS: "1"
+        PYTHONFAULTHANDLER: "1"
       run: |
-        python -m pytest ./tests/test_imputation_saits.py
+        python -m pytest -vv -s \
+          ./tests/test_imputation_saits.py

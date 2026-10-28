@@ -1,6 +1,5 @@
 import time
 
-#from imputegap.wrapper.AlgoPython.SAITS.run_models import recov_saits
 from imputegap.wrapper.AlgoPython.SAITS.recovSAITS import recov_saits
 
 def saits(incomp_data, seq_len=-1, epochs=10000, batch_size=-1, sliding_windows=1, n_head=8, num_workers=0, tr_ratio=0.7, seed=26, logs=True, verbose=True):

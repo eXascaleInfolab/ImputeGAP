@@ -3,7 +3,7 @@ import time
 from imputegap.wrapper.AlgoPython.BitGraph.recovBitGRAPH import recovBitGRAPH
 
 
-def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel_set=[2,3,6,7], epochs=50, batch_size=-1, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
+def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel_set=None, epochs=50, batch_size=-1, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
     """
     Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
 
@@ -23,7 +23,7 @@ def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel
         Size of the kernel used during training (most be smaller the seq_len). Default is 25.
 
     kernel_set : list, optional
-        Set of kernel sizes used in the model for graph convolution operations (default: [2,3,6,7]).
+        Set of kernel sizes used in the model for graph convolution operations (If None, defaults to [2, 3, 6, 7]).
 
     epochs : int, optional
         Number of training epochs (default: 10).
@@ -65,6 +65,9 @@ def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel
     https://github.com/chenxiaodanhit/BiTGraph
     """
     start_time = time.time()  # Record start time
+
+    if kernel_set is None:
+        kernel_set = [2, 3, 6, 7]
 
     #recov_data = recoveryBitGRAPH(input=incomp_data, node_number=node_number, kernel_set=kernel_set, dropout=dropout, subgraph_size=subgraph_size, node_dim=node_dim, seq_len=seq_len, lr=lr, batch_size=batch_size, tr_ratio=tr_ratio, epoch=epoch, num_workers=num_workers, seed=seed, verbose=verbose)
     recov_data = recovBitGRAPH(ts_m=incomp_data, seq_len=seq_len, sliding_windows=sliding_windows, kernel_size=kernel_size, kernel_set=kernel_set, epochs=epochs, batch_size=batch_size, subgraph_size=subgraph_size, tr_ratio=tr_ratio, num_workers=num_workers, seed=seed, verbose=verbose)

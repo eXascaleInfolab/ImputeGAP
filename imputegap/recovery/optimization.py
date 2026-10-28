@@ -1,6 +1,11 @@
+# Standard library
 import time
+
+# Third-party libraries
 from itertools import product
 import numpy as np
+
+# ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.tools.algorithm_parameters import SEARCH_SPACES, ALL_ALGO_PARAMS, PARAM_NAMES, SEARCH_SPACES_PSO, RAYTUNE_PARAMS
@@ -111,7 +116,7 @@ class Optimization:
         Perform Successive Halving optimization for hyperparameters.
     """
 
-    def optimize_adv_imputation_algo_upstream(optimizers, task="c", datasets=["Beef"], normalizer="z-score", horizon=12, test_imputation=False, verbose=False):
+    def optimize_adv_imputation_algo_upstream(optimizers, task="c", datasets=None, normalizer="z-score", horizon=12, test_imputation=False, verbose=False):
         """
         from imputegap.env.default_opti import OPTI_DICTIONARY
         from imputegap.env.default_opti import OPTI_DICTIONARY_SMALL
@@ -123,6 +128,9 @@ class Optimization:
         import os
         import time
         import pandas as pd
+
+        if datasets is None:
+            datasets = ["Beef"]
 
         for key, entry in optimizers.items():  # loop on each algorithm to optimize
             algorithm, param_to_opti = key.split("-", 1)
@@ -192,7 +200,7 @@ class Optimization:
                         summary["rank_rmse"] = summary["avg_rmse"].rank(method="min", ascending=True, na_option="bottom")
                         summary["rank_runtime"] = summary["avg_runtime"].rank(method="min", ascending=True, na_option="bottom")
                         df = df.merge(summary[[param_to_opti, "avg_rmse", "avg_runtime", "rank_rmse", "rank_runtime"]], on=param_to_opti, how="left")
-                    except:
+                    except Exception:
                         df["avg_rmse"] = 0
                         df["avg_runtime"] = 0
                         df["rank_rmse"] = 0
@@ -200,7 +208,7 @@ class Optimization:
                         print(f"cannot rank for {algorithm}...")
                     df.to_excel(path_opti, index=False)
                     print(f"\nINTERMEDIATE : results of {algorithm}, saved in {path_opti=}...\n")
-                except:
+                except Exception:
                     print(f"\nINTERMEDIATE : cannot save results of {algorithm}...\n")
 
 
@@ -216,7 +224,7 @@ class Optimization:
                     summary["rank_rmse"] = summary["avg_rmse"].rank(method="min", ascending=True, na_option="bottom")
                     summary["rank_runtime"] = summary["avg_runtime"].rank(method="min", ascending=True, na_option="bottom")
                     df = df.merge(summary[[param_to_opti, "avg_rmse", "avg_runtime", "rank_rmse", "rank_runtime"]], on=param_to_opti, how="left")
-                except:
+                except Exception:
                     df["avg_rmse"] = 0
                     df["avg_runtime"] = 0
                     df["rank_rmse"] = 0
@@ -226,7 +234,7 @@ class Optimization:
                 df.to_excel(path_opti, index=False)
                 print(f"\n\nresults of {algorithm}, saved in {path_opti=}...")
 
-            except:
+            except Exception:
                 print(f"\n\nFINAL: cannot save results of {algorithm}...")
 
 
@@ -264,7 +272,7 @@ class Optimization:
 
             return np.mean([errors[metric] for metric in metrics])
 
-        def optimize(self, input_data, incomp_data, metrics=["RMSE"], algorithm="cdrec", n_calls=250):
+        def optimize(self, input_data, incomp_data, metrics=None, algorithm="cdrec", n_calls=250):
             """
             Perform greedy optimization for hyperparameters.
 
@@ -275,7 +283,7 @@ class Optimization:
             incomp_data : numpy.ndarray
                 The contaminated time series dataset to impute.
             metrics : list of str, optional
-                List of selected metrics for optimization (default is ["RMSE"]).
+                List of selected metrics for optimization (If None, default is ["RMSE"]).
             algorithm : str, optional
                 The imputation algorithm to optimize (default is 'cdrec').
             n_calls : int, optional
@@ -287,6 +295,9 @@ class Optimization:
                 A tuple containing the best parameters and their corresponding score.
             """
             start_time = time.time()  # Record start time
+
+            if metrics is None:
+                metrics = ["RMSE"]
 
             # Map the parameter ranges to the algorithm-specific search space
             param_ranges = ALL_ALGO_PARAMS[algorithm]
@@ -369,7 +380,7 @@ class Optimization:
             errors = Imputation.evaluate_params(input_data, incomp_data, param_values, algorithm)
             return np.mean([errors[metric] for metric in metrics])
 
-        def optimize(self, input_data, incomp_data, metrics=["RMSE"], algorithm="cdrec", n_calls=100,
+        def optimize(self, input_data, incomp_data, metrics=None, algorithm="cdrec", n_calls=100,
                      n_random_starts=50, acq_func='gp_hedge'):
             """
             Perform Bayesian optimization for hyperparameters.
@@ -399,6 +410,9 @@ class Optimization:
             # BAYESIAN IMPORT
             import skopt
             from skopt.space import Integer
+
+            if metrics is None:
+                metrics = ["RMSE"]
 
             start_time = time.time()  # Record start time
 
@@ -490,8 +504,7 @@ class Optimization:
                 errors_for_all_particles[i] = np.mean([errors[metric] for metric in metrics])
             return errors_for_all_particles
 
-        def optimize(self, input_data, incomp_data, metrics, algorithm, n_particles, c1, c2, w, iterations,
-                     n_processes):
+        def optimize(self, input_data, incomp_data, metrics, algorithm, n_particles, c1, c2, w, iterations, n_processes):
             """
             Perform Particle Swarm Optimization for hyperparameters.
 
@@ -585,8 +598,7 @@ class Optimization:
             selected_errors = [errors_dict[metric] for metric in metrics]
             return np.mean(selected_errors)
 
-        def optimize(self, input_data, incomp_data, metrics, algorithm, num_configs, num_iterations,
-                     reduction_factor):
+        def optimize(self, input_data, incomp_data, metrics, algorithm, num_configs, num_iterations, reduction_factor):
             """
             Perform Successive Halving optimization for hyperparameters.
 
@@ -691,7 +703,7 @@ class Optimization:
             score = imputer.metrics.get(used_metric, "Key not found")
             return score
 
-        def optimize(self, input_data, incomp_data, metrics=["RMSE"], algorithm="cdrec", n_calls=1, max_concurrent_trials=-1):
+        def optimize(self, input_data, incomp_data, metrics=None, algorithm="cdrec", n_calls=1, max_concurrent_trials=-1):
             """
             Perform Ray Tune optimization for hyperparameters.
 
@@ -700,7 +712,7 @@ class Optimization:
             input_data : numpy.ndarray
                 The ground truth time series dataset.
             metrics : list of str, optional
-                List of selected metrics for optimization (default is ["RMSE"]).
+                List of selected metrics for optimization (If None, defaults  is ["RMSE"]).
             algorithm : str, optional
                 The imputation algorithm to optimize (default is 'cdrec').
             n_calls : int, optional
@@ -716,6 +728,9 @@ class Optimization:
             """
             from ray import tune
             import ray
+
+            if metrics is None:
+                metrics = ["RMSE"]
 
             if not ray.is_initialized():
                 ray.init()

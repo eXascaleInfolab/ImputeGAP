@@ -1,6 +1,6 @@
 import numpy as np
 from skopt.space import Integer, Real
-from ray import train, tune
+from ray import tune
 
 # CDRec parameters
 CDREC_RANK_RANGE = [i for i in range(1, 11)]  # This will generate a range from 1 to 10

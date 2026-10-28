@@ -1,8 +1,5 @@
 import time
 
-import numpy as np
-
-from imputegap.tools import utils
 from imputegap.wrapper.AlgoPython.MissNet.recovMissNet import recovMissNet
 
 def miss_net(incomp_data, n_components=20, alpha=0.5, beta=0.1, n_cl=1, max_iter=20, tol=6, random_init=False, logs=True, verbose=True):

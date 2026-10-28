@@ -1,19 +1,24 @@
+# Standard library
 import datetime
 import os
 import math
 import time
+import re
+
+# Third-party libraries
 import pandas as pd
 from collections import defaultdict
 import numpy as np
 import matplotlib.pyplot as plt
-from imputegap.tools import utils
-from imputegap.recovery.manager import TimeSeries
 import itertools
 from pathlib import Path
-import re
 
+# ImputeGAP imports
+from imputegap.tools import utils
+from imputegap.recovery.manager import TimeSeries
+
+# Global Variable
 MAX_PX = 60000  # Matplotlib hard limit (per dimension)
-
 
 class Benchmark:
     """
@@ -53,7 +58,7 @@ class Benchmark:
     def _benchmark_error(self, code, e, runs_plots_scores, ts_m, classifiers, dataset, algorithm, pattern, x, save_dir,
                          verbose):
 
-        print(f"\t\tbypass benchmark: ", dataset, algorithm, pattern, x)
+        print(f"\t\tbypass benchmark: {dataset}, {algorithm}, {pattern}, {x}")
 
         if e is None:
             e = "by pass errors..."
@@ -84,7 +89,7 @@ class Benchmark:
 
         if code == "error":
             os.makedirs(save_dir, exist_ok=True)
-            save_path = os.path.join(save_dir, f"error.log")
+            save_path = os.path.join(save_dir, "error.log")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             try:
                 if isinstance(ts_m, TimeSeries):
@@ -371,7 +376,7 @@ class Benchmark:
 
         return True
 
-    def generate_reports_summary(self, run_of_values, save_dir="./reports", dataset="", metrics=["RMSE"], run=-1, rt=0, title="", upstream=True, verbose=True, ):
+    def generate_reports_summary(self, run_of_values, save_dir="./reports", dataset="", metrics=None, run=-1, rt=0, title="", upstream=True, verbose=True, ):
         """
         Generate and save a summary report of imputation and downstream evaluation results.
 
@@ -384,7 +389,7 @@ class Benchmark:
         dataset : str, optional
             Dataset name (default is "").
         metrics : list of str, optional
-            List of evaluation metrics to include in the report (default is ["RMSE"]).
+            List of evaluation metrics to include in the report (If None, default is ["RMSE"]).
         run : int, optional
             Run number to include in the report (default is -1).
         rt : float, optional
@@ -405,6 +410,9 @@ class Benchmark:
         """
 
         from collections import defaultdict
+
+        if metrics is None:
+            metrics = ["RMSE"]
 
         os.makedirs(save_dir, exist_ok=True)
         metric_unit = "ms"
@@ -518,7 +526,7 @@ class Benchmark:
                         algo_width = 18
                         col_widths = [ds_width, rate_width] + [algo_width] * len(algos)
 
-                        def fmt_row(vals):
+                        def fmt_row(vals, col_widths=col_widths):
                             return "".join(f" {str(v):^{w}} " for v, w in zip(vals, col_widths))
 
                         header_row = fmt_row(headers)
@@ -596,7 +604,7 @@ class Benchmark:
                             opt_width = 18
                             col_widths = [ds_width, rate_width] + [opt_width] * len(opts)
 
-                            def fmt_row(vals):
+                            def fmt_row(vals, col_widths=col_widths):
                                 return "".join(f" {str(v):^{w}} " for v, w in zip(vals, col_widths))
 
                             header_row = fmt_row(headers)
@@ -819,8 +827,7 @@ class Benchmark:
 
         return xlsx_path
 
-    def generate_reports_txt(self, runs_plots_scores, save_dir="./reports", dataset="", metrics=["RMSE"], run=-1, rt=0,
-                             upstream=True, verbose=True):
+    def generate_reports_txt(self, runs_plots_scores, save_dir="./reports", given_dataset="", metrics=None, run=-1, rt=0, upstream=True, verbose=True):
         """
         Generate and save a text report of metrics and timing for each dataset, algorithm, and pattern.
 
@@ -830,10 +837,10 @@ class Benchmark:
             Dictionary containing scores and timing information for each dataset, pattern, and algorithm.
         save_dir : str, optional
             Directory to save the reports file (default is "./reports").
-        dataset : str, optional
+        given_dataset : str, optional
             Name of the data for the report name.
         metrics : str, optional
-            List of metrics asked for in the report.
+            List of metrics asked for in the report. If metrics is None, then default is ["RMSE"])
         run : int, optional
             Number of the run.
         rt : float, optional
@@ -851,6 +858,9 @@ class Benchmark:
         """
         os.makedirs(save_dir, exist_ok=True)
         metric_unit = "ms"
+
+        if metrics is None:
+            metrics = ["RMSE"]
 
         if "RMSE" not in metrics:
             if "smape_imputer" in metrics:
@@ -1028,8 +1038,7 @@ class Benchmark:
                             file.write("Dictionary of Results:\n")
                             file.write(str(runs_plots_scores) + "\n")
 
-    def generate_plots(self, runs_plots_scores, ticks, metrics=None, subplot=False, y_size=8, title=None,
-                       save_dir="./reports", display=False, upstream=True, verbose=True):
+    def generate_plots(self, runs_plots_scores, ticks, metrics=None, subplot=False, y_size=8, title=None, save_dir="./reports", display=False, upstream=True, verbose=True):
         """
         Generate and save plots for each metric and pattern based on provided scores.
 
@@ -1517,32 +1526,29 @@ class Benchmark:
             else:
                 plt.close('all')
 
-    def eval(self, algorithms=["cdrec"], datasets=["eeg-alcohol"], patterns=["mcar"],
-             x_axis=[0.05, 0.1, 0.2, 0.4, 0.6, 0.8], optimizer="default_params", metrics=["*"],
-             save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=200,
-             nbr_vals=2000, dl_ratio=None, verbose=False):
+    def eval(self, algorithms=None, datasets=None, patterns=None, x_axis=None, optimizer="default_params", metrics=None, save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=200, nbr_vals=2000, dl_ratio=None, verbose=False):
         """
         Execute a comprehensive evaluation of imputation algorithms over multiple datasets and patterns.
 
         Parameters
         ----------
         algorithms : list of str
-            List of imputation algorithms to test.
+            List of imputation algorithms to test. If None, default is ["cdrec"]
 
         datasets : list of str
-            List of dataset names to evaluate.
+            List of dataset names to evaluate. If None, default is ["eeg-alcohol"]
 
         patterns : list of str
-            List of contamination patterns to apply.
+            List of contamination patterns to apply. If None, default is ["mcar"]
 
         x_axis : list of float
-            List of missing rates for contamination.
+            List of missing rates for contamination. If None, default is [0.1, 0.2, 0.4, 0.6, 0.8]
 
         optimizer : str, dict
             Name of the optimizer (str) or optimizer with their configurations (dict).
 
         metrics : list of str
-            List of metrics for evaluation.
+            List of metrics for evaluation. If None, default is ["*"]
 
         save_dir : str, optional
             Directory to save reports and plots (default is "./reports").
@@ -1584,6 +1590,17 @@ class Benchmark:
         not_optimized = ["none"]
         mean_group = ["mean", "MeanImpute", "min", "MinImpute", "zero", "ZeroImpute", "MeanImputeBySeries",
                       "meanimpute", "minimpute", "zeroimpute", "meanimputebyseries"]
+
+        if algorithms is None:
+            algorithms = ["cdrec"]
+        if datasets is None:
+            datasets = ["eeg-alcohol"]
+        if patterns is None:
+            patterns = ["mcar"]
+        if x_axis is None:
+            x_axis = [0.1, 0.2, 0.4, 0.6, 0.8]
+        if metrics is None:
+            metrics = ["*"]
 
         if optimizer is None:
             optimizer = "default_params"
@@ -1657,8 +1674,8 @@ class Benchmark:
                     print(f"Benchmarking module has reduced the shape to {ts_test.data.shape}.\n")
 
                 if N < 250:
-                    print(f"The block size is too high for the number of values per series, reduce to 2\n")
                     block_size_mcar = 2
+                    print(f"The block size is too high for the number of values per series, reduce to {block_size_mcar}\n")
 
                 for pattern in patterns:
                     if verbose:
@@ -1767,8 +1784,7 @@ class Benchmark:
                                     algo.metrics = {k: algo.metrics[k] for k in metrics if k in algo.metrics}
 
                                 time_imputation = (end_time_imputation - start_time_imputation) * 1000
-                                if time_imputation < 1:
-                                    time_imputation = 1
+                                time_imputation = max(time_imputation, 1)
                                 log_time_imputation = math.log10(time_imputation) if time_imputation > 0 else None
 
                                 algo.metrics["RUNTIME"] = time_imputation
@@ -1818,7 +1834,7 @@ class Benchmark:
                                     str(algorithm), {}).setdefault(str(val_opt), {})[str(x)] = {"scores": algo.metrics}
 
                                 os.makedirs(save_dir, exist_ok=True)
-                                save_path = os.path.join(save_dir, f"error.log")
+                                save_path = os.path.join(save_dir, "error.log")
                                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                 with open(save_path, "a") as file:
                                     file.write(
@@ -1843,7 +1859,7 @@ class Benchmark:
         print(f"\n> logs: benchmark - Execution Time: {total_time_benchmark} seconds\n")
 
         os.makedirs(save_dir, exist_ok=True)
-        save_path = os.path.join(save_dir, f"runtime.log")
+        save_path = os.path.join(save_dir, "runtime.log")
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         with open(save_path, "a") as file:
@@ -1856,10 +1872,8 @@ class Benchmark:
             dataset_name = str(all_keys[0])
             save_dir_agg_set = save_dir + "/" + dataset_name
 
-            self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, dataset=dataset_name,
-                                      metrics=metrics, rt=total_time_benchmark, run=-1)
-            self.generate_plots(runs_plots_scores=scores, ticks=x_axis, metrics=metrics, subplot=True, y_size=y_p_size,
-                                save_dir=save_dir_agg_set, display=verb)
+            self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, given_dataset=dataset_name, metrics=metrics, rt=total_time_benchmark, run=-1)
+            self.generate_plots(runs_plots_scores=scores, ticks=x_axis, metrics=metrics, subplot=True, y_size=y_p_size, save_dir=save_dir_agg_set, display=verb)
 
         self.generate_reports_summary(run_of_values=run_averaged, save_dir=save_dir, metrics=metrics,
                                       rt=total_time_benchmark, run=-1, title=report_title)
@@ -1868,18 +1882,11 @@ class Benchmark:
         self.list_results = run_averaged
         self.aggregate_results = scores_list
 
-        save_def = os.path.join(save_dir, f"experimentation_setup.log")
+        save_def = os.path.join(save_dir, "experimentation_setup.log")
         with open(save_def, "w") as file:
             file.write(definition_of_exp)
 
-    def eval_downstream_classification(self, classifiers=["arsenal"], algorithms=["cdrec"], datasets=["Car"],
-                                       patterns=["mcar"], x_axis=[0.1, 0.2, 0.4, 0.6, 0.8], metrics=["*"],
-                                       save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score",
-                                       contamination_by_class=True, imputation_by_class=True, report_title="",
-                                       nbr_series=10000, nbr_vals=1000, test_imputation=False, to_cache=True,
-                                       use_cache=True, run_downstream=False, fixed_rate=0.2, evaluate_upstream=True,
-                                       bypass_error=False, generate_plot=True, plots=True, inner_plots=True,
-                                       referential=True, verbose=False, v2=False):
+    def eval_downstream_classification(self, classifiers=None, algorithms=None, datasets=None, patterns=None, x_axis=None, metrics=None, save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", contamination_by_class=True, imputation_by_class=True, report_title="", nbr_series=10000, nbr_vals=1000, test_imputation=False, to_cache=True, use_cache=True, run_downstream=False, fixed_rate=0.2, evaluate_upstream=True, bypass_error=False, generate_plot=True, plots=True, inner_plots=True, referential=True, verbose=False, v2=False):
         """
         Benchmark imputation/recovery algorithms using a downstream classification task across datasets, missingness patterns, and missingness rates.
 
@@ -1901,22 +1908,22 @@ class Benchmark:
         Parameters
         ----------
         classifiers : list[str], optional
-            Classification model identifiers to evaluate downstream. All classifiers are stored into the function `utils.list_of_classifiers()`. Default is ["arsenal"].
+            Classification model identifiers to evaluate downstream. All classifiers are stored into the function `utils.list_of_classifiers()`. If None, default is ["arsenal"].
 
         algorithms : list[str], optional
-            Imputation/recovery algorithms to benchmark. If "*" / "all" is used, it is replaced by `utils.list_of_algorithms()`. Default is ["cdrec"].
+            Imputation/recovery algorithms to benchmark. If "*" / "all" is used, it is replaced by `utils.list_of_algorithms()`. If None, default is ["cdrec"].
 
         datasets : list[str], optional
-            Classification datasets to benchmark. Default is ["Car"]. For all, you can use : utils.get_datasets_classifiers()
+            Classification datasets to benchmark. If None, default is ["Car"]. For all, you can use : utils.get_datasets_classifiers()
 
         patterns : list[str], optional
-            Missingness/contamination patterns (e.g., "mcar", "aligned_series", "aligned_timestamps"). Default is ["mcar"].
+            Missingness/contamination patterns (e.g., "mcar", "aligned_series", "aligned_timestamps"). If None, default is ["mcar"].
 
         x_axis : list[float], optional
-            Missingness rates used for contamination (interpreted as proportions; e.g. 0.1 = 10%). Default is [0.1, 0.2, 0.4, 0.6, 0.8].
+            Missingness rates used for contamination (interpreted as proportions; e.g. 0.1 = 10%). If None, default is [0.1, 0.2, 0.4, 0.6, 0.8].
 
         metrics : list[str], optional
-            Subset of reconstruction metrics to keep in `imputer_tr.metrics`. If "*" / "all" is present, uses `utils.list_of_metrics()`. Default is ["*"].
+            Subset of reconstruction metrics to keep in `imputer_tr.metrics`. If "*" / "all" is present, uses `utils.list_of_metrics()`. If None, default is ["*"].
 
         save_dir : str, optional
             Base output directory for saving benchmark artifacts. A timestamped subdirectory is created. Default is "./imputegap_assets/benchmark".
@@ -2034,6 +2041,19 @@ class Benchmark:
         import gc
         import torch
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+        if classifiers is None:
+            classifiers = ["arsenal"]
+        if algorithms is None:
+            algorithms = ["cdrec"]
+        if datasets is None:
+            datasets = ["Car"]
+        if patterns is None:
+            patterns = ["mcar"]
+        if x_axis is None:
+            x_axis = [0.1, 0.2, 0.4, 0.6, 0.8]
+        if metrics is None:
+            metrics = ["*"]
 
         # =============================================================================================================
         # PREPARATION OF THE DATA
@@ -2182,14 +2202,14 @@ class Benchmark:
                                         from imputegap.recovery.contamination import GenGap
 
                                         if verbose:
-                                            print(f"\n\tcontamination by dataset ")
+                                            print("\n\tcontamination by dataset")
 
                                         if pattern == "aligned_series" or pattern == "seqn":
                                             ts_m = GenGap.aligned(ts.data, rate_dataset=x, rate_series=fixed_rate,
                                                                   offset=0.05, verbose=verbose)
                                             if imputation_by_class:
                                                 if verbose:
-                                                    print(f"\n\t\timputation by class")
+                                                    print("\n\t\timputation by class")
                                                 imputer_tr, _, _ = utils.prepare_series_by_class(labels=y_train,
                                                                                                  raw_data=ts.data.copy(),
                                                                                                  imputer=algorithm,
@@ -2200,7 +2220,7 @@ class Benchmark:
                                                                                                  verbose=verbose)
                                             else:
                                                 if verbose:
-                                                    print(f"\n\t\timputation by dataset")
+                                                    print("\n\t\timputation by dataset")
                                                 imputer_tr = utils.config_impute_algorithm(incomp_data=ts_m,
                                                                                            algorithm=algorithm,
                                                                                            task=b_task, verbose=verbose)
@@ -2212,7 +2232,7 @@ class Benchmark:
 
                                             if imputation_by_class:
                                                 if verbose:
-                                                    print(f"\n\t\timputation by class")
+                                                    print("\n\t\timputation by class")
                                                 imputer_tr, _, _ = utils.prepare_series_by_class(labels=y_train,
                                                                                                  raw_data=ts.data.copy(),
                                                                                                  imputer=algorithm,
@@ -2223,7 +2243,7 @@ class Benchmark:
                                                                                                  verbose=verbose)
                                             else:
                                                 if verbose:
-                                                    print(f"\n\t\timputation by dataset")
+                                                    print("\n\t\timputation by dataset")
                                                 imputer_tr = utils.config_impute_algorithm(incomp_data=ts_m,
                                                                                            algorithm=algorithm,
                                                                                            task=b_task, verbose=verbose)
@@ -2237,7 +2257,7 @@ class Benchmark:
 
                                             if imputation_by_class:
                                                 if verbose:
-                                                    print(f"\n\t\timputation by class")
+                                                    print("\n\t\timputation by class")
                                                 imputer_tr, _, _ = utils.prepare_series_by_class(labels=y_train,
                                                                                                  raw_data=ts.data.copy(),
                                                                                                  imputer=algorithm,
@@ -2248,7 +2268,7 @@ class Benchmark:
                                                                                                  verbose=verbose)
                                             else:
                                                 if verbose:
-                                                    print(f"\n\t\timputation by dataset")
+                                                    print("\n\t\timputation by dataset")
                                                 imputer_tr = utils.config_impute_algorithm(incomp_data=ts_m,
                                                                                            algorithm=algorithm,
                                                                                            task=b_task, verbose=verbose)
@@ -2261,11 +2281,11 @@ class Benchmark:
                                     # -----------------------------------------------------------------------------
                                     else:
                                         if verbose:
-                                            print(f"\n\tcontamination by class")
+                                            print("\n\tcontamination by class")
 
                                         if pattern == "aligned_series":
                                             if verbose:
-                                                print(f"\n\t\timputation by class")
+                                                print("\n\t\timputation by class")
                                             imputer_tr, _, miss = utils.prepare_series_by_class(labels=y_train,
                                                                                                 raw_data=ts.data.copy(),
                                                                                                 imputer=algorithm,
@@ -2279,7 +2299,7 @@ class Benchmark:
                                                                                                 imputation_by_class=imputation_by_class)
                                         elif pattern == "aligned_timestamps":
                                             if verbose:
-                                                print(f"\n\t\timputation by class")
+                                                print("\n\t\timputation by class")
                                             imputer_tr, _, miss = utils.prepare_series_by_class(labels=y_train,
                                                                                                 raw_data=ts.data.copy(),
                                                                                                 imputer=algorithm,
@@ -2293,7 +2313,7 @@ class Benchmark:
                                                                                                 verbose=verbose)
                                         else:
                                             if verbose:
-                                                print(f"\n\t\timputation by class")
+                                                print("\n\t\timputation by class")
                                             imputer_tr, _, miss = utils.prepare_series_by_class(labels=y_train,
                                                                                                 raw_data=ts.data.copy(),
                                                                                                 imputer=algorithm,
@@ -2335,8 +2355,7 @@ class Benchmark:
                                     # ---------------------------------------------------------------------------------
                                     if run_downstream:
                                         if verbose:
-                                            print(
-                                                f"\n\tmodel downstream launched: {run_downstream = }\t{loaded_cache=} - {bypass_error=}")
+                                            print(f"\n\tmodel downstream launched: {run_downstream = }\t{loaded_cache=} - {bypass_error=}")
 
                                         imputer_tr.verbose = verbose
                                         imputer_tr.task = b_task
@@ -2446,8 +2465,7 @@ class Benchmark:
                                                               k in imputer_tr.metrics}
 
                                     time_imputation = (end_time_imputation - start_time_imputation) * 1000
-                                    if time_imputation < 1:
-                                        time_imputation = 1
+                                    time_imputation = max(time_imputation, 1)
                                     log_time_imputation = math.log10(time_imputation) if time_imputation > 0 else None
 
                                     if run_downstream:
@@ -2495,7 +2513,7 @@ class Benchmark:
                                                                                       algorithm, pattern, x, save_dir,
                                                                                       verbose)
 
-                        print(f"done!\n\n")
+                        print("done!\n\n")
 
                 run_storage.append(runs_plots_scores)
 
@@ -2520,15 +2538,13 @@ class Benchmark:
         h = int(total_time_benchmark // 3600)
         m = int((total_time_benchmark % 3600) // 60)
         s = total_time_benchmark % 60
-        print(
-            f"\n> logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
+        print(f"\n> logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
 
         os.makedirs(save_dir, exist_ok=True)
-        save_path = os.path.join(save_dir, f"runtime.log")
+        save_path = os.path.join(save_dir, "runtime.log")
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(save_path, "a") as file:
-            file.write(
-                f"{timestamp} | logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
+            file.write(f"{timestamp} | logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
         verb = False
 
         for scores in run_storage:
@@ -2537,8 +2553,7 @@ class Benchmark:
             save_dir_agg_set = save_dir + "/" + dataset_name
 
             try:
-                self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, dataset=dataset_name,
-                                          metrics=metrics, rt=total_time_benchmark, upstream=evaluate_upstream, run=-1)
+                self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, given_dataset=dataset_name, metrics=metrics, rt=total_time_benchmark, upstream=evaluate_upstream, run=-1)
             except Exception as e:
                 print(f"Error during file report generation: {e}")
             try:
@@ -2574,13 +2589,13 @@ class Benchmark:
         except Exception as e:
             print(f"Error during report generation: {e}")
 
-        print("\nThe results are saved in : ", save_dir, "\n")
+        print(f"\nThe results are saved in : {save_dir}\n")
         self.list_results = run_storage
 
         if evaluate_upstream:
             self.aggregate_results = scores_list
 
-        save_def = os.path.join(save_dir, f"experimentation_setup.log")
+        save_def = os.path.join(save_dir, "experimentation_setup.log")
 
         try:
             with open(save_def, "w") as file:
@@ -2588,13 +2603,7 @@ class Benchmark:
         except Exception as e:
             print(f"Error during report generation: {e}")
 
-    def eval_downstream_forecasting(self, forecasters=["exp-smoothing"], horizon=12, algorithms=["cdrec"],
-                                    datasets=["paris"], patterns=["mcar"], x_axis=[0.1, 0.2, 0.4, 0.6, 0.8],
-                                    metrics=["*"], save_dir="./imputegap_assets/benchmark", runs=1,
-                                    normalizer="z_score", report_title="", nbr_series=10000, nbr_vals=1000,
-                                    to_cache=True, use_cache=True, run_downstream=False, fixed_rate=0.2,
-                                    evaluate_upstream=True, bypass_error=False, referential=True, generate_plot=True,
-                                    plots=True, inner_plots=True, verbose=False):
+    def eval_downstream_forecasting(self, forecasters=None, horizon=12, algorithms=None, datasets=None, patterns=None, x_axis=None, metrics=None, save_dir="./imputegap_assets/benchmark", runs=1, normalizer="z_score", report_title="", nbr_series=10000, nbr_vals=1000, to_cache=True, use_cache=True, run_downstream=False, fixed_rate=0.2, evaluate_upstream=True, bypass_error=False, referential=True, generate_plot=True, plots=True, inner_plots=True, verbose=False):
         """
         Benchmark imputation/recovery algorithms using a downstream forecasting task across datasets, missingness patterns, and missingness rates.
 
@@ -2616,25 +2625,25 @@ class Benchmark:
         Parameters
         ----------
         forecasters : list[str], optional
-            Forecasting model identifiers to evaluate downstream. For all forecasters please use `utils.list_of_forecasters()`. Default is ["exp-smoothing"].
+            Forecasting model identifiers to evaluate downstream. For all forecasters please use `utils.list_of_forecasters()`. If None, default is ["chronos"].
 
         horizon: int, optional
             Value of the horizon for the prediction, e.g, 12
 
         algorithms : list[str], optional
-            Imputation/recovery algorithms to benchmark. If "*" / "all" is used, it is replaced by `utils.list_of_algorithms()`. Default is ["cdrec"].
+            Imputation/recovery algorithms to benchmark. If "*" / "all" is used, it is replaced by `utils.list_of_algorithms()`. If None, default is ["cdrec"].
 
         datasets : list[str], optional
-            Forecasting datasets to benchmark. Default is ["paris"]. For all use: utils.get_dataset_forecasters(directory='datasets/forecast/')
+            Forecasting datasets to benchmark. If None, default is ["paris"]. For all use: utils.get_dataset_forecasters(directory='datasets/forecast/')
 
         patterns : list[str], optional
-            Missingness/contamination patterns (e.g., "mcar", "aligned_series", "aligned_timestamps"). Default is ["mcar"].
+            Missingness/contamination patterns (e.g., "mcar", "aligned_series", "aligned_timestamps"). If None, default is ["mcar"].
 
         x_axis : list[float], optional
-            Missingness rates used for contamination (interpreted as proportions; e.g. 0.1 = 10%). Default is [0.1, 0.2, 0.4, 0.6, 0.8].
+            Missingness rates used for contamination (interpreted as proportions; e.g. 0.1 = 10%). If None, default is [0.1, 0.2, 0.4, 0.6, 0.8].
 
         metrics : list[str], optional
-            Subset of reconstruction metrics to keep in `imputer_tr.metrics`. If "*" / "all" is present, uses `utils.list_of_metrics()`. Default is ["*"].
+            Subset of reconstruction metrics to keep in `imputer_tr.metrics`. If "*" / "all" is present, uses `utils.list_of_metrics()`. If None, default is ["*"].
 
         save_dir : str, optional
             Base output directory for saving benchmark artifacts. A timestamped subdirectory is created. Default is "./imputegap_assets/benchmark".
@@ -2754,6 +2763,20 @@ class Benchmark:
         except ImportError:
             torch = None
         run_storage = []
+
+        if forecasters is None:
+            forecasters = ["chronos"]
+        if algorithms is None:
+            algorithms = ["cdrec"]
+        if datasets is None:
+            datasets = ["paris"]
+        if patterns is None:
+            patterns = ["mcar"]
+        if x_axis is None:
+            x_axis = [0.1, 0.2, 0.4, 0.6, 0.8]
+        if metrics is None:
+            metrics = ["*"]
+
         if not isinstance(algorithms, list):
             raise TypeError(f"'algorithms' must be a list, but got {type(algorithms).__name__}")
         if not isinstance(datasets, list):
@@ -2821,7 +2844,7 @@ class Benchmark:
         # =============================================================================================================
         for i_run in range(0, abs(runs)):
             for dataset in datasets:
-                for horizon in horizons:
+                for horizon_ in horizons:
                     runs_plots_scores = {}
                     block_size_mcar = 10
                     y_p_size = max(4, len(algorithms) * 0.275)
@@ -2831,11 +2854,10 @@ class Benchmark:
                     # DATASET LOADING
                     # -----------------------------------------------------------------------------------------------------
                     ts = TimeSeries(verbose=verbose)
-                    ts.load_forecasting_dataset(dataset, normalizer=normalizer, verbose=verbose, horizon=horizon,
-                                                nbr_series=nbr_series, nbr_val=nbr_vals)
+                    ts.load_forecasting_dataset(dataset, normalizer=normalizer, verbose=verbose, horizon=horizon_, nbr_series=nbr_series, nbr_val=nbr_vals)
                     y_train, season = ts.load_proper_output_forecasting()
                     N, M = ts.data.shape
-                    print(f"{dataset}:{ts.data.shape = }:{season=}-{horizon=}")
+                    print(f"{dataset}:{ts.data.shape = }:{season=}-{horizon_=}")
 
                     if M <= 0:
                         raise ValueError(f"The dataset loaded has no series (series {M}).")
@@ -2856,11 +2878,7 @@ class Benchmark:
                                     # CACHING HANDLING
                                     # ------------------------------------------------------------------------------------
                                     if use_cache:
-                                        name, dir_cache = utils.prepare_caching(dataset=dataset, algorithm=algorithm,
-                                                                                pattern=pattern, x=x,
-                                                                                contamination_by_class=None,
-                                                                                imputation_by_class=s_horizon,
-                                                                                fixed_rate=fixed_rate)
+                                        name, dir_cache = utils.prepare_caching(dataset=dataset, algorithm=algorithm, pattern=pattern, x=x, contamination_by_class=None, imputation_by_class=s_horizon, fixed_rate=fixed_rate)
 
                                         name = "_f_" + name
                                         cache_path_recov = os.path.join(dir_cache, name + "_recov.txt")
@@ -2887,21 +2905,11 @@ class Benchmark:
                                     # ------------------------------------------------------------------------------------
                                     if not loaded_cache and not bypass_error:
                                         if pattern == "aligned_series" or pattern == "seqn":
-                                            incomp_data = utils.config_contamination(ts=ts, pattern="aligned",
-                                                                                     dataset_rate=fixed_rate,
-                                                                                     series_rate=x, verbose=verbose,
-                                                                                     offset=0)
+                                            incomp_data = utils.config_contamination(ts=ts, pattern="aligned", dataset_rate=fixed_rate, series_rate=x, verbose=verbose, offset=0)
                                         elif pattern == "aligned_timestamps" or pattern == "blks":
-                                            incomp_data = utils.config_contamination(ts=ts, pattern="aligned",
-                                                                                     dataset_rate=x,
-                                                                                     series_rate=fixed_rate,
-                                                                                     verbose=verbose, offset=0)
+                                            incomp_data = utils.config_contamination(ts=ts, pattern="aligned", dataset_rate=x, series_rate=fixed_rate, verbose=verbose, offset=0)
                                         else:
-                                            incomp_data = utils.config_contamination(ts=ts, pattern=pattern,
-                                                                                     dataset_rate=fixed_rate,
-                                                                                     series_rate=x,
-                                                                                     block_size=block_size_mcar,
-                                                                                     verbose=verbose, offset=0)
+                                            incomp_data = utils.config_contamination(ts=ts, pattern=pattern, dataset_rate=fixed_rate, series_rate=x, block_size=block_size_mcar, verbose=verbose, offset=0)
 
                                         # MIRROR OF THE CONTAMINATION (FOR FORECASTING PURPOSE - START AT THE HORIZON)
                                         # ---------------------------------------------------------------------------------------
@@ -2911,9 +2919,7 @@ class Benchmark:
                                             # ------------------------------------------------------------------------------------
                                             # IMPUTATION OF THE DATA
                                             # ------------------------------------------------------------------------------------
-                                            imputer = utils.config_impute_algorithm(incomp_data=miss,
-                                                                                    algorithm=algorithm, task=b_task,
-                                                                                    verbose=verbose)
+                                            imputer = utils.config_impute_algorithm(incomp_data=miss, algorithm=algorithm, task=b_task, verbose=verbose)
                                             imputer.verbose = verbose
                                             imputer.task = b_task
                                             imputer.impute()
@@ -2964,7 +2970,7 @@ class Benchmark:
                                                                     contamination_by_class=None,
                                                                     imputation_by_class=s_horizon,
                                                                     fixed_x=fixed_rate,
-                                                                    horizon=horizon)
+                                                                    horizon=horizon_)
 
                                                 forcaster = Forecaster(task="forecast",
                                                                        model=model,
@@ -3047,10 +3053,8 @@ class Benchmark:
                                                                k in imputer.metrics}
 
                                         time_imputation = (end_time_imputation - start_time_imputation) * 1000
-                                        if time_imputation < 1:
-                                            time_imputation = 1
-                                        log_time_imputation = math.log10(
-                                            time_imputation) if time_imputation > 0 else None
+                                        time_imputation = max(time_imputation, 1)
+                                        log_time_imputation = math.log10(time_imputation) if time_imputation > 0 else None
 
                                         if run_downstream:
                                             smape_vals = [
@@ -3115,7 +3119,7 @@ class Benchmark:
                                                                                           algorithm, pattern, x,
                                                                                           save_dir, verbose)
 
-                            print(f"done!\n\n")
+                            print("done!\n\n")
 
                     run_storage.append(runs_plots_scores)
 
@@ -3142,7 +3146,7 @@ class Benchmark:
             f"\n> logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
 
         os.makedirs(save_dir, exist_ok=True)
-        save_path = os.path.join(save_dir, f"runtime.log")
+        save_path = os.path.join(save_dir, "runtime.log")
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(save_path, "a") as file:
             file.write(
@@ -3156,7 +3160,7 @@ class Benchmark:
 
             try:
                 if generate_plot:
-                    self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, dataset=dataset_name,
+                    self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, given_dataset=dataset_name,
                                               metrics=metrics, rt=total_time_benchmark, upstream=evaluate_upstream,
                                               run=-1)
             except Exception as e:
@@ -3178,14 +3182,6 @@ class Benchmark:
         except Exception as e:
             print(f"Error during file report generation: {e}")
 
-        # try:
-        #     if generate_plot:
-        #         self.generate_avg_bar_plot(results=run_storage, save_path=save_dir, type="classifier-forecaster", verbose=verbose, plots=plots, upstream=evaluate_upstream)
-        #     if not plots:
-        #         plt.close('all')
-        # except Exception as e:
-        #     print(f"Error during plotting: {e}")
-
         try:
             self.save_into_excel(run_of_values=run_storage,
                                  xlsx_path=os.path.join(save_dir, f"_summary_{report_title}.xlsx"),
@@ -3193,13 +3189,13 @@ class Benchmark:
         except Exception as e:
             print(f"Error during report generation: {e}")
 
-        print("\nThe results are saved in : ", save_dir, "\n")
+        print(f"\nThe results are saved in : {save_dir}\n")
         self.list_results = run_storage
 
         if evaluate_upstream:
             self.aggregate_results = scores_list
 
-        save_def = os.path.join(save_dir, f"experimentation_setup.log")
+        save_def = os.path.join(save_dir, "experimentation_setup.log")
 
         try:
             with open(save_def, "w") as file:
@@ -3208,7 +3204,7 @@ class Benchmark:
             print(f"Error during report generation: {e}")
 
 
-    def eval_imputation(self, algorithms=["cdrec"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.1, 0.2, 0.4, 0.6, 0.8], metrics=["*"], save_dir="./imputegap_assets/benchmark", normalizer="z_score", report_title="", nbr_series=1000, nbr_vals=1000, to_cache=True, use_cache=True, fixed_rate=0.2, bypass_error=False, generate_plot=True, plots=True, inner_plots=True, verbose=False):
+    def eval_imputation(self, algorithms=None, datasets=None, patterns=None, x_axis=None, metrics=None, save_dir="./imputegap_assets/benchmark", normalizer="z_score", report_title="", nbr_series=1000, nbr_vals=1000, to_cache=True, use_cache=True, fixed_rate=0.2, bypass_error=False, generate_plot=True, plots=True, inner_plots=True, verbose=False):
         """
         Benchmark imputation/recovery algorithms across datasets, missingness patterns, and missingness rates.
 
@@ -3230,19 +3226,19 @@ class Benchmark:
         Parameters
         ----------
         algorithms : list[str], optional
-            Imputation/recovery algorithms to benchmark. If "*" / "all" is used, it is replaced by `utils.list_of_algorithms()`. Default is ["cdrec"].
+            Imputation/recovery algorithms to benchmark. If "*" / "all" is used, it is replaced by `utils.list_of_algorithms()`. If None, default is ["cdrec"].
 
         datasets : list[str], optional
             Forecasting datasets to benchmark. Default is ["paris"]. For all use: utils.get_dataset_forecasters(directory='datasets/forecast/')
 
         patterns : list[str], optional
-            Missingness/contamination patterns (e.g., "mcar", "aligned_series", "aligned_timestamps"). Default is ["mcar"].
+            Missingness/contamination patterns (e.g., "mcar", "aligned_series", "aligned_timestamps"). If None, default is ["mcar"].
 
         x_axis : list[float], optional
-            Missingness rates used for contamination (interpreted as proportions; e.g. 0.1 = 10%). Default is [0.1, 0.2, 0.4, 0.6, 0.8].
+            Missingness rates used for contamination (interpreted as proportions; e.g. 0.1 = 10%). If None, default is [0.1, 0.2, 0.4, 0.6, 0.8].
 
         metrics : list[str], optional
-            Subset of reconstruction metrics to keep in `imputer_tr.metrics`. If "*" / "all" is present, uses `utils.list_of_metrics()`. Default is ["*"].
+            Subset of reconstruction metrics to keep in `imputer_tr.metrics`. If "*" / "all" is present, uses `utils.list_of_metrics()`. If None, default is ["*"].
 
         save_dir : str, optional
             Base output directory for saving benchmark artifacts. A timestamped subdirectory is created. Default is "./imputegap_assets/benchmark".
@@ -3306,7 +3302,6 @@ class Benchmark:
         # =============================================================================================================
         # DATA AND CONFIGURATION MANAGEMENT
         # =============================================================================================================
-        from imputegap.recovery.contamination import GenGap
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
         import gc
@@ -3314,6 +3309,17 @@ class Benchmark:
             import torch
         except ImportError:
             torch = None
+
+        if algorithms is None:
+            algorithms = ["cdrec"]
+        if datasets is None:
+            datasets = ["chlorine"]
+        if patterns is None:
+            patterns = ["mcar"]
+        if x_axis is None:
+            x_axis = [0.1, 0.2, 0.4, 0.6, 0.8]
+        if metrics is None:
+            metrics = ["*"]
 
         run_storage = []
 
@@ -3365,10 +3371,10 @@ class Benchmark:
         print(definition_of_exp)
 
         if normalizer == "denorm":
-            denormalization = True
+            #denormalization = True
             normalizer = "z_score"
-        else:
-            denormalization = False
+        #else:
+            #denormalization = False
 
         # =============================================================================================================
         # BENCHMARK
@@ -3526,7 +3532,7 @@ class Benchmark:
 
                                 imputer_tr, runs_plots_scores = self._benchmark_error("error", e, runs_plots_scores, ts_m, [model], dataset, algorithm, pattern, x, save_dir, verbose)
 
-                        print(f"done!\n\n")
+                        print("done!\n\n")
 
                 run_storage.append(runs_plots_scores)
 
@@ -3549,15 +3555,13 @@ class Benchmark:
         h = int(total_time_benchmark // 3600)
         m = int((total_time_benchmark % 3600) // 60)
         s = total_time_benchmark % 60
-        print(
-            f"\n> logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
+        print(f"\n> logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
 
         os.makedirs(save_dir, exist_ok=True)
-        save_path = os.path.join(save_dir, f"runtime.log")
+        save_path = os.path.join(save_dir, "runtime.log")
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(save_path, "a") as file:
-            file.write(
-                f"{timestamp} | logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
+            file.write(f"{timestamp} | logs: benchmark - Execution Time: {total_time_benchmark} seconds,  ({h:02d}:{m:02d}:{s:06.3f} hh:mm:ss)\n")
         verb = False
 
         for scores in run_storage:
@@ -3567,7 +3571,7 @@ class Benchmark:
 
             try:
                 if generate_plot:
-                    self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, dataset=dataset_name, metrics=metrics, rt=total_time_benchmark, upstream=evaluate_upstream, run=-1)
+                    self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, given_dataset=dataset_name, metrics=metrics, rt=total_time_benchmark, upstream=evaluate_upstream, run=-1)
             except Exception as e:
                 print(f"Error during file report generation: {e}")
             try:
@@ -3588,13 +3592,13 @@ class Benchmark:
         except Exception as e:
             print(f"Error during report generation: {e}")
 
-        print("\nThe results are saved in : ", save_dir, "\n")
+        print(f"\nThe results are saved in : {save_dir}\n")
         self.list_results = run_storage
 
         if evaluate_upstream:
             self.aggregate_results = scores_list
 
-        save_def = os.path.join(save_dir, f"experimentation_setup.log")
+        save_def = os.path.join(save_dir, "experimentation_setup.log")
 
         try:
             with open(save_def, "w") as file:

@@ -1,5 +1,10 @@
+# Standard library
 import math
+
+# Third-party libraries
 import numpy as np
+
+# ImputeGAP imports
 from imputegap.tools import utils
 
 class GenGap:
@@ -133,7 +138,7 @@ class GenGap:
 
         Example
         -------
-         .. code-block:: python
+        .. code-block:: python
 
             ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):
 
@@ -288,7 +293,7 @@ class GenGap:
 
         Example
         -------
-         .. code-block:: python
+        .. code-block:: python
 
             ts_m = GenGap.aligned(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1):
 
@@ -390,7 +395,7 @@ class GenGap:
 
         Example
         -------
-         .. code-block:: python
+        .. code-block:: python
 
             ts_m = GenGap.scattered(ts.data, rate_dataset=0.2, rate_series=0.4, offset=0.1)
 
@@ -486,7 +491,7 @@ class GenGap:
 
         Example
         -------
-          .. code-block:: python
+        .. code-block:: python
 
             ts_m =GenGap.blackout(ts.data, series_rate=0.2)
 
@@ -542,7 +547,7 @@ class GenGap:
 
         Example
         -------
-          .. code-block:: python
+        .. code-block:: python
 
             ts_m = GenGap.gaussian(ts.data, rate_series=0.2, std_dev=0.4, offset=0.1):
 
@@ -671,14 +676,14 @@ class GenGap:
 
         Example
         -------
-         .. code-block:: python
+        .. code-block:: python
 
             ts_m = GenGap.distribution(ts.data, rate_dataset=0.2, rate_series=0.2, probabilities_list=probabilities_list, offset=0.1)
 
         """
 
         if probabilities_list is None:
-            print(f"(ERROR) distribution pattern needs a probabilities list as input.\n")
+            print("(ERROR) distribution pattern needs a probabilities list as input.\n")
             return input_data
 
         if logic_by_series:
@@ -779,7 +784,7 @@ class GenGap:
 
         Example
         -------
-         .. code-block:: python
+        .. code-block:: python
 
             ts_m = GenGap.disjoint(ts.data, rate_series=0.1, limit=1, offset=0.1)
 
@@ -874,7 +879,7 @@ class GenGap:
 
         Example
         -------
-          .. code-block:: python
+        .. code-block:: python
 
             ts_m = GenGap.overlap(ts.data, rate_series=0.1, limit=1, shift=0.05, offset=0.1)
 

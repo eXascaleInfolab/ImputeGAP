@@ -1,5 +1,5 @@
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
 
 from imputegap.tools import utils
 
@@ -7,7 +7,7 @@ from imputegap.tools import utils
 # IN CASE OF NEED, YOU CAN ADAPT AND TAKE CDREC.PY AS A MODEL #
 # =========================================================== #
 
-def native_algo(__py_matrix, __py_param, __verbose=True):
+def native_algo(__py_matrix, __py_param, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the CDRec algorithm with native C++ support.
 

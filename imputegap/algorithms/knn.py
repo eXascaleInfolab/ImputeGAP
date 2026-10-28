@@ -1,4 +1,5 @@
 import time
+
 import numpy as np
 from sklearn.metrics.pairwise import nan_euclidean_distances
 
@@ -37,7 +38,7 @@ def knn(incomp_data, k=5, weights="uniform", logs=True, verbose=True):
     start_time = time.time()  # Record start time
 
     recov_data = np.copy(incomp_data)  # Copy data to avoid modifying original
-    num_rows, num_cols = recov_data.shape  # Get dataset dimensions
+    _, num_cols = recov_data.shape  # Get dataset dimensions
 
 
     # Standardize data (important for correct neighbor selection)

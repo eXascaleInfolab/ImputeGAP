@@ -1,20 +1,46 @@
-import datetime
+# Standard library
 import os
 import platform
+import datetime
 import time
+
+# Third-party libraries
 import numpy as np
 import matplotlib
 import importlib.resources
-
-from imputegap.tools import utils
-
 import matplotlib.pyplot as plt
+
+# ImputeGAP imports
+from imputegap.tools import utils
 
 
 def select_backend():
+    """
+    Select an appropriate Matplotlib backend based on the operating system.
+
+    Attempts to configure an interactive backend compatible with the current
+    platform. On macOS, prioritizes MacOSX, Qt5Agg, and TkAgg. On other systems,
+    prioritizes TkAgg, QtAgg, and Qt5Agg, with Agg as a non-interactive fallback.
+
+    If a backend raises an ImportError or RuntimeError, the next available
+    backend is attempted.
+
+    Returns
+    -------
+    None
+        Configures the Matplotlib backend without returning a value.
+    """
     system = platform.system()
     #headless = os.getenv("DISPLAY") is None or os.getenv("CI") is not None
-    if system == "Darwin":
+    if system == "Windows":
+        raise OSError(
+            "ImputeGAP does not support Windows natively. "
+            "However, you can use Windows Subsystem for Linux (WSL) "
+            "to run ImputeGAP in a Linux environment on Windows. "
+            "For installation instructions and more information, visit: "
+            "https://imputegap.readthedocs.io/en/latest/getting_started.html"
+        )
+    elif system == "Darwin":
         for backend in ["MacOSX", "Qt5Agg", "TkAgg"]:
             try:
                 matplotlib.use(backend)
@@ -93,7 +119,7 @@ class TimeSeries:
         select_backend()
 
         if verbose:
-            print(f"\nImputeGAP Library has been invoked (https://github.com/eXascaleInfolab/ImputeGAP)\n")
+            print("\nImputeGAP Library has been invoked (https://github.com/eXascaleInfolab/ImputeGAP)\n")
 
     def import_matrix(self, data=None):
         """
@@ -413,8 +439,10 @@ class TimeSeries:
             y_train = self.data[train_len:, :]
 
             if verbose:
-                print("\n(SYS) The dataset is loaded from " + str(data_ma) + "\n")
-                print(f"\n(SYS) The season is loaded from {str(data_se)} > {season=} > horizon={time_len-train_len}\n")
+                string_data_ma = str(data_ma)
+                string_data_se = str(data_se)
+                print(f"\n(SYS) The dataset is loaded from {string_data_ma}\n")
+                print(f"\n(SYS) The season is loaded from {string_data_se} > {season=} > horizon={time_len-train_len}\n")
 
             self.data = (X_train, y_train, season, horizon)
 
@@ -721,7 +749,7 @@ class TimeSeries:
         else:
             start_time = time.time()
             if verbose:
-                print(f"> (ERROR): normalizer not recognised...")
+                print(f"> (ERROR): normalizer {normalizer} not recognised...")
             end_time = time.time()
 
         if self.reversed:

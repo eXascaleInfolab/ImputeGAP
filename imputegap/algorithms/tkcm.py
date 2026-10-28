@@ -1,11 +1,11 @@
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
 
 import numpy as np
 
 from imputegap.tools import utils
 
-def native_tkcm(__py_matrix, __py_rank, __verbose=True):
+def native_tkcm(__py_matrix, __py_rank, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the TKCM algorithm with native C++ support.
 
@@ -13,8 +13,10 @@ def native_tkcm(__py_matrix, __py_rank, __verbose=True):
     ----------
     __py_matrix : numpy.ndarray
         The input matrix with missing values (NaNs).
+
     __py_rank : int
         The truncation rank for matrix decomposition (must be greater than 0 and less than the number of columns).
+
     __verbose : bool, optional
         Whether to display the contamination information (default is False).
 
@@ -86,10 +88,10 @@ def tkcm(incomp_data, rank=4, logs=True, verbose=True, lib_path=None):
     m_mask = np.isnan(incomp_data)
 
     if utils.check_contamination_series(incomp_data):
-        print(f"(IMPUTATION-ERROR) tkcm is a uni-dimensional algorithm; it requires that only series 0 be contaminated.\n")
+        print("(IMPUTATION-ERROR) tkcm is a uni-dimensional algorithm; it requires that only series 0 be contaminated.\n")
         return incomp_data
 
-    recov_data = native_tkcm(ts_m, rank, verbose)
+    recov_data =  native_tkcm(ts_m, rank, verbose)
 
     end_time = time.time()
 

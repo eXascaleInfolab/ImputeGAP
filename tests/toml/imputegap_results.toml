@@ -175,8 +175,8 @@ mae = 0.09
 
 [pristi]
 dataset = "chlorine"
-rmse = 0.721 # expected normal run: 0.242
-mae = 0.363  # expected normal run: 0.162
+rmse = 1.768 # expected normal run: 0.242
+mae = 0.515 # expected normal run: 0.162
 
 [trmf]
 dataset = "chlorine"

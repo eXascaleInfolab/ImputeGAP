@@ -1,9 +1,10 @@
 import time
+
 from imputegap.tools import utils
 from imputegap.wrapper.AlgoPython.CDRec.recoveryCDRec import centroid_recovery
 
 
-def native_cdrec(__py_matrix, __py_rank, __py_epsilon, __py_iteration, __verbose=True):
+def native_cdrec(__py_matrix, __py_rank, __py_epsilon, __py_iteration, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the CDRec algorithm with native C++ support.
 

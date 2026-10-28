@@ -1,18 +1,19 @@
-import datetime
+# Standard library
 import os
-import numpy as np
-import matplotlib.pyplot as plt
-from imputegap.tools import utils
-
+import datetime
 import warnings
 
-warnings.filterwarnings(
-    "ignore",
-    message="GPU available but not used.*"
-)
+# Third-party libraries
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ImputeGAP imports
+from imputegap.tools import utils
+
+warnings.filterwarnings("ignore", message="GPU available but not used.*" )
 
 class Forecaster:
-    def __init__(self, task="forecast", model="exp-smoothing", y_train=None, season=24, params=None, baseline="mean-impute", selected_series=None, plots=True, save_path="./imputegap_assets/downstream", to_cache=True, use_cache=False, artifact=None, referential=True, bypass_error=False, s_exception=False, verbose=True):
+    def __init__(self, task="forecast", model="exp-smoothing", y_train=None, season=24, params=None, baseline="mean-impute", selected_series=None, single_pipeline=False, plots=True, save_path="./imputegap_assets/downstream", to_cache=True, use_cache=False, artifact=None, referential=True, bypass_error=False, s_exception=False, verbose=True):
         """
         Container for downstream forecasting configuration and inputs.
 
@@ -42,6 +43,9 @@ class Forecaster:
         selected_series : list[int] or None, optional
             Indices of the series (columns) to include in forecasting and evaluation. Default is None.
 
+        single_pipeline : bool, optional
+            Analyze a single downstream pipeline or a complete one. Default is False.
+
         plots : bool, optional
             Whether to generate downstream plots. Default is True.
 
@@ -67,6 +71,7 @@ class Forecaster:
         self.y_train = y_train
         self.season = season
         self.params = params
+        self.single_pipeline = single_pipeline
         self.plots = plots
         self.save_path = save_path
         self.baseline = baseline
@@ -667,7 +672,8 @@ class Downstream:
         y_train_all, y_test_all, y_pred_all = [], [], []
         mae, mse, smape = [], [], []
         plt, tag, loaded_cache = None, None, False
-
+        raw_data = self.input_data
+        recovery = self.recov_data
 
         save_sele = selected_series[0]
 
@@ -742,7 +748,8 @@ class Downstream:
                 if self.downstream.artifact.algorithm.lower() in ["dynammo", "saits"]:
                     opti = "_opti_"
 
-                sname= f"_f_{smodel}_{t}_{name}_s{str(selected_series[0])}{opti}PRED.txt"
+                s_selection_idx = str(selected_series[0])
+                sname= f"_f_{smodel}_{t}_{name}_s{s_selection_idx}{opti}PRED.txt"
                 cache_path_pred = os.path.join(dir_cache, "forecasters/", sname)
 
                 if os.path.exists(cache_path_pred):
@@ -762,8 +769,9 @@ class Downstream:
                     loaded_cache = False
 
             forecaster = utils.config_forecaster(model, params, y_test.shape[0], s_exception=self.downstream.s_exception)
+
             if self.verbose:
-                print("\n\t\tcall of the forecaster:", type(forecaster), "\n")
+                print(f"\n\t\t{tag}: call of the forecaster:{type(forecaster)}\n")
 
             if not loaded_cache:
                 y_pred = np.zeros_like(y_test, dtype=float)
@@ -897,8 +905,13 @@ class Downstream:
         else:
             metrics = {"mse_groundtruth": mse[0], al_name: mse[1], al_name_c: mse[2], "mae_groundtruth": mae[0], al_name_m: mae[1], al_name_mcs: mae[2], "smape_groundtruth": smape[0], al_name_s: smape[1], al_name_cs: smape[2]}
 
+        print(f"\n\n>>>>>>>>>>>>>> {selected_series= } - {pred_to_call=}\n\n")
+
         if plots:
-            plt = self._plot_downstream(y_train=y_train_all, y_test=y_test_all, y_pred=y_pred_all, incomp_data=self.incomp_data, algorithm=self.algorithm, comparison=baseline, model=model, type=evaluator, save_path=save_path, display=self.downstream.plots, verbose=self.verbose, pred_to_call=pred_to_call)
+            if not self.downstream.single_pipeline:
+                plt = self._plot_downstream(y_train=y_train_all, y_test=y_test_all, y_pred=y_pred_all, incomp_data=self.incomp_data, algorithm=self.algorithm, comparison=baseline, model=model, type=evaluator, save_path=save_path, display=self.downstream.plots, verbose=self.verbose, pred_to_call=pred_to_call)
+            else:
+                plt = self._plot_single_downstream(y_train=y_train_all[1] if self.downstream.referential else y_train_all[0], y_test=y_test_all[1] if self.downstream.referential else y_test_all[0], y_pred=y_pred_all[1] if self.downstream.referential else y_pred_all[0], incomp_data=self.incomp_data, ground_truth=raw_data, recov_data=recovery, series_index=selected_series[0], algorithm=self.algorithm, model=model, type=evaluator, save_path=save_path, display=self.downstream.plots, verbose=self.verbose, pred_to_call=pred_to_call)
 
         return metrics, plt
 
@@ -941,11 +954,10 @@ class Downstream:
         else:
             params = self.downstream.params
 
-        if evaluator == "forecaster":
-            if self.downstream.season is not None:
-                for k in ("sp", "lags"):
-                    if k in params:
-                        params[k] = self.downstream.season
+        if evaluator == "forecaster" and self.downstream.season is not None:
+            for k in ("sp", "lags"):
+                if k in params:
+                    params[k] = self.downstream.season
 
         if self.downstream.selected_series is None:
             nan_cols = np.isnan(self.incomp_data).any(axis=0)
@@ -1095,6 +1107,152 @@ class Downstream:
 
         return plt
 
+    @staticmethod
+    def _plot_single_downstream(y_train, y_test, y_pred, incomp_data,ground_truth, recov_data, algorithm, series_index, model=None, type=None, title="", save_path="./imputegap_assets/downstream", display=True, verbose=True, pred_to_call=0):
+        """
+        Plot ground truth, imputed values, and predictions for the first contaminated series.
+
+        Parameters
+        ----------
+        y_train : np.ndarray
+            Training data array of shape (train_len, n_series).
+        y_test : np.ndarray
+            Testing data array of shape (test_len, n_series).
+        y_pred : np.ndarray
+            Forecasted data array of shape (test_len, n_predictions).
+        incomp_data : np.ndarray
+            Incomplete data array used to identify contaminated series.
+        ground_truth : np.ndarray
+            Ground truth data array used to identify contaminated series.
+        recov_data : np.ndarray
+            Imputed data array containing recovered values.
+        algorithm : str
+            Name of the imputation algorithm.
+        series_index: int
+            Index of the series to plot.
+        model : str
+            Name of the forecasting model.
+        type : str
+            Name of the current type.
+        title : str
+            Title of the plot.
+        save_path : str
+            Directory where plots are saved.
+        display : bool
+            Whether to display the plots.
+        verbose : bool
+            Whether to print the saved file path.
+        pred_to_call : int
+            Index of the prediction column to display.
+
+        Returns
+        -------
+        plt
+            Return the plots object.
+        """
+
+        fig, ax = plt.subplots(figsize=(24, 5))
+        fig.canvas.manager.set_window_title("downstream evaluation")
+        fig.suptitle(title, fontsize=16)
+
+        # Select the first contaminated series
+        valid_indices = [i for i in range(incomp_data.shape[1]) if np.isnan(incomp_data[:, i]).any()]
+
+        if not valid_indices:
+            plt.close(fig)
+            raise ValueError("No contaminated series found.")
+
+        series_idx = series_index
+
+        # Extract recovered training data and predictions
+        train_series = y_train[:, series_idx]
+        test_series = y_test[:, series_idx]
+        pred_series = y_pred[:, pred_to_call]
+        recov_series = recov_data[:, series_idx]
+
+        # Extract original ground truth, independently of recovered training data
+        train_len = len(train_series)
+        test_len = len(test_series)
+
+        ground_train = ground_truth[:train_len, series_idx]
+
+        # Use original testing values when available; otherwise use y_test
+        if ground_truth.shape[0] >= train_len + test_len:
+            ground_test = ground_truth[train_len:train_len + test_len, series_idx]
+        else:
+            ground_test = test_series
+
+        # Identify missing values in the training portion
+        missing_mask = np.isnan(incomp_data[:train_len, series_idx])
+
+        # Full timeline
+        full_series = np.concatenate([ground_train, ground_test])
+
+        # Plot original ground truth over the entire timeline
+        ground_normal = ground_train.copy()
+        ground_normal[missing_mask] = np.nan
+
+        ax.plot(range(train_len), ground_normal, label="ground truth", color="gray", linewidth=1.5, alpha=0.9, zorder=2)
+
+        # Ground truth inside contaminated regions (more transparent)
+        ground_missing = ground_train.copy()
+        ground_missing[~missing_mask] = np.nan
+
+        ax.plot(range(train_len), ground_missing, label="_nolegend_", color="gray", linewidth=1.5, alpha=0.5, zorder=2)
+        ax.plot(range(train_len, train_len + test_len), ground_test, label="_nolegend_", color="gray", linewidth=0.8, alpha=0.5, zorder=1)
+
+        # Highlight recovered values only where contamination occurred
+        imputed_series = ground_train.copy()
+        imputed_series[missing_mask] = recov_series[:train_len][missing_mask]
+
+        plot_mask = missing_mask.copy()
+        plot_mask[1:] |= missing_mask[:-1]
+        plot_mask[:-1] |= missing_mask[1:]
+        imputed_series[~plot_mask] = np.nan
+
+        # Light red background only over contaminated timestamp zones
+        missing_indices = np.where(missing_mask)[0]
+        if len(missing_indices) > 0:
+            groups = np.split(missing_indices, np.where(np.diff(missing_indices) > 1)[0] + 1)
+            for group in groups:
+                ax.axvspan(group[0] - 0.5, group[-1] + 0.5, color="red", alpha=0.08, zorder=0)
+
+        ax.plot(range(len(train_series)), imputed_series, label=f"{algorithm.lower()} imputation", color="red", linestyle="-", linewidth=1.8, alpha=0.9, zorder=5)
+
+        # Plot forecasted data on top of testing data
+        label = f"{type or ''} {model or ''}".strip()
+        ax.plot(range(len(train_series), len(full_series)), pred_series, label=label, linestyle="-", marker=None, color="green", zorder=4)
+
+        # Add a vertical line at the split point
+        ax.axvline(x=len(train_series), color="orange", linestyle="--")
+
+        # Add labels, title, and grid
+        ax.set_title(f"{algorithm.lower()} imputation, series_{series_idx + 1}")
+        ax.set_xlabel("Timestamp")
+        ax.set_ylabel("Value")
+        ax.legend(loc="upper left", fontsize=7, frameon=True, fancybox=True, framealpha=0.8)
+        ax.grid()
+
+        # Adjust layout
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+        fig.subplots_adjust(top=0.88)
+
+        if save_path:
+            os.makedirs(save_path, exist_ok=True)
+
+            now = datetime.datetime.now()
+            current_time = now.strftime("%y_%m_%d_%H_%M_%S")
+            file_path = os.path.join(save_path, current_time + "_" + str(type) + "_" + str(model) + "_downstream.jpg")
+
+            plt.savefig(file_path, bbox_inches="tight")
+
+            if verbose:
+                print("\nplots saved in: ", file_path)
+
+            if display:
+                plt.show()
+
+        return plt
 
     def _plot_classify_accuracy(self, metrics: dict, model="classifier", title="Classification accuracy", save_path="./imputegap_assets/downstream", display=True, verbose=True):
         """

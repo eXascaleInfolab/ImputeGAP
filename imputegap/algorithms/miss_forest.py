@@ -46,9 +46,7 @@ def miss_forest(incomp_data, n_estimators=100, max_iter=5, max_features='sqrt', 
     https://pypi.org/project/MissForest/
     """
 
-    print(f"{n_estimators=} - {max_iter} - {max_features} - {seed} - {logs} - {verbose}")
-
-    incomp_data = incomp_data
+    incomp_data = incomp_data.copy()
 
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)

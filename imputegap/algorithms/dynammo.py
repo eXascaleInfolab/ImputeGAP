@@ -1,11 +1,11 @@
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
 
 import numpy as np
 
 from imputegap.tools import utils
 
-def native_dynammo(__py_matrix, __py_h, __py_maxIter, __py_fast, __verbose=True):
+def native_dynammo(__py_matrix, __py_h, __py_maxIter, __py_fast, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the DynaMMo algorithm with native C++ support.
 

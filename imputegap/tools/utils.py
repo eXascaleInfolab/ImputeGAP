@@ -8,9 +8,6 @@ import importlib.resources
 import numpy as __numpy_import
 import platform
 
-
-
-
 def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: str = "chlorine", optimizer: str = "b", path=None, verbose=False, task="default"):
     """
     Load default or optimal parameters for algorithms from a TOML file.
@@ -62,7 +59,7 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         else:
             filepath = path
         if not os.path.exists(filepath):
-            print(f"\n\tthe selected path is wrong, auto-redirection...")
+            print("\n\tthe selected path is wrong, auto-redirection...")
             here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             filepath = os.path.join(here, "env/"+file_to_load)
 
@@ -101,14 +98,6 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         iteration = int(config[algorithm]['iteration'])
         return {"rank":rank, "epsilon":epsilon, "iteration":iteration}
 
-
-    elif algorithm == "seminar":
-        imputer = str(config[algorithm]['imputer'])
-        return {"imputer":imputer}
-
-    elif algorithm == "new_imputer":
-        imputer = str(config[algorithm]['imputer'])
-        return {"imputer":imputer}
 
     elif algorithm == "stmvl":
         window_size = int(config[algorithm]['window_size'])
@@ -392,7 +381,6 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
             "blackouts_end": blackouts_end,
             "epochs": epochs,
         }
-
 
     elif algorithm == "nuwats":
         seq_len = int(config[algorithm]['seq_len'])
@@ -835,7 +823,6 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         window_size = int(config[algorithm]["window_size"])
         word_length = int(config[algorithm]["word_length"])
         max_dims = int(config[algorithm]["max_dims"])
-        dim_threshold = float(config[algorithm]["dim_threshold"])
         n_jobs = int(config[algorithm]["n_jobs"])
         random_state = int(config[algorithm]["random_state"])
         return {"window_size": window_size, "word_length": word_length, "max_dims": max_dims, "n_jobs": n_jobs, "random_state": random_state, }
@@ -1758,8 +1745,6 @@ def config_classifier(model, params):
     ``"proxforest"`` before model selection.
     """
 
-    from imputegap.recovery.manager import TimeSeries
-
     model_low = model.lower()
     mdl = model_low.replace('_', '').replace('-', '')
 
@@ -2006,7 +1991,6 @@ def config_forecaster(model, params, pred_len=None, s_exception=False):
     if pred_len is not None:
         if "pred_len" in params:
             params["pred_len"] = pred_len
-    if pred_len is not None:
         if "config" in params and "prediction_length" in params["config"]:
             params["config"]["prediction_length"] = pred_len
             print(f"\tprediction_length adapted with the horizon: {params['config']['prediction_length']}\n")
@@ -2484,13 +2468,13 @@ def prepare_series_by_class(labels, raw_data, imputer="cdrec", pattern="mcar", t
 
             # manual check and visualisation
             # __________________________________________________
-            if deep_verbose and False:
-                print(f"\nts.data")
+            if deep_verbose:
+                print("\nts.data")
                 for i in X:
                     for values in i:
                         print(f"{round(values, 1)}", end="\t\t", sep="\t\t")
                     print("")
-                print(f"\nmissing")
+                print("\nmissing")
                 for i in missing:
                     for values in i:
                         if np.isnan(values):
@@ -2498,7 +2482,7 @@ def prepare_series_by_class(labels, raw_data, imputer="cdrec", pattern="mcar", t
                         else:
                             print(f"{round(values, 1)}", end="\t\t", sep="\t\t")
                     print("")
-                print(f"\nimputer.recov_data")
+                print("\nimputer.recov_data")
                 for i in alg.recov_data:
                     for values in i:
                         print(f"{round(values, 1)}", end="\t\t", sep="\t\t")
@@ -2545,7 +2529,7 @@ def prepare_series_by_class(labels, raw_data, imputer="cdrec", pattern="mcar", t
     # pipeline for imputation by dataset (with contamination by class)
     # ====================================================================
     else:
-        print(f"IMPUTATION BY DATASET")
+        print("IMPUTATION BY DATASET")
         alg.incomp_data = full_miss
         alg.impute(params=params)
         full_reconstruction=alg.recov_data
@@ -2628,8 +2612,7 @@ def prepare_caching(dataset, algorithm, pattern, x, contamination_by_class, impu
     implementations, versions, or optimized configurations. The optimization
     suffix is applied differently for classification and forecasting tasks.
     """
-    classification_task = True
-    optizer = True
+
     if contamination_by_class is not None:
         if contamination_by_class:
             c = "contbyclass"
@@ -2787,7 +2770,7 @@ def ts_caching_save(data, type="classification", artifact=None, name="", dir_cac
             "@univariate true",
             "@equalLength true",
             f"@seriesLength {X.shape[1]}",
-            "@classLabel true " + " ".join(l for l in uniq),
+            "@classLabel true " + " ".join(label for label in uniq),
             "@data",
         ]
 
@@ -3197,9 +3180,9 @@ def __marshal_as_numpy_column(__ctype_container, __py_sizen, __py_sizem):
     numpy.ndarray
         A numpy array reshaped to the original matrix dimensions (row-major order).
     """
-    __numpy_marshal = __numpy_import.array(__ctype_container).reshape(__py_sizem, __py_sizen).T;
+    __numpy_marshal = __numpy_import.array(__ctype_container).reshape(__py_sizem, __py_sizen).T
 
-    return __numpy_marshal;
+    return __numpy_marshal
 
 
 def __marshal_as_native_column(__py_matrix):
@@ -3216,10 +3199,10 @@ def __marshal_as_native_column(__py_matrix):
     ctypes.Array
         A ctypes array containing the flattened matrix (in column-major order).
     """
-    __py_input_flat = __numpy_import.ndarray.flatten(__py_matrix.T);
-    __ctype_marshal = __numpy_import.ctypeslib.as_ctypes(__py_input_flat);
+    __py_input_flat = __numpy_import.ndarray.flatten(__py_matrix.T)
+    __ctype_marshal = __numpy_import.ctypeslib.as_ctypes(__py_input_flat)
 
-    return __ctype_marshal;
+    return __ctype_marshal
 
 
 def display_title(title="Master Thesis", aut="Quentin Nater", lib="ImputeGAP", university="University Fribourg"):
@@ -3377,9 +3360,8 @@ def auto_seq_llms(data_x, goal="seq", subset=False, high_limit=200, low_limit=0,
         list_windows = []
         valid_seq = True
 
-        if seq_len % 2 == 1:
-            if seq_len != 1:
-                continue
+        if seq_len % 2 == 1 and seq_len != 1:
+            continue
 
         for s in sizes:
             num_windows = s - seq_len + 1
@@ -3917,7 +3899,7 @@ def prepare_fixed_testing_set(incomp_m, tr_ratio=0.8, offset=0.05, block_selecti
     new_m = data_matrix_cont.copy()
 
     if verbose:
-        print(f"(DL): TEST-SET > Test set fixed to {int(round(target_ratio*100))}% of the dataset, for {target_n_nan} values, add test values: {n_new_nans}")
+        print(f"(DL): TEST-SET > Test set fixed to {round(target_ratio*100)}% of the dataset, for {target_n_nan} values, add test values: {n_new_nans}")
 
     return new_m, new_mask
 
@@ -4040,8 +4022,7 @@ def generate_random_mask(gt, mask_test, mask_valid, droprate=0.2, offset=None, s
 
     # just the cell must be free to be picked
     if offset is not None:
-        if offset > droprate:
-            offset = droprate
+        offset = min(offset, droprate)
         mask_offset[:, :int(offset * gt.shape[1])] = 1
         num_offset = np.sum(mask_offset)
 
@@ -4273,7 +4254,7 @@ def load_share_lib(name="lib_cdrec", verbose=True):
         try:  # try inner file C++
             cpp_wrapper = ctypes.CDLL(lib_path)
             if verbose:
-                print(f"\n(SYS) Wrapper files loaded for C++ : ", {lib_path}, "\n")
+                print(f"\n(SYS) Wrapper files loaded for C++ : {lib_path}\n")
         except Exception:
             try:
                 lib_path = importlib.resources.files('imputegap.algorithms.lib').joinpath("./" + str(name) + "_new.dylib")
@@ -4290,7 +4271,7 @@ def load_share_lib(name="lib_cdrec", verbose=True):
         try:  # try inner file C++
             cpp_wrapper = ctypes.CDLL(lib_path)
             if verbose:
-                print(f"\n(SYS) Wrapper files loaded for C++ : ", {lib_path}, "\n")
+                print(f"\n(SYS) Wrapper files loaded for C++ : {lib_path}\n")
         except Exception:
             lib_path = os.path.join(here, 'algorithms/lib/' + name + ".so")
             cpp_wrapper = ctypes.CDLL(lib_path)
@@ -5110,7 +5091,7 @@ def save_dataset_classifier_features(datasets, save_dir = "./imputegap_assets/fe
             rmse = imputer.metrics["RMSE"]
         rows.append(dataset_classifier_features(data=ts.data, labels=classify_sets[1], name=artifact.dataset, rmse=rmse, verbose=verbose))
     f = pd.DataFrame(rows).sort_values("dataset").reset_index(drop=True)
-    out_path = os.path.join(save_dir, f"classifiers_dataset_features.xlsx")
+    out_path = os.path.join(save_dir, "classifiers_dataset_features.xlsx")
     os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
     try:
         if verbose:
@@ -5122,14 +5103,14 @@ def save_dataset_classifier_features(datasets, save_dir = "./imputegap_assets/fe
     return f
 
 
-from typing import List, Tuple
 
-def split_performance_classifier(names: List[str], n_parts: int = 3) -> Tuple[List[List[str]], List[str]]:
+def split_performance_classifier(names, n_parts=3):
     """
+    Split for performance perspectives the set classifiers to run them apart
 
     Parameters
     ----------
-    names : list[str]
+    name: list
         List of dataset names to split.
 
     n_parts : int, optional
@@ -5146,8 +5127,6 @@ def split_performance_classifier(names: List[str], n_parts: int = 3) -> Tuple[Li
     ValueError
         If `n_parts` is less than 1.
     """
-    from typing import List, Tuple
-
     if n_parts < 1:
         raise ValueError("n_parts must be >= 1")
     if not names:
@@ -5425,9 +5404,9 @@ def compute_variables_timesnetlike(ts_m, strat, tr_ratio, size_limitation, model
         return 24, 16, True, taux_nans, tr_ratio
 
     if seq_len < taux_nans*security:
-        limitation = int((ts_m.shape[0] * (1 - 0.05) * tr_ratio))
+        limitation = int(ts_m.shape[0] * (1 - 0.05) * tr_ratio)
         if verbose:
-            print(f"\n\n(INFO) Imputation adaptation with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage. \n\tCurrently, the number of NaNs might reach {taux_nans} for a sequence and the size of seq_len is {seq_len}. Available data {limitation}\n")
+            print(f"\n\n(INFO) Imputation adaptation with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage.\n\tCurrently, the number of NaNs might reach {taux_nans} for a sequence and the size of seq_len is {seq_len}. Available data {limitation}\n")
         seq_len, batch_size = auto_seq_llms(data_x=ts_m, goal=strat, subset=True, high_limit=limitation, low_limit=int(taux_nans * security), exception=True, verbose=verbose)
         size_limitation = True
 
@@ -5612,12 +5591,11 @@ def patch_classifiers_stmvl(ts_m, window_size, gamma, alpha, verbose=False):
             print(f"\t\t\tnew vals: {window_size=} - {gamma=} - {alpha=}\n")
 
 
-
     if np.all(np.isnan(ts_m).any(axis=0)):
         ts_m[np.isnan(ts_m[:, 0]), 0] = np.nanmean(ts_m[:, 0])
         if verbose:
             print(f"\n\tSTMVL PATCH USED FOR {ts_m.shape=} with following nans count of {taux_nans=}")
-            print(f"\t\t\tall cols had nans, patch effective for STMVL...\n")
+            print("\t\t\tall cols had nans, patch effective for STMVL...\n")
 
     return window_size, gamma, alpha
 

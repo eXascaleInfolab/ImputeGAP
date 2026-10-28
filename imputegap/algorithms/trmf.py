@@ -4,7 +4,7 @@ import time
 from imputegap.wrapper.AlgoPython.TRMF.recovTRMF import recovTRMF
 
 
-def trmf(incomp_data, lags=[1,7], K=4, lambda_f=1, lambda_x=1, lambda_w=1, eta=1, alpha=1000, max_iter=5000, logs=True, verbose=True):
+def trmf(incomp_data, lags=None, K=4, lambda_f=1, lambda_x=1, lambda_w=1, eta=1, alpha=1000, max_iter=5000, logs=True, verbose=True):
     """
     Perform imputation using the Temporal Regularized Matrix Factorization (TRMF) algorithm.
 
@@ -14,7 +14,7 @@ def trmf(incomp_data, lags=[1,7], K=4, lambda_f=1, lambda_x=1, lambda_w=1, eta=1
         The input matrix with contamination (missing values represented as NaNs).
 
     lags : array-like, optional
-        Set of lag indices to use in model.
+        Set of lag indices to use in model (If None, defaults to [1, 7]).
 
     K : int, optional
         Length of latent embedding dimension
@@ -65,6 +65,9 @@ def trmf(incomp_data, lags=[1,7], K=4, lambda_f=1, lambda_x=1, lambda_w=1, eta=1
     H.-F. Yu, N. Rao, and I. S. Dhillon, "Temporal Regularized Matrix Factorization for High-dimensional Time Series Prediction," in *Advances in Neural Information Processing Systems*, vol. 29, 2016. [Online]. Available: https://proceedings.neurips.cc/paper_files/paper/2016/file/85422afb467e9456013a2a51d4dff702-Paper.pdf
     """
     start_time = time.time()  # Record start time
+
+    if lags is None:
+        lags = [1, 7]
 
     recov_data = recovTRMF(data=incomp_data, lags=lags, K=K, lambda_f=lambda_f, lambda_x=lambda_x, lambda_w=lambda_w, eta=eta, alpha=alpha, max_iter=max_iter, reversed=False, verbose=verbose)
 

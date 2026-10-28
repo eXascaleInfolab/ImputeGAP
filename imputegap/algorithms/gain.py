@@ -1,5 +1,5 @@
-import time
 import platform
+import time
 
 from imputegap.wrapper.AlgoPython.GAIN.recovGAIN import recovGAIN
 
