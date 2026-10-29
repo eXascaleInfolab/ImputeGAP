@@ -88,27 +88,19 @@ class TestException(unittest.TestCase):
 
         bench = Benchmark()
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms="test", datasets=None, patterns=None, x_axis=None, metrics=None, optimizer=None)
+            bench.eval(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test", optimizer=3)
         print(f"\nCaught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=None, patterns=None, x_axis=None, metrics=None, optimizer=None)
+            bench.eval(algorithms=["CDRec"], datasets="test", patterns="test", x_axis="test", metrics="test", optimizer=2)
         print(f"Caught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=None, x_axis=None, metrics=None, optimizer=None)
+            bench.eval(algorithms=["CDRec"], datasets=["chlorine"],  patterns="test", x_axis="test", metrics="test", optimizer=2)
         print(f"Caught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis=None, metrics=None, optimizer=None)
-        print(f"Caught TypeError: {excinfo.value}")
-
-        with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics=None, optimizer=None)
-        print(f"Caught TypeError: {excinfo.value}")
-
-        with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics=None, optimizer="ray-tune")
+            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis="test", metrics="test", optimizer=2)
         print(f"Caught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
@@ -134,11 +126,86 @@ class TestException(unittest.TestCase):
             bench.eval(algorithms=["CDRec"], datasets=["eeg-reading"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer=10, nbr_series=10, nbr_vals=10)
 
 
+    def test_bench_exc_plus(self):
+        """
+        The goal is to test the exception raised when input_data (raw_data) is None
+        """
+        from imputegap.recovery.benchmark import Benchmark
+
+        bench = Benchmark()
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_imputation(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"\nCaught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_imputation(algorithms=["CDRec"], datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_imputation(algorithms=["CDRec"], datasets=["chlorine"],  patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_imputation(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+
+
+    def test_bench_exc_forecasting(self):
+        """
+        The goal is to test the exception raised when input_data (raw_data) is None
+        """
+        from imputegap.recovery.benchmark import Benchmark
+
+        bench = Benchmark()
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_forecasting(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"\nCaught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_forecasting(algorithms=["CDRec"], datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_forecasting(algorithms=["CDRec"], datasets=["chlorine"],  patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_forecasting(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+
+
+    def test_bench_exc_classification(self):
+        """
+        The goal is to test the exception raised when input_data (raw_data) is None
+        """
+        from imputegap.recovery.benchmark import Benchmark
+
+        bench = Benchmark()
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_classification(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"\nCaught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_classification(algorithms=["CDRec"], datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_classification(algorithms=["CDRec"], datasets=["chlorine"],  patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_classification(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+
+
     def test_score_raises(self):
         """
         The goal is to test exceptions
         """
-        from imputegap.algorithms.test import zero_impute
+        from imputegap.algorithms.zero_impute import zero_impute
         from imputegap.algorithms.cpp_integration import your_algo
 
         # initialize the time series object

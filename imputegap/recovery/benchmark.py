@@ -2998,8 +2998,7 @@ class Benchmark:
                                                 start_time_downstream = time.time()
 
                                                 downstream_analyser.verbose = verbose
-                                                downstream_analyser.score(ground_matrix, downstream_analyser.recov_data,
-                                                                          downstream=forcaster)
+                                                downstream_analyser.score(ground_matrix, downstream_analyser.recov_data, downstream=forcaster)
                                                 imputer.downstream_metrics = downstream_analyser.downstream_metrics
                                                 end_time_downstream = time.time()
 

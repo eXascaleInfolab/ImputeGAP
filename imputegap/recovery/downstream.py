@@ -1,6 +1,7 @@
 # Standard library
 import os
 import datetime
+import time
 import warnings
 
 # Third-party libraries
@@ -9,6 +10,7 @@ import matplotlib.pyplot as plt
 
 # ImputeGAP imports
 from imputegap.tools import utils
+from recovery.imputation import Imputation
 
 warnings.filterwarnings("ignore", message="GPU available but not used.*" )
 
@@ -82,6 +84,9 @@ class Forecaster:
         self.referential = referential
         self.bypass_error = bypass_error
         self.s_exception = s_exception
+        self.y_train = None
+        self.y_test = None
+        self.y_pred = None
 
 
 class Artifact:
@@ -222,7 +227,7 @@ class Downstream:
 
 
 
-    def __init__(self, input_data, recov_data, incomp_data, algorithm, downstream, verbose=True):
+    def __init__(self, input_data=None, recov_data=None, incomp_data=None, algorithm=None, downstream=None, verbose=True):
         """
         Initialize the Downstream class
 
@@ -315,6 +320,216 @@ class Downstream:
             out.append(f"{k.ljust(k_w)}{gap}{v.ljust(v_w)}")
         out.append(line)
         return "\n".join(out)
+
+    @staticmethod
+    def _report_comparator_results(results, save_path, export_excel=True, verbose=False):
+        """Print comparator results and export a simple, single-sheet Excel table."""
+        import pandas as pd
+
+        if not results:
+            print("\n(COMPARATOR) No results to report.")
+            return None
+
+        # keep the simple template: metadata first, then all available metrics
+        metadata = ["ALGORITHM", "PATTERN", "RATE", "MODEL", "HORIZON"]
+        metrics = []
+        for result in results:
+            for metric in result:
+                if metric not in metadata and metric not in metrics:
+                    metrics.append(metric)
+
+        # prioritize the downstream evaluation metric
+        if "smape_imputer" in metrics:
+            metrics = ["smape_imputer"] + [metric for metric in metrics if metric != "smape_imputer"]
+        elif "f1_imputer" in metrics:
+            metrics = ["f1_imputer"] + [metric for metric in metrics if metric != "f1_imputer"]
+
+        columns = metadata + metrics
+        df = pd.DataFrame(results).reindex(columns=columns)
+        df = df.rename(columns={key: key.lower() for key in metadata})
+
+        print("\nDOWNSTREAM COMPARATOR RESULTS")
+        print(df.to_string(index=False, na_rep="-", float_format=lambda value: f"{value:.4f}"))
+
+        if not export_excel:
+            return None
+
+        # directory is already created by comparator()
+        xlsx_path = os.path.join(save_path, "downstream_comparator.xlsx")
+        with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
+            df.to_excel(writer, sheet_name="downstream_results", index=False)
+
+        if verbose:
+            print(f"Saved: {xlsx_path} (sheets=1)")
+
+        return xlsx_path
+
+    def comparator(self, recov_data=None, input_data=None, incomp_data=None, horizons=None, season=None, models=None, meta_algorithm=None, meta_pattern=None, meta_rate=None, save_path="./imputegap_assets/downstream", export_excel=True, verbose=False, display_plot=True):
+        """
+        Compare the downstream forecasting performance of imputed time series across multiple models and prediction horizons.
+
+        Parameters
+        ----------
+        recov_data : np.ndarray, optional
+            Recovered (imputed) time series matrix of shape (n_timestamps, n_series). Defaults to self.recov_data.
+        input_data : np.ndarray, optional
+            Original complete time series matrix (ground truth). Defaults to self.input_data.
+        incomp_data : np.ndarray, optional
+            Incomplete time series matrix containing missing values. Defaults to self.incomp_data.
+        horizons : list, optional
+            List of forecasting horizons. Positive values represent the number of timestamps to predict, while negative values represent a fraction of the dataset. Defaults to [12].
+        season : int, optional
+            Seasonal period of the time series. Defaults to 12.
+        models : list, optional
+            List of downstream forecasting models to evaluate. Defaults to ["chronos"].
+        meta_algorithm : str, optional
+            Name of the imputation algorithm used to recover the data. Defaults to self.algorithm or "imputer".
+        meta_pattern : str, optional
+            Name of the missingness pattern. Defaults to "pattern".
+        meta_rate : float, optional
+            Missingness rate used for contamination. Defaults to 0.
+        selected_series : int or list[int], optional
+            Contaminated series to evaluate. Defaults to the first contaminated series.
+        save_path : str, optional
+            Directory for the Excel report and combined plot.
+        export_excel : bool, optional
+            Export the comparison results to Excel. Defaults to True.
+        display_plot : bool, optional
+            Display the combined comparison figure. Defaults to True.
+        verbose : bool, optional
+            Whether to display additional information during evaluation. Defaults to False.
+
+        Returns
+        -------
+        list of dict
+            List containing the downstream evaluation results for each model and horizon combination, including the execution time in milliseconds.
+        """
+        import gc
+        try:
+            import torch
+        except ImportError:
+            torch = None
+
+        print(f"\n\n(DOWNSTREAM): ImputeGAP Comparator of Downstream Models has been launched.")
+
+        # retrieve default data and parameters
+        if recov_data is None:
+            recov_data = self.recov_data
+        if input_data is None:
+            input_data = self.input_data
+        if incomp_data is None:
+            incomp_data = self.incomp_data
+        if horizons is None:
+            horizons = [12]
+        if models is None:
+            models = ["chronos"]
+        if meta_algorithm is None:
+            meta_algorithm = self.algorithm
+
+        # validate input data and metadata
+        if recov_data is None:
+            raise ValueError("Recovery data not provided, at least provide a recovery matrix.")
+        if input_data is None:
+            print("\t\t(INFO): Input data (raw-data/ground truth) not provided, the analysis will only provide recovery downstream effects.")
+        if meta_algorithm is None:
+            meta_algorithm = "imputer"
+        if meta_pattern is None:
+            meta_pattern = "pattern"
+        if meta_rate is None:
+            meta_rate = 0
+        if season is None:
+            season = 12
+
+        import logging
+        for name in ["pytorch_lightning", "pytorch_lightning.utilities.rank_zero", "lightning", "lightning.pytorch", "lightning.pytorch.utilities.rank_zero", ]:
+            logging.getLogger(name).setLevel(logging.ERROR)
+
+        saved_info = []  # saved info will store dictionary of every pipeline results
+        saved_pipelines = []  # saved pipelines will store data required for the combined plot
+
+        # pipelines
+        for model_ in models:
+            for horizon_ in horizons:
+
+                print(f"\tpipeline: {meta_algorithm}-{model_}-{horizon_}:")
+
+                start_time_downstream = time.time()
+
+                s_horizon = str(horizon_)
+
+                # split recovered data into training and testing sets
+                if horizon_ > 0:
+                    train_len = recov_data.shape[0] - horizon_
+                else:
+                    train_len = recov_data.shape[0] - int(recov_data.shape[0] * abs(horizon_))
+
+                if train_len <= 0 or train_len >= recov_data.shape[0]:
+                    raise ValueError(f"Invalid forecasting horizon {horizon_} for a dataset of length {recov_data.shape[0]}.")
+
+                print(f"\t\t\tcomparator: converting the dataset into forecasting task... horizon:{horizon_}, data_len:{train_len}, prediction_len:{recov_data.shape[0]-train_len}")
+
+                # initialize downstream forecasting model
+                artifact = Artifact(dataset="recov_data", model=model_, algorithm=meta_algorithm, pattern=meta_pattern,
+                                    x=meta_rate, contamination_by_class=None, imputation_by_class=s_horizon,
+                                    fixed_x=meta_rate, horizon=horizon_)
+                forcaster = Forecaster(task="forecast", model=model_, y_train=None, season=season, plots=False,
+                                       use_cache=False, to_cache=True, artifact=artifact, referential=False,
+                                       bypass_error=False, s_exception=False, single_pipeline=True, verbose=False)
+
+                self.downstream=forcaster
+
+                # evaluate downstream forecasting performance
+                downstream_analyser = Imputation.Statistics.MeanImpute(incomp_data)
+                downstream_analyser.verbose = verbose
+                downstream_analyser.score(input_data, recov_data, downstream=forcaster)
+                end_time_downstream = time.time()
+
+                # compute downstream execution time in milliseconds
+                time_downstream = (end_time_downstream - start_time_downstream) * 1000
+                time_downstream = max(time_downstream, 1)
+
+                # collect downstream metrics and pipeline metadata
+                final_metric = {key: val for key, val in downstream_analyser.downstream_metrics.items() if not np.isnan(val)}
+                final_metric["RUNTIME"] = time_downstream
+                final_metric["MODEL"] = model_
+                final_metric["HORIZON"] = horizon_
+                final_metric["ALGORITHM"] = meta_algorithm
+                final_metric["PATTERN"] = meta_pattern
+                final_metric["RATE"] = meta_rate
+
+                saved_info.append(final_metric)
+                # save pipeline data for the combined downstream plot
+                saved_pipelines.append({"y_train": np.array(forcaster.y_train, copy=True), "y_test": np.array(forcaster.y_test, copy=True), "y_pred": np.array(forcaster.y_pred, copy=True),
+                     "incomp_data": incomp_data, "ground_truth": input_data, "recov_data": recov_data, "model": model_,
+                     "metrics": final_metric.copy()})
+
+                print(f"\tresult of the pipeline: {final_metric=}\n")
+
+                # cleanup
+                del forcaster
+                gc.collect()
+                if torch is not None and torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                    torch.cuda.ipc_collect()
+
+        # create a dedicated directory for this comparator execution
+        run_date = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        save_path = os.path.join(save_path, f"downstream_comparator_{run_date}")
+        try:
+            os.makedirs(save_path, exist_ok=True)
+        except OSError as e:
+            raise OSError(f"Failed to create downstream comparator directory '{save_path}': {e}") from e
+
+        # print and export the consolidated comparison results
+        if saved_info:
+            self._report_comparator_results(saved_info, export_excel=export_excel, verbose=verbose, save_path=save_path)
+
+        # generate combined downstream comparator plot
+        if saved_pipelines:
+            fig = self._plot_comparator_downstream(pipelines=saved_pipelines, algorithm=meta_algorithm, series_index=self.downstream.selected_series[0], title=f"Downstream forecasting comparison - {meta_algorithm}", display=display_plot, save_path=save_path, verbose=verbose)
+            plt.close(fig)
+
+        return saved_pipelines
 
     def classify(self, model, params, baseline, plots=True, save_path="./imputegap_assets/downstream", verbose=True):
         """
@@ -708,15 +923,16 @@ class Downstream:
                 t = "baseline"
 
             if self.downstream.y_train is None:
-                if self.downstream.artifact.horizon > 0:
+                if self.downstream.artifact.horizon >= 1:
                     train_len = data.shape[0] - self.downstream.artifact.horizon
                 else:
                     train_len = data.shape[0] - int(data.shape[0] * self.downstream.artifact.horizon)
 
-                print(f"\t\t\tconverting the dataset into forecasting task... horizon:{self.downstream.artifact.horizon}, train_len:{train_len}")
-
                 y_train = data[:train_len, :]
                 y_test = data[train_len:, :]
+
+                print(f"\t\t\tconverting the dataset into forecasting task... horizon:{self.downstream.artifact.horizon}, data_len:{len(y_train)}, pred_len:{len(y_test)} ")
+
             else:
                 y_train = data
                 y_test = self.downstream.y_train
@@ -905,13 +1121,15 @@ class Downstream:
         else:
             metrics = {"mse_groundtruth": mse[0], al_name: mse[1], al_name_c: mse[2], "mae_groundtruth": mae[0], al_name_m: mae[1], al_name_mcs: mae[2], "smape_groundtruth": smape[0], al_name_s: smape[1], al_name_cs: smape[2]}
 
-        print(f"\n\n>>>>>>>>>>>>>> {selected_series= } - {pred_to_call=}\n\n")
-
         if plots:
             if not self.downstream.single_pipeline:
                 plt = self._plot_downstream(y_train=y_train_all, y_test=y_test_all, y_pred=y_pred_all, incomp_data=self.incomp_data, algorithm=self.algorithm, comparison=baseline, model=model, type=evaluator, save_path=save_path, display=self.downstream.plots, verbose=self.verbose, pred_to_call=pred_to_call)
             else:
                 plt = self._plot_single_downstream(y_train=y_train_all[1] if self.downstream.referential else y_train_all[0], y_test=y_test_all[1] if self.downstream.referential else y_test_all[0], y_pred=y_pred_all[1] if self.downstream.referential else y_pred_all[0], incomp_data=self.incomp_data, ground_truth=raw_data, recov_data=recovery, series_index=selected_series[0], algorithm=self.algorithm, model=model, type=evaluator, save_path=save_path, display=self.downstream.plots, verbose=self.verbose, pred_to_call=pred_to_call)
+
+        self.downstream.y_train = y_train_all[1] if self.downstream.referential else y_train_all[0]
+        self.downstream.y_test = y_test_all[1] if self.downstream.referential else y_test_all[0]
+        self.downstream.y_pred = y_pred_all[1] if self.downstream.referential else y_pred_all[0]
 
         return metrics, plt
 
@@ -965,6 +1183,7 @@ class Downstream:
             selected_series = [series_indices]
         elif self.downstream.selected_series == -1:
             selected_series = range(self.input_data.shape[1])
+        self.downstream.selected_series = selected_series
 
         if self.verbose and evaluator == "forecaster":
             print(f"\n(DOWNSTREAM) Analysis launched !\n\ttask: {evaluator}\n\tmodel: {model}\n\tparams: {params}\n\tbase algorithm: {str(self.algorithm).lower()}\n\treference algorithm: {str(self.downstream.baseline).lower()}\n\tselected series: {selected_series}\n\thorizon: {self.downstream.artifact.horizon}\n")
@@ -1108,9 +1327,83 @@ class Downstream:
         return plt
 
     @staticmethod
-    def _plot_single_downstream(y_train, y_test, y_pred, incomp_data,ground_truth, recov_data, algorithm, series_index, model=None, type=None, title="", save_path="./imputegap_assets/downstream", display=True, verbose=True, pred_to_call=0):
+    def _plot_comparator_downstream(pipelines, algorithm, series_index, title="", save_path="./imputegap_assets/downstream", display=True, verbose=True):
         """
-        Plot ground truth, imputed values, and predictions for the first contaminated series.
+        Combine multiple downstream forecasting pipelines into vertically stacked subplots.
+
+        Parameters
+        ----------
+        pipelines : list of dict
+            Pipeline records containing y_train, y_test, y_pred, incomp_data, ground_truth, recov_data, model and metrics.
+        algorithm : str
+            Name of the imputation algorithm.
+        series_index : int
+            Index of the time series to display.
+        title : str, optional
+            Title of the combined figure.
+        save_path : str, optional
+            Directory where the combined figure is saved.
+        display : bool, optional
+            Whether to display the combined figure.
+        verbose : bool, optional
+            Whether to print the saved file path.
+
+        Returns
+        -------
+        matplotlib.figure.Figure
+            Combined figure containing all downstream forecasting pipelines.
+        """
+        if not pipelines:
+            raise ValueError("No downstream pipelines available for plotting.")
+
+        # initialize combined figure
+        n_pipelines = len(pipelines)
+        fig, axes = plt.subplots(n_pipelines, 1, figsize=(24, 4 * n_pipelines), sharex=True, sharey=True, squeeze=False)
+        if fig.canvas.manager is not None:
+            fig.canvas.manager.set_window_title("downstream comparator evaluation")
+        fig.suptitle(title or f"Downstream comparator - {algorithm}", fontsize=16)
+
+        # plot each pipeline on its corresponding subplot
+        for i, pipeline in enumerate(pipelines):
+            ax = axes[i, 0]
+            Downstream._plot_single_downstream(y_train=pipeline["y_train"], y_test=pipeline["y_test"],
+                                               y_pred=pipeline["y_pred"], incomp_data=pipeline["incomp_data"],
+                                               ground_truth=pipeline["ground_truth"], recov_data=pipeline["recov_data"],
+                                               algorithm=algorithm, series_index=series_index, model=pipeline["model"],
+                                               type="forecasting", display=False, verbose=False, ax=ax,
+                                               metrics=pipeline["metrics"])
+
+            # keep the legend on the first subplot only
+            if i > 0:
+                legend = ax.get_legend()
+                if legend is not None:
+                    legend.remove()
+
+        # adjust layout
+        fig.tight_layout(rect=[0, 0.02, 1, 0.97])
+        fig.subplots_adjust(hspace=0.35)
+
+        # save combined figure
+        if save_path:
+            os.makedirs(save_path, exist_ok=True)
+            now = datetime.datetime.now()
+            current_time = now.strftime("%y_%m_%d_%H_%M_%S")
+            file_path = os.path.join(save_path, current_time + "_" + str(algorithm) + "_comparator_downstream.jpg")
+            fig.savefig(file_path, bbox_inches="tight", dpi=200)
+            if verbose:
+                print("\nplots saved in: ", file_path)
+
+        if display:
+            plt.show()
+
+        return fig
+
+    @staticmethod
+    def _plot_single_downstream(y_train, y_test, y_pred, incomp_data, ground_truth, recov_data, algorithm, series_index,
+                                model=None, type=None, title="", save_path="./imputegap_assets/downstream",
+                                display=True, verbose=True, pred_to_call=0, ax=None, metrics=None):
+        """
+        Plot ground truth, imputed values, and predictions for a contaminated series.
 
         Parameters
         ----------
@@ -1123,64 +1416,86 @@ class Downstream:
         incomp_data : np.ndarray
             Incomplete data array used to identify contaminated series.
         ground_truth : np.ndarray
-            Ground truth data array used to identify contaminated series.
+            Original ground truth data array.
         recov_data : np.ndarray
             Imputed data array containing recovered values.
         algorithm : str
             Name of the imputation algorithm.
-        series_index: int
+        series_index : int
             Index of the series to plot.
-        model : str
+        model : str, optional
             Name of the forecasting model.
-        type : str
-            Name of the current type.
-        title : str
-            Title of the plot.
-        save_path : str
-            Directory where plots are saved.
-        display : bool
-            Whether to display the plots.
-        verbose : bool
+        type : str, optional
+            Name of the current task type.
+        title : str, optional
+            Title of the standalone plot.
+        save_path : str, optional
+            Directory where standalone plots are saved.
+        display : bool, optional
+            Whether to display the standalone plot.
+        verbose : bool, optional
             Whether to print the saved file path.
-        pred_to_call : int
+        pred_to_call : int, optional
             Index of the prediction column to display.
+        ax : matplotlib.axes.Axes, optional
+            Existing subplot axis. If None, create a standalone figure.
+        metrics : dict, optional
+            Pipeline metrics used in the subplot title, including RMSE and RUNTIME.
 
         Returns
         -------
-        plt
-            Return the plots object.
+        matplotlib.figure.Figure
+            Figure containing the downstream plot.
         """
+        # initialize figure or reuse an existing subplot
+        standalone = ax is None
+        if standalone:
+            fig, ax = plt.subplots(figsize=(24, 5))
+            if fig.canvas.manager is not None:
+                fig.canvas.manager.set_window_title("downstream evaluation")
+            fig.suptitle(title, fontsize=16)
+        else:
+            fig = ax.figure
 
-        fig, ax = plt.subplots(figsize=(24, 5))
-        fig.canvas.manager.set_window_title("downstream evaluation")
-        fig.suptitle(title, fontsize=16)
-
-        # Select the first contaminated series
+        # Select the contaminated series
         valid_indices = [i for i in range(incomp_data.shape[1]) if np.isnan(incomp_data[:, i]).any()]
 
         if not valid_indices:
-            plt.close(fig)
+            if standalone:
+                plt.close(fig)
             raise ValueError("No contaminated series found.")
 
         series_idx = series_index
+        if series_idx not in valid_indices:
+            if standalone:
+                plt.close(fig)
+            raise ValueError(f"Selected series {series_idx} does not contain missing values. {valid_indices=}")
 
         # Extract recovered training data and predictions
         train_series = y_train[:, series_idx]
         test_series = y_test[:, series_idx]
-        pred_series = y_pred[:, pred_to_call]
+        predictions = np.asarray(y_pred, dtype=float)
+        if predictions.ndim == 1:
+            predictions = predictions.reshape(-1, 1)
+        pred_series = predictions[:, pred_to_call]
         recov_series = recov_data[:, series_idx]
 
         # Extract original ground truth, independently of recovered training data
         train_len = len(train_series)
         test_len = len(test_series)
-
-        ground_train = ground_truth[:train_len, series_idx]
-
-        # Use original testing values when available; otherwise use y_test
-        if ground_truth.shape[0] >= train_len + test_len:
-            ground_test = ground_truth[train_len:train_len + test_len, series_idx]
+        if ground_truth is None:
+            ground_train = train_series.copy()
+            ground_test = test_series.copy()
         else:
-            ground_test = test_series
+            ground_train = ground_truth[:train_len, series_idx]
+            # Use original testing values when available; otherwise use y_test
+            if ground_truth.shape[0] >= train_len + test_len:
+                ground_test = ground_truth[train_len:train_len + test_len, series_idx]
+            else:
+                ground_test = test_series
+
+        if len(pred_series) != test_len:
+            raise ValueError(f"Prediction length {len(pred_series)} does not match test length {test_len}.")
 
         # Identify missing values in the training portion
         missing_mask = np.isnan(incomp_data[:train_len, series_idx])
@@ -1191,20 +1506,17 @@ class Downstream:
         # Plot original ground truth over the entire timeline
         ground_normal = ground_train.copy()
         ground_normal[missing_mask] = np.nan
-
         ax.plot(range(train_len), ground_normal, label="ground truth", color="gray", linewidth=1.5, alpha=0.9, zorder=2)
 
         # Ground truth inside contaminated regions (more transparent)
         ground_missing = ground_train.copy()
         ground_missing[~missing_mask] = np.nan
-
         ax.plot(range(train_len), ground_missing, label="_nolegend_", color="gray", linewidth=1.5, alpha=0.5, zorder=2)
         ax.plot(range(train_len, train_len + test_len), ground_test, label="_nolegend_", color="gray", linewidth=0.8, alpha=0.5, zorder=1)
 
         # Highlight recovered values only where contamination occurred
         imputed_series = ground_train.copy()
         imputed_series[missing_mask] = recov_series[:train_len][missing_mask]
-
         plot_mask = missing_mask.copy()
         plot_mask[1:] |= missing_mask[:-1]
         plot_mask[:-1] |= missing_mask[1:]
@@ -1217,7 +1529,8 @@ class Downstream:
             for group in groups:
                 ax.axvspan(group[0] - 0.5, group[-1] + 0.5, color="red", alpha=0.08, zorder=0)
 
-        ax.plot(range(len(train_series)), imputed_series, label=f"{algorithm.lower()} imputation", color="red", linestyle="-", linewidth=1.8, alpha=0.9, zorder=5)
+        ax.plot(range(len(train_series)), imputed_series, label=f"{algorithm.lower()} imputation", color="red",
+                linestyle="-", linewidth=1.8, alpha=0.9, zorder=5)
 
         # Plot forecasted data on top of testing data
         label = f"{type or ''} {model or ''}".strip()
@@ -1227,32 +1540,39 @@ class Downstream:
         ax.axvline(x=len(train_series), color="orange", linestyle="--")
 
         # Add labels, title, and grid
-        ax.set_title(f"{algorithm.lower()} imputation, series_{series_idx + 1}")
+        if metrics is not None:
+            smape = metrics.get("smape_imputer", float("nan"))
+            runtime = metrics.get("RUNTIME", float("nan"))
+            if standalone:
+                ax.set_title(f"{algorithm.lower()} - {model} - horizon {metrics.get('HORIZON', len(test_series))} | sMAPE: {smape:.4f} | Time: {runtime:.2f} ms")
+            else:
+                ax.set_title(f"{str(model).upper()}  |  Horizon: {metrics.get('HORIZON', len(test_series))}  |  sMAPE: {smape:.4f}  |  Time: {runtime:.2f} ms", fontsize=14, fontweight="bold", pad=12)
+        else:
+            ax.set_title(f"{algorithm.lower()} imputation, series_{series_idx + 1}")
         ax.set_xlabel("Timestamp")
         ax.set_ylabel("Value")
         ax.legend(loc="upper left", fontsize=7, frameon=True, fancybox=True, framealpha=0.8)
         ax.grid()
 
-        # Adjust layout
-        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-        fig.subplots_adjust(top=0.88)
+        # Adjust layout and save only standalone plots
+        if standalone:
+            plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+            fig.subplots_adjust(top=0.88)
 
-        if save_path:
-            os.makedirs(save_path, exist_ok=True)
-
-            now = datetime.datetime.now()
-            current_time = now.strftime("%y_%m_%d_%H_%M_%S")
-            file_path = os.path.join(save_path, current_time + "_" + str(type) + "_" + str(model) + "_downstream.jpg")
-
-            plt.savefig(file_path, bbox_inches="tight")
-
-            if verbose:
-                print("\nplots saved in: ", file_path)
+            if save_path:
+                os.makedirs(save_path, exist_ok=True)
+                now = datetime.datetime.now()
+                current_time = now.strftime("%y_%m_%d_%H_%M_%S")
+                file_path = os.path.join(save_path,
+                                         current_time + "_" + str(type) + "_" + str(model) + "_downstream.jpg")
+                fig.savefig(file_path, bbox_inches="tight")
+                if verbose:
+                    print("\nplots saved in: ", file_path)
 
             if display:
                 plt.show()
 
-        return plt
+        return plt if standalone else fig
 
     def _plot_classify_accuracy(self, metrics: dict, model="classifier", title="Classification accuracy", save_path="./imputegap_assets/downstream", display=True, verbose=True):
         """
