@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 
 # ImputeGAP imports
 from imputegap.tools import utils
-from imputegap.recovery.imputation import Imputation
 
 warnings.filterwarnings("ignore", message="GPU available but not used.*" )
 
@@ -405,6 +404,8 @@ class Downstream:
             List containing the downstream evaluation results for each model and horizon combination, including the execution time in milliseconds.
         """
         import gc
+        from imputegap.recovery.imputation import Imputation
+
         try:
             import torch
         except ImportError:
@@ -593,6 +594,7 @@ class Downstream:
 
 
         """
+        from imputegap.recovery.imputation import Imputation
         from sklearn.metrics import accuracy_score, recall_score, f1_score
 
         acc_list, rec_list, f1_list = [], [], []
@@ -617,7 +619,6 @@ class Downstream:
                 tag = "imputed data " + self.downstream.algorithm.upper()
                 t = "impute"
             elif x == 2:
-                from imputegap.recovery.imputation import Imputation
                 if baseline is not None:
                     tr_base_imp = utils.config_impute_algorithm(incomp_data=self.incomp_data, algorithm=baseline)
                 else:
