@@ -1,6 +1,6 @@
 import unittest
 
-from recovery.downstream import Artifact
+from imputegap.recovery.downstream import Artifact
 
 
 class TestClassifiers(unittest.TestCase):

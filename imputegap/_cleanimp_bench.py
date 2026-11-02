@@ -1,6 +1,6 @@
 import argparse
-from recovery.benchmark import Benchmark
-from tools import utils
+from imputegap.recovery.benchmark import Benchmark
+from imputegap.tools import utils
 
 
 def parse_args():

@@ -5075,8 +5075,8 @@ def save_dataset_classifier_features(datasets, save_dir = "./imputegap_assets/fe
             A dataframe containing one row per dataset, sorted by dataset name.
         """
 
-    from recovery.manager import TimeSeries
-    from recovery.downstream import Artifact
+    from imputegap.recovery.manager import TimeSeries
+    from imputegap.recovery.downstream import Artifact
 
     rows, rmse = [], None
     for d in datasets:

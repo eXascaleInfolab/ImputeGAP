@@ -10,12 +10,12 @@ import matplotlib.pyplot as plt
 
 # ImputeGAP imports
 from imputegap.tools import utils
-from recovery.imputation import Imputation
+from imputegap.recovery.imputation import Imputation
 
 warnings.filterwarnings("ignore", message="GPU available but not used.*" )
 
 class Forecaster:
-    def __init__(self, task="forecast", model="exp-smoothing", y_train=None, season=24, params=None, baseline="mean-impute", selected_series=None, single_pipeline=False, plots=True, save_path="./imputegap_assets/downstream", to_cache=True, use_cache=False, artifact=None, referential=True, bypass_error=False, s_exception=False, verbose=True):
+    def __init__(self, task="forecast", model="exp-smoothing", y_train=None, season=24, params=None, baseline="mean-impute", selected_series=None, single_pipeline=False, plots=True, save_path="./imputegap_assets/downstream", to_cache=True, use_cache=False, artifact=None, referential=True, bypass_error=False, s_exception=False, verbose=False):
         """
         Container for downstream forecasting configuration and inputs.
 

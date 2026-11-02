@@ -19,8 +19,18 @@ ts_m = GenGap.mcar(ts.data, rate_series=0.4, offset=0)
 imputer = Imputation.MatrixCompletion.CDRec(ts_m)
 imputer.impute()
 
-artifact = Artifact(dataset="eeg-alcohol", model="chronos", algorithm="cdrec", pattern="mcar", horizon=0.1)
-forecaster = Forecaster(task="forecast", model=artifact.model, y_train=None, season=12, use_cache=False, to_cache=True, artifact=artifact, plots=True, single_pipeline=True, verbose=False)
+artifact = Artifact(dataset="eeg-alcohol",
+                    model="chronos",
+                    algorithm="cdrec",
+                    pattern="mcar",
+                    horizon=0.1)
+
+forecaster = Forecaster(task="forecast",
+                        model=artifact.model,
+                        season=12,
+                        artifact=artifact,
+                        plots=True,
+                        single_pipeline=True)
 
 imputer.score(ts.data, imputer.recov_data, downstream=forecaster)
 ts.print_results(imputer.downstream_metrics, text="Downstream results")

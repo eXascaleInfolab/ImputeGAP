@@ -124,7 +124,7 @@ class Optimization:
         from imputegap.env.default_opti import OPTI_DICTIONARY_MICROBENCH
         """
         from imputegap.recovery.manager import TimeSeries
-        from recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGap
         import os
         import time
         import pandas as pd
