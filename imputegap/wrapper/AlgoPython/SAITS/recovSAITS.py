@@ -458,8 +458,8 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     assert args.model_saving_strategy.lower() in ["all", "best", "none", ], "model saving strategy must be all/best/none"
     if args.model_saving_strategy.lower() == "none":
         args.model_saving_strategy = False
-    assert (args.optimizer_type in OPTIMIZER.keys()), f"optimizer type should be in {OPTIMIZER.keys()}, but get{args.optimizer_type}"
-    assert args.device in ["cpu", "cuda"], "device should be cpu or cuda"
+    #assert (args.optimizer_type in OPTIMIZER.keys()), f"optimizer type should be in {OPTIMIZER.keys()}, but get{args.optimizer_type}"
+    #assert args.device in ["cpu", "cuda"], "device should be cpu or cuda"
 
     time_now = args.save_p_model_name #"imp_saits_imputegap"  # datetime.now().__format__("%Y-%m-%d_T%H_%M_%S")
     args.model_saving, args.log_saving = check_saving_dir_for_model(args, time_now, dshere)

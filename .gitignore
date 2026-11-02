@@ -1,76 +1,84 @@
-# Ignore configuration and build script
+# ============================================================
+# FORBIDDEN: Configuration, local files, and generated outputs
+# ============================================================
 .pypirc
+.coveragerc
 build_script.txt
+/old_requirements.txt
+
 *03_imputegap_exercices.ipynb
 *03_imputegap_exercices_sol.ipynb
 *assignment_imputegap.ipynb
+*checkpoint.pth
+*saits_run.txt
+
+# Local scripts (regardless of their directory)
 *runner_validation.py
+*runner_efeatures.py
+*runner_cleaner.py
 *extractor_imp.py
 *extractor_pickle.py
 *extractor_pkl.py
-imputegap/datasets/z_*.txt
-imputegap/datasets/y_*.txt
-imputegap/datasets/fmri-objectviewing.txt
-imputegap/datasets/pollution.txt
-imputegap/datasets/test-large.txt
-*checkpoint.pth
 *script_181.py
 *script_patterns.py
 *script_180.py
 *script_182.py
 *script_lan.py
 *hereliande.py
-*runner_efeatures.py
 *paper_matrixcompletion.py
 *paper_ml.py
 *paper_dl.py
-*saits_run.txt
-*runner_cleaner.py
-*imputegap/wrapper/AlgoPython/NuwaTS/data_provider/dataset/ETT-small/ETTh1.csv
-.coveragerc
-./old_requirements.txt
-imputegap/_optimization
-imputegap/_caching
-imputegap/datasets/_old/*
-imputegap/_optimization/*
-imputegap/_caching/*
-imputegap/datasets/_old/*
 
-# Ignore all .py files in this directory
+# Specific datasets
+/imputegap/datasets/z_*.txt
+/imputegap/datasets/y_*.txt
+/imputegap/datasets/fmri-objectviewing.txt
+/imputegap/datasets/pollution.txt
+/imputegap/datasets/test-large.txt
+/imputegap/wrapper/AlgoPython/NuwaTS/data_provider/dataset/ETT-small/ETTh1.csv
+
+# Generated and archived directories
+/imputegap/_bck/
+/imputegap/_optimization/
+/imputegap/_caching/
+/imputegap/datasets/_old/
+
+# Root-level Python files
 /*.py
-# Keep runner_*.py
+
+# Classification datasets (default: forbidden)
+/imputegap/datasets/classify/*
+
+# Generated assets (default: forbidden)
+/imputegap/imputegap_assets/**
+
+# ============================================================
+# ALLOWED: Explicit exceptions to ignored patterns
+# ============================================================
+
+# Root-level runner scripts, except those forbidden above
 !/runner_*.py
-# Except these specific files
 /runner_efeatures.py
-/paper_matrixcompletion.py
 /imputegap/_cleanimp_classifiers_bench_1_upstream.py
 /imputegap/_cleanimp_classifiers_bench_2_downstream.py
 /imputegap/_cleanimp_forecasters_bench_3_upstream.py
 /imputegap/_cleanimp_forecasters_bench_4_downstream.py
-# Ignore all classification datasets
-/imputegap/datasets/classify/*
+/imputegap/_runner_down_classifier.py
+/imputegap/_runner_efeatures.py
+/imputegap/_cleanimp_bench.py
+/imputegap/_script_180.py
+/imputegap/_script_181.py
+/imputegap/_script_182.py
+/imputegap/_script_lan.py
 
-
-# Except Strawberry and Computers
+# Allowed classification datasets
 !/imputegap/datasets/classify/Strawberry/
 !/imputegap/datasets/classify/Strawberry/**
 !/imputegap/datasets/classify/Computers/
 !/imputegap/datasets/classify/Computers/**
 
-# Ignore generated ImputeGAP assets, except .gitkeep and .toml
-/imputegap/imputegap_assets/**
+# Keep directory traversal and metadata in generated assets
 !/imputegap/imputegap_assets/**/
 !/imputegap/imputegap_assets/**/.gitkeep
 !/imputegap/imputegap_assets/**/*.toml
 
-
-# ============================================================
-# Backup and optimization directories (including all children)
-# ============================================================
-/imputegap/_bck/
-/imputegap/_optimization/
-
-# ============================================================
-# Root files starting with "_"
-# ============================================================
-/imputegap/_*
