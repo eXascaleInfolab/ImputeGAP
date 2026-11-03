@@ -38,8 +38,8 @@ jobs:
         pip install mypy pytest
         
 
-    - name: Run pytest
+    - name: Test NuwaTS
       run: |
-        PYTHONUNBUFFERED=1 python -X faulthandler -m pytest \
-        -vv -s --tb=long \
-        ./tests/test_imputation_nuwats.py
+        USE_TF=0 PYTHONUNBUFFERED=1 python -X faulthandler -m pytest \
+          -vv -s --tb=long \
+          ./tests/test_imputation_nuwats.py

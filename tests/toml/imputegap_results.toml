@@ -135,8 +135,8 @@ mae = 0.199 # sould: 0.249
 
 [saits]
 dataset = "chlorine"
-rmse = 0.959 # 0.15
-mae = 0.353 # 0.09
+rmse = 0.206 # 0.15
+mae = 0.119 # 0.09
 
 [bayotide]
 dataset = "chlorine"
