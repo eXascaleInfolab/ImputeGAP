@@ -38,8 +38,19 @@ jobs:
         pip install mypy pytest
         
 
-    - name: Test NuwaTS
+    - name: Remove Triton for CPU-only tests
       run: |
-        USE_TF=0 PYTHONUNBUFFERED=1 python -X faulthandler -m pytest \
-          -vv -s --tb=long \
+        python -m pip uninstall -y triton
+        python -m pip show torch tensorflow triton llvmlite || true
+                
+
+    - name: Test SAITS
+      env:
+        OMP_NUM_THREADS: "1"
+        MKL_NUM_THREADS: "1"
+        OPENBLAS_NUM_THREADS: "1"
+        NUMEXPR_NUM_THREADS: "1"
+        PYTHONFAULTHANDLER: "1"
+      run: |
+        python -m pytest -vv -s \
           ./tests/test_imputation_nuwats.py
