@@ -8,7 +8,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         lfs: true
     - name: Set up Python
@@ -40,7 +40,12 @@ jobs:
         python --version
         python -m pip show torch torchvision torchaudio numpy scipy
         python -c "import torch; print('Torch:', torch.__version__); print('CUDA:', torch.version.cuda)"
-            
+
+    - name: Remove Triton for CPU-only tests
+      run: |
+        python -m pip uninstall -y triton
+        python -m pip show torch tensorflow triton llvmlite || true
+                
 
     - name: Test SAITS
       env:

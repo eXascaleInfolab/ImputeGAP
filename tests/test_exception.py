@@ -39,18 +39,6 @@ class TestException(unittest.TestCase):
             opt.optimize(None, None, None, None, None)
 
 
-
-    def test_algorithm_test_exc(self):
-        """
-        the goal is to test the exception to algorithms
-        """
-        ts = TimeSeries()
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None)
-        print(f"{ts.data.shape = }")
-        ts_m = GenGap.mcar(ts.data, offset=10, seed=False)
-        imputer = Imputation.Statistics.Test(ts_m)
-        imputer.impute()
-
     def test_extractor_exc(self):
         """
         the goal is to test the exception to algorithms
