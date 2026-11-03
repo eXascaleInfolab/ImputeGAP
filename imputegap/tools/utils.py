@@ -764,7 +764,7 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         training_args = {
             "output_dir": str(config[algorithm].get(
                 "output_dir",
-                f"./patchtst_output_{date_tag}"
+                f"./imputegap_assets/models/patchtst_output_{date_tag}"
             )),
             "num_train_epochs": int(config[algorithm].get("num_train_epochs", 10)),
             "per_device_train_batch_size": int(config[algorithm].get("per_device_train_batch_size", 16)),
