@@ -2970,12 +2970,12 @@ class Benchmark:
                                                                     contamination_by_class=None,
                                                                     imputation_by_class=s_horizon,
                                                                     fixed_x=fixed_rate,
-                                                                    horizon=horizon_)
+                                                                    horizon=horizon_,
+                                                                    season=season)
 
                                                 forcaster = Forecaster(task="forecast",
                                                                        model=model,
                                                                        y_train=y_train,
-                                                                       season=season,
                                                                        plots=False,
                                                                        use_cache=use_cache,
                                                                        to_cache=to_cache,

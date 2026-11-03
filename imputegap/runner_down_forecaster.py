@@ -15,7 +15,7 @@ artifact = Artifact(dataset="paris", model="exp-smoothing", algorithm="cdrec", p
 # load and normalize the dataset
 ts.load_forecasting_dataset(artifact.dataset, normalizer="z-score", verbose=True, horizon=artifact.horizon)
 
-y_train, season = ts.load_proper_output_forecasting()
+y_train, artifact.season = ts.load_proper_output_forecasting()
 
 # contaminate the time series
 ts_m = GenGap.aligned(ts.data, rate_dataset=artifact.fixed_x, rate_series=artifact.x, offset=0)
@@ -26,10 +26,8 @@ imputer = Imputation.MatrixCompletion.CDRec(ts_m)
 imputer.impute()
 
 # compute and print the downstream results
-forecaster = Forecaster(task="forecast",
-                        model=artifact.model,
+forecaster = Forecaster(model=artifact.model,
                         y_train=y_train,
-                        season=season,
                         use_cache=False,
                         to_cache=True,
                         artifact=artifact,

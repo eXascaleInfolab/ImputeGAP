@@ -14,7 +14,7 @@ from imputegap.tools import utils
 warnings.filterwarnings("ignore", message="GPU available but not used.*" )
 
 class Forecaster:
-    def __init__(self, task="forecast", model="exp-smoothing", y_train=None, season=24, params=None, baseline="mean-impute", selected_series=None, single_pipeline=False, plots=True, save_path="./imputegap_assets/downstream", to_cache=True, use_cache=False, artifact=None, referential=True, bypass_error=False, s_exception=False, verbose=False):
+    def __init__(self, task="forecast", model="chronos", y_train=None, params=None, baseline="mean-impute", selected_series=None, pipeline=False, plots=True, save_path="./imputegap_assets/downstream", to_cache=True, use_cache=False, artifact=None, referential=True, bypass_error=False, s_exception=False, verbose=False):
         """
         Container for downstream forecasting configuration and inputs.
 
@@ -32,9 +32,6 @@ class Forecaster:
         y_train : np.ndarray or None, optional
             Training matrix/array used for forecasting ([timestamps, series]). Default is None.
 
-        season : int, optional
-            Seasonality length used by seasonal forecasters (e.g., daily seasonality in hourly data). Default is 24.
-
         params : dict or None, optional
             Model hyperparameters passed to the forecaster configuration helper. Default is None.
 
@@ -44,7 +41,7 @@ class Forecaster:
         selected_series : list[int] or None, optional
             Indices of the series (columns) to include in forecasting and evaluation. Default is None.
 
-        single_pipeline : bool, optional
+        pipeline : bool, optional
             Analyze a single downstream pipeline or a complete one. Default is False.
 
         plots : bool, optional
@@ -70,9 +67,8 @@ class Forecaster:
         self.task = task
         self.model = model
         self.y_train = y_train
-        self.season = season
         self.params = params
-        self.single_pipeline = single_pipeline
+        self.pipeline = pipeline
         self.plots = plots
         self.save_path = save_path
         self.baseline = baseline
@@ -83,13 +79,12 @@ class Forecaster:
         self.referential = referential
         self.bypass_error = bypass_error
         self.s_exception = s_exception
-        self.y_train = None
         self.y_test = None
         self.y_pred = None
 
 
 class Artifact:
-    def __init__(self, dataset, model, algorithm, pattern, x=0.2, fixed_x=0.2, offset=0.05, contamination_by_class=True, imputation_by_class=True, horizon=0.2, verbose=True):
+    def __init__(self, dataset="", model="chronos", algorithm="", pattern="", x=0.2, fixed_x=0.2, offset=0.05, contamination_by_class=True, imputation_by_class=True, horizon=0.2, season=24, verbose=True):
         """
         Container for experiment metadata / configuration.
         """
@@ -103,6 +98,7 @@ class Artifact:
         self.contamination_by_class = contamination_by_class
         self.imputation_by_class = imputation_by_class
         self.horizon = horizon
+        self.season = season
         self.verbose = verbose
 
 
@@ -470,12 +466,8 @@ class Downstream:
                 print(f"\t\t\tcomparator: converting the dataset into forecasting task... horizon:{horizon_}, data_len:{train_len}, prediction_len:{recov_data.shape[0]-train_len}")
 
                 # initialize downstream forecasting model
-                artifact = Artifact(dataset="recov_data", model=model_, algorithm=meta_algorithm, pattern=meta_pattern,
-                                    x=meta_rate, contamination_by_class=None, imputation_by_class=s_horizon,
-                                    fixed_x=meta_rate, horizon=horizon_)
-                forcaster = Forecaster(task="forecast", model=model_, y_train=None, season=season, plots=False,
-                                       use_cache=False, to_cache=True, artifact=artifact, referential=False,
-                                       bypass_error=False, s_exception=False, single_pipeline=True, verbose=False)
+                artifact = Artifact(dataset="recov_data", model=model_, algorithm=meta_algorithm, pattern=meta_pattern, x=meta_rate, contamination_by_class=None, imputation_by_class=s_horizon, fixed_x=meta_rate, horizon=horizon_, season=season)
+                forcaster = Forecaster(task="forecast", model=model_, y_train=None, plots=False, use_cache=False, to_cache=True, artifact=artifact, referential=False, bypass_error=False, s_exception=False, pipeline=True, verbose=False)
 
                 self.downstream=forcaster
 
@@ -1123,7 +1115,7 @@ class Downstream:
             metrics = {"mse_groundtruth": mse[0], al_name: mse[1], al_name_c: mse[2], "mae_groundtruth": mae[0], al_name_m: mae[1], al_name_mcs: mae[2], "smape_groundtruth": smape[0], al_name_s: smape[1], al_name_cs: smape[2]}
 
         if plots:
-            if not self.downstream.single_pipeline:
+            if not self.downstream.pipeline:
                 plt = self._plot_downstream(y_train=y_train_all, y_test=y_test_all, y_pred=y_pred_all, incomp_data=self.incomp_data, algorithm=self.algorithm, comparison=baseline, model=model, type=evaluator, save_path=save_path, display=self.downstream.plots, verbose=self.verbose, pred_to_call=pred_to_call)
             else:
                 plt = self._plot_single_downstream(y_train=y_train_all[1] if self.downstream.referential else y_train_all[0], y_test=y_test_all[1] if self.downstream.referential else y_test_all[0], y_pred=y_pred_all[1] if self.downstream.referential else y_pred_all[0], incomp_data=self.incomp_data, ground_truth=raw_data, recov_data=recovery, series_index=selected_series[0], algorithm=self.algorithm, model=model, type=evaluator, save_path=save_path, display=self.downstream.plots, verbose=self.verbose, pred_to_call=pred_to_call)
@@ -1173,10 +1165,10 @@ class Downstream:
         else:
             params = self.downstream.params
 
-        if evaluator == "forecaster" and self.downstream.season is not None:
+        if evaluator == "forecaster" and self.downstream.artifact.season is not None:
             for k in ("sp", "lags"):
                 if k in params:
-                    params[k] = self.downstream.season
+                    params[k] = self.downstream.artifact.season
 
         if self.downstream.selected_series is None:
             nan_cols = np.isnan(self.incomp_data).any(axis=0)

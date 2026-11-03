@@ -30,7 +30,7 @@ downstream = Downstream()
 down_results = downstream.comparator(recov_data=imputer.recov_data,
                                      input_data=ts.data,
                                      incomp_data=imputer.incomp_data,
-                                     meta_algorithm="cdrec",
+                                     meta_algorithm=imputer.algorithm,
                                      horizons=[24],
                                      models=["chronos", "patchtst", "hw-add", "dlinear"],
                                      meta_pattern=missingness_pattern,

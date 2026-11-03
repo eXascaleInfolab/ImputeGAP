@@ -63,6 +63,7 @@ build_script.txt
 /imputegap/_cleanimp_classifiers_bench_2_downstream.py
 /imputegap/_cleanimp_forecasters_bench_3_upstream.py
 /imputegap/_cleanimp_forecasters_bench_4_downstream.py
+/imputegap/_runner_benchmark_downstream.py
 /imputegap/_runner_down_classifier.py
 /imputegap/_runner_efeatures.py
 /imputegap/_cleanimp_bench.py

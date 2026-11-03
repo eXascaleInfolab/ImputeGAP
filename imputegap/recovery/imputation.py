@@ -97,7 +97,7 @@ class BaseImputer:
             >>> imputer.score(ts.data, imputer.recov_data) # upstream
             >>> imputer.score(ts.data, imputer.recov_data, Forecaster()) # downstream
         """
-        from imputegap.recovery.downstream import Downstream, Forecaster, Classifier
+        from imputegap.recovery.downstream import Downstream, Forecaster, Classifier, Artifact
         if recov_data is not None:
             self.recov_data = recov_data
 

@@ -116,6 +116,7 @@ class TimeSeries:
         self.algorithms_with_families = utils.list_of_algorithms_with_families()
         self.denorm = None
         self.reversed = False
+        self.current_dataset = None
         select_backend()
 
         if verbose:
@@ -812,7 +813,7 @@ class TimeSeries:
         return x
 
 
-    def plot(self, input_data, incomp_data=None, recov_data=None, nbr_series=None, nbr_val=None, series_range=None, subplot=False, size=(16, 8), algorithm=None, save_path="./imputegap_assets", style="default", cont_rate=None, grid=True, reverse=True, legends=True, display=True, verbose=True):
+    def plot(self, input_data, incomp_data=None, recov_data=None, nbr_series=None, nbr_val=None, series_range=None, subplot=False, size=(16, 8), highlight_gap=True, algorithm=None, save_path="./imputegap_assets", style="default", cont_rate=None, grid=True, reverse=True, legends=True, display=True, verbose=True):
         """
         Plot the time series data, including raw, contaminated, or imputed data.
 
@@ -841,6 +842,9 @@ class TimeSeries:
 
         size : tuple, optional
             Size of the plot in inches. Default is (16, 8).
+
+        highlight_gap : bool, optional
+            Highlight the gaps with a red column.
 
         algorithm : str, optional
             Name of the algorithm used for imputation.
@@ -968,6 +972,15 @@ class TimeSeries:
 
                 if incomp_data is None and recov_data is None:  # plot only raw matrix
                     ax.plot(timestamps, input_data[i, :nbr_val], linewidth=2.5, color=color, linestyle='-', label=f'Series_' + str(i+1))
+
+                # Light red background only over contaminated timestamp zones (v2)
+                if highlight_gap and incomp_data is not None:
+                    color_gap = "blue" if recov_data is None else "red"
+                    missing_indices = np.where(np.isnan(incomp_data[i, :nbr_val]))[0]
+                    if len(missing_indices) > 0:
+                        groups = np.split(missing_indices, np.where(np.diff(missing_indices) > 1)[0] + 1)
+                        for group in groups:
+                            ax.axvspan(group[0] - 0.5, group[-1] + 0.5, color=color_gap, alpha=0.08, zorder=0)
 
                 if incomp_data is not None and recov_data is None:  # plot infected matrix
                     if np.isnan(incomp_data[i, :]).any():
