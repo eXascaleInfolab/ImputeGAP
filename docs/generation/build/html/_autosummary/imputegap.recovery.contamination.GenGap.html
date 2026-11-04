@@ -6,13 +6,13 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>imputegap.algorithms - ImputeGAP 1.1.3</title>
-      <link rel="stylesheet" type="text/css" href="../static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../static/custom.css?v=5d077e89" />
-    <link rel="stylesheet" type="text/css" href="../static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../static/custom.css?v=5d077e89" />
+        <title>imputegap.recovery.contamination.GenGap - ImputeGAP 1.1.3</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5d077e89" />
     
     
 
@@ -181,7 +181,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -286,7 +286,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../sources/_autosummary/imputegap.algorithms.rst.txt" title="View this page">
+  <a class="muted-link" href="../_sources/_autosummary/imputegap.recovery.contamination.GenGap.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -300,14 +300,90 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="imputegap-algorithms">
-<h1>imputegap.algorithms<a class="headerlink" href="#imputegap-algorithms" title="Link to this heading">¶</a></h1>
+          <section id="imputegap-recovery-contamination-gengap">
+<h1>imputegap.recovery.contamination.GenGap<a class="headerlink" href="#imputegap-recovery-contamination-gengap" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="imputegap.recovery.contamination.GenGap">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imputegap.recovery.contamination.</span></span><span class="sig-name descname"><span class="pre">GenGap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/imputegap/recovery/contamination.html#GenGap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.contamination.GenGap" title="Link to this definition">¶</a></dt>
+<dd><p>Class for contaminating times series data. This class is used to simulate missing values in the loaded dataset.</p>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True)</dt><dd><p>Apply Missing Completely at Random (MCAR) contamination to selected series.</p>
+</dd>
+<dt>aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True)</dt><dd><p>Apply missing percentage contamination to selected series.</p>
+</dd>
+<dt>blackout(input_data, rate_series=0.2, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply blackout contamination to selected series.</p>
+</dd>
+<dt>gaussian(input_data, series_rate=0.2, missing_rate=0.2, std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, verbose=True)</dt><dd><p>Apply Gaussian contamination to selected series.</p>
+</dd>
+<dt>distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities=None, offset=0.1, seed=True, logic_by_series=True, verbose=True)</dt><dd><p>Apply any distribution contamination to the time series data based on their probabilities.</p>
+</dd>
+<dt>disjoint(input_data, missing_rate=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply Disjoint contamination to selected series.</p>
+</dd>
+<dt>overlap(input_data, missing_rate=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True)</dt><dd><p>Apply Overlapping contamination to selected series.</p>
+</dd>
+<dt>mirror_gap(raw_data, ts_m, axis=0, verbose=True):</dt><dd><p>Mirror the missing-value positions of the input pattern.</p>
+</dd>
+</dl>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p><a class="reference external" href="https://imputegap.readthedocs.io/en/latest/patterns.html">https://imputegap.readthedocs.io/en/latest/patterns.html</a></p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="imputegap.recovery.contamination.GenGap.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/imputegap/recovery/contamination.html#GenGap.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.contamination.GenGap.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the GenGAP object.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#imputegap.recovery.contamination.GenGap.__init__" title="imputegap.recovery.contamination.GenGap.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([verbose])</p></td>
+<td><p>Initialize the GenGAP object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.aligned" title="imputegap.recovery.contamination.GenGap.aligned"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aligned</span></code></a>([rate_dataset, rate_series, offset, ...])</p></td>
+<td><p>Missing blocks start and end at the same selected positions across the chosen series, resulting in aligned missing intervals.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.blackout" title="imputegap.recovery.contamination.GenGap.blackout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">blackout</span></code></a>([rate_series, offset, ...])</p></td>
+<td><p>Apply blackout contamination to selected series</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.disjoint" title="imputegap.recovery.contamination.GenGap.disjoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disjoint</span></code></a>([rate_series, limit, offset, ...])</p></td>
+<td><p>Each missing block begins where the previous one ends, so the missing intervals are consecutive and do not overlap.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.distribution" title="imputegap.recovery.contamination.GenGap.distribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distribution</span></code></a>([rate_dataset, rate_series, ...])</p></td>
+<td><p>Missingness follows a probability distribution, each position has a certain chance of being missing.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.gaussian" title="imputegap.recovery.contamination.GenGap.gaussian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian</span></code></a>([rate_dataset, rate_series, ...])</p></td>
+<td><p>Missingness follows a probability distribution, each position has a certain chance of being missing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.mcar" title="imputegap.recovery.contamination.GenGap.mcar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mcar</span></code></a>([rate_dataset, rate_series, ...])</p></td>
+<td><p>Missing blocks are introduced completely at random.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.mirror_gap" title="imputegap.recovery.contamination.GenGap.mirror_gap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mirror_gap</span></code></a>(ts_m[, axis, verbose])</p></td>
+<td><p>Mirror the missing-value positions of a contaminated time series.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.overlap" title="imputegap.recovery.contamination.GenGap.overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlap</span></code></a>([rate_series, limit, shift, offset, ...])</p></td>
+<td><p>Each missing block starts at the end of the previous one with a specified shift, so the missing intervals are consecutive and overlap.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.scattered" title="imputegap.recovery.contamination.GenGap.scattered"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scattered</span></code></a>([rate_dataset, rate_series, ...])</p></td>
+<td><p>A contiguous interval of missing values is introduced at a randomly selected position within each selected series.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</dd></dl>
+
 </section>
 
         </article>
@@ -335,17 +411,39 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">imputegap.recovery.contamination.GenGap</a><ul>
+<li><a class="reference internal" href="#imputegap.recovery.contamination.GenGap"><code class="docutils literal notranslate"><span class="pre">GenGap</span></code></a><ul>
+<li><a class="reference internal" href="#imputegap.recovery.contamination.GenGap.__init__"><code class="docutils literal notranslate"><span class="pre">GenGap.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
   </div>
-</div><script src="../static/documentation_options.js?v=cb7bf70b"></script>
-    <script src="../static/doctools.js?v=9bcbadda"></script>
-    <script src="../static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="../static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../static/copybutton.js?v=f281be69"></script>
+</div><script src="../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

@@ -6,12 +6,12 @@
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>imputegap.recovery.manager - ImputeGAP 1.1.3</title>
-      <link rel="stylesheet" type="text/css" href="../../../static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../../static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
-    <link rel="stylesheet" type="text/css" href="../../../static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
     
     
 
@@ -300,25 +300,51 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for imputegap.recovery.manager</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span></span><span class="c1"># Standard library</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># Third-party libraries</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
-
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># ImputeGAP imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
 
 <div class="viewcode-block" id="select_backend">
 <a class="viewcode-back" href="../../../imputegap.manager.html#imputegap.recovery.manager.select_backend">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">select_backend</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select an appropriate Matplotlib backend based on the operating system.</span>
+
+<span class="sd">    Attempts to configure an interactive backend compatible with the current</span>
+<span class="sd">    platform. On macOS, prioritizes MacOSX, Qt5Agg, and TkAgg. On other systems,</span>
+<span class="sd">    prioritizes TkAgg, QtAgg, and Qt5Agg, with Agg as a non-interactive fallback.</span>
+
+<span class="sd">    If a backend raises an ImportError or RuntimeError, the next available</span>
+<span class="sd">    backend is attempted.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Configures the Matplotlib backend without returning a value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">system</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
     <span class="c1">#headless = os.getenv(&quot;DISPLAY&quot;) is None or os.getenv(&quot;CI&quot;) is not None</span>
-    <span class="k">if</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">&quot;Darwin&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
+            <span class="s2">&quot;ImputeGAP does not support Windows natively. &quot;</span>
+            <span class="s2">&quot;However, you can use Windows Subsystem for Linux (WSL) &quot;</span>
+            <span class="s2">&quot;to run ImputeGAP in a Linux environment on Windows. &quot;</span>
+            <span class="s2">&quot;For installation instructions and more information, visit: &quot;</span>
+            <span class="s2">&quot;https://imputegap.readthedocs.io/en/latest/getting_started.html&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">&quot;Darwin&quot;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MacOSX&quot;</span><span class="p">,</span> <span class="s2">&quot;Qt5Agg&quot;</span><span class="p">,</span> <span class="s2">&quot;TkAgg&quot;</span><span class="p">]:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
@@ -375,7 +401,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TimeSeries.__init__">
-<a class="viewcode-back" href="../../../autosummary/_autosummary/imputegap.recovery.manager.TimeSeries.html#imputegap.recovery.manager.TimeSeries.__init__">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/_autosummary/imputegap.recovery.manager.TimeSeries.html#imputegap.recovery.manager.TimeSeries.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the TimeSeries object.</span>
@@ -399,10 +425,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithms_with_families</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">list_of_algorithms_with_families</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">denorm</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reversed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_dataset</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">select_backend</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ImputeGAP Library has been invoked (https://github.com/eXascaleInfolab/ImputeGAP)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ImputeGAP Library has been invoked (https://github.com/eXascaleInfolab/ImputeGAP)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TimeSeries.import_matrix">
@@ -734,8 +761,10 @@
             <span class="n">y_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">train_len</span><span class="p">:,</span> <span class="p">:]</span>
 
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) The dataset is loaded from &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_ma</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) The season is loaded from </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">data_se</span><span class="p">)</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">season</span><span class="si">=}</span><span class="s2"> &gt; horizon=</span><span class="si">{</span><span class="n">time_len</span><span class="o">-</span><span class="n">train_len</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">string_data_ma</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_ma</span><span class="p">)</span>
+                <span class="n">string_data_se</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_se</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) The dataset is loaded from </span><span class="si">{</span><span class="n">string_data_ma</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) The season is loaded from </span><span class="si">{</span><span class="n">string_data_se</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">season</span><span class="si">=}</span><span class="s2"> &gt; horizon=</span><span class="si">{</span><span class="n">time_len</span><span class="o">-</span><span class="n">train_len</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">season</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
 
@@ -1057,7 +1086,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt; (ERROR): normalizer not recognised...&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt; (ERROR): normalizer </span><span class="si">{</span><span class="n">normalizer</span><span class="si">}</span><span class="s2"> not recognised...&quot;</span><span class="p">)</span>
             <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reversed</span><span class="p">:</span>
@@ -1126,7 +1155,7 @@
 
 <div class="viewcode-block" id="TimeSeries.plot">
 <a class="viewcode-back" href="../../../imputegap.manager.html#imputegap.recovery.manager.TimeSeries.plot">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recov_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">series_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">cont_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legends</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recov_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">series_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">highlight_gap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">cont_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legends</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the time series data, including raw, contaminated, or imputed data.</span>
 
@@ -1155,6 +1184,9 @@
 
 <span class="sd">        size : tuple, optional</span>
 <span class="sd">            Size of the plot in inches. Default is (16, 8).</span>
+
+<span class="sd">        highlight_gap : bool, optional</span>
+<span class="sd">            Highlight the gaps with a red column.</span>
 
 <span class="sd">        algorithm : str, optional</span>
 <span class="sd">            Name of the algorithm used for imputation.</span>
@@ -1282,6 +1314,15 @@
 
                 <span class="k">if</span> <span class="n">incomp_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">recov_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># plot only raw matrix</span>
                     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">timestamps</span><span class="p">,</span> <span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="n">nbr_val</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Series_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+                <span class="c1"># Light red background only over contaminated timestamp zones (v2)</span>
+                <span class="k">if</span> <span class="n">highlight_gap</span> <span class="ow">and</span> <span class="n">incomp_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">color_gap</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span> <span class="k">if</span> <span class="n">recov_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;red&quot;</span>
+                    <span class="n">missing_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="n">nbr_val</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">groups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">missing_indices</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">missing_indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">group</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color_gap</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">incomp_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">recov_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># plot infected matrix</span>
                     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
@@ -1454,11 +1495,11 @@
       
     </aside>
   </div>
-</div><script src="../../../static/documentation_options.js?v=cb7bf70b"></script>
-    <script src="../../../static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="../../../static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../../static/copybutton.js?v=f281be69"></script>
+</div><script src="../../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

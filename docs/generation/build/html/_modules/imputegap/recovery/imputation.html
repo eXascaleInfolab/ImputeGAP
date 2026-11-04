@@ -6,12 +6,12 @@
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>imputegap.recovery.imputation - ImputeGAP 1.1.3</title>
-      <link rel="stylesheet" type="text/css" href="../../../static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../../static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
-    <link rel="stylesheet" type="text/css" href="../../../static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
     
     
 
@@ -300,11 +300,12 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for imputegap.recovery.imputation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span></span><span class="c1"># Standard library</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluation</span>
-
-<span class="n">is_optimized</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="s2">&quot;stmvl&quot;</span><span class="p">,</span> <span class="s2">&quot;iim&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="BaseImputer">
@@ -408,11 +409,11 @@
 <span class="sd">            &gt;&gt;&gt; imputer.score(ts.data, imputer.recov_data) # upstream</span>
 <span class="sd">            &gt;&gt;&gt; imputer.score(ts.data, imputer.recov_data, Forecaster()) # downstream</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.downstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">Downstream</span><span class="p">,</span> <span class="n">Forecaster</span><span class="p">,</span> <span class="n">Classifier</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.downstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">Downstream</span><span class="p">,</span> <span class="n">Forecaster</span><span class="p">,</span> <span class="n">Classifier</span><span class="p">,</span> <span class="n">Artifact</span>
         <span class="k">if</span> <span class="n">recov_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">recov_data</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">downstream</span><span class="p">,</span> <span class="n">Forecaster</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">downstream</span><span class="p">,</span> <span class="n">Classifier</span><span class="p">))</span> <span class="ow">and</span> <span class="n">downstream</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">downstream</span><span class="p">,</span> <span class="p">(</span><span class="n">Forecaster</span><span class="p">,</span> <span class="n">Classifier</span><span class="p">)):</span>
             <span class="n">downstream_score</span> <span class="o">=</span> <span class="n">Downstream</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">downstream</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">downstream_metrics</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream_plot</span> <span class="o">=</span> <span class="n">downstream_score</span><span class="o">.</span><span class="n">downstream_analysis</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -456,38 +457,40 @@
                     <span class="n">params</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">params</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;iim&quot;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">learning_neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;learning_neighbors&quot;</span><span class="p">]</span>
-                    <span class="n">algo_code</span> <span class="o">=</span> <span class="s2">&quot;iim &quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\W_]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_neighbors</span><span class="p">))</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">to_tuples</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;algorithm_code&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">algo_code</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">learning_neighbors</span><span class="p">,</span> <span class="n">algo_code</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;iim&quot;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">learning_neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;learning_neighbors&quot;</span><span class="p">]</span>
+                <span class="n">algo_code</span> <span class="o">=</span> <span class="s2">&quot;iim &quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\W_]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_neighbors</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">to_tuples</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;algorithm_code&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">algo_code</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">learning_neighbors</span><span class="p">,</span> <span class="n">algo_code</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Conduct the optimization of the hyperparameters using different optimizers.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        parameters : dict</span>
-<span class="sd">            Dictionary containing optimization configurations such as input_data, optimizer, and options.</span>
+<span class="sd">            Dictionary containing optimization configurations such as input_data, optimizer, and options. If None, defaults to an empty dictionary.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.optimization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optimization</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="n">optimizer</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;optimizer&quot;</span><span class="p">,</span> <span class="s2">&quot;ray_tune&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;raytune&quot;</span><span class="p">:</span>
             <span class="n">optimizer</span> <span class="o">=</span> <span class="s2">&quot;ray_tune&quot;</span>
 
         <span class="n">supported_test_optimizers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;test-bayesian&quot;</span><span class="p">,</span> <span class="s2">&quot;test-pso&quot;</span><span class="p">,</span> <span class="s2">&quot;test-sh&quot;</span><span class="p">,</span> <span class="s2">&quot;test-greedy&quot;</span><span class="p">,</span> <span class="p">}</span>
+        <span class="n">is_optimized</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="s2">&quot;stmvl&quot;</span><span class="p">,</span> <span class="s2">&quot;iim&quot;</span><span class="p">]</span>
 
         <span class="c1"># Deprecated optimizers</span>
         <span class="k">if</span> <span class="n">optimizer</span> <span class="o">!=</span> <span class="s2">&quot;ray_tune&quot;</span> <span class="ow">and</span> <span class="n">optimizer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_test_optimizers</span><span class="p">:</span>
@@ -3355,6 +3358,10 @@
 <span class="sd">            - Addition of a reconstruction module to rebuild the full original imputed matrix (sum and average the windows (windows strategy) | merge the dimensions across samples (samples strategy)).</span>
 
 <span class="sd">            - Computation of seq_len and batch_size based on the dataset shape.</span>
+
+<span class="sd">            Patches</span>
+<span class="sd">            -------</span>
+<span class="sd">            - We noticed some problems with triton and llvmlite with some version of the environment. If the problem appears, please install those version of the requirements: (torch==2.9.1 / triton==3.5.1 / tensorflow==2.20.0 / llvmlite==0.46.0).</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;saits&quot;</span>
@@ -3622,11 +3629,14 @@
 
 <span class="sd">                Example</span>
 <span class="sd">                -------</span>
-<span class="sd">                    &gt;&gt;&gt; csdi_imputer = Imputation.DeepLearning.CSDI(incomp_data)</span>
-<span class="sd">                    &gt;&gt;&gt; csdi_imputer.impute()  # default parameters for imputation &gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; csdi_imputer.impute(user_def=True, params={&quot;seq_len&quot;:-1, &quot;batch_size&quot;:-1, &quot;epochs&quot;: 50, &quot;sliding_windows&quot;:1, &quot;target_strategy&quot;:&quot;random&quot;, &quot;nsamples&quot;: 1, &quot;num_workers&quot;:0})  # user defined&gt; or</span>
-<span class="sd">                    &gt;&gt;&gt; csdi_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # auto-ml with ray_tune</span>
-<span class="sd">                    &gt;&gt;&gt; recov_data = csdi_imputer.recov_data</span>
+<span class="sd">                .. code-block:: python</span>
+
+<span class="sd">                    csdi_imputer = Imputation.DeepLearning.CSDI(incomp_data)</span>
+
+<span class="sd">                    csdi_imputer.impute()  # default parameters for imputation &gt; or</span>
+<span class="sd">                    csdi_imputer.impute(user_def=True, params={&quot;seq_len&quot;:-1, &quot;batch_size&quot;:-1, &quot;epochs&quot;: 50, &quot;sliding_windows&quot;:1, &quot;target_strategy&quot;:&quot;random&quot;, &quot;nsamples&quot;: 1, &quot;num_workers&quot;:0})  # user defined&gt; or</span>
+<span class="sd">                    csdi_imputer.impute(user_def=False, params={&quot;input_data&quot;: ts.data, &quot;optimizer&quot;: &quot;ray_tune&quot;})  # auto-ml with ray_tune</span>
+<span class="sd">                    recov_data = csdi_imputer.recov_data</span>
 
 <span class="sd">                References</span>
 <span class="sd">                ----------</span>
@@ -3669,6 +3679,10 @@
 <span class="sd">            Example</span>
 <span class="sd">            -------</span>
 <span class="sd">                &gt;&gt;&gt; nuwats_imputer.impute(user_def=True, params={&quot;seq_len&quot;:-1, &quot;batch_size&quot;:-1, &quot;epochs&quot;:10, &quot;gpt_layers&quot;:6, &quot;num_workers&quot;:0, &quot;seed&quot;:2021})  # user defined&gt; or</span>
+
+<span class="sd">            Patches</span>
+<span class="sd">            -------</span>
+<span class="sd">            - We noticed some problems with triton and llvmlite with some version of the environment. If the problem appears, please install those version of the requirements: (torch==2.9.1 / triton==3.5.1 / tensorflow==2.20.0 / llvmlite==0.46.0).</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;nuwats&quot;</span>
@@ -3970,11 +3984,11 @@
       
     </aside>
   </div>
-</div><script src="../../../static/documentation_options.js?v=cb7bf70b"></script>
-    <script src="../../../static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="../../../static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../../static/copybutton.js?v=f281be69"></script>
+</div><script src="../../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

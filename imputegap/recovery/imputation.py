@@ -2825,6 +2825,10 @@ class Imputation:
             - Addition of a reconstruction module to rebuild the full original imputed matrix (sum and average the windows (windows strategy) | merge the dimensions across samples (samples strategy)).
 
             - Computation of seq_len and batch_size based on the dataset shape.
+
+            Patches
+            -------
+            - We noticed some problems with triton and llvmlite with some version of the environment. If the problem appears, please install those version of the requirements: (torch==2.9.1 / triton==3.5.1 / tensorflow==2.20.0 / llvmlite==0.46.0).
             """
 
             algorithm = "saits"
@@ -3078,11 +3082,14 @@ class Imputation:
 
                 Example
                 -------
-                    >>> csdi_imputer = Imputation.DeepLearning.CSDI(incomp_data)
-                    >>> csdi_imputer.impute()  # default parameters for imputation > or
-                    >>> csdi_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 50, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})  # user defined> or
-                    >>> csdi_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = csdi_imputer.recov_data
+                .. code-block:: python
+
+                    csdi_imputer = Imputation.DeepLearning.CSDI(incomp_data)
+
+                    csdi_imputer.impute()  # default parameters for imputation > or
+                    csdi_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 50, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})  # user defined> or
+                    csdi_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+                    recov_data = csdi_imputer.recov_data
 
                 References
                 ----------
@@ -3118,6 +3125,10 @@ class Imputation:
             Example
             -------
                 >>> nuwats_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs":10, "gpt_layers":6, "num_workers":0, "seed":2021})  # user defined> or
+
+            Patches
+            -------
+            - We noticed some problems with triton and llvmlite with some version of the environment. If the problem appears, please install those version of the requirements: (torch==2.9.1 / triton==3.5.1 / tensorflow==2.20.0 / llvmlite==0.46.0).
             """
 
             algorithm = "nuwats"

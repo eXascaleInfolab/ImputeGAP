@@ -6,12 +6,12 @@
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>imputegap.tools.utils - ImputeGAP 1.1.3</title>
-      <link rel="stylesheet" type="text/css" href="../../../static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../../static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
-    <link rel="stylesheet" type="text/css" href="../../../static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
     
     
 
@@ -310,9 +310,6 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">__numpy_import</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
 
-
-
-
 <div class="viewcode-block" id="load_parameters">
 <a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.load_parameters">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_parameters</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;chlorine&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
@@ -366,7 +363,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">filepath</span> <span class="o">=</span> <span class="n">path</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">the selected path is wrong, auto-redirection...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">the selected path is wrong, auto-redirection...&quot;</span><span class="p">)</span>
             <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
             <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;env/&quot;</span><span class="o">+</span><span class="n">file_to_load</span><span class="p">)</span>
 
@@ -405,14 +402,6 @@
         <span class="n">iteration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s1">&#39;iteration&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;rank&quot;</span><span class="p">:</span><span class="n">rank</span><span class="p">,</span> <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span><span class="n">epsilon</span><span class="p">,</span> <span class="s2">&quot;iteration&quot;</span><span class="p">:</span><span class="n">iteration</span><span class="p">}</span>
 
-
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;seminar&quot;</span><span class="p">:</span>
-        <span class="n">imputer</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s1">&#39;imputer&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;imputer&quot;</span><span class="p">:</span><span class="n">imputer</span><span class="p">}</span>
-
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;new_imputer&quot;</span><span class="p">:</span>
-        <span class="n">imputer</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s1">&#39;imputer&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;imputer&quot;</span><span class="p">:</span><span class="n">imputer</span><span class="p">}</span>
 
     <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;stmvl&quot;</span><span class="p">:</span>
         <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s1">&#39;window_size&#39;</span><span class="p">])</span>
@@ -696,7 +685,6 @@
             <span class="s2">&quot;blackouts_end&quot;</span><span class="p">:</span> <span class="n">blackouts_end</span><span class="p">,</span>
             <span class="s2">&quot;epochs&quot;</span><span class="p">:</span> <span class="n">epochs</span><span class="p">,</span>
         <span class="p">}</span>
-
 
     <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;nuwats&quot;</span><span class="p">:</span>
         <span class="n">seq_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s1">&#39;seq_len&#39;</span><span class="p">])</span>
@@ -1080,7 +1068,7 @@
         <span class="n">training_args</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;output_dir&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="s2">&quot;output_dir&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;./patchtst_output_</span><span class="si">{</span><span class="n">date_tag</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;./imputegap_assets/models/patchtst_output_</span><span class="si">{</span><span class="n">date_tag</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)),</span>
             <span class="s2">&quot;num_train_epochs&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;num_train_epochs&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
             <span class="s2">&quot;per_device_train_batch_size&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;per_device_train_batch_size&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)),</span>
@@ -1139,7 +1127,6 @@
         <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s2">&quot;window_size&quot;</span><span class="p">])</span>
         <span class="n">word_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s2">&quot;word_length&quot;</span><span class="p">])</span>
         <span class="n">max_dims</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s2">&quot;max_dims&quot;</span><span class="p">])</span>
-        <span class="n">dim_threshold</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s2">&quot;dim_threshold&quot;</span><span class="p">])</span>
         <span class="n">n_jobs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">])</span>
         <span class="n">random_state</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s2">&quot;random_state&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;window_size&quot;</span><span class="p">:</span> <span class="n">window_size</span><span class="p">,</span> <span class="s2">&quot;word_length&quot;</span><span class="p">:</span> <span class="n">word_length</span><span class="p">,</span> <span class="s2">&quot;max_dims&quot;</span><span class="p">:</span> <span class="n">max_dims</span><span class="p">,</span> <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="n">n_jobs</span><span class="p">,</span> <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span> <span class="p">}</span>
@@ -2083,8 +2070,6 @@
 <span class="sd">    ``&quot;proxforest&quot;`` before model selection.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
-
     <span class="n">model_low</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="n">mdl</span> <span class="o">=</span> <span class="n">model_low</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 
@@ -2334,7 +2319,6 @@
     <span class="k">if</span> <span class="n">pred_len</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;pred_len&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;pred_len&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_len</span>
-    <span class="k">if</span> <span class="n">pred_len</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;config&quot;</span> <span class="ow">in</span> <span class="n">params</span> <span class="ow">and</span> <span class="s2">&quot;prediction_length&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">][</span><span class="s2">&quot;prediction_length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_len</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">prediction_length adapted with the horizon: </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">][</span><span class="s1">&#39;prediction_length&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2830,13 +2814,13 @@
 
             <span class="c1"># manual check and visualisation</span>
             <span class="c1"># __________________________________________________</span>
-            <span class="k">if</span> <span class="n">deep_verbose</span> <span class="ow">and</span> <span class="kc">False</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ts.data&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">deep_verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ts.data&quot;</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">values</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">missing&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">missing&quot;</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
@@ -2844,7 +2828,7 @@
                         <span class="k">else</span><span class="p">:</span>
                             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">values</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">imputer.recov_data&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">imputer.recov_data&quot;</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">alg</span><span class="o">.</span><span class="n">recov_data</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">values</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2891,7 +2875,7 @@
     <span class="c1"># pipeline for imputation by dataset (with contamination by class)</span>
     <span class="c1"># ====================================================================</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;IMPUTATION BY DATASET&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;IMPUTATION BY DATASET&quot;</span><span class="p">)</span>
         <span class="n">alg</span><span class="o">.</span><span class="n">incomp_data</span> <span class="o">=</span> <span class="n">full_miss</span>
         <span class="n">alg</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
         <span class="n">full_reconstruction</span><span class="o">=</span><span class="n">alg</span><span class="o">.</span><span class="n">recov_data</span>
@@ -2977,8 +2961,7 @@
 <span class="sd">    implementations, versions, or optimized configurations. The optimization</span>
 <span class="sd">    suffix is applied differently for classification and forecasting tasks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">classification_task</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">optizer</span> <span class="o">=</span> <span class="kc">True</span>
+
     <span class="k">if</span> <span class="n">contamination_by_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">contamination_by_class</span><span class="p">:</span>
             <span class="n">c</span> <span class="o">=</span> <span class="s2">&quot;contbyclass&quot;</span>
@@ -3139,7 +3122,7 @@
             <span class="s2">&quot;@univariate true&quot;</span><span class="p">,</span>
             <span class="s2">&quot;@equalLength true&quot;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">&quot;@seriesLength </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;@classLabel true &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">uniq</span><span class="p">),</span>
+            <span class="s2">&quot;@classLabel true &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">uniq</span><span class="p">),</span>
             <span class="s2">&quot;@data&quot;</span><span class="p">,</span>
         <span class="p">]</span>
 
@@ -3562,9 +3545,9 @@
 <span class="sd">    numpy.ndarray</span>
 <span class="sd">        A numpy array reshaped to the original matrix dimensions (row-major order).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">__numpy_marshal</span> <span class="o">=</span> <span class="n">__numpy_import</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">__ctype_container</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">__py_sizem</span><span class="p">,</span> <span class="n">__py_sizen</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">;</span>
+    <span class="n">__numpy_marshal</span> <span class="o">=</span> <span class="n">__numpy_import</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">__ctype_container</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">__py_sizem</span><span class="p">,</span> <span class="n">__py_sizen</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 
-    <span class="k">return</span> <span class="n">__numpy_marshal</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">__numpy_marshal</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">__marshal_as_native_column</span><span class="p">(</span><span class="n">__py_matrix</span><span class="p">):</span>
@@ -3581,10 +3564,10 @@
 <span class="sd">    ctypes.Array</span>
 <span class="sd">        A ctypes array containing the flattened matrix (in column-major order).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">__py_input_flat</span> <span class="o">=</span> <span class="n">__numpy_import</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">__py_matrix</span><span class="o">.</span><span class="n">T</span><span class="p">);</span>
-    <span class="n">__ctype_marshal</span> <span class="o">=</span> <span class="n">__numpy_import</span><span class="o">.</span><span class="n">ctypeslib</span><span class="o">.</span><span class="n">as_ctypes</span><span class="p">(</span><span class="n">__py_input_flat</span><span class="p">);</span>
+    <span class="n">__py_input_flat</span> <span class="o">=</span> <span class="n">__numpy_import</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">__py_matrix</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">__ctype_marshal</span> <span class="o">=</span> <span class="n">__numpy_import</span><span class="o">.</span><span class="n">ctypeslib</span><span class="o">.</span><span class="n">as_ctypes</span><span class="p">(</span><span class="n">__py_input_flat</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">__ctype_marshal</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">__ctype_marshal</span>
 
 
 <div class="viewcode-block" id="display_title">
@@ -3747,9 +3730,8 @@
         <span class="n">list_windows</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">valid_seq</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">seq_len</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">seq_len</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">seq_len</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">seq_len</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">continue</span>
 
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sizes</span><span class="p">:</span>
             <span class="n">num_windows</span> <span class="o">=</span> <span class="n">s</span> <span class="o">-</span> <span class="n">seq_len</span> <span class="o">+</span> <span class="mi">1</span>
@@ -4314,7 +4296,7 @@
     <span class="n">new_m</span> <span class="o">=</span> <span class="n">data_matrix_cont</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(DL): TEST-SET &gt; Test set fixed to </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">target_ratio</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span><span class="si">}</span><span class="s2">% of the dataset, for </span><span class="si">{</span><span class="n">target_n_nan</span><span class="si">}</span><span class="s2"> values, add test values: </span><span class="si">{</span><span class="n">n_new_nans</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(DL): TEST-SET &gt; Test set fixed to </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">target_ratio</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s2">% of the dataset, for </span><span class="si">{</span><span class="n">target_n_nan</span><span class="si">}</span><span class="s2"> values, add test values: </span><span class="si">{</span><span class="n">n_new_nans</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_m</span><span class="p">,</span> <span class="n">new_mask</span></div>
 
@@ -4443,8 +4425,7 @@
 
     <span class="c1"># just the cell must be free to be picked</span>
     <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">offset</span> <span class="o">&gt;</span> <span class="n">droprate</span><span class="p">:</span>
-            <span class="n">offset</span> <span class="o">=</span> <span class="n">droprate</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">droprate</span><span class="p">)</span>
         <span class="n">mask_offset</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">offset</span> <span class="o">*</span> <span class="n">gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">num_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask_offset</span><span class="p">)</span>
 
@@ -4685,7 +4666,7 @@
         <span class="k">try</span><span class="p">:</span>  <span class="c1"># try inner file C++</span>
             <span class="n">cpp_wrapper</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Wrapper files loaded for C++ : &quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">lib_path</span><span class="p">},</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Wrapper files loaded for C++ : </span><span class="si">{</span><span class="n">lib_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">lib_path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s1">&#39;imputegap.algorithms.lib&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;./&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_new.dylib&quot;</span><span class="p">)</span>
@@ -4702,7 +4683,7 @@
         <span class="k">try</span><span class="p">:</span>  <span class="c1"># try inner file C++</span>
             <span class="n">cpp_wrapper</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Wrapper files loaded for C++ : &quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">lib_path</span><span class="p">},</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(SYS) Wrapper files loaded for C++ : </span><span class="si">{</span><span class="n">lib_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="n">lib_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s1">&#39;algorithms/lib/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.so&quot;</span><span class="p">)</span>
             <span class="n">cpp_wrapper</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
@@ -5593,8 +5574,8 @@
 <span class="sd">            A dataframe containing one row per dataset, sorted by dataset name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-    <span class="kn">from</span><span class="w"> </span><span class="nn">recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">recovery.downstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">Artifact</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.downstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">Artifact</span>
 
     <span class="n">rows</span><span class="p">,</span> <span class="n">rmse</span> <span class="o">=</span> <span class="p">[],</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
@@ -5609,7 +5590,7 @@
             <span class="n">rmse</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">]</span>
         <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset_classifier_features</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">classify_sets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">artifact</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="n">rmse</span><span class="o">=</span><span class="n">rmse</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">))</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;dataset&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">out_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;classifiers_dataset_features.xlsx&quot;</span><span class="p">)</span>
+    <span class="n">out_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s2">&quot;classifiers_dataset_features.xlsx&quot;</span><span class="p">)</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -5622,16 +5603,16 @@
 
 
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <div class="viewcode-block" id="split_performance_classifier">
 <a class="viewcode-back" href="../../../imputegap.utils.html#imputegap.tools.utils.split_performance_classifier">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">split_performance_classifier</span><span class="p">(</span><span class="n">names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">n_parts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_performance_classifier</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">n_parts</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Split for performance perspectives the set classifiers to run them apart</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    names : list[str]</span>
+<span class="sd">    name: list</span>
 <span class="sd">        List of dataset names to split.</span>
 
 <span class="sd">    n_parts : int, optional</span>
@@ -5648,8 +5629,6 @@
 <span class="sd">    ValueError</span>
 <span class="sd">        If `n_parts` is less than 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
-
     <span class="k">if</span> <span class="n">n_parts</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_parts must be &gt;= 1&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">names</span><span class="p">:</span>
@@ -5933,9 +5912,9 @@
         <span class="k">return</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">taux_nans</span><span class="p">,</span> <span class="n">tr_ratio</span>
 
     <span class="k">if</span> <span class="n">seq_len</span> <span class="o">&lt;</span> <span class="n">taux_nans</span><span class="o">*</span><span class="n">security</span><span class="p">:</span>
-        <span class="n">limitation</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">ts_m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.05</span><span class="p">)</span> <span class="o">*</span> <span class="n">tr_ratio</span><span class="p">))</span>
+        <span class="n">limitation</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ts_m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.05</span><span class="p">)</span> <span class="o">*</span> <span class="n">tr_ratio</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">(INFO) Imputation adaptation with </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage. </span><span class="se">\n\t</span><span class="s2">Currently, the number of NaNs might reach </span><span class="si">{</span><span class="n">taux_nans</span><span class="si">}</span><span class="s2"> for a sequence and the size of seq_len is </span><span class="si">{</span><span class="n">seq_len</span><span class="si">}</span><span class="s2">. Available data </span><span class="si">{</span><span class="n">limitation</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">(INFO) Imputation adaptation with </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage.</span><span class="se">\n\t</span><span class="s2">Currently, the number of NaNs might reach </span><span class="si">{</span><span class="n">taux_nans</span><span class="si">}</span><span class="s2"> for a sequence and the size of seq_len is </span><span class="si">{</span><span class="n">seq_len</span><span class="si">}</span><span class="s2">. Available data </span><span class="si">{</span><span class="n">limitation</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">seq_len</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="n">auto_seq_llms</span><span class="p">(</span><span class="n">data_x</span><span class="o">=</span><span class="n">ts_m</span><span class="p">,</span> <span class="n">goal</span><span class="o">=</span><span class="n">strat</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">high_limit</span><span class="o">=</span><span class="n">limitation</span><span class="p">,</span> <span class="n">low_limit</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">taux_nans</span> <span class="o">*</span> <span class="n">security</span><span class="p">),</span> <span class="n">exception</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
         <span class="n">size_limitation</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -6123,12 +6102,11 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t</span><span class="s2">new vals: </span><span class="si">{</span><span class="n">window_size</span><span class="si">=}</span><span class="s2"> - </span><span class="si">{</span><span class="n">gamma</span><span class="si">=}</span><span class="s2"> - </span><span class="si">{</span><span class="n">alpha</span><span class="si">=}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
-
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ts_m</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)):</span>
         <span class="n">ts_m</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ts_m</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">ts_m</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">STMVL PATCH USED FOR </span><span class="si">{</span><span class="n">ts_m</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s2"> with following nans count of </span><span class="si">{</span><span class="n">taux_nans</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t</span><span class="s2">all cols had nans, patch effective for STMVL...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t\t</span><span class="s2">all cols had nans, patch effective for STMVL...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">alpha</span></div>
 
@@ -6439,11 +6417,11 @@
       
     </aside>
   </div>
-</div><script src="../../../static/documentation_options.js?v=cb7bf70b"></script>
-    <script src="../../../static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="../../../static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../../static/copybutton.js?v=f281be69"></script>
+</div><script src="../../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

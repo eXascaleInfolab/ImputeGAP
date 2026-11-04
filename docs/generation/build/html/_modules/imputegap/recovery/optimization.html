@@ -6,12 +6,12 @@
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>imputegap.recovery.optimization - ImputeGAP 1.1.3</title>
-      <link rel="stylesheet" type="text/css" href="../../../static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../../static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
-    <link rel="stylesheet" type="text/css" href="../../../static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=5d077e89" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
     
     
 
@@ -300,9 +300,14 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for imputegap.recovery.optimization</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span></span><span class="c1"># Standard library</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># Third-party libraries</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">product</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools.algorithm_parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">SEARCH_SPACES</span><span class="p">,</span> <span class="n">ALL_ALGO_PARAMS</span><span class="p">,</span> <span class="n">PARAM_NAMES</span><span class="p">,</span> <span class="n">SEARCH_SPACES_PSO</span><span class="p">,</span> <span class="n">RAYTUNE_PARAMS</span>
@@ -423,7 +428,7 @@
 
 <div class="viewcode-block" id="Optimization.optimize_adv_imputation_algo_upstream">
 <a class="viewcode-back" href="../../../imputegap.optimization.html#imputegap.recovery.optimization.Optimization.optimize_adv_imputation_algo_upstream">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_adv_imputation_algo_upstream</span><span class="p">(</span><span class="n">optimizers</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Beef&quot;</span><span class="p">],</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z-score&quot;</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">test_imputation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_adv_imputation_algo_upstream</span><span class="p">(</span><span class="n">optimizers</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z-score&quot;</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">test_imputation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        from imputegap.env.default_opti import OPTI_DICTIONARY</span>
 <span class="sd">        from imputegap.env.default_opti import OPTI_DICTIONARY_SMALL</span>
@@ -431,10 +436,13 @@
 <span class="sd">        from imputegap.env.default_opti import OPTI_DICTIONARY_MICROBENCH</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGap</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGap</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+        <span class="k">if</span> <span class="n">datasets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Beef&quot;</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">optimizers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># loop on each algorithm to optimize</span>
             <span class="n">algorithm</span><span class="p">,</span> <span class="n">param_to_opti</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -504,7 +512,7 @@
                         <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;rank_rmse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;avg_rmse&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_option</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">)</span>
                         <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;rank_runtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;avg_runtime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_option</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">)</span>
                         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">summary</span><span class="p">[[</span><span class="n">param_to_opti</span><span class="p">,</span> <span class="s2">&quot;avg_rmse&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_runtime&quot;</span><span class="p">,</span> <span class="s2">&quot;rank_rmse&quot;</span><span class="p">,</span> <span class="s2">&quot;rank_runtime&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="n">param_to_opti</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
-                    <span class="k">except</span><span class="p">:</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                         <span class="n">df</span><span class="p">[</span><span class="s2">&quot;avg_rmse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                         <span class="n">df</span><span class="p">[</span><span class="s2">&quot;avg_runtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                         <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rank_rmse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -512,7 +520,7 @@
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot rank for </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
                     <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">path_opti</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">INTERMEDIATE : results of </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">, saved in </span><span class="si">{</span><span class="n">path_opti</span><span class="si">=}</span><span class="s2">...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">INTERMEDIATE : cannot save results of </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
@@ -528,7 +536,7 @@
                     <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;rank_rmse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;avg_rmse&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_option</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">)</span>
                     <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;rank_runtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;avg_runtime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_option</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">)</span>
                     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">summary</span><span class="p">[[</span><span class="n">param_to_opti</span><span class="p">,</span> <span class="s2">&quot;avg_rmse&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_runtime&quot;</span><span class="p">,</span> <span class="s2">&quot;rank_rmse&quot;</span><span class="p">,</span> <span class="s2">&quot;rank_runtime&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="n">param_to_opti</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;avg_rmse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;avg_runtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rank_rmse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -538,7 +546,7 @@
                 <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">path_opti</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">results of </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">, saved in </span><span class="si">{</span><span class="n">path_opti</span><span class="si">=}</span><span class="s2">...&quot;</span><span class="p">)</span>
 
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">FINAL: cannot save results of </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span></div>
 
 
@@ -581,7 +589,7 @@
 
 <div class="viewcode-block" id="Optimization.Greedy.optimize">
 <a class="viewcode-back" href="../../../imputegap.optimization.html#imputegap.recovery.optimization.Optimization.Greedy.optimize">[docs]</a>
-        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">],</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">n_calls</span><span class="o">=</span><span class="mi">250</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">n_calls</span><span class="o">=</span><span class="mi">250</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Perform greedy optimization for hyperparameters.</span>
 
@@ -592,7 +600,7 @@
 <span class="sd">            incomp_data : numpy.ndarray</span>
 <span class="sd">                The contaminated time series dataset to impute.</span>
 <span class="sd">            metrics : list of str, optional</span>
-<span class="sd">                List of selected metrics for optimization (default is [&quot;RMSE&quot;]).</span>
+<span class="sd">                List of selected metrics for optimization (If None, default is [&quot;RMSE&quot;]).</span>
 <span class="sd">            algorithm : str, optional</span>
 <span class="sd">                The imputation algorithm to optimize (default is &#39;cdrec&#39;).</span>
 <span class="sd">            n_calls : int, optional</span>
@@ -604,6 +612,9 @@
 <span class="sd">                A tuple containing the best parameters and their corresponding score.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>  <span class="c1"># Record start time</span>
+
+            <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">]</span>
 
             <span class="c1"># Map the parameter ranges to the algorithm-specific search space</span>
             <span class="n">param_ranges</span> <span class="o">=</span> <span class="n">ALL_ALGO_PARAMS</span><span class="p">[</span><span class="n">algorithm</span><span class="p">]</span>
@@ -692,7 +703,7 @@
 
 <div class="viewcode-block" id="Optimization.Bayesian.optimize">
 <a class="viewcode-back" href="../../../imputegap.optimization.html#imputegap.recovery.optimization.Optimization.Bayesian.optimize">[docs]</a>
-        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">],</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">n_calls</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">n_calls</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                      <span class="n">n_random_starts</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">acq_func</span><span class="o">=</span><span class="s1">&#39;gp_hedge&#39;</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Perform Bayesian optimization for hyperparameters.</span>
@@ -722,6 +733,9 @@
             <span class="c1"># BAYESIAN IMPORT</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">skopt</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">skopt.space</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integer</span>
+
+            <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">]</span>
 
             <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>  <span class="c1"># Record start time</span>
 
@@ -819,8 +833,7 @@
 
 <div class="viewcode-block" id="Optimization.ParticleSwarm.optimize">
 <a class="viewcode-back" href="../../../imputegap.optimization.html#imputegap.recovery.optimization.Optimization.ParticleSwarm.optimize">[docs]</a>
-        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">n_particles</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span>
-                     <span class="n">n_processes</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">n_particles</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">n_processes</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Perform Particle Swarm Optimization for hyperparameters.</span>
 
@@ -920,8 +933,7 @@
 
 <div class="viewcode-block" id="Optimization.SuccessiveHalving.optimize">
 <a class="viewcode-back" href="../../../imputegap.optimization.html#imputegap.recovery.optimization.Optimization.SuccessiveHalving.optimize">[docs]</a>
-        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">num_configs</span><span class="p">,</span> <span class="n">num_iterations</span><span class="p">,</span>
-                     <span class="n">reduction_factor</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">num_configs</span><span class="p">,</span> <span class="n">num_iterations</span><span class="p">,</span> <span class="n">reduction_factor</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Perform Successive Halving optimization for hyperparameters.</span>
 
@@ -1032,7 +1044,7 @@
 
 <div class="viewcode-block" id="Optimization.RayTune.optimize">
 <a class="viewcode-back" href="../../../imputegap.optimization.html#imputegap.recovery.optimization.Optimization.RayTune.optimize">[docs]</a>
-        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">],</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">n_calls</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_concurrent_trials</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;cdrec&quot;</span><span class="p">,</span> <span class="n">n_calls</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_concurrent_trials</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Perform Ray Tune optimization for hyperparameters.</span>
 
@@ -1041,7 +1053,7 @@
 <span class="sd">            input_data : numpy.ndarray</span>
 <span class="sd">                The ground truth time series dataset.</span>
 <span class="sd">            metrics : list of str, optional</span>
-<span class="sd">                List of selected metrics for optimization (default is [&quot;RMSE&quot;]).</span>
+<span class="sd">                List of selected metrics for optimization (If None, defaults  is [&quot;RMSE&quot;]).</span>
 <span class="sd">            algorithm : str, optional</span>
 <span class="sd">                The imputation algorithm to optimize (default is &#39;cdrec&#39;).</span>
 <span class="sd">            n_calls : int, optional</span>
@@ -1057,6 +1069,9 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">tune</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>
+
+            <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">ray</span><span class="o">.</span><span class="n">is_initialized</span><span class="p">():</span>
                 <span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
@@ -1141,11 +1156,11 @@
       
     </aside>
   </div>
-</div><script src="../../../static/documentation_options.js?v=cb7bf70b"></script>
-    <script src="../../../static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../static/scripts/furo.js?v=5fa4622c"></script>
-    <script src="../../../static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../../static/copybutton.js?v=f281be69"></script>
+</div><script src="../../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

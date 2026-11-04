@@ -35,8 +35,8 @@ class TestDownstream(unittest.TestCase):
         forecasters = []
         for model in models:
             if model != "cif":
-                artifact = Artifact(dataset="test-logic-llm", model=model, algorithm="cdrec", pattern="mcar", horizon=2)
-                forecasters.append(Forecaster(task="forecasting", model=artifact.model, y_train=None, season=2, use_cache=False, to_cache=False, artifact=artifact, plots=False, verbose=False))
+                artifact = Artifact(dataset="test-logic-llm", model=model, algorithm="cdrec", pattern="mcar", season=2, horizon=2)
+                forecasters.append(Forecaster(task="forecasting", model=artifact.model, y_train=None, use_cache=False, to_cache=False, artifact=artifact, plots=False, verbose=False))
 
         print(f"{forecasters = }")
 
@@ -96,8 +96,8 @@ class TestDownstream(unittest.TestCase):
 
         models = utils.list_of_forecasters()
 
-        artifact = Artifact(dataset="eeg-alcohol", model="exp-smoothing", algorithm="cdrec", pattern="mcar", horizon=12)
-        forecaster = Forecaster(task="nope", model=artifact.model, y_train=None, season=12, use_cache=False, to_cache=True, artifact=artifact, plots=True, verbose=False)
+        artifact = Artifact(dataset="eeg-alcohol", model="exp-smoothing", algorithm="cdrec", pattern="mcar", horizon=12, season=12)
+        forecaster = Forecaster(task="nope", model=artifact.model, y_train=None, use_cache=False, to_cache=True, artifact=artifact, plots=True, verbose=False)
 
         # Configure downstream options
         downstream_options= [forecaster]
