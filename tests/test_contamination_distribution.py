@@ -6,7 +6,7 @@ from scipy.stats import norm
 
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 
@@ -60,7 +60,7 @@ class TestContaminationDistribution(unittest.TestCase):
             for S in series_impacted:
                 for R in missing_rates:
                     D = self.load_probabilities(ts.data)
-                    incomp_data = GenGap.distribution(input_data=ts.data, rate_dataset=S, rate_series=R, probabilities_list=D, offset=P)
+                    incomp_data = GenGAP.distribution(input_data=ts.data, rate_dataset=S, rate_series=R, probabilities_list=D, offset=P)
                     N, M = incomp_data.data.shape
 
                     n_nan = np.isnan(incomp_data).sum()
@@ -91,7 +91,7 @@ class TestContaminationDistribution(unittest.TestCase):
             for missing_rate in missing_rates:
 
                 D = self.load_probabilities(ts_1.data)
-                ts_contaminate = GenGap.distribution(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, probabilities_list=D, offset=0.1)
+                ts_contaminate = GenGAP.distribution(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, probabilities_list=D, offset=0.1)
 
                 self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(),
                     msg=f"Found NaNs in first {ten_percent_index} rows (series_sel={series_sel}, missing_rate={missing_rate})")
@@ -121,7 +121,7 @@ class TestContaminationDistribution(unittest.TestCase):
                     for std_dev in std_devs:
                         # Generate contamination with the current standard deviation
                         D = self.load_probabilities(ts.data, std_dev=std_dev)
-                        contaminated_data = GenGap.distribution(input_data=ts.data, rate_dataset=S, rate_series=R, probabilities_list=D, offset=P)
+                        contaminated_data = GenGAP.distribution(input_data=ts.data, rate_dataset=S, rate_series=R, probabilities_list=D, offset=P)
 
                         # Calculate positions of NaN values
                         nan_positions = np.where(np.isnan(contaminated_data))
@@ -153,7 +153,7 @@ class TestContaminationDistribution(unittest.TestCase):
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
                     D = self.load_probabilities(ts_1.data, std_dev=std_dev)
-                    ts_contaminate = GenGap.distribution(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, probabilities_list=D, offset=offset, seed=True)
+                    ts_contaminate = GenGAP.distribution(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, probabilities_list=D, offset=offset, seed=True)
                     N, M = ts_contaminate.data.shape
 
                     nbr_series_contaminated = 0

@@ -18,7 +18,7 @@ from imputegap.tools import utils
 
 
 
-class Explainer:
+class ExplainGAP:
     """
     Manage SHAP-based model explanations and feature extraction for time series datasets.
 
@@ -217,11 +217,15 @@ class Explainer:
 
         Example
         -------
-        >>> import numpy as np
-        >>> data = np.random.rand(5, 100)  # 5 time series, each with 100 values
-        >>> results, descriptions = extractor_tsfel(data, frequency=50, categories=["statistical", "temporal"])
-        >>> print(results)
-        >>> print(descriptions)
+        .. code-block:: python
+
+            import numpy as np
+            data = np.random.rand(5, 100)  # 5 time series, each with 100 values
+            results, descriptions = extractor_tsfel(data, frequency=50, categories=["statistical", "temporal"])
+
+            print(results)
+            print(descriptions)
+
 
         Notes
         -----

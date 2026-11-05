@@ -6,7 +6,7 @@ import pytest
 
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestGAIN(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestGAIN(unittest.TestCase):
         ts = TimeSeries()
         ts.load_series(utils.search_path(dataset), normalizer="z_score")
 
-        incomp_data = GenGap.mcar(ts.data)
+        incomp_data = GenGAP.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
 
         system = platform.system()

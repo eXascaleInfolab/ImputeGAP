@@ -2,7 +2,7 @@ import unittest
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 import pytest
 
 
@@ -25,7 +25,7 @@ class TestDownstream(unittest.TestCase):
         print(f"{utils.list_of_downstreams_sktime() = }")
 
         # Create a mask for contamination
-        ts_mask = GenGap.aligned(ts_1.data, rate_series=0.7)
+        ts_mask = GenGAP.aligned(ts_1.data, rate_series=0.7)
 
         # Perform imputation
         imputer = Imputation.MatrixCompletion.CDRec(ts_mask)
@@ -88,7 +88,7 @@ class TestDownstream(unittest.TestCase):
         print(f"{utils.list_of_downstreams_sktime() = }")
 
         # Create a mask for contamination
-        ts_mask = GenGap.aligned(ts_1.data, rate_series=0.7)
+        ts_mask = GenGAP.aligned(ts_1.data, rate_series=0.7)
 
         # Perform imputation
         imputer = Imputation.MatrixCompletion.CDRec(ts_mask)

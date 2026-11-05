@@ -1,5 +1,5 @@
 imputegap.recovery.imputation package
-=========================================
+=====================================
 
 Module contents
 ---------------

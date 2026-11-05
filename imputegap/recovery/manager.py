@@ -228,6 +228,7 @@ class TimeSeries:
         .. code-block:: python
 
             ts.load_classify_dataset("Car", normalizer="z-score", to_numpy=True)
+
         """
         from sktime.datasets import load_from_tsfile_to_dataframe
 
@@ -520,7 +521,10 @@ class TimeSeries:
 
         Example
         -------
-        >>> ts.load_series(utils.search_path("eeg-alcohol"), nbr_series=50, nbr_val=100)
+        .. code-block:: python
+
+            ts.load_series(utils.search_path("eeg-alcohol"), nbr_series=50, nbr_val=100)
+
         """
 
         if data is not None:
@@ -637,7 +641,10 @@ class TimeSeries:
 
         Example
         -------
-            >>> ts.print_results(imputer.metrics, imputer.algorithm)
+        .. code-block:: python
+
+            ts.print_results(imputer.metrics, imputer.algorithm)
+
         """
 
         if algorithm != "":
@@ -682,7 +689,10 @@ class TimeSeries:
 
         Example
         -------
-            >>> ts.normalize(normalizer="z_score")
+        .. code-block:: python
+
+            ts.normalize(normalizer="z_score")
+
         """
 
         normalizer = normalizer.replace("-", "_").lower()
@@ -880,9 +890,12 @@ class TimeSeries:
 
         Example
         -------
-            >>> ts.plot(input_data=ts.data, nbr_series=9, nbr_val=100, save_path="./imputegap_assets") # plain data
-            >>> ts.plot(ts.data, ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets") # contamination
-            >>> ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, save_path="./imputegap_assets") # imputation
+        .. code-block:: python
+
+            ts.plot(input_data=ts.data, nbr_series=9, nbr_val=100, save_path="./imputegap_assets") # plain data
+            ts.plot(ts.data, ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets") # contamination
+            ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, save_path="./imputegap_assets") # imputation
+
         """
         select_backend()
 

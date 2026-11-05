@@ -1,5 +1,5 @@
 import unittest
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestLIB(unittest.TestCase):
@@ -22,7 +22,7 @@ class TestLIB(unittest.TestCase):
         ts.normalize(normalizer="z_score")
 
         # contaminate the time series
-        ts_m = GenGap.mcar(ts.data)
+        ts_m = GenGAP.mcar(ts.data)
 
         # impute the contaminated series
         imputer = Imputation.MatrixCompletion.CDRec(ts_m)

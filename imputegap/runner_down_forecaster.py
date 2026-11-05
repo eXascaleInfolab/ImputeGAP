@@ -1,6 +1,6 @@
 # ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.downstream import Forecaster
 from imputegap.recovery.downstream import Artifact
@@ -18,8 +18,8 @@ ts.load_forecasting_dataset(artifact.dataset, normalizer="z-score", verbose=True
 y_train, artifact.season = ts.load_proper_output_forecasting()
 
 # contaminate the time series
-ts_m = GenGap.aligned(ts.data, rate_dataset=artifact.fixed_x, rate_series=artifact.x, offset=0)
-ts_m = GenGap.mirror_gap(raw_data=ts.data, ts_m=ts_m)
+ts_m = GenGAP.aligned(ts.data, rate_dataset=artifact.fixed_x, rate_series=artifact.x, offset=0)
+ts_m = GenGAP.mirror_gap(raw_data=ts.data, ts_m=ts_m)
 
 # define and impute the contaminated series
 imputer = Imputation.MatrixCompletion.CDRec(ts_m)

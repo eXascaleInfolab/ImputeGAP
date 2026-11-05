@@ -1,6 +1,6 @@
 # ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 from imputegap.tools import utils
 
 # initialize the time series object
@@ -11,7 +11,7 @@ print(f"\nMissingness patterns : {ts.patterns}")
 ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
 # contaminate the time series with MCAR pattern
-ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
+ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
 
 # plot the contaminated time series
 ts.plot(ts.data, ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets/contamination")

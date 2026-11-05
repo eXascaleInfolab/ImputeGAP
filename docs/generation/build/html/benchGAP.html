@@ -3,16 +3,17 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Notebooks" href="notebooks.html" /><link rel="prev" title="Algorithms" href="algorithms.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Missingness Patterns - ImputeGAP 1.1.3</title>
+        <title>BenchGAP - ImputeGAP 1.1.3</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
+    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=6db992ee" />
     
     
 
@@ -181,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -241,18 +242,18 @@
     </a>-->
 </div><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gengap.html">GenGAP</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">GenGap: Missingness Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">GenGAP: Missingness Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -286,7 +287,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/missingness_patterns.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/benchGAP.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -300,135 +301,55 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="missingness-patterns">
-<h1>Missingness Patterns<a class="headerlink" href="#missingness-patterns" title="Link to this heading">¶</a></h1>
-<p>ImputeGAP introduces a new taxonomy of missingness patterns tailored to time series, going beyond the traditional MAR and MNAR categories, which were not designed for temporal data.</p>
-<section id="setup">
-<span id="id1"></span><h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">¶</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>(N, M) : number of timestamps, number of series</p></li>
-<li><p>W : user-defined offset window in the beginning of the series (default = 25)</p></li>
-<li><p>R : user-defined % of missing values (default = 20%)</p></li>
-<li><p>S : user-defined % of contaminated series (default = 20%)</p></li>
-</ul>
+          <section id="benchgap">
+<h1>BenchGAP<a class="headerlink" href="#benchgap" title="Link to this heading">¶</a></h1>
+<p>ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>33<span class="fn-bracket">]</span></a>.  Users have full control over the benchmark by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.</p>
+<p>The benchmarking module can be utilized as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.benchmark</span><span class="w"> </span><span class="kn">import</span> <span class="n">BenchGAP</span>
+
+<span class="n">my_algorithms</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SoftImpute&quot;</span><span class="p">,</span> <span class="s2">&quot;KNNImpute&quot;</span><span class="p">]</span>
+
+<span class="n">my_opt</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;default_params&quot;</span><span class="p">]</span>
+
+<span class="n">my_datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">]</span>
+
+<span class="n">my_patterns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mcar&quot;</span><span class="p">]</span>
+
+<span class="nb">range</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]</span>
+
+<span class="n">my_metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">]</span>
+
+<span class="c1"># launch the evaluation</span>
+<span class="n">bench</span> <span class="o">=</span> <span class="n">BenchGAP</span><span class="p">()</span>
+<span class="n">bench</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">algorithms</span><span class="o">=</span><span class="n">my_algorithms</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="n">my_datasets</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="n">my_patterns</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="nb">range</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">my_metrics</span><span class="p">,</span> <span class="n">optimizers</span><span class="o">=</span><span class="n">my_opt</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>You can enable the optimizer using the following command:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">opt</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;optimizer&quot;</span><span class="p">:</span> <span class="s2">&quot;ray_tune&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;n_calls&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max_concurrent_trials&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
+<span class="n">my_opt</span> <span class="o">=</span> <span class="p">[</span><span class="n">opt</span><span class="p">]</span>
+</pre></div>
+</div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">33</a><span class="fn-bracket">]</span></span>
+<p>Mourad Khayati, Alberto Lerner, Zakhar Tymchenko, Philippe Cudré-Mauroux: Mind the Gap: An Experimental Evaluation of Imputation of Missing Values Techniques in Time Series. Proc. VLDB Endow. 13(5): 768-782 (2020)</p>
+</aside>
+</aside>
 <br></section>
-<section id="mono-block">
-<span id="scenario-mono-block"></span><h2>MONO-BLOCK<a class="headerlink" href="#mono-block" title="Link to this heading">¶</a></h2>
-<p>One missing block per series</p>
-<br><p><strong>Aligned</strong></p>
-<p>Missing blocks start at the same selected positions and have the same fixed size across the chosen series, resulting in aligned missing intervals.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
-<li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
-<li><p>The starting position is the same and begins at <code class="docutils literal notranslate"><span class="pre">W</span></code> and progresses until the size of the missing block is reached, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.aligned(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
-</ul>
-</div>
-<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="_images/imputegap_aligned.png" />
-<br><br><p><strong>Disjoint</strong></p>
-<p>Each missing block begins where the previous one ends, so the missing intervals are consecutive and do not overlap.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
-<li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
-<li><p>The starting position of the first missing block begins at <code class="docutils literal notranslate"><span class="pre">W</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.disjoint(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
-</ul>
-</div>
-<br><img alt="ImputeGAP Disjoint Pattern" class="portrait align-left" src="_images/imputegap_disjoint.png" />
-<br><br><p><strong>Overlap</strong></p>
-<p>Each missing block overlaps with the previous one.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
-<li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
-<li><p>The starting position of the first missing block begins at <code class="docutils literal notranslate"><span class="pre">W</span></code>.</p></li>
-<li><p>The overlap is controlled by the variable <code class="docutils literal notranslate"><span class="pre">shift</span></code>.</p></li>
-<li><p>This pattern continues until the limit or <code class="docutils literal notranslate"><span class="pre">N</span></code> is reached.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.overlap(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25,</span> <span class="pre">shift=0.1)</span></code></p></li>
-</ul>
-</div>
-<br><img alt="ImputeGAP Overlap Pattern" class="portrait align-left" src="_images/imputegap_overlap.png" />
-<br><br><p><strong>Scattered</strong></p>
-<p>The starting position of the missing block is chosen at random, all missing blocks share the same size.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
-<li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
-<li><p>The starting position is random, then progresses until the size of the missing block is reached, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.scattered(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
-</ul>
-</div>
-<br><img alt="ImputeGAP Scatter Pattern" class="portrait align-left" src="_images/imputegap_scattered.png" />
-<br><br></section>
-<section id="multi-block">
-<span id="scenario-multi-block"></span><h2>MULTI-BLOCK<a class="headerlink" href="#multi-block" title="Link to this heading">¶</a></h2>
-<p>Multiple missing blocks per series</p>
-<br><p><strong>MCAR</strong></p>
-<p>Missing blocks have the same size and are introduced completely at random. The affected time series are selected at random.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
-<li><p>Data blocks of the same size are removed from arbitrary series at a random position between <code class="docutils literal notranslate"><span class="pre">W</span></code> and <code class="docutils literal notranslate"><span class="pre">N</span></code>, until the total number of missing values per series is reached.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.mcar(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.2,</span> <span class="pre">offset=25,</span> <span class="pre">seed=False,</span> <span class="pre">block_size=20)</span></code></p></li>
-</ul>
-</div>
-<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="_images/imputegap_mcar.png" />
-<br><br><p><strong>Block Distribution</strong></p>
-<p>Missing data follows a probability distribution, each position has a certain chance of being missing.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
-<li><p>Data is removed following a distribution given by the user for every values of the series, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GenGap.gaussian(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25,</span> <span class="pre">selected_mean=&quot;position&quot;,</span> <span class="pre">std_dev=0.2)</span></code></p></li>
-</ul>
-</div>
-<p>To configure the block distribution pattern, please refer to this <a class="reference external" href="tutorials_distribution.html">page</a>.</p>
-<br><img alt="ImputeGAP Distribution Pattern" class="portrait align-left" src="_images/imputegap_distribution.png" />
-<br><br></section>
-</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="notebooks.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Notebooks</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="algorithms.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">Algorithms</div>
-                
-              </div>
-            </a>
+          
+          
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -447,29 +368,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Missingness Patterns</a><ul>
-<li><a class="reference internal" href="#setup">Setup</a></li>
-<li><a class="reference internal" href="#mono-block">MONO-BLOCK</a></li>
-<li><a class="reference internal" href="#multi-block">MULTI-BLOCK</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

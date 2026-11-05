@@ -1,5 +1,5 @@
 imputegap.recovery.explainer package
-=======================================
+====================================
 
 Module contents
 ---------------

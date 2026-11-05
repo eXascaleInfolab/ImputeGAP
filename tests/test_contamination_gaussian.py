@@ -3,7 +3,7 @@ import numpy as np
 import math
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 
@@ -25,7 +25,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
             for S in series_impacted:
                 for R in missing_rates:
-                    incomp_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
+                    incomp_data = GenGAP.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
                     N, M = incomp_data.shape
 
                     n_nan = np.isnan(incomp_data).sum()
@@ -56,7 +56,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
             for S in series_impacted:
                 for R in missing_rates:
-                    incomp_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P, selected_mean="position")
+                    incomp_data = GenGAP.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P, selected_mean="position")
                     N, M = incomp_data.shape
 
                     n_nan = np.isnan(incomp_data).sum()
@@ -85,7 +85,7 @@ class TestContaminationGaussian(unittest.TestCase):
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = GenGap.gaussian(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, offset=0.1)
+                ts_contaminate = GenGAP.gaussian(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, offset=0.1)
 
                 self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows")
 
@@ -112,7 +112,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
                     for std_dev in std_devs:
                         # Generate contamination with the current standard deviation
-                        contaminated_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, std_dev=std_dev, offset=P, selected_mean="values")
+                        contaminated_data = GenGAP.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, std_dev=std_dev, offset=P, selected_mean="values")
                         contaminated_data = contaminated_data.T
 
                         # Calculate positions of NaN values
@@ -153,7 +153,7 @@ class TestContaminationGaussian(unittest.TestCase):
                 for R in missing_rates_per_series:
                     densities = {}
                     for std_dev in std_devs:
-                        contaminated_data = GenGap.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, std_dev=std_dev, offset=offset, selected_mean="position", )
+                        contaminated_data = GenGAP.gaussian(input_data=ts.data, rate_dataset=S, rate_series=R, std_dev=std_dev, offset=offset, selected_mean="position", )
                         contaminated_data = contaminated_data.T
                         nan_positions = np.where(np.isnan(contaminated_data))
                         valid = nan_positions[1] >= P_idx
@@ -179,7 +179,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = GenGap.gaussian(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, std_dev=std_dev, offset=offset, seed=True)
+                    ts_contaminate = GenGAP.gaussian(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, std_dev=std_dev, offset=offset, seed=True)
                     N, M = ts_contaminate.shape
 
                     nbr_series_contaminated = 0

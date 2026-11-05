@@ -1,13 +1,13 @@
 
-GenGap: Missingness Patterns
+GenGAP: Missingness Patterns
 ============================
 
-The ``GenGap`` class provides methods for generating missing values in time series datasets.
+The ``GenGAP`` class provides methods for generating missing values in time series datasets.
 
-GenGap Class
+GenGAP Class
 ------------
 
-.. autoclass:: imputegap.recovery.contamination.GenGap
+.. autoclass:: imputegap.recovery.contamination.GenGAP
    :members:
    :undoc-members:
    :show-inheritance:

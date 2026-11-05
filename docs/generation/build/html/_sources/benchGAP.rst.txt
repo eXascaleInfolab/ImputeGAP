@@ -1,8 +1,8 @@
 :orphan:
 
-=========
-Benchmark
-=========
+========
+BenchGAP
+========
 
 
 ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms [33]_.  Users have full control over the benchmark by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
@@ -12,7 +12,7 @@ The benchmarking module can be utilized as follows:
 
 .. code-block:: python
 
-    from imputegap.recovery.benchmark import Benchmark
+    from imputegap.recovery.benchmark import BenchGAP
 
     my_algorithms = ["SoftImpute", "KNNImpute"]
 
@@ -27,7 +27,7 @@ The benchmarking module can be utilized as follows:
     my_metrics = ["*"]
 
     # launch the evaluation
-    bench = Benchmark()
+    bench = BenchGAP()
     bench.eval(algorithms=my_algorithms, datasets=my_datasets, patterns=my_patterns, x_axis=range, metrics=my_metrics, optimizers=my_opt)
 
 

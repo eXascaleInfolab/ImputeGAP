@@ -9,9 +9,10 @@
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=29d0bcd9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/page_s_gobal.css?v=6db992ee" />
     
     
 
@@ -245,13 +246,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../algorithms.html">Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gengap.html">GenGAP</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../imputegap.gengap.html">GenGap: Missingness Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../imputegap.gengap.html">GenGAP: Missingness Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -322,9 +323,9 @@
 <span class="c1"># Global Variable</span>
 <span class="n">MAX_PX</span> <span class="o">=</span> <span class="mi">60000</span>  <span class="c1"># Matplotlib hard limit (per dimension)</span>
 
-<div class="viewcode-block" id="Benchmark">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Benchmark</span><span class="p">:</span>
+<div class="viewcode-block" id="BenchGAP">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BenchGAP</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class to evaluate the performance of imputation algorithms through benchmarking across datasets and patterns.</span>
 
@@ -347,7 +348,10 @@
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
-<span class="sd">    output : {&#39;eegalcohol&#39;: {&#39;mcar&#39;: {&#39;MeanImpute&#39;: {&#39;default_params&#39;: {&#39;0.05&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 1.107394798606378, &#39;MAE&#39;: 0.9036474830477748, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 10.07390022277832, &#39;RUNTIME_LOG&#39;: 1.00319764506136}}, &#39;0.1&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.8569349076796438, &#39;MAE&#39;: 0.6416542359734557, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}, &#39;0.2&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.9924113085421721, &#39;MAE&#39;: 0.7939689811173046, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}, &#39;0.4&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 1.0058063455061463, &#39;MAE&#39;: 0.8076546785476064, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}, &#39;0.6&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.9891809506243663, &#39;MAE&#39;: 0.7914550709031675, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}, &#39;0.8&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.9927953862507292, &#39;MAE&#39;: 0.7925635744718286, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}}}, &#39;SoftImpute&#39;: {&#39;default_params&#39;: {&#39;0.05&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.4359915238078244, &#39;MAE&#39;: 0.3725965559420608, &#39;CORRELATION&#39;: 0.9530448037164908, &#39;RUNTIME&#39;: 199.30577278137207, &#39;RUNTIME_LOG&#39;: 2.2995198779819055}}, &#39;0.1&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.3665001858394363, &#39;MAE&#39;: 0.2989983612840734, &#39;CORRELATION&#39;: 0.9049909722894052, &#39;RUNTIME&#39;: 117.54822731018066, &#39;RUNTIME_LOG&#39;: 2.0702160841184516}}, &#39;0.2&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.39833006221984, &#39;MAE&#39;: 0.30824644022807457, &#39;CORRELATION&#39;: 0.9161465703422209, &#39;RUNTIME&#39;: 317.5652027130127, &#39;RUNTIME_LOG&#39;: 2.5018329084349737}}, &#39;0.4&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.435591016228979, &#39;MAE&#39;: 0.3335144215651955, &#39;CORRELATION&#39;: 0.9021032587324183, &#39;RUNTIME&#39;: 302.2916316986084, &#39;RUNTIME_LOG&#39;: 2.4804261248244566}}, &#39;0.6&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.4500113661547204, &#39;MAE&#39;: 0.338085865703361, &#39;CORRELATION&#39;: 0.8893263437029546, &#39;RUNTIME&#39;: 314.93282318115234, &#39;RUNTIME_LOG&#39;: 2.498217926383076}}, &#39;0.8&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.46554422402146944, &#39;MAE&#39;: 0.3508926604243284, &#39;CORRELATION&#39;: 0.8791443563129441, &#39;RUNTIME&#39;: 311.9697570800781, &#39;RUNTIME_LOG&#39;: 2.4941124947560986}}}}}}}</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        output = {&#39;eegalcohol&#39;: {&#39;mcar&#39;: {&#39;MeanImpute&#39;: {&#39;default_params&#39;: {&#39;0.05&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 1.107394798606378, &#39;MAE&#39;: 0.9036474830477748, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 10.07390022277832, &#39;RUNTIME_LOG&#39;: 1.00319764506136}}, &#39;0.1&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.8569349076796438, &#39;MAE&#39;: 0.6416542359734557, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}, &#39;0.2&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.9924113085421721, &#39;MAE&#39;: 0.7939689811173046, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}, &#39;0.4&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 1.0058063455061463, &#39;MAE&#39;: 0.8076546785476064, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}, &#39;0.6&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.9891809506243663, &#39;MAE&#39;: 0.7914550709031675, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}, &#39;0.8&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.9927953862507292, &#39;MAE&#39;: 0.7925635744718286, &#39;CORRELATION&#39;: nan, &#39;RUNTIME&#39;: 1.0, &#39;RUNTIME_LOG&#39;: 0.0}}}}, &#39;SoftImpute&#39;: {&#39;default_params&#39;: {&#39;0.05&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.4359915238078244, &#39;MAE&#39;: 0.3725965559420608, &#39;CORRELATION&#39;: 0.9530448037164908, &#39;RUNTIME&#39;: 199.30577278137207, &#39;RUNTIME_LOG&#39;: 2.2995198779819055}}, &#39;0.1&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.3665001858394363, &#39;MAE&#39;: 0.2989983612840734, &#39;CORRELATION&#39;: 0.9049909722894052, &#39;RUNTIME&#39;: 117.54822731018066, &#39;RUNTIME_LOG&#39;: 2.0702160841184516}}, &#39;0.2&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.39833006221984, &#39;MAE&#39;: 0.30824644022807457, &#39;CORRELATION&#39;: 0.9161465703422209, &#39;RUNTIME&#39;: 317.5652027130127, &#39;RUNTIME_LOG&#39;: 2.5018329084349737}}, &#39;0.4&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.435591016228979, &#39;MAE&#39;: 0.3335144215651955, &#39;CORRELATION&#39;: 0.9021032587324183, &#39;RUNTIME&#39;: 302.2916316986084, &#39;RUNTIME_LOG&#39;: 2.4804261248244566}}, &#39;0.6&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.4500113661547204, &#39;MAE&#39;: 0.338085865703361, &#39;CORRELATION&#39;: 0.8893263437029546, &#39;RUNTIME&#39;: 314.93282318115234, &#39;RUNTIME_LOG&#39;: 2.498217926383076}}, &#39;0.8&#39;: {&#39;scores&#39;: {&#39;RMSE&#39;: 0.46554422402146944, &#39;MAE&#39;: 0.3508926604243284, &#39;CORRELATION&#39;: 0.8791443563129441, &#39;RUNTIME&#39;: 311.9697570800781, &#39;RUNTIME_LOG&#39;: 2.4941124947560986}}}}}}}</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -467,8 +471,8 @@
 
         <span class="k">return</span> <span class="n">imputer</span>
 
-<div class="viewcode-block" id="Benchmark.average_runs_by_names">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.average_runs_by_names">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.average_runs_by_names">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.average_runs_by_names">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">average_runs_by_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Average the results of all runs depending on the dataset</span>
@@ -533,8 +537,8 @@
         <span class="k">return</span> <span class="n">results_avg</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.avg_results_task">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.avg_results_task">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.avg_results_task">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.avg_results_task">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">avg_results_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">datasets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the average of all metrics and times across multiple datasets.</span>
@@ -599,8 +603,8 @@
         <span class="k">return</span> <span class="n">comprehensive_matrix</span><span class="p">,</span> <span class="n">group_keys_list</span><span class="p">,</span> <span class="n">datasets_list</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.generate_heatmap">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_heatmap">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.generate_heatmap">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_heatmap">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_heatmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">algos</span><span class="p">,</span> <span class="n">sets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate and save RMSE matrix in HD quality.</span>
@@ -689,8 +693,8 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.generate_reports_summary">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_reports_summary">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.generate_reports_summary">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_reports_summary">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_reports_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_of_values</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">run</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">rt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate and save a summary report of imputation and downstream evaluation results.</span>
@@ -965,8 +969,8 @@
             <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">run_of_values</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.save_into_excel">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.save_into_excel">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.save_into_excel">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.save_into_excel">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">save_into_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_of_values</span><span class="p">,</span> <span class="n">xlsx_path</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">):</span>
 
         <span class="n">dicts</span> <span class="o">=</span> <span class="p">[</span><span class="n">run_of_values</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">run_of_values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">run_of_values</span><span class="p">)</span>
@@ -1146,8 +1150,8 @@
         <span class="k">return</span> <span class="n">xlsx_path</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.generate_reports_txt">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_reports_txt">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.generate_reports_txt">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_reports_txt">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_reports_txt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs_plots_scores</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span> <span class="n">given_dataset</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">run</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">rt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate and save a text report of metrics and timing for each dataset, algorithm, and pattern.</span>
@@ -1360,8 +1364,8 @@
                             <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">runs_plots_scores</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.generate_plots">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_plots">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.generate_plots">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_plots">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_plots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs_plots_scores</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./reports&quot;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate and save plots for each metric and pattern based on provided scores.</span>
@@ -1605,8 +1609,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">subplots</span> <span class="o">=</span> <span class="n">plt</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.generate_avg_bar_plot">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_avg_bar_plot">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.generate_avg_bar_plot">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_avg_bar_plot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_avg_bar_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upstream</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate summary statistics and per-metric boxplots aggregated across benchmark runs.</span>
@@ -1854,8 +1858,8 @@
                 <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.eval">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.eval">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.eval">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;default_params&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets/benchmark&quot;</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">,</span> <span class="n">report_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">nbr_vals</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">dl_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute a comprehensive evaluation of imputation algorithms over multiple datasets and patterns.</span>
@@ -2217,8 +2221,8 @@
             <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">definition_of_exp</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.eval_downstream_classification">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval_downstream_classification">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.eval_downstream_classification">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.eval_downstream_classification">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">eval_downstream_classification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classifiers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets/benchmark&quot;</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">,</span> <span class="n">contamination_by_class</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imputation_by_class</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">report_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">nbr_vals</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">test_imputation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">to_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">run_downstream</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fixed_rate</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">evaluate_upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bypass_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">generate_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inner_plots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">referential</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">v2</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Benchmark imputation/recovery algorithms using a downstream classification task across datasets, missingness patterns, and missingness rates.</span>
@@ -2532,13 +2536,13 @@
                                     <span class="c1"># PIPELINE WITH CONTAMINATION BY DATASET</span>
                                     <span class="c1"># --------------------------------------------------------------------------------</span>
                                     <span class="k">if</span> <span class="ow">not</span> <span class="n">contamination_by_class</span><span class="p">:</span>
-                                        <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGap</span>
+                                        <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGAP</span>
 
                                         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                                             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">contamination by dataset&quot;</span><span class="p">)</span>
 
                                         <span class="k">if</span> <span class="n">pattern</span> <span class="o">==</span> <span class="s2">&quot;aligned_series&quot;</span> <span class="ow">or</span> <span class="n">pattern</span> <span class="o">==</span> <span class="s2">&quot;seqn&quot;</span><span class="p">:</span>
-                                            <span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">fixed_rate</span><span class="p">,</span>
+                                            <span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">fixed_rate</span><span class="p">,</span>
                                                                   <span class="n">offset</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
                                             <span class="k">if</span> <span class="n">imputation_by_class</span><span class="p">:</span>
                                                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -2560,7 +2564,7 @@
                                                 <span class="n">imputer_tr</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
 
                                         <span class="k">elif</span> <span class="n">pattern</span> <span class="o">==</span> <span class="s2">&quot;aligned_timestamps&quot;</span> <span class="ow">or</span> <span class="n">pattern</span> <span class="o">==</span> <span class="s2">&quot;blks&quot;</span><span class="p">:</span>
-                                            <span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">fixed_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                                            <span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">fixed_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
                                                                   <span class="n">offset</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
                                             <span class="k">if</span> <span class="n">imputation_by_class</span><span class="p">:</span>
@@ -2584,7 +2588,7 @@
 
 
                                         <span class="k">else</span><span class="p">:</span>
-                                            <span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">fixed_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                                            <span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="n">fixed_rate</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
                                                                <span class="n">block_size</span><span class="o">=</span><span class="n">block_size_mcar</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                                                                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -2937,8 +2941,8 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error during report generation: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Benchmark.eval_downstream_forecasting">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval_downstream_forecasting">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.eval_downstream_forecasting">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.eval_downstream_forecasting">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">eval_downstream_forecasting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">forecasters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets/benchmark&quot;</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">,</span> <span class="n">report_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">nbr_vals</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">to_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">run_downstream</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fixed_rate</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">evaluate_upstream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bypass_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">referential</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">generate_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inner_plots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Benchmark imputation/recovery algorithms using a downstream forecasting task across datasets, missingness patterns, and missingness rates.</span>
@@ -3091,7 +3095,7 @@
         <span class="c1"># =============================================================================================================</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.downstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">Forecaster</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.downstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">Artifact</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGap</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGAP</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TF_CPP_MIN_LOG_LEVEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3&#39;</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
         <span class="k">try</span><span class="p">:</span>
@@ -3249,7 +3253,7 @@
 
                                         <span class="c1"># MIRROR OF THE CONTAMINATION (FOR FORECASTING PURPOSE - START AT THE HORIZON)</span>
                                         <span class="c1"># ---------------------------------------------------------------------------------------</span>
-                                        <span class="n">miss</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">mirror_gap</span><span class="p">(</span><span class="n">raw_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ts_m</span><span class="o">=</span><span class="n">incomp_data</span><span class="p">)</span>
+                                        <span class="n">miss</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mirror_gap</span><span class="p">(</span><span class="n">raw_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ts_m</span><span class="o">=</span><span class="n">incomp_data</span><span class="p">)</span>
 
                                         <span class="k">try</span><span class="p">:</span>
                                             <span class="c1"># ------------------------------------------------------------------------------------</span>
@@ -3540,8 +3544,8 @@
 
 
 
-<div class="viewcode-block" id="Benchmark.eval_imputation">
-<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval_imputation">[docs]</a>
+<div class="viewcode-block" id="BenchGAP.eval_imputation">
+<a class="viewcode-back" href="../../../imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.eval_imputation">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">eval_imputation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets/benchmark&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">,</span> <span class="n">report_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nbr_vals</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">to_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fixed_rate</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">bypass_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">generate_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inner_plots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Benchmark imputation/recovery algorithms across datasets, missingness patterns, and missingness rates.</span>

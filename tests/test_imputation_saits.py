@@ -2,7 +2,7 @@ import os
 import unittest
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestSAITS(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestSAITS(unittest.TestCase):
         ts = TimeSeries()
         ts.load_series(utils.search_path(dataset), normalizer="z_score")
 
-        incomp_data = GenGap.mcar(ts.data)
+        incomp_data = GenGAP.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()
         algo.score(ts.data)
@@ -46,7 +46,7 @@ class TestSAITS(unittest.TestCase):
         ts = TimeSeries()
         ts.load_series(utils.search_path(dataset), normalizer="z_score")
 
-        incomp_data = GenGap.mcar(ts.data)
+        incomp_data = GenGAP.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute(params={"seq_len":-1, "batch_size":-1, "epochs":10000, "sliding_windows":0, "n_head":8, "num_workers":0})
         algo.score(ts.data)

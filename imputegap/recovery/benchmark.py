@@ -20,7 +20,7 @@ from imputegap.recovery.manager import TimeSeries
 # Global Variable
 MAX_PX = 60000  # Matplotlib hard limit (per dimension)
 
-class Benchmark:
+class BenchGAP:
     """
     A class to evaluate the performance of imputation algorithms through benchmarking across datasets and patterns.
 
@@ -43,7 +43,10 @@ class Benchmark:
 
     Example
     -------
-    output : {'eegalcohol': {'mcar': {'MeanImpute': {'default_params': {'0.05': {'scores': {'RMSE': 1.107394798606378, 'MAE': 0.9036474830477748, 'CORRELATION': nan, 'RUNTIME': 10.07390022277832, 'RUNTIME_LOG': 1.00319764506136}}, '0.1': {'scores': {'RMSE': 0.8569349076796438, 'MAE': 0.6416542359734557, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}, '0.2': {'scores': {'RMSE': 0.9924113085421721, 'MAE': 0.7939689811173046, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}, '0.4': {'scores': {'RMSE': 1.0058063455061463, 'MAE': 0.8076546785476064, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}, '0.6': {'scores': {'RMSE': 0.9891809506243663, 'MAE': 0.7914550709031675, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}, '0.8': {'scores': {'RMSE': 0.9927953862507292, 'MAE': 0.7925635744718286, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}}}, 'SoftImpute': {'default_params': {'0.05': {'scores': {'RMSE': 0.4359915238078244, 'MAE': 0.3725965559420608, 'CORRELATION': 0.9530448037164908, 'RUNTIME': 199.30577278137207, 'RUNTIME_LOG': 2.2995198779819055}}, '0.1': {'scores': {'RMSE': 0.3665001858394363, 'MAE': 0.2989983612840734, 'CORRELATION': 0.9049909722894052, 'RUNTIME': 117.54822731018066, 'RUNTIME_LOG': 2.0702160841184516}}, '0.2': {'scores': {'RMSE': 0.39833006221984, 'MAE': 0.30824644022807457, 'CORRELATION': 0.9161465703422209, 'RUNTIME': 317.5652027130127, 'RUNTIME_LOG': 2.5018329084349737}}, '0.4': {'scores': {'RMSE': 0.435591016228979, 'MAE': 0.3335144215651955, 'CORRELATION': 0.9021032587324183, 'RUNTIME': 302.2916316986084, 'RUNTIME_LOG': 2.4804261248244566}}, '0.6': {'scores': {'RMSE': 0.4500113661547204, 'MAE': 0.338085865703361, 'CORRELATION': 0.8893263437029546, 'RUNTIME': 314.93282318115234, 'RUNTIME_LOG': 2.498217926383076}}, '0.8': {'scores': {'RMSE': 0.46554422402146944, 'MAE': 0.3508926604243284, 'CORRELATION': 0.8791443563129441, 'RUNTIME': 311.9697570800781, 'RUNTIME_LOG': 2.4941124947560986}}}}}}}
+    .. code-block:: python
+
+        output = {'eegalcohol': {'mcar': {'MeanImpute': {'default_params': {'0.05': {'scores': {'RMSE': 1.107394798606378, 'MAE': 0.9036474830477748, 'CORRELATION': nan, 'RUNTIME': 10.07390022277832, 'RUNTIME_LOG': 1.00319764506136}}, '0.1': {'scores': {'RMSE': 0.8569349076796438, 'MAE': 0.6416542359734557, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}, '0.2': {'scores': {'RMSE': 0.9924113085421721, 'MAE': 0.7939689811173046, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}, '0.4': {'scores': {'RMSE': 1.0058063455061463, 'MAE': 0.8076546785476064, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}, '0.6': {'scores': {'RMSE': 0.9891809506243663, 'MAE': 0.7914550709031675, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}, '0.8': {'scores': {'RMSE': 0.9927953862507292, 'MAE': 0.7925635744718286, 'CORRELATION': nan, 'RUNTIME': 1.0, 'RUNTIME_LOG': 0.0}}}}, 'SoftImpute': {'default_params': {'0.05': {'scores': {'RMSE': 0.4359915238078244, 'MAE': 0.3725965559420608, 'CORRELATION': 0.9530448037164908, 'RUNTIME': 199.30577278137207, 'RUNTIME_LOG': 2.2995198779819055}}, '0.1': {'scores': {'RMSE': 0.3665001858394363, 'MAE': 0.2989983612840734, 'CORRELATION': 0.9049909722894052, 'RUNTIME': 117.54822731018066, 'RUNTIME_LOG': 2.0702160841184516}}, '0.2': {'scores': {'RMSE': 0.39833006221984, 'MAE': 0.30824644022807457, 'CORRELATION': 0.9161465703422209, 'RUNTIME': 317.5652027130127, 'RUNTIME_LOG': 2.5018329084349737}}, '0.4': {'scores': {'RMSE': 0.435591016228979, 'MAE': 0.3335144215651955, 'CORRELATION': 0.9021032587324183, 'RUNTIME': 302.2916316986084, 'RUNTIME_LOG': 2.4804261248244566}}, '0.6': {'scores': {'RMSE': 0.4500113661547204, 'MAE': 0.338085865703361, 'CORRELATION': 0.8893263437029546, 'RUNTIME': 314.93282318115234, 'RUNTIME_LOG': 2.498217926383076}}, '0.8': {'scores': {'RMSE': 0.46554422402146944, 'MAE': 0.3508926604243284, 'CORRELATION': 0.8791443563129441, 'RUNTIME': 311.9697570800781, 'RUNTIME_LOG': 2.4941124947560986}}}}}}}
+
     """
 
     def __init__(self):
@@ -2199,13 +2202,13 @@ class Benchmark:
                                     # PIPELINE WITH CONTAMINATION BY DATASET
                                     # --------------------------------------------------------------------------------
                                     if not contamination_by_class:
-                                        from imputegap.recovery.contamination import GenGap
+                                        from imputegap.recovery.contamination import GenGAP
 
                                         if verbose:
                                             print("\n\tcontamination by dataset")
 
                                         if pattern == "aligned_series" or pattern == "seqn":
-                                            ts_m = GenGap.aligned(ts.data, rate_dataset=x, rate_series=fixed_rate,
+                                            ts_m = GenGAP.aligned(ts.data, rate_dataset=x, rate_series=fixed_rate,
                                                                   offset=0.05, verbose=verbose)
                                             if imputation_by_class:
                                                 if verbose:
@@ -2227,7 +2230,7 @@ class Benchmark:
                                                 imputer_tr.impute()
 
                                         elif pattern == "aligned_timestamps" or pattern == "blks":
-                                            ts_m = GenGap.aligned(ts.data, rate_dataset=fixed_rate, rate_series=x,
+                                            ts_m = GenGAP.aligned(ts.data, rate_dataset=fixed_rate, rate_series=x,
                                                                   offset=0.05, verbose=verbose)
 
                                             if imputation_by_class:
@@ -2251,7 +2254,7 @@ class Benchmark:
 
 
                                         else:
-                                            ts_m = GenGap.mcar(ts.data, rate_dataset=fixed_rate, rate_series=x,
+                                            ts_m = GenGAP.mcar(ts.data, rate_dataset=fixed_rate, rate_series=x,
                                                                block_size=block_size_mcar, seed=True, offset=0.05,
                                                                verbose=False)
 
@@ -2755,7 +2758,7 @@ class Benchmark:
         # =============================================================================================================
         from imputegap.recovery.downstream import Forecaster
         from imputegap.recovery.downstream import Artifact
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
         import gc
         try:
@@ -2913,7 +2916,7 @@ class Benchmark:
 
                                         # MIRROR OF THE CONTAMINATION (FOR FORECASTING PURPOSE - START AT THE HORIZON)
                                         # ---------------------------------------------------------------------------------------
-                                        miss = GenGap.mirror_gap(raw_data=ts.data, ts_m=incomp_data)
+                                        miss = GenGAP.mirror_gap(raw_data=ts.data, ts_m=incomp_data)
 
                                         try:
                                             # ------------------------------------------------------------------------------------

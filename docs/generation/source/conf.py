@@ -46,7 +46,10 @@ html_logo = "https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/as
 html_favicon = "https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"
 
 html_static_path = ['static']
-html_css_files = ['custom.css']
+html_css_files = [
+    'custom.css',
+    'page_s_gobal.css',
+]
 
 # Set the version and release info
 version = '1.1.3'

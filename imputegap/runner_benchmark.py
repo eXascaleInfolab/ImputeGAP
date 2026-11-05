@@ -1,8 +1,8 @@
 # ImputeGAP import
-from imputegap.recovery.benchmark import Benchmark
+from imputegap.recovery.benchmark import BenchGAP
 
 # launch the evaluation
-bench = Benchmark()
+bench = BenchGAP()
 bench.eval_imputation(algorithms=["MeanImpute", "SoftImpute"],
            datasets=["eeg-alcohol"],
            patterns=["mcar"],

@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestContaminationBlackout(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestContaminationBlackout(unittest.TestCase):
         N, M = ts_1.data.shape
 
         for missing_rate in missing_rates:
-            ts_contaminate = GenGap.blackout(input_data=ts_1.data, rate_series=missing_rate, offset=offset)
+            ts_contaminate = GenGAP.blackout(input_data=ts_1.data, rate_series=missing_rate, offset=offset)
 
             n_nan = np.isnan(ts_contaminate).sum()
             expected_nan_series = M
@@ -40,7 +40,7 @@ class TestContaminationBlackout(unittest.TestCase):
 
         for missing_rate in missing_rates:
 
-            ts_contaminate = GenGap.blackout(input_data=ts_1.data, rate_series=missing_rate, offset=0.1)
+            ts_contaminate = GenGAP.blackout(input_data=ts_1.data, rate_series=missing_rate, offset=0.1)
 
             print(f"{ts_contaminate = }")
 
@@ -48,7 +48,7 @@ class TestContaminationBlackout(unittest.TestCase):
 
         for missing_rate in missing_rates:
 
-            ts_contaminate = GenGap.blackout(input_data=ts_1.data, rate_series=missing_rate, offset=4)
+            ts_contaminate = GenGAP.blackout(input_data=ts_1.data, rate_series=missing_rate, offset=4)
 
             print(f"{ts_contaminate = }")
 

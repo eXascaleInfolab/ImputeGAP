@@ -11,5 +11,5 @@ imputegap.recovery.benchmark
 
    .. autosummary::
    
-      Benchmark
+      BenchGAP
    

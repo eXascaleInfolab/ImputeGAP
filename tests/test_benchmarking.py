@@ -1,6 +1,6 @@
 import math
 import unittest
-from imputegap.recovery.benchmark import Benchmark
+from imputegap.recovery.benchmark import BenchGAP
 
 class TestBenchmarking(unittest.TestCase):
 
@@ -8,7 +8,7 @@ class TestBenchmarking(unittest.TestCase):
         """
         the goal is to test if only the simple imputation benchmarking has the expected outcome
         """
-        bench = Benchmark()
+        bench = BenchGAP()
         expected_datasets = ["test-logic-llm.txt"]
 
         opti_bayesian = {"optimizer": "bayesian", "options": {"n_calls": 2, "n_random_starts": 50, "acq_func": "gp_hedge", "metrics": "RMSE"}}
@@ -62,9 +62,9 @@ class TestBenchmarking(unittest.TestCase):
 
     def test_benchmarking_deuxpointzero(self):
 
-        from imputegap.recovery.benchmark import Benchmark
+        from imputegap.recovery.benchmark import BenchGAP
         # launch the evaluation
-        bench = Benchmark()
+        bench = BenchGAP()
         bench.eval_imputation(algorithms=["MeanImpute", "SoftImpute"],
                               datasets=["eeg-alcohol"],
                               patterns=["mcar"],
@@ -349,7 +349,7 @@ class TestBenchmarking(unittest.TestCase):
         expected_rmse = {'CDRec': 4.5, 'IIM': -5.5, 'MeanImpute': 0.4, 'MRNN': 0.5, 'STMVL': -1.5}
 
         print(f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n=====================================")
-        bench = Benchmark()
+        bench = BenchGAP()
         print(f"{alpha_1=}")
         scores_list, algos, sets = bench.avg_results_task(alpha_1, alpha_2, beta_1, beta_2, delta_1, delta_2, epsilon_1, epsilon_2, gamma_1, gamma_2)
 

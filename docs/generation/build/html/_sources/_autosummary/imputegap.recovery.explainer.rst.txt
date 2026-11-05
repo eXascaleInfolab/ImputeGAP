@@ -11,5 +11,5 @@ imputegap.recovery.explainer
 
    .. autosummary::
    
-      Explainer
+      ExplainGAP
    

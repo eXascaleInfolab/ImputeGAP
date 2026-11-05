@@ -1,7 +1,7 @@
 import os
 import unittest
 from imputegap.recovery.imputation import Imputation
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 
@@ -19,7 +19,7 @@ class TestCSDI(unittest.TestCase):
         ts = TimeSeries()
         ts.load_series(utils.search_path(dataset), normalizer="z_score", nbr_val=250, nbr_series=40)
 
-        incomp_data = GenGap.mcar(ts.data)
+        incomp_data = GenGAP.mcar(ts.data)
 
         algo = Imputation.DeepLearning.CSDI(incomp_data).impute()
         algo.score(ts.data)

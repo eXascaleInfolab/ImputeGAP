@@ -8,9 +8,10 @@
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
+    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=6db992ee" />
     
     
 
@@ -244,13 +245,13 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gengap.html">GenGAP</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.manager.html">imputegap.recovery.manager package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">GenGap: Missingness Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputegap.gengap.html">GenGAP: Missingness Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -307,7 +308,7 @@
   <h2>_</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="_autosummary/imputegap.recovery.contamination.GenGap.html#imputegap.recovery.contamination.GenGap.__init__">__init__() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="_autosummary/imputegap.recovery.contamination.GenGAP.html#imputegap.recovery.contamination.GenGAP.__init__">__init__() (imputegap.recovery.contamination.GenGAP method)</a>
 
         <ul>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.BaseImputer.__init__">(imputegap.recovery.imputation.BaseImputer method)</a>
@@ -385,8 +386,6 @@
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MeanImputeBySeries.__init__">(imputegap.recovery.imputation.Imputation.Statistics.MeanImputeBySeries method)</a>
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MinImpute.__init__">(imputegap.recovery.imputation.Imputation.Statistics.MinImpute method)</a>
-</li>
-          <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.Test.__init__">(imputegap.recovery.imputation.Imputation.Statistics.Test method)</a>
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute.__init__">(imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute method)</a>
 </li>
@@ -476,14 +475,12 @@
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MinImpute.algorithm">(imputegap.recovery.imputation.Imputation.Statistics.MinImpute attribute)</a>
 </li>
-          <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.Test.algorithm">(imputegap.recovery.imputation.Imputation.Statistics.Test attribute)</a>
-</li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute.algorithm">(imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute attribute)</a>
 </li>
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.aligned">aligned() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.aligned">aligned() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
         <li><a href="imputegap.downstream.html#imputegap.recovery.downstream.Artifact">Artifact (class in imputegap.recovery.downstream)</a>
 </li>
@@ -491,9 +488,9 @@
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.auto_seq_sample">auto_seq_sample() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.average_runs_by_names">average_runs_by_names() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.average_runs_by_names">average_runs_by_names() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.avg_results_task">avg_results_task() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.avg_results_task">avg_results_task() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -509,9 +506,9 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark">Benchmark (class in imputegap.recovery.benchmark)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP">BenchGAP (class in imputegap.recovery.benchmark)</a>
 </li>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.blackout">blackout() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.blackout">blackout() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -561,7 +558,7 @@
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.control_boundaries">control_boundaries() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.convert_results">convert_results() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.convert_results">convert_results() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.corr_dataset_features">corr_dataset_features() (in module imputegap.tools.utils)</a>
 </li>
@@ -585,11 +582,11 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.disjoint">disjoint() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.disjoint">disjoint() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.display_title">display_title() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.distribution">distribution() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.distribution">distribution() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.dl_integration_transformation">dl_integration_transformation() (in module imputegap.tools.utils)</a>
 </li>
@@ -605,13 +602,13 @@
   <h2>E</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval">eval() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.eval">eval() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval_downstream_classification">eval_downstream_classification() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.eval_downstream_classification">eval_downstream_classification() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval_downstream_forecasting">eval_downstream_forecasting() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.eval_downstream_forecasting">eval_downstream_forecasting() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.eval_imputation">eval_imputation() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.eval_imputation">eval_imputation() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
         <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.evaluate_params">evaluate_params() (imputegap.recovery.imputation.Imputation method)</a>
 </li>
@@ -619,15 +616,15 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="imputegap.evaluation.html#imputegap.recovery.evaluation.Evaluation">Evaluation (class in imputegap.recovery.evaluation)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.execute_shap_model">execute_shap_model() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.execute_shap_model">execute_shap_model() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer">Explainer (class in imputegap.recovery.explainer)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP">ExplainGAP (class in imputegap.recovery.explainer)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.extractor_pycatch">extractor_pycatch() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.extractor_pycatch">extractor_pycatch() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.extractor_tsfel">extractor_tsfel() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.extractor_tsfel">extractor_tsfel() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.extractor_tsfresh">extractor_tsfresh() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.extractor_tsfresh">extractor_tsfresh() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -637,19 +634,19 @@
   <h2>F</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.feature_correlation">feature_correlation() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.feature_correlation">feature_correlation() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.feature_forecasting">feature_forecasting() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.feature_forecasting">feature_forecasting() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.feature_shifting">feature_shifting() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.feature_shifting">feature_shifting() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.feature_stationarity">feature_stationarity() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.feature_stationarity">feature_stationarity() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.feature_transition">feature_transition() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.feature_transition">feature_transition() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.feature_trend">feature_trend() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.feature_trend">feature_trend() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
         <li><a href="imputegap.downstream.html#imputegap.recovery.downstream.Forecaster">Forecaster (class in imputegap.recovery.downstream)</a>
 </li>
@@ -663,23 +660,23 @@
   <h2>G</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.gaussian">gaussian() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.gaussian">gaussian() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_avg_bar_plot">generate_avg_bar_plot() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_avg_bar_plot">generate_avg_bar_plot() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_heatmap">generate_heatmap() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_heatmap">generate_heatmap() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_plots">generate_plots() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_plots">generate_plots() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.generate_random_mask">generate_random_mask() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_reports_summary">generate_reports_summary() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_reports_summary">generate_reports_summary() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.generate_reports_txt">generate_reports_txt() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.generate_reports_txt">generate_reports_txt() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
-        <li><a href="_autosummary/imputegap.recovery.contamination.GenGap.html#imputegap.recovery.contamination.GenGap">GenGap (class in imputegap.recovery.contamination)</a>, <a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap">[1]</a>
+        <li><a href="_autosummary/imputegap.recovery.contamination.GenGAP.html#imputegap.recovery.contamination.GenGAP">GenGAP (class in imputegap.recovery.contamination)</a>, <a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP">[1]</a>
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.get_dataset_forecasters">get_dataset_forecasters() (in module imputegap.tools.utils)</a>
 </li>
@@ -799,8 +796,6 @@
 </li>
         <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MinImpute">Imputation.Statistics.MinImpute (class in imputegap.recovery.imputation)</a>
 </li>
-        <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.Test">Imputation.Statistics.Test (class in imputegap.recovery.imputation)</a>
-</li>
         <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute">Imputation.Statistics.ZeroImpute (class in imputegap.recovery.imputation)</a>
 </li>
         <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.BaseImputer.impute">impute() (imputegap.recovery.imputation.BaseImputer method)</a>
@@ -879,8 +874,6 @@
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MeanImputeBySeries.impute">(imputegap.recovery.imputation.Imputation.Statistics.MeanImputeBySeries method)</a>
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MinImpute.impute">(imputegap.recovery.imputation.Imputation.Statistics.MinImpute method)</a>
-</li>
-          <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.Test.impute">(imputegap.recovery.imputation.Imputation.Statistics.Test method)</a>
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute.impute">(imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute method)</a>
 </li>
@@ -1025,7 +1018,7 @@
 </li>
         <li><a href="imputegap.manager.html#imputegap.recovery.manager.TimeSeries.load_classify_dataset">load_classify_dataset() (imputegap.recovery.manager.TimeSeries method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.load_configuration">load_configuration() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.load_configuration">load_configuration() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
         <li><a href="imputegap.manager.html#imputegap.recovery.manager.TimeSeries.load_forecasting_dataset">load_forecasting_dataset() (imputegap.recovery.manager.TimeSeries method)</a>
 </li>
@@ -1116,8 +1109,6 @@
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MinImpute.logs">(imputegap.recovery.imputation.Imputation.Statistics.MinImpute attribute)</a>
 </li>
-          <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.Test.logs">(imputegap.recovery.imputation.Imputation.Statistics.Test attribute)</a>
-</li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute.logs">(imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute attribute)</a>
 </li>
         </ul></li>
@@ -1133,9 +1124,9 @@
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.max_consecutive_nans_per_col_loop">max_consecutive_nans_per_col_loop() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.mcar">mcar() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.mcar">mcar() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.mirror_gap">mirror_gap() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.mirror_gap">mirror_gap() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
         <li>
     module
@@ -1214,7 +1205,7 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="imputegap.optimization.html#imputegap.recovery.optimization.Optimization.optimize_adv_imputation_algo_upstream">optimize_adv_imputation_algo_upstream() (imputegap.recovery.optimization.Optimization method)</a>
 </li>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.overlap">overlap() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.overlap">overlap() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -1248,7 +1239,7 @@
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.prevent_leakage">prevent_leakage() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.print">print() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.print">print() (imputegap.recovery.explainer.ExplainGAP method)</a>
 
         <ul>
           <li><a href="imputegap.manager.html#imputegap.recovery.manager.TimeSeries.print">(imputegap.recovery.manager.TimeSeries method)</a>
@@ -1280,11 +1271,11 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.save_dataset_classifier_features">save_dataset_classifier_features() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.Benchmark.save_into_excel">save_into_excel() (imputegap.recovery.benchmark.Benchmark method)</a>
+        <li><a href="imputegap.benchmark.html#imputegap.recovery.benchmark.BenchGAP.save_into_excel">save_into_excel() (imputegap.recovery.benchmark.BenchGAP method)</a>
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.save_optimization">save_optimization() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGap.scattered">scattered() (imputegap.recovery.contamination.GenGap method)</a>
+        <li><a href="imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.scattered">scattered() (imputegap.recovery.contamination.GenGAP method)</a>
 </li>
         <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.BaseImputer.score">score() (imputegap.recovery.imputation.BaseImputer method)</a>
 
@@ -1363,8 +1354,6 @@
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MinImpute.score">(imputegap.recovery.imputation.Imputation.Statistics.MinImpute method)</a>
 </li>
-          <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.Test.score">(imputegap.recovery.imputation.Imputation.Statistics.Test method)</a>
-</li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute.score">(imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute method)</a>
 </li>
         </ul></li>
@@ -1376,11 +1365,11 @@
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.sets_splitter_based_on_training">sets_splitter_based_on_training() (in module imputegap.tools.utils)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.shap_explainer">shap_explainer() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.shap_explainer">shap_explainer() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
         <li><a href="imputegap.manager.html#imputegap.recovery.manager.TimeSeries.shift">shift() (imputegap.recovery.manager.TimeSeries method)</a>
 </li>
-        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.Explainer.show">show() (imputegap.recovery.explainer.Explainer method)</a>
+        <li><a href="imputegap.explainer.html#imputegap.recovery.explainer.ExplainGAP.show">show() (imputegap.recovery.explainer.ExplainGAP method)</a>
 </li>
         <li><a href="imputegap.utils.html#imputegap.tools.utils.split_mask_bwt_test_valid">split_mask_bwt_test_valid() (in module imputegap.tools.utils)</a>
 </li>
@@ -1484,8 +1473,6 @@
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MeanImputeBySeries.verbose">(imputegap.recovery.imputation.Imputation.Statistics.MeanImputeBySeries attribute)</a>
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MinImpute.verbose">(imputegap.recovery.imputation.Imputation.Statistics.MinImpute attribute)</a>
-</li>
-          <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.Test.verbose">(imputegap.recovery.imputation.Imputation.Statistics.Test attribute)</a>
 </li>
           <li><a href="imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute.verbose">(imputegap.recovery.imputation.Imputation.Statistics.ZeroImpute attribute)</a>
 </li>

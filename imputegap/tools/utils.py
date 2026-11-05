@@ -1608,7 +1608,7 @@ def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_s
     Returns
     -------
     numpy array
-        Contaminated time-series data returned by the selected ``GenGap``
+        Contaminated time-series data returned by the selected ``GenGAP``
         contamination method.
 
     Raises
@@ -1619,7 +1619,7 @@ def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_s
     """
 
 
-    from imputegap.recovery.contamination import GenGap
+    from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
 
     pattern_low = pattern.lower()
@@ -1631,25 +1631,25 @@ def config_contamination(ts, pattern, dataset_rate=0.4, series_rate=0.4, block_s
         matrix = ts
 
     if ptn == "mcar" or ptn == "missing_completely_at_random":
-        incomp_data = GenGap.mcar(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, block_size=block_size, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.mcar(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, block_size=block_size, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "mp" or ptn == "missingpercentage" or ptn == "aligned":
-        incomp_data = GenGap.aligned(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.aligned(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "ps" or ptn == "percentageshift" or ptn == "scattered" or ptn == "scatter":
-        incomp_data = GenGap.scattered(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.scattered(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "disjoint":
-        incomp_data = GenGap.disjoint(input_data=matrix, rate_series=dataset_rate, limit=1, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.disjoint(input_data=matrix, rate_series=dataset_rate, limit=1, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "overlap":
-        incomp_data = GenGap.overlap(input_data=matrix, rate_series=dataset_rate, limit=limit, shift=shift, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.overlap(input_data=matrix, rate_series=dataset_rate, limit=limit, shift=shift, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "gaussian":
-        incomp_data = GenGap.gaussian(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, std_dev=std_dev, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.gaussian(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, std_dev=std_dev, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "distribution" or pattern == "dist":
-        incomp_data = GenGap.distribution(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, probabilities_list=probabilities, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.distribution(input_data=matrix, rate_dataset=dataset_rate, rate_series=series_rate, probabilities_list=probabilities, offset=offset, seed=seed, explainer=explainer, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "blackout":
-        incomp_data = GenGap.blackout(input_data=matrix, rate_series=dataset_rate, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.blackout(input_data=matrix, rate_series=dataset_rate, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "alignedseries":
-        incomp_data = GenGap.aligned(input_data=matrix, rate_series=series_rate, rate_dataset=dataset_rate, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.aligned(input_data=matrix, rate_series=series_rate, rate_dataset=dataset_rate, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
     elif ptn == "alignedtimestamps":
-        incomp_data = GenGap.aligned(input_data=matrix, rate_series=series_rate, rate_dataset=dataset_rate, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
+        incomp_data = GenGAP.aligned(input_data=matrix, rate_series=series_rate, rate_dataset=dataset_rate, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
     else:
         raise ValueError(f"\n(CONT) Pattern '{pattern}' not recognized, please choose your algorithm on this list :\n\t{TimeSeries().patterns}\n")
         incomp_data = None

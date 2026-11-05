@@ -9,9 +9,10 @@
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5d077e89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=29d0bcd9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/page_s_gobal.css?v=6db992ee" />
     
     
 
@@ -245,13 +246,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../algorithms.html">Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../missingness_patterns.html">Missingness Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gengap.html">GenGAP</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.manager.html">imputegap.recovery.manager package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../imputegap.gengap.html">GenGap: Missingness Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../imputegap.gengap.html">GenGAP: Missingness Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.imputation.html">imputegap.recovery.imputation package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.optimization.html">imputegap.recovery.optimization package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../imputegap.benchmark.html">imputegap.recovery.benchmark package</a></li>
@@ -309,9 +310,9 @@
 <span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
-<div class="viewcode-block" id="GenGap">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">GenGap</span><span class="p">:</span>
+<div class="viewcode-block" id="GenGAP">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenGAP</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for contaminating times series data. This class is used to simulate missing values in the loaded dataset.</span>
 
@@ -347,14 +348,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GenGap.__init__">
-<a class="viewcode-back" href="../../../_autosummary/imputegap.recovery.contamination.GenGap.html#imputegap.recovery.contamination.GenGap.__init__">[docs]</a>
+<div class="viewcode-block" id="GenGAP.__init__">
+<a class="viewcode-back" href="../../../_autosummary/imputegap.recovery.contamination.GenGAP.html#imputegap.recovery.contamination.GenGAP.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the GenGAP object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ImputeGAP’s contamination module, GenGap, has been invoked (https://github.com/eXascaleInfolab/ImputeGAP).&quot;</span><span class="p">)</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ImputeGAP’s contamination module, GenGAP, has been invoked (https://github.com/eXascaleInfolab/ImputeGAP).&quot;</span><span class="p">)</span></div>
 
 
 
@@ -364,8 +365,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">offset</span>
 
-<div class="viewcode-block" id="GenGap.mirror_gap">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.mirror_gap">[docs]</a>
+<div class="viewcode-block" id="GenGAP.mirror_gap">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.mirror_gap">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">mirror_gap</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">ts_m</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Mirror the missing-value positions of a contaminated time series.</span>
@@ -403,8 +404,8 @@
 
 
 
-<div class="viewcode-block" id="GenGap.mcar">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.mcar">[docs]</a>
+<div class="viewcode-block" id="GenGAP.mcar">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.mcar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Missing blocks are introduced completely at random. Time series are selected at random, and blocks of a fixed size are removed at randomly chosen positions.</span>
@@ -452,7 +453,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):</span>
+<span class="sd">            ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -509,7 +510,7 @@
         <span class="c1"># BLOCK CHECK</span>
         <span class="n">S</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">series_selected</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts_contaminated</span><span class="p">[</span><span class="n">S</span><span class="p">])</span>  <span class="c1"># number of values in the series</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
         <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rate_series</span><span class="p">)</span>  <span class="c1"># number of data to remove</span>
         <span class="n">B</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">W</span> <span class="o">/</span> <span class="n">block_size</span><span class="p">)</span>  <span class="c1"># number of block to remove</span>
         <span class="k">if</span> <span class="n">B</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
@@ -523,7 +524,7 @@
         <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="n">series_selected</span><span class="p">:</span>
             <span class="n">S</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
             <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts_contaminated</span><span class="p">[</span><span class="n">S</span><span class="p">])</span>  <span class="c1"># number of values in the series</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
             <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rate_series</span><span class="p">)</span>  <span class="c1"># number of data to remove</span>
             <span class="n">B</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">W</span> <span class="o">/</span> <span class="n">block_size</span><span class="p">)</span>  <span class="c1"># number of block to remove</span>
 
@@ -564,8 +565,8 @@
 
 
 
-<div class="viewcode-block" id="GenGap.aligned">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.aligned">[docs]</a>
+<div class="viewcode-block" id="GenGAP.aligned">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.aligned">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">aligned</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">single_series</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Missing blocks start and end at the same selected positions across the chosen series, resulting in aligned missing intervals.</span>
@@ -660,7 +661,7 @@
         <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">default_init</span><span class="p">,</span> <span class="n">nbr_series_impacted</span><span class="p">):</span>
             <span class="n">S</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
             <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts_contaminated</span><span class="p">[</span><span class="n">S</span><span class="p">])</span>  <span class="c1"># number of values in the series</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
             <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rate_series</span><span class="p">)</span>  <span class="c1"># number of data to remove</span>
 
             <span class="k">for</span> <span class="n">to_remove</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">W</span><span class="p">):</span>
@@ -673,8 +674,8 @@
             <span class="k">return</span> <span class="n">ts_contaminated</span></div>
 
 
-<div class="viewcode-block" id="GenGap.scattered">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.scattered">[docs]</a>
+<div class="viewcode-block" id="GenGAP.scattered">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.scattered">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">scattered</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A contiguous interval of missing values is introduced at a randomly selected position within each selected series.</span>
@@ -765,7 +766,7 @@
         <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">default_init</span><span class="p">,</span> <span class="n">nbr_series_impacted</span><span class="p">):</span>
             <span class="n">S</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
             <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts_contaminated</span><span class="p">[</span><span class="n">S</span><span class="p">])</span>  <span class="c1"># number of values in the series</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
             <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rate_series</span><span class="p">)</span>  <span class="c1"># number of data to remove</span>
             <span class="n">L</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">W</span> <span class="o">-</span> <span class="n">P</span><span class="p">)</span> <span class="o">+</span><span class="mi">1</span>
 
@@ -782,8 +783,8 @@
 
 
 
-<div class="viewcode-block" id="GenGap.blackout">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.blackout">[docs]</a>
+<div class="viewcode-block" id="GenGAP.blackout">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.blackout">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">blackout</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply blackout contamination to selected series</span>
@@ -817,13 +818,13 @@
 <span class="sd">            ts_m =GenGap.blackout(ts.data, series_rate=0.2)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">rate_series</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">aligned</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="n">rate_series</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="n">logic_by_series</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span></div>
 
 
 
 
-<div class="viewcode-block" id="GenGap.gaussian">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.gaussian">[docs]</a>
+<div class="viewcode-block" id="GenGAP.gaussian">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.gaussian">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gaussian</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">selected_mean</span><span class="o">=</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="n">std_dev</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Missingness follows a probability distribution, each position has a certain chance of being missing.</span>
@@ -925,7 +926,7 @@
         <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">default_init</span><span class="p">,</span> <span class="n">nbr_series_impacted</span><span class="p">):</span>
             <span class="n">S</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
             <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts_contaminated</span><span class="p">[</span><span class="n">S</span><span class="p">])</span>  <span class="c1"># number of values in the series</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
             <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rate_series</span><span class="p">)</span>  <span class="c1"># number of data points to remove</span>
             <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
 
@@ -957,8 +958,8 @@
             <span class="k">return</span> <span class="n">ts_contaminated</span></div>
 
 
-<div class="viewcode-block" id="GenGap.distribution">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.distribution">[docs]</a>
+<div class="viewcode-block" id="GenGAP.distribution">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.distribution">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">distribution</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">probabilities_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">explainer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Missingness follows a probability distribution, each position has a certain chance of being missing.</span>
@@ -1061,7 +1062,7 @@
         <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">default_init</span><span class="p">,</span> <span class="n">nbr_series_impacted</span><span class="p">):</span>
             <span class="n">S</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
             <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts_contaminated</span><span class="p">[</span><span class="n">S</span><span class="p">])</span>  <span class="c1"># number of values in the series</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
             <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rate_series</span><span class="p">)</span>  <span class="c1"># number of data points to remove</span>
             <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
             <span class="n">D</span> <span class="o">=</span> <span class="n">probabilities_list</span><span class="p">[</span><span class="n">S</span><span class="p">]</span>
@@ -1078,8 +1079,8 @@
 
 
 
-<div class="viewcode-block" id="GenGap.disjoint">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.disjoint">[docs]</a>
+<div class="viewcode-block" id="GenGAP.disjoint">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.disjoint">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">disjoint</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Each missing block begins where the previous one ends, so the missing intervals are consecutive and do not overlap.</span>
@@ -1151,7 +1152,7 @@
 
         <span class="k">while</span> <span class="n">S</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts_contaminated</span><span class="p">[</span><span class="n">S</span><span class="p">])</span>  <span class="c1"># number of values in the series</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
             <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rate_series</span><span class="p">)</span>  <span class="c1"># number of data to remove</span>
             <span class="n">L</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="n">W</span>  <span class="c1"># new limit</span>
 
@@ -1174,8 +1175,8 @@
             <span class="k">return</span> <span class="n">ts_contaminated</span></div>
 
 
-<div class="viewcode-block" id="GenGap.overlap">
-<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGap.overlap">[docs]</a>
+<div class="viewcode-block" id="GenGAP.overlap">
+<a class="viewcode-back" href="../../../imputegap.gengap.html#imputegap.recovery.contamination.GenGAP.overlap">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">overlap</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">logic_by_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Each missing block starts at the end of the previous one with a specified shift, so the missing intervals are consecutive and overlap.</span>
@@ -1252,7 +1253,7 @@
 
         <span class="k">while</span> <span class="n">S</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts_contaminated</span><span class="p">[</span><span class="n">S</span><span class="p">])</span>  <span class="c1"># number of values in the series</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGap</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">_compute_offset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>  <span class="c1"># values to protect in the beginning of the series</span>
             <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rate_series</span><span class="p">)</span>  <span class="c1"># number of data to remove</span>
 
             <span class="k">if</span> <span class="n">X</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>

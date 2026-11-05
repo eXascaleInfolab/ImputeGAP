@@ -7,7 +7,7 @@ import numpy as np
 # ImputeGAP imports
 from imputegap.tools import utils
 
-class GenGap:
+class GenGAP:
     """
     Class for contaminating times series data. This class is used to simulate missing values in the loaded dataset.
 
@@ -48,7 +48,7 @@ class GenGap:
         Initialize the GenGAP object.
         """
         if verbose:
-            print(f"ImputeGAP’s contamination module, GenGap, has been invoked (https://github.com/eXascaleInfolab/ImputeGAP).")
+            print(f"ImputeGAP’s contamination module, GenGAP, has been invoked (https://github.com/eXascaleInfolab/ImputeGAP).")
 
 
     def _compute_offset(N, offset):
@@ -140,7 +140,7 @@ class GenGap:
         -------
         .. code-block:: python
 
-            ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):
+            ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10):
 
         """
 
@@ -197,7 +197,7 @@ class GenGap:
         # BLOCK CHECK
         S = int(series_selected[0])
         N = len(ts_contaminated[S])  # number of values in the series
-        P = GenGap._compute_offset(N=N, offset=offset)
+        P = GenGAP._compute_offset(N=N, offset=offset)
         W = int(N * rate_series)  # number of data to remove
         B = int(W / block_size)  # number of block to remove
         if B <= 0:
@@ -211,7 +211,7 @@ class GenGap:
         for series in series_selected:
             S = int(series)
             N = len(ts_contaminated[S])  # number of values in the series
-            P = GenGap._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
+            P = GenGAP._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
             W = int(N * rate_series)  # number of data to remove
             B = int(W / block_size)  # number of block to remove
 
@@ -345,7 +345,7 @@ class GenGap:
         for series in range(default_init, nbr_series_impacted):
             S = int(series)
             N = len(ts_contaminated[S])  # number of values in the series
-            P = GenGap._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
+            P = GenGAP._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
             W = int(N * rate_series)  # number of data to remove
 
             for to_remove in range(0, W):
@@ -447,7 +447,7 @@ class GenGap:
         for series in range(default_init, nbr_series_impacted):
             S = int(series)
             N = len(ts_contaminated[S])  # number of values in the series
-            P = GenGap._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
+            P = GenGAP._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
             W = int(N * rate_series)  # number of data to remove
             L = (N - W - P) +1
 
@@ -496,7 +496,7 @@ class GenGap:
             ts_m =GenGap.blackout(ts.data, series_rate=0.2)
 
         """
-        return GenGap.aligned(input_data, rate_dataset=1, rate_series=rate_series, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
+        return GenGAP.aligned(input_data, rate_dataset=1, rate_series=rate_series, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
 
 
 
@@ -601,7 +601,7 @@ class GenGap:
         for series in range(default_init, nbr_series_impacted):
             S = int(series)
             N = len(ts_contaminated[S])  # number of values in the series
-            P = GenGap._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
+            P = GenGAP._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
             W = int(N * rate_series)  # number of data points to remove
             R = np.arange(P, N)
 
@@ -734,7 +734,7 @@ class GenGap:
         for series in range(default_init, nbr_series_impacted):
             S = int(series)
             N = len(ts_contaminated[S])  # number of values in the series
-            P = GenGap._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
+            P = GenGAP._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
             W = int(N * rate_series)  # number of data points to remove
             R = np.arange(P, N)
             D = probabilities_list[S]
@@ -821,7 +821,7 @@ class GenGap:
 
         while S < M:
             N = len(ts_contaminated[S])  # number of values in the series
-            P = GenGap._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
+            P = GenGAP._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
             W = int(N * rate_series)  # number of data to remove
             L = X + W  # new limit
 
@@ -919,7 +919,7 @@ class GenGap:
 
         while S < M:
             N = len(ts_contaminated[S])  # number of values in the series
-            P = GenGap._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
+            P = GenGAP._compute_offset(N=N, offset=offset)  # values to protect in the beginning of the series
             W = int(N * rate_series)  # number of data to remove
 
             if X != 0:

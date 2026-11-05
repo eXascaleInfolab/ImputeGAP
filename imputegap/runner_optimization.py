@@ -1,6 +1,6 @@
 # ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
 
@@ -11,7 +11,7 @@ ts = TimeSeries()
 ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
 # contaminate and impute the time series
-ts_m = GenGap.mcar(ts.data)
+ts_m = GenGAP.mcar(ts.data)
 imputer = Imputation.MatrixCompletion.CDRec(ts_m)
 imputer.verbose = False
 

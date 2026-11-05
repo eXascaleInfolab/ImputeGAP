@@ -1,8 +1,23 @@
-====================
-Missingness Patterns
-====================
+======
+GenGAP
+======
 
 ImputeGAP introduces a new taxonomy of missingness patterns tailored to time series, going beyond the traditional MAR and MNAR categories, which were not designed for temporal data.
+
+
+.. raw:: html
+
+   <div class="gengap-contents">
+      <h2>Contents</h2>
+
+      <div class="gengap-nav">
+         <a href="#setup">⚙️ Setup</a>
+         <a href="#mono-block">▦ Mono-Block</a>
+         <a href="#multi-block">▦ Multi-Block</a>
+         <a href="#contaminationtuto">📖 GenGAP Tutorial</a>
+      </div>
+   </div>
+
 
 .. _setup:
 
@@ -16,20 +31,15 @@ Setup
     -   R : user-defined % of missing values (default = 20%)
     -   S : user-defined % of contaminated series (default = 20%)
 
-.. raw:: html
-
-   <br>
 
 
-.. _scenario_mono_block:
+.. _scenariomonoblock:
 
 MONO-BLOCK
 ----------
 One missing block per series
 
-.. raw:: html
 
-   <br>
 
 **Aligned**
 
@@ -40,7 +50,7 @@ Missing blocks start at the same selected positions and have the same fixed size
     -   ``R ∈ [1%, (100-W)%]``
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position is the same and begins at ``W`` and progresses until the size of the missing block is reached, affecting the first series from the top up to ``S%`` of the dataset.
-    -   ``GenGap.aligned(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
+    -   ``GenGAP.aligned(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -55,10 +65,6 @@ Missing blocks start at the same selected positions and have the same fixed size
 
 
 
-.. raw:: html
-
-   <br><br>
-
 
 **Disjoint**
 
@@ -69,7 +75,7 @@ Each missing block begins where the previous one ends, so the missing intervals 
     -   ``R ∈ [1%, (100-W)%]``
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position of the first missing block begins at ``W``.
-    -   ``GenGap.disjoint(ts.data, rate_series=0.4, offset=25)``
+    -   ``GenGAP.disjoint(ts.data, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -81,10 +87,6 @@ Each missing block begins where the previous one ends, so the missing intervals 
    :align: left
    :class: portrait
 
-
-.. raw:: html
-
-   <br><br>
 
 
 **Overlap**
@@ -98,7 +100,7 @@ Each missing block overlaps with the previous one.
     -   The starting position of the first missing block begins at ``W``.
     -   The overlap is controlled by the variable ``shift``.
     -   This pattern continues until the limit or ``N`` is reached.
-    -   ``GenGap.overlap(ts.data, rate_series=0.4, offset=25, shift=0.1)``
+    -   ``GenGAP.overlap(ts.data, rate_series=0.4, offset=25, shift=0.1)``
 
 .. raw:: html
 
@@ -109,10 +111,6 @@ Each missing block overlaps with the previous one.
    :align: left
    :class: portrait
 
-
-.. raw:: html
-
-   <br><br>
 
 
 
@@ -125,7 +123,7 @@ The starting position of the missing block is chosen at random, all missing bloc
     -   ``R ∈ [1%, (100-W)%]``
     -   The size of a single missing block varies between 1% and (100 - ``W``)% of ``N``.
     -   The starting position is random, then progresses until the size of the missing block is reached, affecting the first series from the top up to ``S%`` of the dataset.
-    -   ``GenGap.scattered(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
+    -   ``GenGAP.scattered(ts.data, rate_dataset=1, rate_series=0.4, offset=25)``
 
 
 .. raw:: html
@@ -139,21 +137,14 @@ The starting position of the missing block is chosen at random, all missing bloc
 
 
 
-.. raw:: html
 
-   <br><br>
-
-
-.. _scenario_multi_block:
+.. _scenariomultiblock:
 
 MULTI-BLOCK
 -----------
 
 Multiple missing blocks per series
 
-.. raw:: html
-
-   <br>
 
 **MCAR**
 
@@ -163,7 +154,7 @@ Missing blocks have the same size and are introduced completely at random. The a
 
     -   ``R ∈ [1%, (100-W)%]``
     -   Data blocks of the same size are removed from arbitrary series at a random position between ``W`` and ``N``, until the total number of missing values per series is reached.
-    -   ``GenGap.mcar(ts.data, rate_dataset=1, rate_series=0.2, offset=25, seed=False, block_size=20)``
+    -   ``GenGAP.mcar(ts.data, rate_dataset=1, rate_series=0.2, offset=25, seed=False, block_size=20)``
 
 
 .. raw:: html
@@ -177,11 +168,6 @@ Missing blocks have the same size and are introduced completely at random. The a
 
 
 
-.. raw:: html
-
-   <br><br>
-
-
 **Block Distribution**
 
 Missing data follows a probability distribution, each position has a certain chance of being missing.
@@ -190,14 +176,10 @@ Missing data follows a probability distribution, each position has a certain cha
 
     -   ``R ∈ [1%, (100-W)%]``
     -   Data is removed following a distribution given by the user for every values of the series, affecting the first series from the top up to ``S%`` of the dataset.
-    -   ``GenGap.gaussian(ts.data, rate_dataset=1, rate_series=0.4, offset=25, selected_mean="position", std_dev=0.2)``
+    -   ``GenGAP.gaussian(ts.data, rate_dataset=1, rate_series=0.4, offset=25, selected_mean="position", std_dev=0.2)``
 
 To configure the block distribution pattern, please refer to this `page <tutorials_distribution.html>`_.
 
-
-.. raw:: html
-
-   <br>
 
 .. image:: _img/imputegap_distribution.png
    :alt: ImputeGAP Distribution Pattern
@@ -206,6 +188,45 @@ To configure the block distribution pattern, please refer to this `page <tutoria
 
 
 
-.. raw:: html
+.. _contaminationtuto:
 
-   <br><br>
+GenGAP Tutorial
+---------------
+
+ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGAP module can be invoked externally.
+
+As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:
+
+.. code-block:: python
+
+    from imputegap.recovery.manager import TimeSeries
+    from imputegap.recovery.contamination import GenGAP
+    from imputegap.tools import utils
+
+    # initialize the time series object
+    ts = TimeSeries()
+
+    # load and normalize the dataset
+    ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+
+    # contaminate the time series with MCAR pattern
+    ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
+
+    # plot the contaminated time series
+    ts.plot(ts.data, ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets/contamination")
+
+
+
+
+All missingness patterns developed in ImputeGAP are available in the ``ts.patterns`` module. They can be listed as follows:
+
+.. code-block:: python
+
+    from imputegap.recovery.manager import TimeSeries
+    ts = TimeSeries()
+    print(f"Missingness patterns : {ts.patterns}")
+
+
+
+
+

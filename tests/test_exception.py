@@ -6,8 +6,8 @@ import pytest
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
-from imputegap.recovery.contamination import GenGap
-from imputegap.recovery.explainer import Explainer
+from imputegap.recovery.contamination import GenGAP
+from imputegap.recovery.explainer import ExplainGAP
 
 
 class TestException(unittest.TestCase):
@@ -46,7 +46,7 @@ class TestException(unittest.TestCase):
         ts_1 = TimeSeries()
         ts_1.load_series(utils.search_path("chlorine"), nbr_series=10, nbr_val=40)
 
-        exp = Explainer()
+        exp = ExplainGAP()
 
         with pytest.raises(KeyError):
             exp.shap_explainer(input_data=ts_1.data, file_name="chlorine", rate_dataset=0.3, seed=True, verbose=True, extractor="test")
@@ -72,9 +72,9 @@ class TestException(unittest.TestCase):
         """
         The goal is to test the exception raised when input_data (raw_data) is None
         """
-        from imputegap.recovery.benchmark import Benchmark
+        from imputegap.recovery.benchmark import BenchGAP
 
-        bench = Benchmark()
+        bench = BenchGAP()
         with pytest.raises(TypeError) as excinfo:
             bench.eval(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test", optimizer=3)
         print(f"\nCaught TypeError: {excinfo.value}")
@@ -118,9 +118,9 @@ class TestException(unittest.TestCase):
         """
         The goal is to test the exception raised when input_data (raw_data) is None
         """
-        from imputegap.recovery.benchmark import Benchmark
+        from imputegap.recovery.benchmark import BenchGAP
 
-        bench = Benchmark()
+        bench = BenchGAP()
         with pytest.raises(TypeError) as excinfo:
             bench.eval_imputation(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
         print(f"\nCaught TypeError: {excinfo.value}")
@@ -143,9 +143,9 @@ class TestException(unittest.TestCase):
         """
         The goal is to test the exception raised when input_data (raw_data) is None
         """
-        from imputegap.recovery.benchmark import Benchmark
+        from imputegap.recovery.benchmark import BenchGAP
 
-        bench = Benchmark()
+        bench = BenchGAP()
         with pytest.raises(TypeError) as excinfo:
             bench.eval_downstream_forecasting(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
         print(f"\nCaught TypeError: {excinfo.value}")
@@ -168,9 +168,9 @@ class TestException(unittest.TestCase):
         """
         The goal is to test the exception raised when input_data (raw_data) is None
         """
-        from imputegap.recovery.benchmark import Benchmark
+        from imputegap.recovery.benchmark import BenchGAP
 
-        bench = Benchmark()
+        bench = BenchGAP()
         with pytest.raises(TypeError) as excinfo:
             bench.eval_downstream_classification(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
         print(f"\nCaught TypeError: {excinfo.value}")
@@ -201,7 +201,7 @@ class TestException(unittest.TestCase):
         ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None)
         print(f"{ts.data.shape = }")
 
-        ts_m = GenGap.mcar(ts.data, offset=10, seed=False)
+        ts_m = GenGAP.mcar(ts.data, offset=10, seed=False)
         imputer = Imputation.MatrixCompletion.CDRec(ts_m)
         imputer.impute()
         ts.plot(ts.data, style="mono", display=False)
@@ -249,7 +249,7 @@ class TestException(unittest.TestCase):
         ts.normalize()
         ts.normalize(normalizer="dsfds", verbose=True)
 
-        ts_m = GenGap.mcar(ts.data, offset=10, seed=False)
+        ts_m = GenGAP.mcar(ts.data, offset=10, seed=False)
         imputer = Imputation.Statistics.MeanImputeBySeries(ts_m)
         imputer.logs=False
         imputer.impute()
@@ -436,7 +436,7 @@ class TestException(unittest.TestCase):
     def test_patters_raises(self):
         alpha=True
 
-        _ = GenGap(verbose=True)
+        _ = GenGAP(verbose=True)
 
         s = ["mcar", "aligned", "disjoint", "overlap", "scatter", "gaussian", "blackout", "distribution"]
         ts = TimeSeries()
@@ -451,14 +451,14 @@ class TestException(unittest.TestCase):
                     _ = utils.config_contamination(ts=ts, pattern=pattern, offset=(ts.data.shape[0] + 10), verbose=True)
                     print(f"{excinfo = }")
 
-        _ = GenGap.mcar(ts.data, rate_dataset=0.5, rate_series=0.5, logic_by_series=False, block_size=1, offset=0)
+        _ = GenGAP.mcar(ts.data, rate_dataset=0.5, rate_series=0.5, logic_by_series=False, block_size=1, offset=0)
         self.assertTrue(alpha, True)
 
         with pytest.raises(ValueError) as excinfo:
             _ = utils.config_contamination(ts=ts, pattern="dfds", offset=100)
 
         with pytest.raises(ValueError) as excinfo:
-            _ = GenGap.distribution(ts.data, probabilities_list=[1])
+            _ = GenGAP.distribution(ts.data, probabilities_list=[1])
 
         for pattern in s:
             if pattern != "distribution":
@@ -466,15 +466,15 @@ class TestException(unittest.TestCase):
                     utils.config_contamination(ts=ts, pattern=pattern, offset=100)
                 print(f"Caught TypeError: {excinfo.value} for {s}")
 
-        _ = GenGap.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
-        _ = GenGap.aligned(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
-        _ = GenGap.gaussian(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
-        _ = GenGap.scattered(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        _ = GenGAP.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
+        _ = GenGAP.aligned(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        _ = GenGAP.gaussian(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        _ = GenGAP.scattered(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
         with pytest.raises(ValueError):
-            _ = GenGap.distribution(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True, probabilities_list=[1])
+            _ = GenGAP.distribution(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True, probabilities_list=[1])
 
         ts.data[1, 3] = np.nan
-        _ = GenGap.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
+        _ = GenGAP.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
 
         for pattern in s:
             ts = TimeSeries()
@@ -606,7 +606,7 @@ class TestException(unittest.TestCase):
         ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
 
         # contaminate the time series
-        ts_m = GenGap.mcar(ts.data)
+        ts_m = GenGAP.mcar(ts.data)
 
         cont_data_matrix, mask_train, mask_test, mask_valid, error = utils.dl_integration_transformation(ts_m,
                                                                                                          tr_ratio=0.6,

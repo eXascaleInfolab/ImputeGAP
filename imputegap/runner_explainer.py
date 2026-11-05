@@ -1,11 +1,11 @@
 # ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.explainer import Explainer
+from imputegap.recovery.explainer import ExplainGAP
 from imputegap.tools import utils
 
 # initialize the time series and explainer object
 ts = TimeSeries()
-exp = Explainer()
+exp = ExplainGAP()
 print(f"\nImputeGAP explainer features extractor : {ts.extractors}")
 
 # load and normalize the dataset

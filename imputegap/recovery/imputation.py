@@ -506,37 +506,6 @@ class Imputation:
 
                 return self
 
-        class Test(BaseImputer):
-            """
-            ZeroImpute class to impute missing values with zeros.
-
-            Methods
-            -------
-            impute(self, params=None):
-                Perform imputation by replacing missing values with zeros.
-            """
-            algorithm = "test"
-
-            def impute(self, params=None):
-                """
-                Impute missing values by replacing them with zeros.
-                Template for adding external new algorithm
-
-                Parameters
-                ----------
-                params : dict, optional
-                    Dictionary of algorithm parameters (default is None).
-
-                Returns
-                -------
-                self : ZeroImpute
-                    The object with `recov_data` set.
-                """
-                from imputegap.algorithms.test import zero_impute
-
-                self.recov_data = zero_impute(self.incomp_data, params)
-
-                return self
 
         class Interpolation(BaseImputer):
             """
@@ -549,7 +518,10 @@ class Imputation:
 
             Example
             -------
-            $ interpolation.impute(params={"method":"linear", "poly_order":2})
+            .. code-block:: python
+
+                interpolation.impute(params={"method":"linear", "poly_order":2})
+
             """
             algorithm = "interpolation"
 
@@ -571,11 +543,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> interpolation_imputer = Imputation.Statistics.Interpolation(incomp_data)
-                    >>> interpolation_imputer.impute()  # default parameters for imputation > or
-                    >>> interpolation_imputer.impute(user_def=True, params={"method":"linear", "poly_order":2})  # user-defined > or
-                    >>> interpolation_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = interpolation_imputer.recov_data
+                .. code-block:: python
+
+                    interpolation_imputer = Imputation.Statistics.Interpolation(incomp_data)
+
+                    interpolation_imputer.impute()  # default parameters for imputation > or
+                    interpolation_imputer.impute(user_def=True, params={"method":"linear", "poly_order":2})  # user-defined > or
+                    interpolation_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = interpolation_imputer.recov_data
+
                 """
                 from imputegap.algorithms.interpolation import interpolation
 
@@ -597,7 +574,10 @@ class Imputation:
 
             Example
             -------
-            $ knn.impute(user_def=True, params={'k': 5, 'weights': "uniform"})
+            .. code-block:: python
+
+                knn.impute(user_def=True, params={'k': 5, 'weights': "uniform"})
+
             """
             algorithm = "knn_impute"
 
@@ -626,11 +606,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> knn_imputer = Imputation.Statistics.KNNImpute(incomp_data)
-                    >>> knn_imputer.impute()  # default parameters for imputation > or
-                    >>> knn_imputer.impute(user_def=True, params={'k': 5, 'weights': "uniform"})  # user-defined > or
-                    >>> knn_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = knn_imputer.recov_data
+                .. code-block:: python
+
+                    knn_imputer = Imputation.Statistics.KNNImpute(incomp_data)
+
+                    knn_imputer.impute()  # default parameters for imputation > or
+                    knn_imputer.impute(user_def=True, params={'k': 5, 'weights': "uniform"})  # user-defined > or
+                    knn_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = knn_imputer.recov_data
+
                 """
                 from imputegap.algorithms.knn import knn
 
@@ -681,7 +666,10 @@ class Imputation:
 
             Example
             -------
-            $ cdrec.impute(params={'rank': 3, 'epsilon': 1e-06, 'iteration': 100})
+            .. code-block:: python
+
+                imputer.impute(params={'rank': 3, 'epsilon': 1e-06, 'iteration': 100})
+
             """
 
             algorithm = "cdrec"
@@ -777,11 +765,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> cdrec_imputer = Imputation.MatrixCompletion.CDRec(incomp_data)
-                    >>> cdrec_imputer.impute()  # default parameters for imputation > or
-                    >>> cdrec_imputer.impute(user_def=True, params={'rank': 3, 'epsilon': 1e-06, 'iteration': 100})  # user-defined > or
-                    >>> cdrec_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "bayesian", "options": {"n_calls": 2}})  # automl with bayesian
-                    >>> recov_data = cdrec_imputer.recov_data
+                .. code-block:: python
+
+                    cdrec_imputer = Imputation.MatrixCompletion.CDRec(incomp_data)
+
+                    cdrec_imputer.impute()  # default parameters for imputation > or
+                    cdrec_imputer.impute(user_def=True, params={'rank': 3, 'epsilon': 1e-06, 'iteration': 100})  # user-defined > or
+                    cdrec_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "bayesian", "options": {"n_calls": 2}})  # automl with bayesian
+
+                    recov_data = cdrec_imputer.recov_data
+
 
                 References
                 ----------
@@ -809,7 +802,10 @@ class Imputation:
 
             Example
             -------
-            $ i_svd.impute(params={'rank': 3})
+            .. code-block:: python
+
+                imputer.impute(params={'rank': 3})
+
             """
 
             algorithm = "iterative_svd"
@@ -839,11 +835,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> i_svd_imputer = Imputation.MatrixCompletion.IterativeSVD(incomp_data)
-                    >>> i_svd_imputer.impute()  # default parameters for imputation > or
-                    >>> i_svd_imputer.impute(params={'rank': 3}) # user-defined  > or
-                    >>> i_svd_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = i_svd_imputer.recov_data
+                .. code-block:: python
+
+                    svd_imputer = Imputation.MatrixCompletion.IterativeSVD(incomp_data)
+
+                    svd_imputer.impute()  # default parameters for imputation > or
+                    svd_imputer.impute(params={'rank': 3}) # user-defined  > or
+                    svd_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = svd_imputer.recov_data
+
 
                 References
                 ----------
@@ -867,6 +868,13 @@ class Imputation:
             -------
             impute(self, user_def=True, params=None):
                 Perform imputation using the GROUSE algorithm.
+
+            Example
+            -------
+            .. code-block:: python
+
+                imputer.impute(params={'max_rank': 5})
+
             """
 
             algorithm = "grouse"
@@ -896,11 +904,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> grouse_imputer = Imputation.MatrixCompletion.GROUSE(incomp_data)
-                    >>> grouse_imputer.impute()  # default parameters for imputation > or
-                    >>> grouse_imputer.impute(params={'max_rank': 5}) # user-defined  > or
-                    >>> grouse_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = grouse_imputer.recov_data
+                .. code-block:: python
+
+                    grouse_imputer = Imputation.MatrixCompletion.GROUSE(incomp_data)
+
+                    grouse_imputer.impute()  # default parameters for imputation > or
+                    grouse_imputer.impute(params={'max_rank': 5}) # user-defined  > or
+                    grouse_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = grouse_imputer.recov_data
+
 
                 References
                 ----------
@@ -927,7 +940,10 @@ class Imputation:
 
             Example
             -------
-            $ rosl.impute(params={'rank': 3, 'regularization': 0.6})
+            .. code-block:: python
+
+                rosl.impute(params={'rank': 3, 'regularization': 0.6})
+
             """
 
             algorithm = "rosl"
@@ -960,11 +976,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> rosl_imputer = Imputation.MatrixCompletion.ROSL(incomp_data)
-                    >>> rosl_imputer.impute()  # default parameters for imputation > or
-                    >>> rosl_imputer.impute(params={'rank': 3, 'regularization': 0.6}) # user-defined  > or
-                    >>> rosl_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = rosl_imputer.recov_data
+                .. code-block:: python
+
+                    rosl_imputer = Imputation.MatrixCompletion.ROSL(incomp_data)
+
+                    rosl_imputer.impute()  # default parameters for imputation > or
+                    rosl_imputer.impute(params={'rank': 3, 'regularization': 0.6}) # user-defined  > or
+                    rosl_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = rosl_imputer.recov_data
+
 
                 References
                 ----------
@@ -993,7 +1014,10 @@ class Imputation:
 
             Example
             -------
-            $ softimpute.impute(params={'max_rank': 3})
+            .. code-block:: python
+
+                imputer.impute(params={'max_rank': 3})
+
             """
 
             algorithm = "soft_impute"
@@ -1023,11 +1047,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> soft_impute_imputer = Imputation.MatrixCompletion.SoftImpute(incomp_data)
-                    >>> soft_impute_imputer.impute()  # default parameters for imputation > or
-                    >>> soft_impute_imputer.impute(params={'max_rank': 3}) # user-defined  > or
-                    >>> soft_impute_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = soft_impute_imputer.recov_data
+                .. code-block:: python
+
+                    softimpute_imputer = Imputation.MatrixCompletion.SoftImpute(incomp_data)
+
+                    softimpute.impute()  # default parameters for imputation > or
+                    softimpute_imputer.impute(params={'max_rank': 3}) # user-defined  > or
+                    softimpute_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = softimpute_imputer.recov_data
+
 
                 References
                 ----------
@@ -1055,7 +1084,10 @@ class Imputation:
 
             Example
             -------
-            $ spirit.impute(params={'k': 4, 'w': 6, 'lambda_value': 1.0})
+            .. code-block:: python
+
+                spirit.impute(params={'k': 4, 'w': 6, 'lambda_value': 1.0})
+
             """
 
             algorithm = "spirit"
@@ -1091,11 +1123,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> spirit_imputer = Imputation.MatrixCompletion.SPIRIT(incomp_data)
-                    >>> spirit_imputer.impute()  # default parameters for imputation > or
-                    >>> spirit_imputer.impute(params={'k': 4, 'w': 6, 'lambda_value': 1.0}) # user-defined  > or
-                    >>> spirit_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = spirit_imputer.recov_data
+                .. code-block:: python
+
+                    spirit_imputer = Imputation.MatrixCompletion.SPIRIT(incomp_data)
+
+                    spirit_imputer.impute()  # default parameters for imputation > or
+                    spirit_imputer.impute(params={'k': 4, 'w': 6, 'lambda_value': 1.0}) # user-defined  > or
+                    spirit_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = spirit_imputer.recov_data
+
 
                 References
                 ----------
@@ -1127,7 +1164,10 @@ class Imputation:
 
             Example
             -------
-            $ svt.impute(params={'tau': 2})
+            .. code-block:: python
+
+                imputer.impute(params={'tau': 2})
+
             """
 
             algorithm = "svt"
@@ -1158,11 +1198,15 @@ class Imputation:
 
                 Example
                 -------
-                    >>> svt_imputer = Imputation.MatrixCompletion.SVT(incomp_data)
-                    >>> svt_imputer.impute()  # default parameters for imputation > or
-                    >>> svt_imputer.impute(params={'tau': 2}) # user-defined  > or
-                    >>> svt_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = svt_imputer.recov_data
+                .. code-block:: python
+
+                    svt_imputer = Imputation.MatrixCompletion.SVT(incomp_data)
+
+                    svt_imputer.impute()  # default parameters for imputation > or
+                    svt_imputer.impute(params={'tau': 2}) # user-defined  > or
+                    svt_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = svt_imputer.recov_data
 
                 References
                 ----------
@@ -1187,7 +1231,10 @@ class Imputation:
 
             Example
             -------
-            $ imputer.impute(params={"lags":[1,7], "K":4, "lambda_f":1.0, "lambda_x":1.0, "lambda_w":1.0, "eta":1.0, "alpha":1000.0, "max_iter":5000})
+            .. code-block:: python
+
+                imputer.impute(params={"lags":[1,7], "K":4, "lambda_f":1.0, "lambda_x":1.0, "lambda_w":1.0, "eta":1.0, "alpha":1000.0, "max_iter":5000})
+
             """
 
             algorithm = "trmf"
@@ -1234,11 +1281,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> trmf_imputer = Imputation.MatrixCompletion.TRMF(incomp_data)
-                    >>> trmf_imputer.impute()
-                    >>> trmf_imputer.impute(params={"lags":[1,7], "K":4, "lambda_f":1.0, "lambda_x":1.0, "lambda_w":1.0, "eta":1.0, "alpha":1000.0, "max_iter":5000})
-                    >>> trmf_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})
-                    >>> recov_data = trmf_imputer.recov_data
+                .. code-block:: python
+
+                    trmf_imputer = Imputation.MatrixCompletion.TRMF(incomp_data)
+
+                    trmf_imputer.impute()
+                    trmf_imputer.impute(params={"lags":[1,7], "K":4, "lambda_f":1.0, "lambda_x":1.0, "lambda_w":1.0, "eta":1.0, "alpha":1000.0, "max_iter":5000})
+                    trmf_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})
+
+                    recov_data = trmf_imputer.recov_data
+
 
                 References
                 ----------
@@ -1284,7 +1336,10 @@ class Imputation:
 
             Example
             -------
-            $ missforest.impute(params={"n_estimators":100, "max_iter":5, "max_features":"sqrt", "seed": 42})
+            .. code-block:: python
+
+                missforest.impute(params={"n_estimators":100, "max_iter":5, "max_features":"sqrt", "seed": 42})
+
             """
             algorithm = "miss_forest"
 
@@ -1319,11 +1374,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> mf_imputer = Imputation.MachineLearning.MissForest(incomp_data)
-                    >>> mf_imputer.impute()  # default parameters for imputation > or
-                    >>> mf_imputer.impute(user_def=True, params={"n_estimators":100, "max_iter":5, "max_features":"sqrt", "seed": 42})  # user defined > or
-                    >>> mf_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = mf_imputer.recov_data
+                .. code-block:: python
+
+                    mf_imputer = Imputation.MachineLearning.MissForest(incomp_data)
+
+                    mf_imputer.impute()  # default parameters for imputation > or
+                    mf_imputer.impute(user_def=True, params={"n_estimators":100, "max_iter":5, "max_features":"sqrt", "seed": 42})  # user defined > or
+                    mf_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = mf_imputer.recov_data
+
 
                 References
                 ----------
@@ -1348,6 +1408,13 @@ class Imputation:
             -------
             impute(self, user_def=True, params=None):
                 Perform imputation using the MICE algorithm.
+
+            Example
+            -------
+            .. code-block:: python
+
+                imputer.impute(user_def=True, params={"max_iter":3, "tol":0.001, "initial_strategy":"mean", "sample_posterior": False})
+
             """
             algorithm = "mice"
 
@@ -1383,11 +1450,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> mice_imputer = Imputation.MachineLearning.MICE(incomp_data)
-                    >>> mice_imputer.impute()  # default parameters for imputation > or
-                    >>> mice_imputer.impute(user_def=True, params={"max_iter":3, "tol":0.001, "initial_strategy":"mean", "sample_posterior": False, "seed": 42})  # user defined > or
-                    >>> mice_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = mice_imputer.recov_data
+                .. code-block:: python
+
+                    mice_imputer = Imputation.MachineLearning.MICE(incomp_data)
+
+                    mice_imputer.impute()  # default parameters for imputation > or
+                    mice_imputer.impute(user_def=True, params={"max_iter":3, "tol":0.001, "initial_strategy":"mean", "sample_posterior": False})  # user defined > or
+                    mice_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = mice_imputer.recov_data
+
 
                 References
                 ----------
@@ -1415,7 +1487,10 @@ class Imputation:
 
             Example
             -------
-            $ xgboost.impute(user_def=True, params={"n_estimators":2, "seed": 42})
+            .. code-block:: python
+
+                imputer.impute(user_def=True, params={"n_estimators":2, "seed": 42})
+
             """
             algorithm = "xgboost"
 
@@ -1444,11 +1519,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> mxgboost_imputer = Imputation.MachineLearning.XGBOOST(incomp_data)
-                    >>> mxgboost_imputer.impute()  # default parameters for imputation > or
-                    >>> mxgboost_imputer.impute(user_def=True, params={"n_estimators":2, "seed": 42})  # user defined > or
-                    >>> mxgboost_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = mxgboost_imputer.recov_data
+                .. code-block:: python
+
+                    xgboost_imputer = Imputation.MachineLearning.XGBOOST(incomp_data)
+
+                    xgboost_imputer.impute()  # default parameters for imputation > or
+                    xgboost_imputer.impute(user_def=True, params={"n_estimators":2, "seed": 42})  # user defined > or
+                    xgboost_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = xgboost_imputer.recov_data
+
 
                 References
                 ----------
@@ -1479,6 +1559,13 @@ class Imputation:
             -------
             impute(self, user_def=True, params=None):
                 Perform imputation using the IIM algorithm.
+
+            Example
+            -------
+            .. code-block:: python
+
+                imputer.impute(user_def=True, params={'learning_neighbors': 10})
+
             """
             algorithm = "iim"
 
@@ -1507,11 +1594,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> iim_imputer = Imputation.MachineLearning.IIM(incomp_data)
-                    >>> iim_imputer.impute()  # default parameters for imputation > or
-                    >>> iim_imputer.impute(user_def=True, params={'learning_neighbors': 10})  # user-defined  > or
-                    >>> iim_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "bayesian", "options": {"n_calls": 2}})  # automl with bayesian
-                    >>> recov_data = iim_imputer.recov_data
+                .. code-block:: python
+
+                    iim_imputer = Imputation.MachineLearning.IIM(incomp_data)
+
+                    iim_imputer.impute()  # default parameters for imputation > or
+                    iim_imputer.impute(user_def=True, params={'learning_neighbors': 10})  # user-defined  > or
+                    iim_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "bayesian", "options": {"n_calls": 2}})  # automl with bayesian
+
+                    recov_data = iim_imputer.recov_data
+
 
                 References
                 ----------
@@ -1557,7 +1649,10 @@ class Imputation:
 
             Example
             -------
-            $ stmvl.impute(params={'window_size': 7, 'gamma':0.85, 'alpha': 2})
+            .. code-block:: python
+
+                stmvl.impute(params={'window_size': 7, 'gamma':0.85, 'alpha': 2})
+
             """
             algorithm = "stmvl"
 
@@ -1586,11 +1681,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> stmvl_imputer = Imputation.PatternSearch.STMVL(incomp_data)
-                    >>> stmvl_imputer.impute()  # default parameters for imputation > or
-                    >>> stmvl_imputer.impute(user_def=True, params={'window_size': 7, 'gamma':0.85, 'alpha': 2})  # user-defined  > or
-                    >>> stmvl_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "bayesian", "options": {"n_calls": 2}})  # automl with bayesian
-                    >>> recov_data = stmvl_imputer.recov_data
+                .. code-block:: python
+
+                    stmvl_imputer = Imputation.PatternSearch.STMVL(incomp_data)
+
+                    stmvl_imputer.impute()  # default parameters for imputation > or
+                    stmvl_imputer.impute(user_def=True, params={'window_size': 7, 'gamma':0.85, 'alpha': 2})  # user-defined  > or
+                    stmvl_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "bayesian", "options": {"n_calls": 2}})  # automl with bayesian
+
+                    recov_data = stmvl_imputer.recov_data
+
 
                 References
                 ----------
@@ -1616,7 +1716,10 @@ class Imputation:
 
             Example
             -------
-            $ dynammo.impute(params={'h': 3, 'max_iteration': 100, 'approximation': True})
+            .. code-block:: python
+
+                dynammo.impute(params={'h': 3, 'max_iteration': 100, 'approximation': True})
+
             """
 
             algorithm = "dynammo"
@@ -1648,11 +1751,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> dynammo_imputer = Imputation.PatternSearch.DynaMMo(incomp_data)
-                    >>> dynammo_imputer.impute()  # default parameters for imputation > or
-                    >>> dynammo_imputer.impute(params={'h': 3, 'max_iteration': 100, 'approximation': True}) # user-defined  > or
-                    >>> dynammo_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = dynammo_imputer.recov_data
+                .. code-block:: python
+
+                    dynammo_imputer = Imputation.PatternSearch.DynaMMo(incomp_data)
+
+                    dynammo_imputer.impute()  # default parameters for imputation > or
+                    dynammo_imputer.impute(params={'h': 3, 'max_iteration': 100, 'approximation': True}) # user-defined  > or
+                    dynammo_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = dynammo_imputer.recov_data
+
 
                 References
                 ----------
@@ -1677,7 +1785,10 @@ class Imputation:
 
             Example
             -------
-            $ tkcm.impute(params={'rank': 4})
+            .. code-block:: python
+
+                tkcm.impute(params={'rank': 4})
+
             """
 
             algorithm = "tkcm"
@@ -1705,11 +1816,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> tkcm_imputer = Imputation.PatternSearch.TKCM(incomp_data)
-                    >>> tkcm_imputer.impute()  # default parameters for imputation > or
-                    >>> tkcm_imputer.impute(params={'rank': 4})  # user-defined > or
-                    >>> tkcm_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = tkcm_imputer.recov_data
+                .. code-block:: python
+
+                    tkcm_imputer = Imputation.PatternSearch.TKCM(incomp_data)
+
+                    tkcm_imputer.impute()  # default parameters for imputation > or
+                    tkcm_imputer.impute(params={'rank': 4})  # user-defined > or
+                    tkcm_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = tkcm_imputer.recov_data
+
 
                 References
                 ----------
@@ -1767,7 +1883,10 @@ class Imputation:
 
             Example
             -------
-            $ mrnn.impute(params={"seq_len":24, "epochs": 200, "batch_size": 64, "sliding_windows": 1 "hidden_layer": 108, "impute_weight": 0.3, "num_workers":0})
+            .. code-block:: python
+
+                mrnn.impute(params={"seq_len":24, "epochs": 200, "batch_size": 64, "sliding_windows": 1 "hidden_layer": 108, "impute_weight": 0.3, "num_workers":0})
+
 
             Changes
             -------
@@ -1832,11 +1951,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> mrnn_imputer = Imputation.DeepLearning.MRNN(incomp_data)
-                    >>> mrnn_imputer.impute()  # default parameters for imputation > or
-                    >>> mrnn_imputer.impute(params={"seq_len":24, "epochs": 200, "batch_size": 64, "sliding_windows": 1 "hidden_layer": 108, "impute_weight": 0.3, "num_workers":0})  # user-defined > or
-                    >>> mrnn_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "bayesian", "options": {"n_calls": 2}})  # automl with bayesian
-                    >>> recov_data = mrnn_imputer.recov_data
+                .. code-block:: python
+
+                    mrnn_imputer = Imputation.DeepLearning.MRNN(incomp_data)
+
+                    mrnn_imputer.impute()  # default parameters for imputation > or
+                    mrnn_imputer.impute(params={"seq_len":24, "epochs": 200, "batch_size": 64, "sliding_windows": 1 "hidden_layer": 108, "impute_weight": 0.3, "num_workers":0})  # user-defined > or
+                    mrnn_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "bayesian", "options": {"n_calls": 2}})  # automl with bayesian
+
+                    recov_data = mrnn_imputer.recov_data
+
 
                 References
                 ----------
@@ -1861,7 +1985,10 @@ class Imputation:
 
             Example
             -------
-            $ brits.impute(params={"model": "brits", "seq_len":24, "epochs": 200, "batch_size": 64, "sliding_windows": 1,  "hidden_layer": 108, "impute_weight": 0.3, "num_workers":0})
+            .. code-block:: python
+
+                brits.impute(params={"model": "brits", "seq_len":24, "epochs": 200, "batch_size": 64, "sliding_windows": 1,  "hidden_layer": 108, "impute_weight": 0.3, "num_workers":0})
+
 
             Changes
             -------
@@ -1932,11 +2059,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> brits_imputer = Imputation.DeepLearning.BRITS(incomp_data)
-                    >>> brits_imputer.impute()  # default parameters for imputation > or
-                    >>> brits_imputer.impute(params={"model": "brits", "seq_len":24, "epochs": 200, "batch_size": 64, "sliding_windows": 1,  "hidden_layer": 108, "impute_weight": 0.3, "num_workers":0})  # user-defined > or
-                    >>> brits_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = brits_imputer.recov_data
+                .. code-block:: python
+
+                    brits_imputer = Imputation.DeepLearning.BRITS(incomp_data)
+
+                    brits_imputer.impute()  # default parameters for imputation > or
+                    brits_imputer.impute(params={"model": "brits", "seq_len":24, "epochs": 200, "batch_size": 64, "sliding_windows": 1,  "hidden_layer": 108, "impute_weight": 0.3, "num_workers":0})  # user-defined > or
+                    brits_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = brits_imputer.recov_data
+
 
                 References
                 ----------
@@ -1961,7 +2093,9 @@ class Imputation:
 
             Example
             -------
-            $ deepmvi.impute(params={"max_epoch": 1000, "patience": 2, "lr":0.001, "batch_size":-1})
+            .. code-block:: python
+
+                deepmvi.impute(params={"max_epoch": 1000, "patience": 2, "lr":0.001, "batch_size":-1})
 
             Changes
             -------
@@ -2002,11 +2136,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> deep_mvi_imputer = Imputation.DeepLearning.DeepMVI(incomp_data)
-                    >>> deep_mvi_imputer.impute()  # default parameters for imputation > or
-                    >>> deep_mvi_imputer.impute(params={"max_epoch": 1000, "patience": 2, "lr":0.001, "batch_size":-1})  # user-defined > or
-                    >>> deep_mvi_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = deep_mvi_imputer.recov_data
+                .. code-block:: python
+
+                    deep_mvi_imputer = Imputation.DeepLearning.DeepMVI(incomp_data)
+
+                    deep_mvi_imputer.impute()  # default parameters for imputation > or
+                    deep_mvi_imputer.impute(params={"max_epoch": 1000, "patience": 2, "lr":0.001, "batch_size":-1})  # user-defined > or
+                    deep_mvi_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = deep_mvi_imputer.recov_data
+
 
                 References
                 ----------
@@ -2033,7 +2172,10 @@ class Imputation:
 
             Example
             -------
-            $ mpin.impute(params={"window": 6, "incre_mode": "alone", "base": "SAGE", "epochs": 200, "num_of_iteration": 5, "k": 10})
+            .. code-block:: python
+
+                mpin.impute(params={"window": 6, "incre_mode": "alone", "base": "SAGE", "epochs": 200, "num_of_iteration": 5, "k": 10})
+
 
             Changes
             -------
@@ -2090,11 +2232,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> mpin_imputer = Imputation.DeepLearning.MPIN(incomp_data)
-                    >>> mpin_imputer.impute()  # default parameters for imputation > or
-                    >>> mpin_imputer.impute(params={"window": 6, "incre_mode": "alone", "base": "SAGE", "epochs": 200, "num_of_iteration": 5, "k": 10})  # user-defined > or
-                    >>> mpin_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = mpin_imputer.recov_data
+                .. code-block:: python
+
+                    mpin_imputer = Imputation.DeepLearning.MPIN(incomp_data)
+
+                    mpin_imputer.impute()  # default parameters for imputation > or
+                    mpin_imputer.impute(params={"window": 6, "incre_mode": "alone", "base": "SAGE", "epochs": 200, "num_of_iteration": 5, "k": 10})  # user-defined > or
+                    mpin_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = mpin_imputer.recov_data
+
 
                 References
                 ----------
@@ -2128,7 +2275,10 @@ class Imputation:
 
             Example
             -------
-            $ imputer.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 20, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})
+            .. code-block:: python
+
+                imputer.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 20, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})
+
 
             Changes
             -------
@@ -2196,11 +2346,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> pristi_imputer = Imputation.DeepLearning.PriSTI(incomp_data)
-                    >>> pristi_imputer.impute()  # default parameters for imputation > or
-                    >>> pristi_imputer.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 20, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})  # user-defined > or
-                    >>> pristi_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
-                    >>> recov_data = pristi_imputer.recov_data
+                .. code-block:: python
+
+                    pristi_imputer = Imputation.DeepLearning.PriSTI(incomp_data)
+
+                    pristi_imputer.impute()  # default parameters for imputation > or
+                    pristi_imputer.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 20, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})  # user-defined > or
+                    pristi_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # automl with ray_tune
+
+                    recov_data = pristi_imputer.recov_data
+
 
                 References
                 ----------
@@ -2230,7 +2385,10 @@ class Imputation:
 
             Example
             -------
-            $ missnet.impute(params={'n_components':15, 'alpha': 0.5, 'beta':0.1, 'n_cl': 1, 'max_iter':20, 'tol':5, 'random_init':False})
+            .. code-block:: python
+
+                missnet.impute(params={'n_components':15, 'alpha': 0.5, 'beta':0.1, 'n_cl': 1, 'max_iter':20, 'tol':5, 'random_init':False})
+
 
             Changes
             -------
@@ -2285,11 +2443,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> miss_net_imputer = Imputation.DeepLearning.MissNet(incomp_data)
-                    >>> miss_net_imputer.impute()  # default parameters for imputation > or
-                    >>> miss_net_imputer.impute(user_def=True, params={'n_components':15, 'alpha': 0.5, 'beta':0.1, 'n_cl': 1, 'max_iter':20, 'tol':5, 'random_init':False})  # user-defined > or
-                    >>> miss_net_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = miss_net_imputer.recov_data
+                .. code-block:: python
+
+                    miss_net_imputer = Imputation.DeepLearning.MissNet(incomp_data)
+
+                    miss_net_imputer.impute()  # default parameters for imputation > or
+                    miss_net_imputer.impute(user_def=True, params={'n_components':15, 'alpha': 0.5, 'beta':0.1, 'n_cl': 1, 'max_iter':20, 'tol':5, 'random_init':False})  # user-defined > or
+                    miss_net_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = miss_net_imputer.recov_data
+
 
                 References
                 ----------
@@ -2316,7 +2479,10 @@ class Imputation:
 
             Example
             -------
-            $ gain.impute(params={"batch_size":128, "epochs":1000, "alpha":100, "hint_rate":0.9})
+            .. code-block:: python
+
+                gain.impute(params={"batch_size":128, "epochs":1000, "alpha":100, "hint_rate":0.9})
+
 
             Changes
             -------
@@ -2366,11 +2532,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> gain_imputer = Imputation.DeepLearning.GAIN(incomp_data)
-                    >>> gain_imputer.impute()  # default parameters for imputation > or
-                    >>> gain_imputer.impute(user_def=True, params={"batch_size":128, "epochs":1000, "alpha":100, "hint_rate":0.9})  # user defined> or
-                    >>> gain_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = gain_imputer.recov_data
+                .. code-block:: python
+
+                    gain_imputer = Imputation.DeepLearning.GAIN(incomp_data)
+
+                    gain_imputer.impute()  # default parameters for imputation > or
+                    gain_imputer.impute(user_def=True, params={"batch_size":128, "epochs":1000, "alpha":100, "hint_rate":0.9})  # user defined> or
+                    gain_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = gain_imputer.recov_data
+
 
                 References
                 ----------
@@ -2397,7 +2568,10 @@ class Imputation:
 
             Example
             -------
-            $ grin.impute(params={"seq_len":1, "sim_type":"corr", "epochs":50, "batch_size":32, "sliding_windows":1, "adj_threshold":0.1, "patience":40, "num_workers":0})
+            .. code-block:: python
+
+                grin.impute(params={"seq_len":1, "sim_type":"corr", "epochs":50, "batch_size":32, "sliding_windows":1, "adj_threshold":0.1, "patience":40, "num_workers":0})
+
 
             Changes
             -------
@@ -2468,11 +2642,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> grin_imputer = Imputation.DeepLearning.GRIN(incomp_data)
-                    >>> grin_imputer.impute()  # default parameters for imputation > or
-                    >>> grin_imputer.impute(user_def=True, params={"seq_len":1, "sim_type":"corr", "epochs":50, "batch_size":32, "sliding_windows":1, "adj_threshold":0.1, "patience":40, "num_workers":0})  # user defined> or
-                    >>> grin_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = grin_imputer.recov_data
+                .. code-block:: python
+
+                    grin_imputer = Imputation.DeepLearning.GRIN(incomp_data)
+
+                    grin_imputer.impute()  # default parameters for imputation > or
+                    grin_imputer.impute(user_def=True, params={"seq_len":1, "sim_type":"corr", "epochs":50, "batch_size":32, "sliding_windows":1, "adj_threshold":0.1, "patience":40, "num_workers":0})  # user defined> or
+                    grin_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = grin_imputer.recov_data
+
 
                 References
                 ----------
@@ -2505,7 +2684,10 @@ class Imputation:
 
             Example
             -------
-            $ bayotide.impute(params={"K_trend":30, "K_season":1, "n_season":10, "K_bias":0, "time_scale":1, "a0":1, "b0":1, "v":1, "num_fold":1})
+            .. code-block:: python
+
+                bayotide.impute(params={"K_trend":30, "K_season":1, "n_season":10, "K_bias":0, "time_scale":1, "a0":1, "b0":1, "v":1, "num_fold":1})
+
 
             Changes
             -------
@@ -2577,11 +2759,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> bay_otide_imputer = Imputation.DeepLearning.BayOTIDE(incomp_data)
-                    >>> bay_otide_imputer.impute()  # default parameters for imputation > or
-                    >>> bay_otide_imputer.impute(user_def=True, params={"K_trend":30, "K_season":1, "n_season":10, "K_bias":0, "time_scale":1, "a0":1, "b0":1, "v":1, "num_fold":1})  # user defined> or
-                    >>> bay_otide_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = bay_otide_imputer.recov_data
+                .. code-block:: python
+
+                    bayotide_imputer = Imputation.DeepLearning.BayOTIDE(incomp_data)
+
+                    bayotide_imputer.impute()  # default parameters for imputation > or
+                    bayotide_imputer.impute(user_def=True, params={"K_trend":30, "K_season":1, "n_season":10, "K_bias":0, "time_scale":1, "a0":1, "b0":1, "v":1, "num_fold":1})  # user defined> or
+                    bayotide_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = bayotide_imputer.recov_data
+
 
                 References
                 ----------
@@ -2609,7 +2796,9 @@ class Imputation:
 
             Examples
             --------
-            $ hkmft.impute(params={"tags":[], "seq_len":7, "blackouts_begin":0, "blackouts_end":0, "epochs":10})
+            .. code-block:: python
+
+                hkmft.impute(params={"tags":[], "seq_len":7, "blackouts_begin":0, "blackouts_end":0, "epochs":10})
 
             Changes
             -------
@@ -2668,11 +2857,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> hkmf_t_imputer = Imputation.DeepLearning.HKMFT(incomp_data)
-                    >>> hkmf_t_imputer.impute()  # default parameters for imputation > or
-                    >>> hkmf_t_imputer.impute(user_def=True, params={"tags":[], "seq_len":7, "blackouts_begin":0, "blackouts_end": 0,"epochs":10})  # user defined> or
-                    >>> hkmf_t_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = hkmf_t_imputer.recov_data
+                .. code-block:: python
+
+                    hkmf_t_imputer = Imputation.DeepLearning.HKMFT(incomp_data)
+
+                    hkmf_t_imputer.impute()  # default parameters for imputation > or
+                    hkmf_t_imputer.impute(user_def=True, params={"tags":[], "seq_len":7, "blackouts_begin":0, "blackouts_end": 0,"epochs":10})  # user defined> or
+                    hkmf_t_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = hkmf_t_imputer.recov_data
+
 
                 References
                 ----------
@@ -2682,20 +2876,6 @@ class Imputation:
                 from imputegap.algorithms.hkmf_t import hkmf_t
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
-
-                #if "tags" not in params:
-                #    params["tags"] = []
-                #if "blackouts_begin" not in params:
-                #    params["blackouts_begin"] = 0
-                #if "blackouts_end" not in params:
-                #    params["blackouts_end"] = 0
-
-                #if len(params["tags"]) == 0:
-                #    params["tags"] = None
-                #if params["blackouts_begin"] == 0:
-                #    params["blackouts_begin"] = None
-                #if params["blackouts_end"] == 0:
-                #    params["blackouts_end"] = None
 
                 self.recov_data = hkmf_t(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
 
@@ -2712,7 +2892,9 @@ class Imputation:
 
             Example
             -------
-            $ bit_graph.impute(params={"seq_len":-1, "sliding_windows":1, "kernel_size":25, "kernel_set":[2,3,6,7], "epochs":50, "batch_size": -1, "subgraph_size":5, "num_workers":0})
+            .. code-block:: python
+
+                bit_graph.impute(params={"seq_len":-1, "sliding_windows":1, "kernel_size":25, "kernel_set":[2,3,6,7], "epochs":50, "batch_size": -1, "subgraph_size":5, "num_workers":0})
 
             Changes
             -------
@@ -2781,11 +2963,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> bit_graph_imputer = Imputation.DeepLearning.BitGraph(incomp_data)
-                    >>> bit_graph_imputer.impute()  # default parameters for imputation > or
-                    >>> bit_graph_imputer.impute(user_def=True, params={"seq_len":-1, "sliding_windows":1, "kernel_size":25, "kernel_set":[2,3,6,7], "epochs":50, "batch_size": -1, "subgraph_size":5, "num_workers":0})  # user defined> or
-                    >>> bit_graph_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = bit_graph_imputer.recov_data
+                .. code-block:: python
+
+                    bit_graph_imputer = Imputation.DeepLearning.BitGraph(incomp_data)
+
+                    bit_graph_imputer.impute()  # default parameters for imputation > or
+                    bit_graph_imputer.impute(user_def=True, params={"seq_len":-1, "sliding_windows":1, "kernel_size":25, "kernel_set":[2,3,6,7], "epochs":50, "batch_size": -1, "subgraph_size":5, "num_workers":0})  # user defined> or
+                    bit_graph_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = bit_graph_imputer.recov_data
+
 
                 References
                 ----------
@@ -2812,7 +2999,9 @@ class Imputation:
 
             Example
             -------
-                $   imputer.impute(params={"seq_len":24, "batch_size":128, "epochs":10000, "sliding_windows":1, "n_head":8, "num_workers":0})
+            .. code-block:: python
+
+                imputer.impute(params={"seq_len":24, "batch_size":128, "epochs":10000, "sliding_windows":1, "n_head":8, "num_workers":0})
 
             Changes
             -------
@@ -2880,11 +3069,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> saits_imputer = Imputation.DeepLearning.BitGraph(incomp_data)
-                    >>> saits_imputer.impute()  # default parameters for imputation > or
-                    >>> saits_imputer.impute(user_def=True, params={"seq_len":24, "batch_size":128, "epochs":10000, "sliding_windows":1, "n_head":8, "num_workers":0})  # user defined> or
-                    >>> saits_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = saits_imputer.recov_data
+                .. code-block:: python
+
+                    saits_imputer = Imputation.DeepLearning.BitGraph(incomp_data)
+
+                    saits_imputer.impute()  # default parameters for imputation > or
+                    saits_imputer.impute(user_def=True, params={"seq_len":24, "batch_size":128, "epochs":10000, "sliding_windows":1, "n_head":8, "num_workers":0})  # user defined> or
+                    saits_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = saits_imputer.recov_data
+
 
                 References
                 ----------
@@ -2911,7 +3105,10 @@ class Imputation:
 
             Example
             -------
-            $ timesnet.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 10, "gpt_layers":3, "num_workers":0, "seed":2021})
+            .. code-block:: python
+
+                timesnet.impute(params={"seq_len":-1, "batch_size":-1, "epochs": 10, "gpt_layers":3, "num_workers":0, "seed":2021})
+
 
             Changes
             -------
@@ -2978,11 +3175,16 @@ class Imputation:
 
                 Example
                 -------
-                    >>> timesnet_imputer = Imputation.LLMs.GPT4TS(incomp_data)
-                    >>> timesnet_imputer.impute()  # default parameters for imputation > or
-                    >>> timesnet_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 10, "gpt_layers":3, "num_workers":0, "seed":2021})  # user defined> or
-                    >>> timesnet_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = timesnet_imputer.recov_data
+                .. code-block:: python
+
+                    timesnet_imputer = Imputation.LLMs.GPT4TS(incomp_data)
+
+                    timesnet_imputer.impute()  # default parameters for imputation > or
+                    timesnet_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 10, "gpt_layers":3, "num_workers":0, "seed":2021})  # user defined> or
+                    timesnet_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = timesnet_imputer.recov_data
+
 
                 References
                 ----------
@@ -3089,6 +3291,7 @@ class Imputation:
                     csdi_imputer.impute()  # default parameters for imputation > or
                     csdi_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 50, "sliding_windows":1, "target_strategy":"random", "nsamples": 1, "num_workers":0})  # user defined> or
                     csdi_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
                     recov_data = csdi_imputer.recov_data
 
                 References
@@ -3124,7 +3327,9 @@ class Imputation:
 
             Example
             -------
-                >>> nuwats_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs":10, "gpt_layers":6, "num_workers":0, "seed":2021})  # user defined> or
+            .. code-block:: python
+
+                nuwats_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs":10, "gpt_layers":6, "num_workers":0, "seed":2021})
 
             Patches
             -------
@@ -3177,11 +3382,15 @@ class Imputation:
 
                 Example
                 -------
-                    >>> nuwats_imputer = Imputation.LLMs.NuwaTS(incomp_data)
-                    >>> nuwats_imputer.impute()  # default parameters for imputation > or
-                    >>> nuwats_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 10, "gpt_layers":6, "num_workers":0, "seed":2021})  # user defined> or
-                    >>> nuwats_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = nuwats_imputer.recov_data
+                .. code-block:: python
+
+                    nuwats_imputer = Imputation.LLMs.NuwaTS(incomp_data)
+
+                    nuwats_imputer.impute()  # default parameters for imputation > or
+                    nuwats_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 10, "gpt_layers":6, "num_workers":0, "seed":2021})  # user defined> or
+                    nuwats_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = nuwats_imputer.recov_data
 
                 References
                 ----------
@@ -3278,11 +3487,15 @@ class Imputation:
 
                 Example
                 -------
-                    >>> gpt4ts_imputer = Imputation.LLMs.GPT4TS(incomp_data)
-                    >>> gpt4ts_imputer.impute()  # default parameters for imputation > or
-                    >>> gpt4ts_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 10, "gpt_layers":3, "num_workers":0, "seed":2021})  # user defined> or
-                    >>> gpt4ts_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = gpt4ts_imputer.recov_data
+                .. code-block:: python
+
+                    gpt4ts_imputer = Imputation.LLMs.GPT4TS(incomp_data)
+
+                    gpt4ts_imputer.impute()  # default parameters for imputation > or
+                    gpt4ts_imputer.impute(user_def=True, params={"seq_len":-1, "batch_size":-1, "epochs": 10, "gpt_layers":3, "num_workers":0, "seed":2021})  # user defined> or
+                    gpt4ts_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = gpt4ts_imputer.recov_data
 
                 References
                 ----------
@@ -3310,12 +3523,9 @@ class Imputation:
 
             Example
             -------
-                >>> moment_imputer.impute(params={"model": "zero-shot", "model_size": "small", "use_mean": True, "seq_len":-1, "sliding_windows":1})
+            .. code-block:: python
 
-            Changes
-            -------
-            - ...
-
+                moment_imputer.impute(params={"model": "zero-shot", "model_size": "small", "use_mean": True, "seq_len":-1, "sliding_windows":1})
 
             """
 
@@ -3359,11 +3569,15 @@ class Imputation:
 
                 Example
                 -------
-                    >>> moment_imputer = Imputation.LLMs.Moment(incomp_data)
-                    >>> moment_imputer.impute()  # default parameters for imputation > or
-                    >>> moment_imputer.impute(user_def=True, params={"model": "zero-shot", "model_size": "small", "use_mean": True, "seq_len":-1, "sliding_windows":1})   # user defined> or
-                    >>> moment_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
-                    >>> recov_data = moment_imputer.recov_data
+                .. code-block:: python
+
+                    moment_imputer = Imputation.LLMs.Moment(incomp_data)
+
+                    moment_imputer.impute()  # default parameters for imputation > or
+                    moment_imputer.impute(user_def=True, params={"model": "zero-shot", "model_size": "small", "use_mean": True, "seq_len":-1, "sliding_windows":1})   # user defined> or
+                    moment_imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})  # auto-ml with ray_tune
+
+                    recov_data = moment_imputer.recov_data
 
                 References
                 ----------

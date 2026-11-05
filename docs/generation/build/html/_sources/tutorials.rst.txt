@@ -76,16 +76,16 @@ To import the time series as a matrix, pass it as an argument of the ``ts.import
 
 .. _contamination:
 
-GenGap: Missing Data Simulation
+GenGAP: Missing Data Simulation
 -------------------------------
-ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGap module can be invoked externally. The patterns are described here: `missingness_patterns.html <missingness_patterns.html>`_.
+ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGAP module can be invoked externally. The patterns are described here: `missingness_patterns.html <missingness_patterns.html>`_.
 
 As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:
 
 .. code-block:: python
 
     from imputegap.recovery.manager import TimeSeries
-    from imputegap.recovery.contamination import GenGap
+    from imputegap.recovery.contamination import GenGAP
     from imputegap.tools import utils
 
     # initialize the time series object
@@ -95,7 +95,7 @@ As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pat
     ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
     # contaminate the time series with MCAR pattern
-    ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
+    ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
 
     # plot the contaminated time series
     ts.plot(ts.data, ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets/contamination")
@@ -136,7 +136,7 @@ Let's illustrate the imputation using the CDRec algorithm from the Matrix Comple
 .. code-block:: python
 
     from imputegap.recovery.imputation import Imputation
-    from imputegap.recovery.contamination import GenGap
+    from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
     from imputegap.tools import utils
 
@@ -147,7 +147,7 @@ Let's illustrate the imputation using the CDRec algorithm from the Matrix Comple
     ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
     # contaminate the time series
-    ts_m = GenGap.mcar(ts.data)
+    ts_m = GenGAP.mcar(ts.data)
 
     # impute the contaminated series
     imputer = Imputation.MatrixCompletion.CDRec(ts_m)
@@ -195,7 +195,7 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
 .. code-block:: python
 
     from imputegap.recovery.imputation import Imputation
-    from imputegap.recovery.contamination import GenGap
+    from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
     from imputegap.tools import utils
 
@@ -206,7 +206,7 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
     ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
     # contaminate and impute the time series
-    ts_m = GenGap.mcar(ts.data)
+    ts_m = GenGAP.mcar(ts.data)
     imputer = Imputation.MatrixCompletion.CDRec(ts_m)
 
     # use Ray Tune to fine tune the imputation algorithm
@@ -243,8 +243,8 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
 
 .. _benchmark:
 
-Benchmark
----------
+BenchGAP
+--------
 
 ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms [33]_.  Users have full control over the benchmark by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
 
@@ -253,10 +253,10 @@ The benchmarking module can be utilized as follows:
 
 .. code-block:: python
 
-    from imputegap.recovery.benchmark import Benchmark
+    from imputegap.recovery.benchmark import BenchGAP
 
     # launch the evaluation
-    bench = Benchmark()
+    bench = BenchGAP()
     bench.eval_imputation(algorithms=["MeanImpute", "SoftImpute"],
                datasets=["eeg-alcohol"],
                patterns=["mcar"],
@@ -286,7 +286,7 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
 .. code-block:: python
 
     from imputegap.recovery.imputation import Imputation
-    from imputegap.recovery.contamination import GenGap
+    from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
     from imputegap.tools import utils
 
@@ -297,7 +297,7 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
     ts.load_series(utils.search_path("forecast-economy"), normalizer="z_score")
 
     # contaminate the time series
-    ts_m = GenGap.aligned(ts.data, rate_series=0.8)
+    ts_m = GenGAP.aligned(ts.data, rate_series=0.8)
 
     # define and impute the contaminated series
     imputer = Imputation.MatrixCompletion.CDRec(ts_m)
@@ -331,8 +331,8 @@ All downstream models developed in ImputeGAP are available in the ``ts.forecaste
 
 .. _explainer:
 
-Explainer
----------
+ExplainGAP
+----------
 
 
 The library provides insights into the algorithm's behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (`SHAP <https://shap.readthedocs.io/en/latest/>`_) to measure how different time series features influence the model’s predictions.
@@ -342,12 +342,12 @@ Let's illustrate the explainer using the CDRec algorithm and MCAR missingness pa
 .. code-block:: python
 
     from imputegap.recovery.manager import TimeSeries
-    from imputegap.recovery.explainer import Explainer
+    from imputegap.recovery.explainer import ExplainGAP
     from imputegap.tools import utils
 
     # initialize the time series and explainer object
     ts = TimeSeries()
-    exp = Explainer()
+    exp = ExplainGAP()
 
     # load and normalize the dataset
     ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")

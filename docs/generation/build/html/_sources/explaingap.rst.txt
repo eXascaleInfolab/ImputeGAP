@@ -1,8 +1,8 @@
 :orphan:
 
-=========
-Explainer
-=========
+==========
+ExplainGAP
+==========
 
 The library provides insights into the algorithm's behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (`SHAP <https://shap.readthedocs.io/en/latest/>`_) to reveal how different time series features influence the model’s predictions.
 
@@ -11,12 +11,12 @@ Let's illustrate the explainer using the CDRec algorithm and MCAR missingness pa
 .. code-block:: python
 
     from imputegap.recovery.manager import TimeSeries
-    from imputegap.recovery.explainer import Explainer
+    from imputegap.recovery.explainer import ExplainGAP
     from imputegap.tools import utils
 
     # initialize the time series and explainer object
     ts = TimeSeries()
-    exp = Explainer()
+    exp = ExplainGAP()
 
     # load and normalize the dataset
     ts.load_series(utils.search_path("eeg-alcohol"))

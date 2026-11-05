@@ -2,7 +2,7 @@ import unittest
 from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 
@@ -17,7 +17,7 @@ class TestOptiMRNN(unittest.TestCase):
         ts_1 = TimeSeries()
         ts_1.load_series(data=utils.search_path(dataset), nbr_val=200)
 
-        incomp_data = GenGap.mcar(input_data=ts_1.data)
+        incomp_data = GenGAP.mcar(input_data=ts_1.data)
 
         params = utils.load_parameters(query="default", algorithm=algorithm)
 

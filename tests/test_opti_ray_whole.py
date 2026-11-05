@@ -2,7 +2,7 @@ import unittest
 
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 class TestOptiRAY(unittest.TestCase):
 
@@ -21,7 +21,7 @@ class TestOptiRAY(unittest.TestCase):
         ts_1.normalize(normalizer="min_max")
 
         # 3. contamination of the data
-        ts_mask = GenGap.mcar(ts_1.data, rate_series=0.18)
+        ts_mask = GenGAP.mcar(ts_1.data, rate_series=0.18)
 
         # 4. imputation of the contaminated data
         # imputation with AutoML which will discover the optimal hyperparameters for your dataset and your algorithm

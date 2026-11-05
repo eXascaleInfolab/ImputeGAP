@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from imputegap.recovery.benchmark import Benchmark
+from imputegap.recovery.benchmark import BenchGAP
 
 class TestBenchmarkForecasting(unittest.TestCase):
 
@@ -34,7 +34,7 @@ class TestBenchmarkForecasting(unittest.TestCase):
 
 
     def test_forecasting_upstream_mcar(self):
-        bench = Benchmark()
+        bench = BenchGAP()
 
         bench.eval_downstream_forecasting(
             horizon=12,
@@ -62,7 +62,7 @@ class TestBenchmarkForecasting(unittest.TestCase):
 
 
     def test_forecasting_upstream_aligned_series(self):
-        bench = Benchmark()
+        bench = BenchGAP()
 
         bench.eval_downstream_forecasting(
             horizon=12,
@@ -91,7 +91,7 @@ class TestBenchmarkForecasting(unittest.TestCase):
 
 
     def test_forecasting_upstream_aligned_timestamps(self):
-        bench = Benchmark()
+        bench = BenchGAP()
 
         bench.eval_downstream_forecasting(
             horizon=12,
@@ -120,7 +120,7 @@ class TestBenchmarkForecasting(unittest.TestCase):
 
 
     def test_forecasting_multiple_rates(self):
-        bench = Benchmark()
+        bench = BenchGAP()
 
         bench.eval_downstream_forecasting(
             horizon=12,
@@ -152,7 +152,7 @@ class TestBenchmarkForecasting(unittest.TestCase):
 
 
     def test_forecasting_downstream(self):
-        bench = Benchmark()
+        bench = BenchGAP()
 
         bench.eval_downstream_forecasting(
             forecasters=["exp-smoothing"],

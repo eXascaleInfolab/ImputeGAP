@@ -71,7 +71,7 @@ class TestPipeline(unittest.TestCase):
         x = False
 
         from imputegap.recovery.manager import TimeSeries
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.tools import utils
 
         # initialize the time series object
@@ -82,7 +82,7 @@ class TestPipeline(unittest.TestCase):
         ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
         # contaminate the time series with MCAR pattern
-        ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
+        ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
 
         # plot the contaminated time series
         ts.plot(ts.data, ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets/contamination")
@@ -108,7 +108,7 @@ class TestPipeline(unittest.TestCase):
         x = False
 
         from imputegap.recovery.imputation import Imputation
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.recovery.manager import TimeSeries
         from imputegap.tools import utils
 
@@ -120,7 +120,7 @@ class TestPipeline(unittest.TestCase):
         ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
         # contaminate the time series
-        ts_m = GenGap.mcar(ts.data)
+        ts_m = GenGAP.mcar(ts.data)
 
         # impute the contaminated series
         imputer = Imputation.MatrixCompletion.CDRec(ts_m)
@@ -162,7 +162,7 @@ class TestPipeline(unittest.TestCase):
         x = False
 
         from imputegap.recovery.imputation import Imputation
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.recovery.manager import TimeSeries
         from imputegap.tools import utils
 
@@ -173,7 +173,7 @@ class TestPipeline(unittest.TestCase):
         ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
 
         # contaminate and impute the time series
-        ts_m = GenGap.mcar(ts.data)
+        ts_m = GenGAP.mcar(ts.data)
         imputer = Imputation.MatrixCompletion.CDRec(ts_m)
         imputer.verbose = False
 
@@ -226,12 +226,12 @@ class TestPipeline(unittest.TestCase):
         xx = False
 
         from imputegap.recovery.manager import TimeSeries
-        from imputegap.recovery.explainer import Explainer
+        from imputegap.recovery.explainer import ExplainGAP
         from imputegap.tools import utils
 
         # initialize the time series and explainer object
         ts = TimeSeries()
-        exp = Explainer()
+        exp = ExplainGAP()
         print(f"\nImputeGAP explainer features extractor : {ts.extractors}")
 
         # load and normalize the dataset
@@ -272,7 +272,7 @@ class TestPipeline(unittest.TestCase):
 
         x = False
 
-        from imputegap.recovery.benchmark import Benchmark
+        from imputegap.recovery.benchmark import BenchGAP
         from imputegap.tools import utils
 
         my_algorithms = ["MeanImpute", "SoftImpute"]
@@ -288,7 +288,7 @@ class TestPipeline(unittest.TestCase):
         my_metrics = ["*"]
 
         # launch the evaluation
-        bench = Benchmark()
+        bench = BenchGAP()
         bench.eval(algorithms=my_algorithms, datasets=my_datasets, patterns=my_patterns, x_axis=range,
                    metrics=my_metrics, optimizer=my_opt)
 
@@ -300,7 +300,7 @@ class TestPipeline(unittest.TestCase):
 
         x = False
 
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.recovery.manager import TimeSeries
         from imputegap.tools import utils
 
@@ -310,10 +310,10 @@ class TestPipeline(unittest.TestCase):
             # load and normalize the dataset
             ts = TimeSeries()
             ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z-score", nbr_series=11, nbr_val=42)
-            incomp_data = GenGap.mcar(ts.data)
+            incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             if name == "DeepMVI":
-                incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
+                incomp_data = GenGAP.aligned(ts.data, single_series=0, rate_series=0.5)
                 incomp_data = np.tile(incomp_data, (7, 5))
                 ts.data = np.tile(ts.data, (7, 5))
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
@@ -345,7 +345,7 @@ class TestPipeline(unittest.TestCase):
 
     def test_pipeline_algos_llms(self):
         x = False
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.recovery.manager import TimeSeries
         from imputegap.tools import utils
 
@@ -356,7 +356,7 @@ class TestPipeline(unittest.TestCase):
             if name != "NuwaTS":
                 ts = TimeSeries()
                 ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z-score", nbr_series=16, nbr_val=69)
-                incomp_data = GenGap.mcar(ts.data)
+                incomp_data = GenGAP.mcar(ts.data)
                 print(f"\n\n{incomp_data.shape = }")
                 algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
                 algo.logs = False
@@ -380,7 +380,7 @@ class TestPipeline(unittest.TestCase):
 
         x = False
 
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.recovery.manager import TimeSeries
         from imputegap.tools import utils
 
@@ -390,10 +390,10 @@ class TestPipeline(unittest.TestCase):
             # load and normalize the dataset
             ts = TimeSeries()
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
-            incomp_data = GenGap.mcar(ts.data)
+            incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             if name == "SPIRIT":
-                incomp_data = GenGap.aligned(ts.data, single_series=0)
+                incomp_data = GenGAP.aligned(ts.data, single_series=0)
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
             algo.logs = False
             algo.impute()
@@ -416,7 +416,7 @@ class TestPipeline(unittest.TestCase):
 
         x = False
 
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.recovery.manager import TimeSeries
         from imputegap.tools import utils
 
@@ -426,11 +426,11 @@ class TestPipeline(unittest.TestCase):
             # load and normalize the dataset
             ts = TimeSeries()
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
-            incomp_data = GenGap.mcar(ts.data)
+            incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             if name == "TKCM":
                 ts.data = np.tile(ts.data, (7, 5))
-                incomp_data = GenGap.aligned(ts.data, single_series=0, rate_series=0.5)
+                incomp_data = GenGAP.aligned(ts.data, single_series=0, rate_series=0.5)
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
             algo.logs = False
             algo.impute()
@@ -452,7 +452,7 @@ class TestPipeline(unittest.TestCase):
 
         x = False
 
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.recovery.manager import TimeSeries
         from imputegap.tools import utils
 
@@ -462,7 +462,7 @@ class TestPipeline(unittest.TestCase):
             # load and normalize the dataset
             ts = TimeSeries()
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
-            incomp_data = GenGap.mcar(ts.data)
+            incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
             algo.logs = False
@@ -486,7 +486,7 @@ class TestPipeline(unittest.TestCase):
 
         x = False
 
-        from imputegap.recovery.contamination import GenGap
+        from imputegap.recovery.contamination import GenGAP
         from imputegap.recovery.manager import TimeSeries
         from imputegap.tools import utils
 
@@ -496,7 +496,7 @@ class TestPipeline(unittest.TestCase):
             # load and normalize the dataset
             ts = TimeSeries()
             ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
-            incomp_data = GenGap.mcar(ts.data)
+            incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
             algo.logs = False

@@ -214,7 +214,7 @@ class DataLoaderImputeGAP(object):
 
 if __name__ == '__main__':
     from imputegap.recovery.manager import TimeSeries
-    from imputegap.recovery.contamination import GenGap
+    from imputegap.recovery.contamination import GenGAP
     from imputegap.tools import utils
 
     # initialize the time series object
@@ -224,7 +224,7 @@ if __name__ == '__main__':
     # ts.load_series(utils.search_path("test-logic-dl-xl.txt"))
     ts.load_series(utils.search_path("chlorine"))
     ts.normalize(normalizer="z_score")
-    ts_m = GenGap.aligned(ts.data)
+    ts_m = GenGAP.aligned(ts.data)
     b = DataLoaderImputeGAP(ts_m, None)
     b.generate_mask(100, 200)
     data, mask, tag, gt = b.get_data()

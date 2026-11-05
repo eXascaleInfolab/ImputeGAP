@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from imputegap.recovery.explainer import Explainer
+from imputegap.recovery.explainer import ExplainGAP
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 
@@ -12,7 +12,7 @@ class TestExplainer(unittest.TestCase):
         """
         filename = "chlorine"
 
-        exp = Explainer()
+        exp = ExplainGAP()
 
         RMSE = [0.508740447256769, 0.5834508294411466, 0.5318564446461029, 0.5162089180931576, 0.46608400269248135,
          0.4531125301877796, 0.4071204339932292, 0.38188027439915706, 0.32530898769725997, 0.3077025334161655,
