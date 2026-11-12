@@ -1,9 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.BayOTIDE.recovBayOTIDE import recovBayOTIDE
+from imputegap.tools import utils
 
 
-def bay_otide(incomp_data, K_trend=30, K_season=1, n_season=10, K_bias=0, time_scale=1, a0=1, b0=1, v=1, num_fold=1, tr_ratio=0.8, logs=True, verbose=False):
+def bay_otide(incomp_data, K_trend=30, K_season=1, n_season=10, K_bias=0, time_scale=1, a0=1, b0=1, v=1, num_fold=1, tr_ratio=0.8, logs=True, use_cuda=False, verbose=False):
     """
     BayOTIDE class to impute missing values using Bayesian Online Multivariate Time series Imputation with functional decomposition
 
@@ -51,8 +52,11 @@ def bay_otide(incomp_data, K_trend=30, K_season=1, n_season=10, K_bias=0, time_s
     logs : bool, optional
         Whether to log the execution time (default is True).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
-                Whether to display the contamination information (default is True).
+        Whether to display the contamination information (default is True).
 
     Returns
     -------
@@ -70,9 +74,10 @@ def bay_otide(incomp_data, K_trend=30, K_season=1, n_season=10, K_bias=0, time_s
     https://github.com/xuangu-fang/BayOTIDE
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
     #recov_data = recovBayOTIDE(incomp_m=incomp_data, K_trend=K_trend, K_season=K_season, n_season=n_season, K_bias=K_bias, time_scale=time_scale, a0=a0, b0=b0, v=v, num_workers=0, tr_ratio=tr_ratio, verbose=verbose)
-    recov_data = recovBayOTIDE(incomp_data=incomp_data, K_trend=K_trend, K_season=K_season, n_season=n_season, K_bias=K_bias, time_scale=time_scale, a0=a0, b0=b0, v=v, num_fold=num_fold, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = recovBayOTIDE(incomp_data=incomp_data, K_trend=K_trend, K_season=K_season, n_season=n_season, K_bias=K_bias, time_scale=time_scale, a0=a0, b0=b0, v=v, num_fold=num_fold, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
 

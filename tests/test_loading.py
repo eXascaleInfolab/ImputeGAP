@@ -44,7 +44,7 @@ class TestLoading(unittest.TestCase):
 
     def test_loading_normalization_min_max(self):
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test.txt"))
+        ts_1.load_series("test.txt")
         ts_1.normalize(normalizer="min_max")
 
         assert np.isclose(np.min(ts_1.data), 0), f"Min value after Min-Max normalization is not 0: {np.min(ts_1.normalized_ts)}"
@@ -52,7 +52,7 @@ class TestLoading(unittest.TestCase):
 
     def test_loading_normalization_z_score(self):
         normalized = TimeSeries()
-        normalized.load_series(utils.search_path("test.txt"))
+        normalized.load_series("test.txt")
         normalized.normalize()
 
         mean = np.mean(normalized.data)
@@ -63,7 +63,7 @@ class TestLoading(unittest.TestCase):
 
     def test_loading_normalization_min_max_lib(self):
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series("chlorine")
         ts_1.normalize(normalizer="min_max")
 
         ts_2 = TimeSeries()
@@ -74,11 +74,11 @@ class TestLoading(unittest.TestCase):
 
     def test_loading_normalization_z_score_lib(self):
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series("chlorine")
         ts_1.normalize()
 
         ts_2 = TimeSeries()
-        ts_2.load_series(utils.search_path("chlorine"))
+        ts_2.load_series("chlorine")
         ts_2.normalize(normalizer="z_lib")
 
         assert np.allclose(ts_1.data, ts_2.data)

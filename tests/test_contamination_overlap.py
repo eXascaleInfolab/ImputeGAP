@@ -14,7 +14,7 @@ class TestContaminationOverlap(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series("chlorine")
 
         series_impacted = [0.4, 0.8]
         ten_percent_index = int(ts_1.data.shape[1] * 0.1)
@@ -56,7 +56,7 @@ class TestContaminationOverlap(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
 
             for S in series_rate:
 

@@ -20,7 +20,7 @@ class TestContaminationMP(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
             N, M = ts.data.shape  # series, values
             P = math.ceil(ts.data.shape[0] * 0.1)
 
@@ -47,7 +47,7 @@ class TestContaminationMP(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
+        ts_1.load_series("test-logic-llm.txt")
 
         series_impacted = [0.4, 0.8]
         missing_rates = [0.1, 0.4, 0.6]
@@ -72,7 +72,7 @@ class TestContaminationMP(unittest.TestCase):
         for dataset in datasets:
             ts_1 = TimeSeries()
             ts_1.data = None
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
             N, M = ts_1.data.shape
 
             for series_sel in series_impacted:
@@ -128,7 +128,7 @@ class TestContaminationMP(unittest.TestCase):
         for dataset in datasets:
             ts_1 = TimeSeries()
             ts_1.data = None
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
             N, M = ts_1.data.shape
             for series_sel in series_impacted:
                 for Z in series_pointer :

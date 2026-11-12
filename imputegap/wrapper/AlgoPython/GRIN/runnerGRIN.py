@@ -12,7 +12,6 @@ import copy
 import datetime
 import os
 import pathlib
-from argparse import ArgumentParser
 
 import numpy as np
 import pytorch_lightning as pl
@@ -33,7 +32,6 @@ from imputegap.wrapper.AlgoPython.GRIN.lib.nn.utils.metrics import MaskedMAE, Ma
 from imputegap.wrapper.AlgoPython.GRIN.lib.utils import parser_utils, numpy_metrics, ensure_list, prediction_dataframe
 from imputegap.wrapper.AlgoPython.GRIN.lib.utils.parser_utils import str_to_bool
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def has_graph_support(model_cls):
     return model_cls in [models.GRINet, models.MPGRUNet, models.BiMPGRUNet]
@@ -157,7 +155,7 @@ def handle_parser(argv=None):
     return args
 
 
-def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, sliding_windows=1, lr=0.001, adj_threshold=0.1, patience=40, num_workers=0, seed=42, tr_ratio=0.7, verbose=True, deep_verbose=False):
+def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, sliding_windows=1, lr=0.001, adj_threshold=0.1, patience=40, num_workers=0, seed=42, tr_ratio=0.7, verbose=True, use_cuda=0, deep_verbose=False):
 
     ts_m = np.copy(incomp_data)
     recov = np.copy(incomp_data)
@@ -199,15 +197,16 @@ def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, s
     args.workers = num_workers
     args.test_len, args.val_len = utils_imp.sets_splitter_based_on_training(tr=tr_ratio, verbose=verbose)
 
+    device = torch.device("cuda" if use_cuda else "cpu")
+
     if verbose:
-        print(f"\n(IMPUTATION) GRIN\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_len: {args.window}\n\tsim_type: {sim_type}\n\tepochs: {args.epochs}\n\tbatch_size: {args.batch_size}\n\tsliding_windows: {sliding_windows}\n\tadj_threshold: {args.adj_threshold}\n\tpatience: {args.patience}\n\tnum_workers: {args.workers}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {args.test_len}\n\tval_ratio: {args.val_len}\n")
+        print(f"\n(IMPUTATION) GRIN\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_len: {args.window}\n\tsim_type: {sim_type}\n\tepochs: {args.epochs}\n\tbatch_size: {args.batch_size}\n\tsliding_windows: {sliding_windows}\n\tadj_threshold: {args.adj_threshold}\n\tpatience: {args.patience}\n\tnum_workers: {args.workers}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {args.test_len}\n\tval_ratio: {args.val_len}\n\tuse_cuda: {use_cuda}\n")
         print(f"call: gain.impute(params={{'seq_len': {seq_len}, 'sim_type': '{sim_type}', 'epochs': {epochs}, 'batch_size': {batch_size}, 'sliding_windows': {sliding_windows}, 'adj_threshold': {adj_threshold}, 'patience': {patience}, 'num_workers': {num_workers}}})\n")
 
     if args.seed < 0:
         args.seed = seed
     torch.set_num_threads(1)
     pl.seed_everything(args.seed, verbose=False)
-
 
     if verbose:
         print("\n\npre-processing")
@@ -314,6 +313,7 @@ def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, s
     trainer = pl.Trainer(max_epochs=args.epochs,
                          logger=logger,
                          default_root_dir=logdir,
+                         accelerator="gpu" if use_cuda else "cpu",
                          #gpus=1 if torch.cuda.is_available() else None,
                          gradient_clip_val=args.grad_clip_val,
                          gradient_clip_algorithm=args.grad_clip_algorithm,
@@ -324,6 +324,8 @@ def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, s
                          enable_model_summary=verbose)
 
     trainer.fit(filler, datamodule=dm)
+    #print(f"GRIN > Selected device: {trainer.accelerator.__class__.__name__}")
+    #print(f"GRIN > Trainer device: {trainer.strategy.root_device}")
 
     ########################################
     # testing                              #
@@ -339,8 +341,7 @@ def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, s
     trainer.test(model=filler, datamodule=dm, ckpt_path=None, verbose=verbose)
     filler.eval()
 
-    if torch.cuda.is_available():
-        filler = filler.to(device)
+    filler = filler.to(device)
 
     with torch.no_grad():
         y_true, y_hat, mask = filler.predict_loader(dm.test_dataloader(), return_mask=True)
@@ -386,8 +387,7 @@ def runGRIN(incomp_data, seq_len=1, sim_type="corr", epochs=50, batch_size=32, s
     trainer.test(model=filler, datamodule=dm, ckpt_path=None, verbose=verbose)
     filler.eval()
 
-    if torch.cuda.is_available():
-        filler = filler.to(device)
+    filler = filler.to(device)
 
     with torch.no_grad():
         y_true, y_hat, mask = filler.predict_loader(dm.imputed_dataloader(), return_mask=True)

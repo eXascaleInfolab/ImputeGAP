@@ -21,7 +21,7 @@ class TestExplainer(unittest.TestCase):
         expected_categories, expected_features, _ = exp.load_configuration()
 
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path(filename))
+        ts_1.load_series(filename)
 
         exp.shap_explainer(input_data=ts_1.data, file_name=filename, rate_dataset=0.3, seed=True, verbose=True, extractor="pycatch22")
 

@@ -56,7 +56,7 @@ def handle_parser(argv=None):
   return args
 
 
-def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9, tr_ratio=0.8, verbose=False, replicat=False):
+def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9, tr_ratio=0.8, verbose=False, use_cuda=0, replicat=False):
   '''Main function for UCI letter and spam datasets.
 
   Args:
@@ -107,7 +107,7 @@ def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9,
     ori_data_x, miss_data_x, data_m = data_loader(data_name="data_name", miss_rate=miss_rate, ts=input_data, inject_nan=False)
 
     # Impute missing data
-    imputed_data_x = gain(miss_data_x, gain_parameters, verbose=verbose)
+    imputed_data_x = gain(miss_data_x, gain_parameters, use_cuda=use_cuda, verbose=verbose)
 
     if replicat:
       model_rmse = rmse_loss(ori_data_x, imputed_data_x, data_m)

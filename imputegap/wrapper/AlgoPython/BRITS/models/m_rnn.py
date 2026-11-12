@@ -115,11 +115,15 @@ class Model(nn.Module):
 
         hiddens = []
 
-        h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
-        c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # olds
+        # h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # if torch.cuda.is_available():
+        #    h, c = h.cuda(), c.cuda()
 
-        if torch.cuda.is_available():
-            h, c = h.cuda(), c.cuda()
+        # Create recurrent states on the same device as the input.
+        h = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
+        c = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
 
         for t in range(self.seq_len):
             hiddens.append(h)
@@ -177,11 +181,15 @@ class Model(nn.Module):
         labels = data['labels'].view(-1, 1)
         is_train = data['is_train'].view(-1, 1)
 
-        h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
-        c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # olds
+        # h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # if torch.cuda.is_available():
+        #    h, c = h.cuda(), c.cuda()
 
-        if torch.cuda.is_available():
-            h, c = h.cuda(), c.cuda()
+        # Create recurrent states on the same device as the input.
+        h = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
+        c = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
 
         imputations = Variable(imputations.data, requires_grad = False)
         out, (h, c) = self.pred_rnn(imputations)

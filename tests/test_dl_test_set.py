@@ -18,7 +18,7 @@ class TestDLTestSet(unittest.TestCase):
         print(f"Imputation algorithms : {ts.algorithms}")
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("chlorine"))
+        ts.load_series("chlorine")
 
         # contaminate the time series
         ts_m = GenGAP.mcar(ts.data)

@@ -36,7 +36,7 @@ def handle_parser(argv=None):
 
     return args
 
-def recovCSDI(ts_m, seq_len=-1, batch_size=-1, epochs=200, num_workers=0, nsamples=100, sliding_windows=1, target_strategy="mix", beta=[0.0001, 0.5], shuffle=True, normalize=True, tr_ratio=0.7, seed=1, verbose=True, deep_verbose=False, replicat=False):
+def recovCSDI(ts_m, seq_len=-1, batch_size=-1, epochs=200, num_workers=0, nsamples=100, sliding_windows=1, target_strategy="mix", beta=[0.0001, 0.5], shuffle=True, normalize=True, tr_ratio=0.7, seed=1, verbose=True, deep_verbose=False, use_cuda=0, replicat=False):
 
     data_m = np.copy(ts_m)
     recov = np.copy(ts_m)
@@ -51,7 +51,7 @@ def recovCSDI(ts_m, seq_len=-1, batch_size=-1, epochs=200, num_workers=0, nsampl
     args.seq_len = seq_len
     args.features = ts_m.shape[1]
     args.num_workers = num_workers
-    args.device = "cuda" if torch.cuda.is_available() else "cpu"
+    args.device = "cuda" if use_cuda else "cpu"
     args.shuffle = shuffle
     args.normalize = normalize
     args.nsample = nsamples

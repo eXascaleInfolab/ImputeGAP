@@ -11,21 +11,45 @@
 import torch
 from torch.autograd import Variable
 
-def to_var(var):
+#def to_var(var, device=None):
+#    if torch.is_tensor(var):
+#        var = Variable(var)
+#        if torch.cuda.is_available():
+#            var = var.cuda()
+#        return var
+#    if isinstance(var, int) or isinstance(var, float) or isinstance(var, str):
+#        return var
+#    if isinstance(var, dict):
+#        for key in var:
+#            var[key] = to_var(var[key])
+#        return var
+#    if isinstance(var, list):
+#        var = map(lambda x: to_var(x), var)
+#        return var
+
+def to_var(var, device=None):
+    # Tensor: transfer to the requested device.
     if torch.is_tensor(var):
         var = Variable(var)
-        if torch.cuda.is_available():
-            var = var.cuda()
+        if device is not None:
+            var = var.to(device)
         return var
-    if isinstance(var, int) or isinstance(var, float) or isinstance(var, str):
+
+    # Primitive values do not have a device.
+    if isinstance(var, (int, float, str)):
         return var
+
+    # Recursively transfer tensors inside dictionaries.
     if isinstance(var, dict):
         for key in var:
-            var[key] = to_var(var[key])
+            var[key] = to_var(var[key], device=device)
         return var
+
+    # Recursively transfer tensors inside lists.
     if isinstance(var, list):
-        var = map(lambda x: to_var(x), var)
-        return var
+        return [to_var(x, device=device) for x in var]
+
+    return var
 
 def stop_gradient(x):
     if isinstance(x, float):
@@ -34,8 +58,10 @@ def stop_gradient(x):
         return tuple(map(lambda y: Variable(y.data), x))
     return Variable(x.data)
 
-def zero_var(sz):
-    x = Variable(torch.zeros(sz))
-    if torch.cuda.is_available():
-        x = x.cuda()
-    return x
+def zero_var(sz, device="cpu"):
+    #x = Variable(torch.zeros(sz))
+    #if torch.cuda.is_available():
+    #    x = x.cuda()
+    #return x
+    # Create the tensor directly on the requested device.
+    return Variable(torch.zeros(sz, device=device))

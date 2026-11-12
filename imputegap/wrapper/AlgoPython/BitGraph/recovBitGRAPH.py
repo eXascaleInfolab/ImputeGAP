@@ -268,7 +268,7 @@ def evaluate(model, val_iter, scaler):
     return loss/len(val_iter)
 
 
-def recovBitGRAPH(ts_m=None, seq_len=24, sliding_windows=1, pred_len=0, kernel_size=1, kernel_set=[2,3,6,7], epochs=10, batch_size=32, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=0, norma=True, verbose=True, replicat=False):
+def recovBitGRAPH(ts_m=None, seq_len=24, sliding_windows=1, pred_len=0, kernel_size=1, kernel_set=[2,3,6,7], epochs=10, batch_size=32, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=0, norma=True, verbose=True, use_cuda=0, replicat=False):
 
     recov = np.copy(ts_m)
     m_mask = np.isnan(ts_m)
@@ -301,7 +301,7 @@ def recovBitGRAPH(ts_m=None, seq_len=24, sliding_windows=1, pred_len=0, kernel_s
     args.seq_len = seq_len
     args.pred_len = seq_len
     args.epochs = epochs
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = torch.device("cuda" if use_cuda else "cpu")
     args.device = device
     args.subgraph_size = subgraph_size
     args.kernel_set = kernel_set
@@ -320,11 +320,11 @@ def recovBitGRAPH(ts_m=None, seq_len=24, sliding_windows=1, pred_len=0, kernel_s
 
     if verbose:
         print(f"\n(IMPUTATION) BitGRAPH\n\tMatrix Shape: ({ts_m.shape[0]}, {ts_m.shape[1]})\n\tseq_len: {args.seq_len}\n\tsliding_windows: {sliding_windows}\n\tkernel_size: {args.kernel_size}\n\tkernel_set: {args.kernel_set}\n\tbatch_size: {args.batch_size}\n\tepochs: {args.epochs}\n\tsubgraph_size: {args.subgraph_size}\n\tnum_workers: {num_workers}"
-              f"\n\tpred_len: {args.pred_len}\n\tseed {seed}\n\tnode_number: {args.node_number}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\ttr_ratio: {tr_ratio}\n\tval_ratio: {args.val_r}\n\tts_ratio: {args.ts_r}")
+              f"\n\tpred_len: {args.pred_len}\n\tseed {seed}\n\tnode_number: {args.node_number}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\ttr_ratio: {tr_ratio}\n\tval_ratio: {args.val_r}\n\tts_ratio: {args.ts_r}\n\tdevice: {args.device}")
         print(f"\ncall: bitgraph.impute(params={{'seq_len': {seq_len}, 'sliding_windows': {sliding_windows}, 'kernel_size': '{args.kernel_size}', 'kernel_set': {args.kernel_set}, 'epochs': {args.epochs}, 'batch_size': {args.batch_size}, 'subgraph_size': {args.subgraph_size}, 'num_workers': {num_workers}}})\n")
 
     model=Model(True, True, 2, node_number, args.kernel_set, device, predefined_A=None, dropout=0.3, subgraph_size=args.subgraph_size, node_dim=3, dilation_exponential=1, conv_channels=8, residual_channels=8, skip_channels=16, end_channels= 32, seq_length=args.seq_len, in_dim=1,out_len=args.pred_len, out_dim=1, layers=2, propalpha=0.05, tanhalpha=3, layer_norm_affline=True) #2 4 6
-    if torch.cuda.is_available():
+    if use_cuda==1:
         model = model.cuda()
 
     imputed_matrix = train(ts_m, model, sliding_windows=sliding_windows, multivariate=multivariate, verbose=verbose)

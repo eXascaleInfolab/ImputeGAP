@@ -2,9 +2,10 @@ import platform
 import time
 
 from imputegap.wrapper.AlgoPython.GAIN.recovGAIN import recovGAIN
+from imputegap.tools import utils
 
 
-def gain(incomp_data, batch_size=128, epochs=10000, alpha=100, hint_rate=0.9, tr_ratio=0.9, logs=True, verbose=True):
+def gain(incomp_data, batch_size=128, epochs=10000, alpha=100, hint_rate=0.9, tr_ratio=0.9, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using the Multivariate Recurrent Neural Network (MRNN) algorithm.
 
@@ -12,18 +13,28 @@ def gain(incomp_data, batch_size=128, epochs=10000, alpha=100, hint_rate=0.9, tr
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
+
     batch_size : int, optional
         Number of samples in each mini-batch during training. Default is 128.
+
     epochs : int, optional
         Number of training epochs. Default is 10000.
+
     alpha : float, optional
         Hyperparameter that controls the balance between the adversarial loss and the reconstruction loss. Default is 100.
+
     hint_rate : float, optional
         Probability of providing hints for the missing data during training. Default is 0.9.
+
     tr_ratio: float, optional
         Split ratio between training and testing sets (default is 0.9).
+
     logs : bool, optional
         Whether to log execution details (e.g., training progress and execution time). Default is True.
+
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
 
@@ -36,21 +47,25 @@ def gain(incomp_data, batch_size=128, epochs=10000, alpha=100, hint_rate=0.9, tr
 
     Example
     -------
-        >>> recov_data = gain(incomp_data, batch_size=32, hint_rate=0.9, alpha=10, epoch=100)
-        >>> print(recov_data)
+    .. code-block:: python
+
+        recov_data = gain(incomp_data, batch_size=32, hint_rate=0.9, alpha=10, epoch=100)
+        print(recov_data)
+
 
     References
     ----------
     J. Yoon, W. R. Zame and M. van der Schaar, "Estimating Missing Data in Temporal Data Streams Using Multi-Directional Recurrent Neural Networks," in IEEE Transactions on Biomedical Engineering, vol. 66, no. 5, pp. 1477-1490, May 2019, doi: 10.1109/TBME.2018.2874712. keywords: {Time measurement;Interpolation;Estimation;Medical diagnostic imaging;Correlation;Recurrent neural networks;Biomedical measurement;Missing data;temporal data streams;imputation;recurrent neural nets}
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, exception="GAIN")
 
     system = platform.system()
     if system == "Darwin":
         raise NotImplementedError("GAIN is currently disabled on macOS (Darwin) in ImputeGAP due to TensorFlow backend/performance issues. Please run GAIN on Linux/Windows or use another imputer on macOS.")
         return incomp_data
 
-    recov_data = recovGAIN(ts_m=incomp_data, batch_size=batch_size, iterations=epochs, alpha=alpha, hint_rate=hint_rate, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = recovGAIN(ts_m=incomp_data, batch_size=batch_size, iterations=epochs, alpha=alpha, hint_rate=hint_rate, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

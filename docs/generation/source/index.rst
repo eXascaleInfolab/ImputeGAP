@@ -3,10 +3,10 @@ ImputeGAP Documentation
 
 .. admonition:: 📢 News !
 
-        - [20-10-2026] Version 1.1.3 is out! The new release includes the following major updates:
+        - [11-12-2026] Version 1.1.3 is out! The new release includes the following major updates:
             - New LLMs algorithms
-            - New utilities to handle forecasting and classification tasks
-        - [04-06-2025] ImputeGAP will be presented as a Tutorial at KDD 2025 in Toronto! `[Link] <https://imputegap-tutorials.github.io/KDD-2025/>`_
+            - New parameter to select CPU or GPU execution for imputation algorithms.
+        - [04-06-2025] ImputeGAP was be presented as a Tutorial at KDD 2025 in Toronto! `[Link] <https://imputegap-tutorials.github.io/KDD-2025/>`_
 
 
 ImputeGAP is a comprehensive Python library for imputation of missing values in  time series data. It implements user-friendly APIs to easily visualize, analyze, and repair incomplete time series datasets. The library supports a diverse range of imputation algorithms and modular missing data simulation catering to datasets with varying characteristics. ImputeGAP includes extensive customization options, such as automated hyperparameter tuning, benchmarking, explainability, and downstream evaluation.
@@ -20,7 +20,7 @@ In detail, the library provides:
     - Unified benchmarking pipeline to evaluate the performance of imputation algorithms
     - Modular analysis tools to assess the impact of imputation on time series downstream tasks
     - Expainability module to understand the impact of time series features on the imputation results
-    - Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R
+    - Adjustable wrappers to integrate new algorithms in different languages
 
 
 .. raw:: html
@@ -47,46 +47,8 @@ Getting Started
       darkQuery.addEventListener('change', applyTheme); // React to changes
    </script>
 
-   <style>
-        [data-theme="dark"] .card
-        {
-            padding: 15px;
-            border-radius: 8px;
-            background-color: #181818;
-        }
 
-        [data-theme="dark"] .card p
-        {
-            color: #CCCCCC;
-        }
-
-        [data-theme="dark"] .card h3 a
-        {
-            color: #2e86c1;
-            text-decoration: none;
-        }
-
-        [data-theme="light"] .card
-        {
-            padding: 15px;
-            border-radius: 8px;
-            background-color: #f8f9fa;
-        }
-
-        [data-theme="light"] .card p
-        {
-            color: #333333;
-        }
-
-        [data-theme="light"] .card h3 a
-        {
-            color: #2e86c1;
-            text-decoration: none;
-        }
-   </style>
-
-
-   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+   <div class="index-navigation" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
 
       <div class="card">
         <h3><a href="getting_started.html">🚀 Installation</a></h3>
@@ -94,7 +56,7 @@ Getting Started
       </div>
 
       <div class="card">
-        <h3><a href="tutorials.html">📖 Tutorials</a></h3>
+        <h3><a href="tutorials.html">📖 Full tutorials</a></h3>
         <p>Check the tutorials to learn how to use ImputeGAP.</p>
       </div>
 
@@ -104,11 +66,10 @@ Getting Started
       </div>
 
       <div class="card">
-        <h3><a href="algorithms.html">🧠 Algorithms</a></h3>
-        <p>Explore the core algorithms used in ImputeGAP.</p>
+        <h3><a href="integration.html">🧩 Integration</a></h3>
+        <p>Explore how contribute to the library.</p>
       </div>
 
-    </div><br>
 
 
 .. raw:: html
@@ -117,20 +78,19 @@ Getting Started
 
 
 
+.. _algorithms:
+
 Imputation Algorithms
 ---------------------
 
 ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum of imputation method families:
 
-.. raw:: html
-
-    <style>
-        table.algs-left { margin-left: 0 !important; margin-right: auto !important; }
-    </style>
+🚧 = under integration
 
 
 .. list-table::
    :header-rows: 1
+   :widths: 36 30 34
    :class: algs-left
 
    * - **Algorithms**
@@ -145,21 +105,15 @@ ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum o
    * - GPT4TS [34]_
      - LLMs
      - NeurIPS -- 2023
-   * - 🚧 LLM4HRS [44]_
+   * - LLM4HRS [44]_ 🚧
      - LLMs
-     - Trans Geo RS -- 2025
-   * - 🚧 UniTS [42]_
+     - IEEE Tr Geo RS -- 2025
+   * - UniTS [42]_ 🚧
      - LLMs
      - NeurIPS -- 2024
-   * - 🚧 Timer [43]_
+   * - Timer [43]_ 🚧
      - LLMs
      - ICML -- 2024
-   * -
-     -
-     -
-   * -
-     -
-     -
    * - MissNet [27]_
      - Deep Learning
      - KDD -- 2024
@@ -202,51 +156,42 @@ ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum o
    * - GAIN [28]_
      - Deep Learning
      - ICML -- 2018
-   * - 🚧 T1 [45]_
+   * - T1 [45]_ 🚧
      - Deep Learning
      - ICLR -- 2026
-   * - 🚧 FIM-ℓ [46]_
+   * - FIM-ℓ [46]_ 🚧
      - Deep Learning
      - ICLR -- 2025
-   * - 🚧 SSD-TS [47]_
+   * - SSD-TS [47]_ 🚧
      - Deep Learning
      - KDD -- 2025
-   * - 🚧 ImputeINR [48]_
+   * - ImputeINR [48]_ 🚧
      - Deep Learning
      - IJCAI -- 2025
-   * - 🚧 CoFill [49]_
+   * - CoFill [49]_ 🚧
      - Deep Learning
      - IJCAI -- 2025
-   * - 🚧 SADI [50]_
+   * - SADI [50]_ 🚧
      - Deep Learning
      - AAAI -- 2025
-   * - 🚧 LSCD [51]_
+   * - LSCD [51]_ 🚧
      - Deep Learning
      - ICML -- 2025
-   * - 🚧 FGTI [52]_
+   * - FGTI [52]_ 🚧
      - Deep Learning
      - NeurIPS -- 2024
-   * - 🚧 SSSD [53]_
+   * - SSSD [53]_ 🚧
      - Deep Learning
      - TMLR -- 2023
-   * - 🚧 MTSIT [54]_
+   * - MTSIT [54]_ 🚧
      - Deep Learning
      - IEEE Signal Processing Letters -- 2022
-   * - 🚧 SSGAN [55]_
+   * - SSGAN [55]_ 🚧
      - Deep Learning
      - AAAI -- 2021
-   * - 🚧 CSBI [56]_
-     - Deep Learning
-     - ICML -- 2023
-   * - 🚧 PoGeVon [57]_
+   * - PoGeVon [57]_ 🚧
      - Deep Learning
      - KDD -- 2023
-   * -
-     -
-     -
-   * -
-     -
-     -
    * - CDRec [1]_
      - Matrix Completion
      - KAIS -- 2020
@@ -271,15 +216,9 @@ ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum o
    * - IterativeSVD [2]_
      - Matrix Completion
      - BIOINFORMATICS -- 2001
-   * - 🚧 TIDER [58]_
+   * - TIDER [58]_ 🚧
      - Matrix Completion
      - ICLR -- 2023
-   * -
-     -
-     -
-   * -
-     -
-     -
    * - TKCM [11]_
      - Pattern Search
      - EDBT -- 2017
@@ -289,15 +228,9 @@ ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum o
    * - DynaMMo [10]_
      - Pattern Search
      - KDD -- 2009
-   * - 🚧 PSW-I [59]_
-     - Machine Learning
+   * - PSW-I [59]_ 🚧
+     - Pattern Search
      - ICLR -- 2025
-   * -
-     -
-     -
-   * -
-     -
-     -
    * - IIM [12]_
      - Machine Learning
      - ICDE -- 2019
@@ -310,12 +243,6 @@ ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum o
    * - MissForest [15]_
      - Machine Learning
      - BioInformatics -- 2012
-   * -
-     -
-     -
-   * -
-     -
-     -
    * - KNNImpute
      - Statistics
      - _
@@ -471,23 +398,20 @@ References
 
 .. [51] Elizabeth Fons, Alejandro Sztrajman, Yousef El-Laham, Luciana Ferrer, Svitlana Vyetrenko, Manuela Veloso: LSCD: Lomb–Scargle Conditioned Diffusion for Time series Imputation. ICML (2025)
 
--- to do --
+.. [52] Xinyu Yang, Yu Sun, Xiaojie Yuan, Xinyang Chen: Frequency-aware Generative Models for Multivariate Time Series Imputation. NeurIPS (2024)
 
-.. [52] Xinyu Yang, Yu Sun, Xiaojie Yuan, Xinyang Chen: Frequency-aware Generative Models for Multivariate Time Series Imputation. NeurIPS (2024). https://proceedings.neurips.cc/paper_files/paper/2024/file/5e364212327fa3a59ae3595b025c469f-Paper-Conference.pdf
+.. [53] Juan Lopez Alcaraz, Nils Strodthoff: Diffusion-Based Time Series Imputation and Forecasting with Structured State Space Models. TMLR (2023)
 
-.. [53] Juan Lopez Alcaraz, Nils Strodthoff: Diffusion-Based Time Series Imputation and Forecasting with Structured State Space Models. TMLR (2023). https://mlanthology.org/tmlr/2023/alcaraz2023tmlr-diffusionbased/
+.. [54] A. Yarkin Yıldız, Emirhan Koç, Aykut Koç: Multivariate Time Series Imputation With Transformers. IEEE Signal Processing Letters 29 (2022)
 
-.. [54] A. Yarkin Yıldız, Emirhan Koç, Aykut Koç: Multivariate Time Series Imputation With Transformers. IEEE Signal Processing Letters 29 (2022).
+.. [55] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin: Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI (2021)
 
-.. [55] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin: Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI (2021). https://doi.org/10.1609/aaai.v35i10.17086
+.. [57] Dingsu Wang, Yuchen Yan, Ruizhong Qiu, Yada Zhu, Kaiyu Guan, Andrew Margenot, Hanghang Tong: Networked Time Series Imputation via Position-aware Graph Enhanced Variational Autoencoders. KDD (2023)
 
-.. [56] Yu Chen, Wei Deng, Shikai Fang, Fengpei Li, Nicole Tianjiao Yang, Yikai Zhang, Kashif Rasul, Shandian Zhe, Anderson Schneider, Yuriy Nevmyvaka: Provably Convergent Schrödinger Bridge with Applications to Probabilistic Time Series Imputation. ICML (2023). https://proceedings.mlr.press/v202/chen23f.html
+.. [58] Shuai Liu, Xiucheng Li, Gao Cong, Yile Chen, Yue Jiang: Multivariate Time-Series Imputation with Disentangled Temporal Representations. ICLR (2023)
 
-.. [57] Dingsu Wang, Yuchen Yan, Ruizhong Qiu, Yada Zhu, Kaiyu Guan, Andrew Margenot, Hanghang Tong: Networked Time Series Imputation via Position-aware Graph Enhanced Variational Autoencoders. KDD (2023). https://doi.org/10.1145/3580305.3599444
+.. [59] Hao Wang, Zhengnan Li, Haoxuan Li, Xu Chen, Mingming Gong, Bin Chen, Zhichao Chen: Optimal Transport for Time Series Imputation. ICLR (2025)
 
-.. [58] Shuai Liu, Xiucheng Li, Gao Cong, Yile Chen, Yue Jiang: Multivariate Time-Series Imputation with Disentangled Temporal Representations. ICLR (2023). https://mlanthology.org/iclr/2023/liu2023iclr-multivariate/
-
-.. [59] Hao Wang, Zhengnan Li, Haoxuan Li, Xu Chen, Mingming Gong, Bin Chen, Zhichao Chen: Optimal Transport for Time Series Imputation. ICLR (2025). https://proceedings.iclr.cc/paper_files/paper/2025/hash/033394ac055e3c47bfc3c967ffcfee74-Abstract-Conference.html
 
 
 
@@ -495,14 +419,6 @@ References
 .. raw:: html
 
    <br><br>
-
-
-🚧 = under integration
-
-.. raw:: html
-
-   <br><br>
-
 
 
 
@@ -511,13 +427,13 @@ References
    :caption: Contents:
    :hidden:
 
-
-   getting_started
-   tutorials
-   datasets
-   algorithms
-   gengap
-   notebooks
+   installation
+   data_loading
+   gapgenerator
+   imputation
+   benchmarking
+   downstreamimpact
+   explainability
    integration
    about_us
    imputegap

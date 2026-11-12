@@ -176,7 +176,9 @@ class BRITS(nn.Module):
         self.feature_num = configs.enc_in
         # imputer settings
         self.rnn_hidden_size = 256
-        self.device = "cuda:{}".format(configs.gpu)
+        self.device = torch.device(
+            f"cuda:{configs.gpu}" if configs.use_gpu else "cpu"
+        )
         # create models
         self.rits_f = RITS(self.seq_len, self.feature_num, self.rnn_hidden_size,self.device,self.MIT)
         self.rits_b = RITS(self.seq_len, self.feature_num, self.rnn_hidden_size,self.device,self.MIT)

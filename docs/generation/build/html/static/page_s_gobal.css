@@ -1,0 +1,419 @@
+/* General heading spacing */
+h2 {
+    margin-top: 55px !important;
+    margin-bottom: 30px !important;
+}
+
+h3 {
+    margin-top: 50px !important;
+    margin-bottom: 25px !important;
+}
+
+/* GenGAP: spacing before main chapters */
+body:has(.gengap-contents) section#mono-block,
+body:has(.gengap-contents) section#multi-block,
+body:has(.gengap-contents) section#gengap-tutorial {
+    display: flow-root;
+    padding-top: 30px !important;
+    scroll-margin-top: 30px;
+}
+
+.gengap-contents {
+    margin: 24px 0 32px;
+}
+
+.gengap-contents h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.gengap-nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.gengap-nav a {
+    display: block;
+    padding: 16px 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #334155;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+}
+
+.gengap-nav a:hover {
+    background: #eef2ff;
+    border-color: #818cf8;
+    color: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 600px) {
+    .gengap-nav {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================
+   ImputeGAP - Algorithms Table
+   ========================================== */
+
+/* Wider table and container */
+table.algs-left {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 28px 0 45px !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border: 1px solid #dce3eb !important;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 0.94rem;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.045);
+}
+
+/* Header */
+table.algs-left thead th {
+    background: #26364a !important;
+    color: #ffffff !important;
+    padding: 17px 20px !important;
+    font-weight: 700;
+    font-size: 0.94rem;
+    text-align: left;
+    border: none !important;
+}
+
+/* Regular cells */
+table.algs-left tbody td {
+    padding: 13px 20px !important;
+    vertical-align: middle;
+    border: none !important;
+    border-bottom: 1px solid #e9edf2 !important;
+    background: #ffffff;
+    transition: background 0.15s ease;
+}
+
+/* Alternating row backgrounds */
+table.algs-left tbody tr:nth-child(even) td {
+    background: #f7f9fc;
+}
+
+/* Hover */
+table.algs-left tbody tr:hover td {
+    background: #eaf3ff !important;
+}
+
+/* Algorithm names */
+table.algs-left tbody td:first-child {
+    font-weight: 600;
+    color: #26364a;
+}
+
+/* Column widths */
+table.algs-left th:nth-child(1),
+table.algs-left td:nth-child(1) { width: 36%; }
+
+table.algs-left th:nth-child(2),
+table.algs-left td:nth-child(2) { width: 30%; }
+
+table.algs-left th:nth-child(3),
+table.algs-left td:nth-child(3) { width: 34%; }
+
+/* Family labels */
+table.algs-left tbody td:nth-child(2) p {
+    display: inline-block;
+    padding: 5px 11px;
+    border-radius: 6px;
+    background: var(--family-bg, #eaf0f8) !important;
+    color: var(--family-fg, #365777) !important;
+    font-size: 0.83rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Family colors and positions.
+   Rows are counted from 1, excluding the header.
+   The RST table must not contain blank separator rows. */
+
+/* LLMs: Blue (rows 1-6) */
+table.algs-left tbody tr:nth-child(-n+6) {
+    --family-bg: #e4efff;
+    --family-fg: #1d4ed8;
+}
+
+/* Deep Learning: Red (rows 7-32) */
+table.algs-left tbody tr:nth-child(n+7):nth-child(-n+32) {
+    --family-bg: #fce8e8;
+    --family-fg: #b91c1c;
+}
+
+/* Matrix Completion: Green (rows 33-41) */
+table.algs-left tbody tr:nth-child(n+33):nth-child(-n+41) {
+    --family-bg: #e5f5e9;
+    --family-fg: #16703a;
+}
+
+/* Pattern Search: Purple (rows 42-45, including PSW-I) */
+table.algs-left tbody tr:nth-child(n+42):nth-child(-n+45) {
+    --family-bg: #f3e8ff;
+    --family-fg: #7e22ce;
+}
+
+/* Machine Learning: Orange (rows 46-49) */
+table.algs-left tbody tr:nth-child(n+46):nth-child(-n+49) {
+    --family-bg: #fff1dc;
+    --family-fg: #a35409;
+}
+
+/* Statistics: Teal (rows 50-55) */
+table.algs-left tbody tr:nth-child(n+50) {
+    --family-bg: #e5f5f5;
+    --family-fg: #0e7490;
+}
+
+/* Family separators: thin slate line and extra space above each new family */
+table.algs-left tbody tr:is(
+    :nth-child(7),
+    :nth-child(33),
+    :nth-child(42),
+    :nth-child(46),
+    :nth-child(50)
+) td {
+    border-top: 2px solid #94a3b8 !important;
+    padding-top: 24px !important;
+}
+
+/* Remove extra paragraph spacing */
+table.algs-left td p,
+table.algs-left th p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Dark mode - Furo (explicit Dark or automatic system Dark) */
+body[data-theme="dark"] table.algs-left {
+    border-color: #3a4656 !important;
+}
+
+body[data-theme="dark"] table.algs-left tbody td {
+    background: #20252d !important;
+    color: #e2e8f0 !important;
+    border-bottom-color: #384252 !important;
+}
+
+body[data-theme="dark"] table.algs-left tbody tr:nth-child(even) td {
+    background: #262d37 !important;
+}
+
+body[data-theme="dark"] table.algs-left tbody tr:hover td {
+    background: #30435a !important;
+}
+
+body[data-theme="dark"] table.algs-left tbody td:first-child {
+    color: #e2e8f0 !important;
+}
+
+/* Automatic dark mode */
+@media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]):not([data-theme="dark"]) table.algs-left {
+        border-color: #3a4656 !important;
+    }
+
+    body:not([data-theme="light"]):not([data-theme="dark"]) table.algs-left tbody td {
+        background: #20252d !important;
+        color: #e2e8f0 !important;
+        border-bottom-color: #384252 !important;
+    }
+
+    body:not([data-theme="light"]):not([data-theme="dark"]) table.algs-left tbody tr:nth-child(even) td {
+        background: #262d37 !important;
+    }
+
+    body:not([data-theme="light"]):not([data-theme="dark"]) table.algs-left tbody tr:hover td {
+        background: #30435a !important;
+    }
+
+    body:not([data-theme="light"]):not([data-theme="dark"]) table.algs-left tbody td:first-child {
+        color: #e2e8f0 !important;
+    }
+}
+
+/* GenGAP: emphasize individual pattern/algorithm titles. */
+body:has(.gengap-contents) section#scenariomonoblock > p:has(> strong),
+body:has(.gengap-contents) section#scenariomultiblock > p:has(> strong) {
+    margin-top: 52px !important;
+    margin-bottom: 18px !important;
+}
+
+body:has(.gengap-contents) section#scenariomonoblock > p > strong,
+body:has(.gengap-contents) section#scenariomultiblock > p > strong {
+    display: inline-block;
+    font-size: 1.35rem;
+    font-weight: 750;
+    line-height: 1.3;
+}
+
+
+/* GenGAP: prevent the floated distribution image from squeezing the tutorial. */
+body:has(.gengap-contents) section#gengap-tutorial {
+    clear: both !important;
+    display: flow-root !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    padding-top: 30px !important;
+}
+
+/* GenGAP pattern headings: target Sphinx's generated section IDs. */
+body:has(.gengap-contents) section#mono-block-one-missing-block-per-series > p:has(> strong),
+body:has(.gengap-contents) section#multi-block-multiple-missing-blocks-per-series > p:has(> strong) {
+    margin-top: 52px !important;
+    margin-bottom: 18px !important;
+    clear: both;
+}
+
+body:has(.gengap-contents) section#mono-block-one-missing-block-per-series > p > strong,
+body:has(.gengap-contents) section#multi-block-multiple-missing-blocks-per-series > p > strong {
+    display: inline-block;
+    font-size: 1.35rem !important;
+    font-weight: 750 !important;
+    line-height: 1.3;
+}
+
+/* Only the two main GenGAP sections, explicitly marked in RST. */
+body:has(.gengap-contents) section.gengap-main-block {
+    padding-top: 60px !important;
+    clear: both;
+}
+body:has(.gengap-contents) section.gengap-main-block > h2,
+body:has(.gengap-contents) section.gengap-main-block > h3 {
+    margin-top: 0 !important;
+}
+
+
+/* Dataset category colors: retain algs-left layout, override algorithm row palette. */
+/* Weather */
+table.algs-left.datasets-left tbody tr:nth-child(n+1):nth-child(-n+3) {
+    --family-bg: #e0f2fe;
+    --family-fg: #075985;
+}
+/* Air Quality */
+table.algs-left.datasets-left tbody tr:nth-child(n+4):nth-child(-n+5) {
+    --family-bg: #ccfbf1;
+    --family-fg: #115e59;
+}
+/* Water Quality */
+table.algs-left.datasets-left tbody tr:nth-child(n+6):nth-child(-n+7) {
+    --family-bg: #dbeafe;
+    --family-fg: #1e40af;
+}
+/* Neuroscience */
+table.algs-left.datasets-left tbody tr:nth-child(8) {
+    --family-bg: #f3e8ff;
+    --family-fg: #6b21a8;
+}
+/* IoT Sensing */
+table.algs-left.datasets-left tbody tr:nth-child(n+9):nth-child(-n+10) {
+    --family-bg: #ffedd5;
+    --family-fg: #9a3412;
+}
+/* Sports */
+table.algs-left.datasets-left tbody tr:nth-child(n+11):nth-child(-n+12) {
+    --family-bg: #dcfce7;
+    --family-fg: #166534;
+}
+/* Energy */
+table.algs-left.datasets-left tbody tr:nth-child(13) {
+    --family-bg: #fef3c7;
+    --family-fg: #92400e;
+}
+/* Finance */
+table.algs-left.datasets-left tbody tr:nth-child(14) {
+    --family-bg: #ffe4e6;
+    --family-fg: #9f1239;
+}
+
+/* Category boundaries, without algorithm-specific separators. */
+table.algs-left.datasets-left tbody tr td {
+    border-top: none !important;
+    padding-top: 13px !important;
+}
+table.algs-left.datasets-left tbody tr:is(:nth-child(4), :nth-child(6), :nth-child(8), :nth-child(9), :nth-child(11), :nth-child(13), :nth-child(14)) td {
+    border-top: 2px solid #94a3b8 !important;
+    padding-top: 24px !important;
+}
+
+/* Index navigation cards: restore the original card appearance. */
+.index-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.index-navigation .card {
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.index-navigation .card h3 {
+    margin: 0 0 8px !important;
+}
+
+.index-navigation .card p {
+    margin: 0 !important;
+    color: #333333;
+}
+
+.index-navigation .card h3 a {
+    color: #2e86c1;
+    text-decoration: none;
+}
+
+[data-theme="dark"] .index-navigation .card {
+    background-color: #181818;
+    border-color: #3a4656;
+}
+
+[data-theme="dark"] .index-navigation .card p {
+    color: #cccccc;
+}
+
+@media (max-width: 600px) {
+    .index-navigation {
+        grid-template-columns: 1fr;
+    }
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+/* Benchmark tables: preserve borders and structure */
+table.benchmark-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Remove only the dark header background */
+table.benchmark-table thead th {
+    background: transparent !important;
+    color: inherit !important;
+}
+
+/* Justify regular text globally */
+article p {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+/* Keep figure captions centered */
+article figcaption p {
+    text-align: center;
+}

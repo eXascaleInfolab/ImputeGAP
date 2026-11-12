@@ -15,7 +15,7 @@ class TestContaminationMCAR(unittest.TestCase):
         the goal is to test if only the selected values are contaminated
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
+        ts_1.load_series("test-logic-llm.txt")
 
         series_impacted = [0.4]
         missing_rates = [40]
@@ -45,7 +45,7 @@ class TestContaminationMCAR(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test.txt"))
+        ts_1.load_series("test.txt")
 
         series_impacted = [0.4, 1]
         missing_rates = [0.1, 0.4, 0.6]
@@ -74,7 +74,7 @@ class TestContaminationMCAR(unittest.TestCase):
 
         for dataset in datasets:
             ts_1 = TimeSeries()
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
 
             for S in series_impacted:
                 for R in missing_rates:
@@ -115,7 +115,7 @@ class TestContaminationMCAR(unittest.TestCase):
 
         for dataset in datasets:
             ts_1 = TimeSeries()
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
             ten_percent_index = int(ts_1.data.shape[1] * 0.1)
 
             for series_sel in series_impacted:
@@ -132,7 +132,7 @@ class TestContaminationMCAR(unittest.TestCase):
         Verify if the manager of a dataset is working
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series("chlorine")
 
         ts_2 = TimeSeries()
         ts_2.import_matrix(GenGAP.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.1, block_size=10, offset=0.1, seed=True))
@@ -155,9 +155,9 @@ class TestContaminationMCAR(unittest.TestCase):
         for dataset in datasets:
             ts_1 = TimeSeries()
             if dataset == "eeg-reading":
-                ts_1.load_series(utils.search_path(dataset), header=True)
+                ts_1.load_series(dataset, header=True)
             else:
-                ts_1.load_series(utils.search_path(dataset))
+                ts_1.load_series(dataset)
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
@@ -212,7 +212,7 @@ class TestContaminationMCAR(unittest.TestCase):
 
         for dataset in datasets:
             ts_1 = TimeSeries()
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
             N, M = ts_1.data.shape
 
             for series_sel in series_impacted:

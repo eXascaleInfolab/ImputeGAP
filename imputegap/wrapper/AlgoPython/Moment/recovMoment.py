@@ -44,19 +44,20 @@ def init_model(model_size="small", seed=0, verbose=True):
     return model
 
 
-def recovery_moment(incomp_data, model="zero-shot", model_size="small", use_mean=True, seq_len=-1, sliding_windows=1, seed=26, verbose=False, replicat=False):
+def recovery_moment(incomp_data, model="zero-shot", model_size="small", use_mean=True, seq_len=-1, sliding_windows=1, seed=26, verbose=False, use_cuda=0, replicat=False):
     if model == "zero-shot":
-        return recov_moment_zeroshot(incomp_data=incomp_data, model=model, model_size=model_size, use_mean=use_mean, seq_len=seq_len, sliding_windows=sliding_windows, verbose=verbose, replicat=replicat)
+        return recov_moment_zeroshot(incomp_data=incomp_data, model=model, model_size=model_size, use_mean=use_mean, seq_len=seq_len, sliding_windows=sliding_windows, verbose=verbose, use_cuda=use_cuda, replicat=replicat)
     else:
-        return recov_moment_train(incomp_data=incomp_data, model=model, model_size=model_size, use_mean=use_mean, seq_len=seq_len, sliding_windows=sliding_windows, verbose=verbose, replicat=replicat)
+        return recov_moment_train(incomp_data=incomp_data, model=model, model_size=model_size, use_mean=use_mean, seq_len=seq_len, sliding_windows=sliding_windows, verbose=verbose, use_cuda=use_cuda, replicat=replicat)
 
 
-def recov_moment_zeroshot(incomp_data, model="zero-shot", model_size="small", use_mean=True, seq_len=-1, sliding_windows=1, seed=26, verbose=False, replicat=False):
+def recov_moment_zeroshot(incomp_data, model="zero-shot", model_size="small", use_mean=True, seq_len=-1, sliding_windows=1, seed=26, verbose=False, use_cuda=0, replicat=False):
 
     ts_m = np.copy(incomp_data)
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)
     size_limitation = False
+    device = torch.device("cuda" if use_cuda else "cpu")
 
     if seq_len ==-1:
         seq_len, batch_size, size_limitation, taux_nans, tr_ratio = utils_imp.compute_variables_timesnetlike(ts_m=ts_m, strat="seq", tr_ratio=1, size_limitation=size_limitation, model=model, high=32,verbose=verbose)
@@ -73,14 +74,21 @@ def recov_moment_zeroshot(incomp_data, model="zero-shot", model_size="small", us
             print(f"\n\n(INFO) Imputation adaptation with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage. \n\tCurrently, the number of NaNs might reach {taux_nans} for a sequence and the size of seq_len is {seq_len}.\n(INFO) NaNs sequence is put to mean {use_mean = }\n")
 
     if verbose:
-        print(f"(IMPUTATION) MOMENT\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tmodel: {model}\n\tmodel_size: {model_size}\n\tuse_mean: {use_mean}\n\tseq_len: {seq_len}\n\tsliding_windows: {sliding_windows}\n\tseed: {seed}\n\tverbose: {verbose}\n\tmax consecutive nans: {taux_nans}\n")
-        print(f"\ncall: moment.impute(params={{'model': {model}, 'model_size': {model_size}, 'use_mean': {use_mean}, 'seq_len': {seq_len}, 'sliding_windows': {sliding_windows}}})\n\n")
+        print(f"(IMPUTATION) MOMENT\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tmodel: {model}\n\tmodel_size: {model_size}\n\tuse_mean: {use_mean}\n\tseq_len: {seq_len}\n\tsliding_windows: {sliding_windows}\n\tseed: {seed}\n\tverbose: {verbose}\n\tmax consecutive nans: {taux_nans}\n\tuse_cuda: {use_cuda}\n")
+        print(f"\ncall: moment.impute(params={{'model': '{model}', 'model_size': '{model_size}', 'use_mean': {use_mean}, 'seq_len': {seq_len}, 'sliding_windows': {sliding_windows}}})\n\n")
 
     model = init_model(model_size=model_size, seed=seed, verbose=verbose)
+    model = model.to(device).float()
+    model.eval()
 
     x = utils.window_truncation(ts_m, seq_len=seq_len, stride=sliding_windows, info="moments", verbose=False, deep_verbose=False)
-    x = torch.as_tensor(x)  # converts numpy -> torch (keeps dtype if possible)
+    #x = torch.as_tensor(x)  # converts numpy -> torch (keeps dtype if possible)
+    x = torch.as_tensor(x, dtype=torch.float32, device=device)
     x_enc = x.permute(0, 2, 1).contiguous()   # [B, C, L]
+
+    if verbose:
+        print(f"MOMENT > Model device: {next(model.parameters()).device}")
+        print(f"MOMENT > Input device: {x_enc.device}")
 
     if use_mean:
         # Fill NaNs in x (model also nan_to_num later, but do it early to be safe)
@@ -88,12 +96,15 @@ def recov_moment_zeroshot(incomp_data, model="zero-shot", model_size="small", us
         mean = torch.nan_to_num(mean, nan=0.0)  # if everything is NaN
         x_enc = torch.where(torch.isnan(x_enc), mean, x_enc)
 
-    output = model(x_enc=x_enc)
+    # Inference does not need gradients.
+    with torch.no_grad():
+        output = model(x_enc=x_enc)
 
     if verbose:
         print(f"\nreconstruction...\n")
 
-    recovery = output.reconstruction.permute(0, 2, 1).contiguous()  # [B, L, C]
+    #recovery = output.reconstruction.permute(0, 2, 1).contiguous()  # [B, L, C]
+    recovery = output.reconstruction.permute(0, 2, 1).contiguous().cpu()
 
     recovery_matrix = utils.reconstruction_window_based(preds=recovery, nbr_timestamps=incomp_data.shape[0], sliding_windows=sliding_windows, verbose=False, deep_verbose=False)
     recovery_matrix = recovery_matrix.detach().cpu().numpy()
@@ -116,12 +127,13 @@ def make_mask(input_mask, mask_ratio):
     n = int(len(available_idx) * mask_ratio)
 
     if n > 0:
-        chosen = available_idx[torch.randperm(len(available_idx))[:n]]
+        #chosen = available_idx[torch.randperm(len(available_idx))[:n]]
+        chosen = available_idx[torch.randperm(len(available_idx), device=input_mask.device)[:n]]
         mask[chosen] = 0
 
     return mask.long()
 
-def recov_moment_train(incomp_data, model="train", model_size="small", use_mean=True, seq_len=-1, sliding_windows=1, seed=26, verbose=False, replicat=False):
+def recov_moment_train(incomp_data, model="train", model_size="small", use_mean=True, seq_len=-1, sliding_windows=1, seed=26, verbose=False, use_cuda=0, replicat=False):
 
     ts_m = np.copy(incomp_data)
     recov = np.copy(incomp_data)
@@ -149,7 +161,7 @@ def recov_moment_train(incomp_data, model="train", model_size="small", use_mean=
             print(f"\n\n(INFO) Imputation adaptation with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage. \n\tCurrently, the number of NaNs might reach {taux_nans} for a sequence and the size of seq_len is {seq_len}.\n(INFO) NaNs sequence is put to mean {use_mean = }\n")
 
     if verbose:
-        print(f"(IMPUTATION) MOMENT\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tmodel: {model}\n\tmodel_size: {model_size}\n\tuse_mean: {use_mean}\n\tseq_len: {seq_len}\n\tsliding_windows: {sliding_windows}\t\n\tseed: {seed}\n\tverbose: {verbose}\n\tmax consecutive nans: {taux_nans}\n")
+        print(f"(IMPUTATION) MOMENT\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tmodel: {model}\n\tmodel_size: {model_size}\n\tuse_mean: {use_mean}\n\tseq_len: {seq_len}\n\tsliding_windows: {sliding_windows}\t\n\tseed: {seed}\n\tverbose: {verbose}\n\tmax consecutive nans: {taux_nans}\n\tuse_cuda: {use_cuda}\n")
         print(f"\ncall: moment.impute(params={{'model': {model}, 'model_size': {model_size}, 'use_mean': {use_mean}, 'seq_len': {seq_len}, 'sliding_windows': {sliding_windows}}})\n\n")
 
     model = init_model(model_size=model_size, seed=seed, verbose=False)
@@ -173,8 +185,12 @@ def recov_moment_train(incomp_data, model="train", model_size="small", use_mean=
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     mask_generator = Masking(mask_ratio=mask_ratio)  # Mask 25% of patches randomly
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = torch.device("cuda" if use_cuda else "cpu")
     model = model.to(device).float()
+    model.eval()
+
+    if verbose:
+        print(f"MOMENT > Model device: {next(model.parameters()).device}")
 
     trues, preds, masks = [], [], []
     with torch.no_grad():

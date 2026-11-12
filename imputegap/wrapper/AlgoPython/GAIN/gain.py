@@ -33,7 +33,7 @@ Contact: jsyoon0823@gmail.com
 import os
 
 # (Optional but very effective fallback) run on CPU to avoid any GPU codegen
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
@@ -45,7 +45,7 @@ from imputegap.wrapper.AlgoPython.GAIN.utils import xavier_init
 from imputegap.wrapper.AlgoPython.GAIN.utils import binary_sampler, uniform_sampler, sample_batch_index
 
 
-def gain (data_x, gain_parameters, verbose=True):
+def gain (data_x, gain_parameters, use_cuda=0, verbose=True):
   '''Impute missing values in data_x
   
   Args:
@@ -160,7 +160,13 @@ def gain (data_x, gain_parameters, verbose=True):
   G_solver = tf.train.AdamOptimizer().minimize(G_loss, var_list=theta_G)
   
   ## Iterations
-  config = tf.ConfigProto()
+  #config = tf.ConfigProto()
+  config = tf.ConfigProto(
+    device_count={"GPU": 1 if use_cuda else 0},
+    allow_soft_placement=not bool(use_cuda)
+  )
+  config.gpu_options.allow_growth = True
+
   config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.OFF
   sess = tf.Session(config=config)
   sess.run(tf.global_variables_initializer())

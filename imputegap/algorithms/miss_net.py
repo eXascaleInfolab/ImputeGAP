@@ -1,8 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.MissNet.recovMissNet import recovMissNet
+from imputegap.tools import utils
 
-def miss_net(incomp_data, n_components=20, alpha=0.5, beta=0.1, n_cl=1, max_iter=20, tol=6, random_init=False, logs=True, verbose=True):
+
+def miss_net(incomp_data, n_components=20, alpha=0.5, beta=0.1, n_cl=1, max_iter=20, tol=6, random_init=False, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using the Multivariate Recurrent Neural Network (MRNN) algorithm.
 
@@ -33,9 +35,11 @@ def miss_net(incomp_data, n_components=20, alpha=0.5, beta=0.1, n_cl=1, max_iter
     random_init : bool, optional
         Whether to use random initialization for latent variables. (default False)
 
-
     logs : bool, optional
         Whether to log the execution time (default is True).
+
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
 
     verbose : bool, optional
         Whether to display the contamination information (default is True).
@@ -57,6 +61,7 @@ def miss_net(incomp_data, n_components=20, alpha=0.5, beta=0.1, n_cl=1, max_iter
     """
 
     start_time = time.time()  # Record start time
+    _ = utils.check_cuda(use_cuda=use_cuda, exception="MissNet")
 
     recov_data = recovMissNet(X=incomp_data, n_components=n_components, alpha=alpha, beta=beta, n_cl=n_cl, max_iter=max_iter, tol=tol, random_init=random_init, verbose=verbose)
 

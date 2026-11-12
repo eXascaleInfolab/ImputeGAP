@@ -153,7 +153,7 @@ def handle_parser(argv=None):
 
     return args
 
-def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layers=3, num_workers=0, model="TimesNet", tr_ratio=0.7, seed=2021, verbose=True, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq"):
+def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layers=3, num_workers=0, model="TimesNet", tr_ratio=0.7, seed=2021, verbose=True, replicat=False, normalization=True, scaling=True, shuffle=True, use_cuda=0, strat="seq"):
 
     data_m = np.copy(ts_m)
     recov = np.copy(ts_m)
@@ -161,7 +161,7 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layer
 
     args = handle_parser()
 
-    args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
+    args.use_gpu = bool(use_cuda)
     args.ts_m = data_m
 
     args.is_training = 1
@@ -223,7 +223,7 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layer
         args.data = "ETTh1"
 
     if verbose:
-        print(f"(IMPUTATION) {model}\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tepochs: {args.train_epochs}\n\tdataloader: {args.data}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\ttop_k: {args.top_k}\n\tpred_len: {args.pred_len}\n\tlabel_len: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n")
+        print(f"(IMPUTATION) {model}\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_len: {args.seq_len}\n\tepochs: {args.train_epochs}\n\tdataloader: {args.data}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\ttop_k: {args.top_k}\n\tpred_len: {args.pred_len}\n\tlabel_len: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n\tuse_cuda: {use_cuda}\n")
         print(f"\ncall: timesnet.impute(params={{'seq_len': {args.seq_len}, 'batch_size': {args.batch_size}, 'top_k': {args.top_k}, 'epochs': {args.train_epochs}, 'gpt_layers': {args.gpt_layers}, 'num_workers': {args.num_workers}, 'seed': {seed}}})\n\n")
 
     if verbose:
@@ -232,9 +232,11 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layer
 
     Exp = Exp_Imputation
 
+
     for ii in range(args.itr):
         # setting record of experiments
         exp = Exp(args)  # set experiments
+        #print(f"TimesNet > Device: {next(exp.model.parameters()).device}")
         setting = '{}_{}_{}_{}_ft{}_sl{}_ll{}_pl{}_dm{}_nh{}_el{}_dl{}_df{}_expand{}_dc{}_fc{}_eb{}_dt{}_{}_{}'.format(args.task_name, args.model_id, args.model, args.data, args.features, args.seq_len, args.label_len, args.pred_len, args.d_model, args.n_heads, args.e_layers, args.d_layers, args.d_ff, args.expand, args.d_conv, args.factor, args.embed, args.distil, args.des, ii)
 
         if args.verbose:
@@ -253,7 +255,8 @@ def recovTimesNet(ts_m, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layer
             print(f'\n\n>>>>>>>reconstruction<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         reconstruction = exp.test(setting, test=0, reconstruction=True, normalization=args.normalization, scaling=args.scaling, replicat=replicat, original_shape=ts_m.shape, verbose=args.verbose, checkpoint=path)
         reconstruction = np.array(reconstruction)
-        torch.cuda.empty_cache()
+        if args.use_gpu:
+            torch.cuda.empty_cache()
 
         if np.isnan(reconstruction).any():
             print(f"\n\n(ERROR) Imputation error with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage. \n\tCurrently, the number of NaNs might reach {taux_nans} for a sequence and the size of seq_len is {args.seq_len}.\n")

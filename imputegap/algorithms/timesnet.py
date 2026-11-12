@@ -1,9 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.TimesNet.recovTimesNet import recovTimesNet
+from imputegap.tools import utils
 
 
-def timesnet(incomp_data, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layers=3, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
+def timesnet(incomp_data, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_layers=3, num_workers=0, tr_ratio=0.7, seed=42, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using TimesNet algorithm.
 
@@ -40,6 +41,9 @@ def timesnet(incomp_data, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_lay
     logs : bool, optional
         Whether to print/log execution time and key events (default: True).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to print detailed output information during execution (default: True).
 
@@ -59,8 +63,9 @@ def timesnet(incomp_data, seq_len=-1, batch_size=-1, top_k=5, epochs=10, gpt_lay
     https://github.com/Chengyui/NuwaTS/tree/master
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
-    recov_data = recovTimesNet(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, top_k=top_k, epochs=epochs, gpt_layers=gpt_layers, model="TimesNet", num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, verbose=verbose)
+    recov_data = recovTimesNet(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, top_k=top_k, epochs=epochs, gpt_layers=gpt_layers, model="TimesNet", num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

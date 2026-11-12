@@ -28,7 +28,7 @@ class BaseImputer:
     logs = True
     verbose = True
 
-    def __init__(self, incomp_data):
+    def __init__(self, incomp_data, use_cuda=0):
         """
         Initialize the BaseImputer with an infected time series matrix.
 
@@ -44,6 +44,7 @@ class BaseImputer:
         self.downstream_plot = None
         self.parameters = None
         self.task = "default"
+        self.use_cuda = use_cuda
 
     def impute(self, params=None):
         """
@@ -1970,7 +1971,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = mrnn(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = mrnn(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -2078,7 +2079,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = brits(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = brits(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -2156,7 +2157,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = deep_mvi(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = deep_mvi(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -2258,7 +2259,7 @@ class Imputation:
                     params["window"] = 6
                 params["k"] = utils.control_boundaries(rank=params["k"], boundary=self.incomp_data.shape[0] // params["window"], algorithm=self.algorithm)
 
-                self.recov_data = mpin(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = mpin(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -2366,7 +2367,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = pristi(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = pristi(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -2463,7 +2464,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = miss_net(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = miss_net(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -2552,7 +2553,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = gain(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = gain(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -2662,7 +2663,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = grin(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = grin(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, use_cuda=self.use_cuda, verbose=self.verbose, **params)
 
                 return self
 
@@ -2779,7 +2780,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = bay_otide(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = bay_otide(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, use_cuda=self.use_cuda, verbose=self.verbose, **params)
 
                 return self
 
@@ -2877,7 +2878,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = hkmf_t(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = hkmf_t(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -2984,7 +2985,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = bit_graph(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = bit_graph(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, use_cuda=self.use_cuda, verbose=self.verbose, **params)
 
                 return self
 
@@ -3090,7 +3091,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = saits(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = saits(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -3196,7 +3197,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = timesnet(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = timesnet(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -3304,7 +3305,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = csdi(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = csdi(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, use_cuda=self.use_cuda, verbose=self.verbose, **params)
 
                 return self
 
@@ -3402,7 +3403,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = nuwats(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = nuwats(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -3507,7 +3508,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = gpt4ts(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = gpt4ts(incomp_data=self.incomp_data, tr_ratio=tr_ratio, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
                 return self
 
@@ -3591,6 +3592,6 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = moment(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = moment(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
 
 

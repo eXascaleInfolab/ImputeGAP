@@ -1,9 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.BRITS.recovBRITS import recovBRITS
+from imputegap.tools import utils
 
 
-def brits(incomp_data, model="rits_i", seq_len=24, epochs=50, batch_size=64, sliding_windows=1, hidden_layers=108, impute_weight=0.3, num_workers=0, seed=42, tr_ratio=0.9, logs=True, verbose=True):
+def brits(incomp_data, model="rits_i", seq_len=24, epochs=50, batch_size=64, sliding_windows=1, hidden_layers=108, impute_weight=0.3, num_workers=0, seed=42, tr_ratio=0.9, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using the BRITS algorithm.
 
@@ -40,6 +41,9 @@ def brits(incomp_data, model="rits_i", seq_len=24, epochs=50, batch_size=64, sli
     tr_ratio: float, optional
          Split ratio between training and testing sets (default is 0.9).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
 
@@ -56,17 +60,20 @@ def brits(incomp_data, model="rits_i", seq_len=24, epochs=50, batch_size=64, sli
 
     Example
     -------
-        >>> recov_data = brits(incomp_data=incomp_data, model="brits")
-        >>> print(recov_data)
+    .. code-block:: python
+
+        recov_data = brits(incomp_data=incomp_data, model="brits")
+        print(recov_data)
+
 
     References
     ----------
     Cao, W., Wang, D., Li, J., Zhou, H., Li, L. & Li, Y. BRITS: Bidirectional Recurrent Imputation for Time Series. Advances in Neural Information Processing Systems, 31 (2018). https://proceedings.neurips.cc/paper_files/paper/2018/file/734e6bfcd358e25ac1db0a4241b95651-Paper.pdf
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
-    #recov_data = brits_recovery(incomp_data=incomp_data, model=model, epoch=epoch, batch_size=batch_size, nbr_features=nbr_features, hidden_layers=hidden_layers, seq_length=seq_length, tr_ratio=tr_ratio, num_workers=num_workers, seed=42, verbose=verbose)
-    recov_data = recovBRITS(incomp_data=incomp_data, seq_len=seq_len, model_name=model, epochs=epochs, batch_size=batch_size, sliding_windows=sliding_windows, impute_weight=impute_weight, hid_size=hidden_layers, num_workers=num_workers, seed=seed, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = recovBRITS(incomp_data=incomp_data, seq_len=seq_len, model_name=model, epochs=epochs, batch_size=batch_size, sliding_windows=sliding_windows, impute_weight=impute_weight, hid_size=hidden_layers, num_workers=num_workers, seed=seed, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

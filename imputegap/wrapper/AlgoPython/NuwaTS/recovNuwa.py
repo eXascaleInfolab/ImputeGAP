@@ -131,7 +131,7 @@ def handle_parser(argv=None):
 
 
 
-def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, seed=2023, tr_ratio=0.7, verbose=True, deep_verbose=False, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq"):
+def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, seed=2023, tr_ratio=0.7, verbose=True, deep_verbose=False, replicat=False, normalization=True, scaling=True, shuffle=True, use_cuda=0, strat="seq"):
 
     if seq_len == -2:
         return np.nan_to_num(ts_m, nan=0.0)
@@ -146,7 +146,8 @@ def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_la
     np.random.seed(fix_seed)
 
     args = handle_parser()
-    args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
+    args.use_gpu = bool(use_cuda)
+    #args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
     args.ts_m = ts_m
 
     args.is_training = 1
@@ -233,6 +234,7 @@ def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_la
         # setting record of experiments
         exp = Exp(args)  # set experiments
         setting = 'imputegap_settings'
+        #print(f"NuwaTS > Device: {next(exp.model.parameters()).device}")
 
         if args.verbose:
             print(f'\n\n>>>>>>>training>>>>>>>>>>>>>>>>>>>>>>>>>>')

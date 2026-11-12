@@ -14,49 +14,10 @@ Initialize a Git Repository::
     source imputegap_source.sh
 
 
-.. raw:: html
-
-    <br><br>
 
 
-
-Library Architecture
---------------------
-
-ImputeGAP is organized into six main directories, each responsible for a specific aspect of the framework.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 80
-
-   * - **Directory**
-     - **Description**
-   * - ``algorithms/``
-     - Contains the interfaces and execution logic used to invoke imputation algorithms, including integrations with external implementations.
-   * - ``datasets/``
-     - Stores the datasets provided with the library, along with additional datasets used for experimentation and evaluation.
-   * - ``env/``
-     - Defines default configurations, parameters, and settings for the supported algorithms and models.
-   * - ``recovery/``
-     - Contains the core modules responsible for time series imputation, recovery management, benchmarking, and evaluation.
-   * - ``tools/``
-     - Provides shared utilities and helper functions used throughout the library.
-   * - ``wrapper/``
-     - Contains external algorithm implementations, including code adapted from research papers and third-party sources.
-
-
-.. note::
-
-   To integrate an algorithm in C++, please follow the :doc:`integration tutorial <integration_c>`.
-
-
-.. raw:: html
-
-    <br><br>
-
-
-A. Python Integration Steps
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Integration Steps
+~~~~~~~~~~~~~~~~~
 
 Basic Features
 --------------
@@ -81,9 +42,6 @@ Basic Features
         self.recov_data = new_alg(self.incomp_data, **params)
 
 
-.. raw:: html
-
-   <br><br>
 
 
 Advanced Features
@@ -160,3 +118,40 @@ To enable the optimization module, please update ``./imputegap/tools/algorithm_p
 .. raw:: html
 
    <br>
+
+
+
+Library Architecture
+--------------------
+
+ImputeGAP is organized into six main directories, each responsible for a specific aspect of the framework.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - **Directory**
+     - **Description**
+   * - ``algorithms/``
+     - Contains the interfaces and execution logic used to invoke imputation algorithms, including integrations with external implementations.
+   * - ``datasets/``
+     - Stores the datasets provided with the library, along with additional datasets used for experimentation and evaluation.
+   * - ``env/``
+     - Defines default configurations, parameters, and settings for the supported algorithms and models.
+   * - ``recovery/``
+     - Contains the core modules responsible for time series imputation, recovery management, benchmarking, and evaluation.
+   * - ``tools/``
+     - Provides shared utilities and helper functions used throughout the library.
+   * - ``wrapper/``
+     - Contains external algorithm implementations, including code adapted from research papers and third-party sources.
+
+
+.. note::
+
+   To integrate an algorithm in C++, please follow the :doc:`integration tutorial <integration_c>`.
+
+
+.. raw:: html
+
+    <br>
+

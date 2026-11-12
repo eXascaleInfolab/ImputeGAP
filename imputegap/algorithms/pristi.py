@@ -1,9 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.PriSTI.recovPriSTI import recovPriSTI
+from imputegap.tools import utils
 
 
-def pristi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, target_strategy="random", nsamples=1, beta=None, num_workers=0, tr_ratio=0.9, seed=1, logs=True, verbose=True):
+def pristi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, target_strategy="random", nsamples=1, beta=None, num_workers=0, tr_ratio=0.9, seed=1, logs=True, use_cuda=0, verbose=True):
     """
     Perform time series imputation using the PriSTI (Probabilistic Imputation via Sequential Targeted Imputation) algorithm.
 
@@ -50,6 +51,9 @@ def pristi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1,
     logs : bool, optional
         Whether to print/log execution time and key events (default: True).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to print detailed output information during execution (default: True).
 
@@ -61,8 +65,11 @@ def pristi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1,
 
      Example
      -------
-        >>> recov_data = pristi(incomp_data, seq_len=48, batch_size=16)
-        >>> print(recov_data.shape)
+     .. code-block:: python
+
+        recov_data = pristi(incomp_data, seq_len=48, batch_size=16)
+        print(recov_data.shape)
+
 
     References
     ----------
@@ -70,11 +77,12 @@ def pristi(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1,
     https://github.com/LMZZML/PriSTI
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
     if beta is None:
         beta = [0.0001, 0.2]
 
-    recov_data = recovPriSTI(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, sliding_windows=sliding_windows, target_strategy=target_strategy, nsamples=nsamples, beta=beta, num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, verbose=verbose)
+    recov_data = recovPriSTI(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, sliding_windows=sliding_windows, target_strategy=target_strategy, nsamples=nsamples, beta=beta, num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

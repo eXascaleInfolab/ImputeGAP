@@ -221,8 +221,8 @@ if __name__ == '__main__':
     ts = TimeSeries()
 
     # load and normalize the dataset
-    # ts.load_series(utils.search_path("test-logic-dl-xl.txt"))
-    ts.load_series(utils.search_path("chlorine"))
+    # ts.load_series("test-logic-dl-xl.txt")
+    ts.load_series("chlorine")
     ts.normalize(normalizer="z_score")
     ts_m = GenGAP.aligned(ts.data)
     b = DataLoaderImputeGAP(ts_m, None)

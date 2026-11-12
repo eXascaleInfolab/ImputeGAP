@@ -1,8 +1,11 @@
 import time
 
 from imputegap.wrapper.AlgoPython.CSDI.recovCSDI import recovCSDI
+from imputegap.tools import utils
 
-def csdi(incomp_data, seq_len=-1, batch_size=-1, epochs=25, sliding_windows=1, target_strategy="random", nsamples=1, beta=None, num_workers=0, tr_ratio=0.7, seed=1, logs=True, verbose=True):
+
+def csdi(incomp_data, seq_len=-1, batch_size=-1, epochs=25, sliding_windows=1, target_strategy="random",
+         nsamples=1, beta=None, num_workers=0, tr_ratio=0.7, seed=1, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using CSDI
 
@@ -46,6 +49,9 @@ def csdi(incomp_data, seq_len=-1, batch_size=-1, epochs=25, sliding_windows=1, t
     logs : bool, optional
         Whether to print/log execution time and key events (default: True).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to print detailed output information during execution (default: True).
 
@@ -56,8 +62,10 @@ def csdi(incomp_data, seq_len=-1, batch_size=-1, epochs=25, sliding_windows=1, t
 
     Example
     -------
-        >>> imputed = csdi(incomp_data, seq_len=48, batch_size=16)
-        >>> print(imputed.shape)
+    .. code-block:: python
+
+        imputed = csdi(incomp_data, seq_len=48, batch_size=16)
+        print(imputed.shape)
 
     References
     ----------
@@ -65,11 +73,12 @@ def csdi(incomp_data, seq_len=-1, batch_size=-1, epochs=25, sliding_windows=1, t
     https://github.com/ermongroup/CSDI
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
     if beta is None:
         beta = [0.0001, 0.5]
 
-    recov_data = recovCSDI(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, sliding_windows=sliding_windows, target_strategy=target_strategy, nsamples=nsamples, beta=beta, num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, verbose=verbose)
+    recov_data = recovCSDI(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, sliding_windows=sliding_windows, target_strategy=target_strategy, nsamples=nsamples, beta=beta, num_workers=num_workers, tr_ratio=tr_ratio, seed=seed, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
 

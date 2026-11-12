@@ -17,13 +17,12 @@ To load and plot the eeg-alcohol dataset from the library:
 .. code-block:: python
 
     from imputegap.recovery.manager import TimeSeries
-    from imputegap.tools import utils
 
     # initialize the time series object
     ts = TimeSeries()
 
     # load and normalize the dataset from the library
-    ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+    ts.load_series("eeg-alcohol", normalizer="z_score")
 
     # print and plot a subset of time series
     ts.print(nbr_series=4, nbr_val=4)
@@ -86,13 +85,12 @@ As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pat
 
     from imputegap.recovery.manager import TimeSeries
     from imputegap.recovery.contamination import GenGAP
-    from imputegap.tools import utils
 
     # initialize the time series object
     ts = TimeSeries()
 
     # load and normalize the dataset
-    ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+    ts.load_series("eeg-alcohol", normalizer="z_score")
 
     # contaminate the time series with MCAR pattern
     ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
@@ -138,13 +136,12 @@ Let's illustrate the imputation using the CDRec algorithm from the Matrix Comple
     from imputegap.recovery.imputation import Imputation
     from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
-    from imputegap.tools import utils
 
     # initialize the time series object
     ts = TimeSeries()
 
     # load and normalize the dataset
-    ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+    ts.load_series("eeg-alcohol", normalizer="z_score")
 
     # contaminate the time series
     ts_m = GenGAP.mcar(ts.data)
@@ -166,6 +163,13 @@ Imputation can be performed using either default values or user-defined values. 
 .. code-block:: python
 
     imputer.impute(params={"rank": 5, "epsilon": 0.01, "iteration": 100})
+
+
+For Deep Learning and LLM-based algorithms, the computing device (CPU or GPU) can be specified manually or selected automatically through the imputation parameters:
+
+.. code-block:: python
+
+    imputer = Imputation.LLMs.GPT4TS(ts_m, use_cuda=1)
 
 
 All algorithms developed in ImputeGAP are available in the ``ts.algorithms`` module. They can be listed as follows:
@@ -203,7 +207,7 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
     ts = TimeSeries()
 
     # load and normalize the dataset
-    ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+    ts.load_series("eeg-alcohol", normalizer="z_score")
 
     # contaminate and impute the time series
     ts_m = GenGAP.mcar(ts.data)
@@ -285,27 +289,31 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
 
 .. code-block:: python
 
+    # ImputeGAP imports
     from imputegap.recovery.imputation import Imputation
     from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
     from imputegap.tools import utils
+    from imputegap.recovery.downstream import Artifact, Forecaster
 
     # initialize the time series object
     ts = TimeSeries()
+    print(f"\nImputeGAP downstream models for forcasting : {ts.forecasters}")
 
-    # load and normalize the timeseries
-    ts.load_series(utils.search_path("forecast-economy"), normalizer="z_score")
+    # load and normalize the dataset
+    ts.load_series("chlorine", normalizer="z_score")
 
     # contaminate the time series
-    ts_m = GenGAP.aligned(ts.data, rate_series=0.8)
+    ts_m = GenGAP.mcar(ts.data, rate_series=0.4, offset=0)
 
     # define and impute the contaminated series
     imputer = Imputation.MatrixCompletion.CDRec(ts_m)
     imputer.impute()
 
-    # compute and print the downstream results
-    downstream_config = {"task": "forecast", "model": "hw-add", "baseline": "ZeroImpute"}
-    imputer.score(ts.data, imputer.recov_data, downstream=downstream_config)
+    # define downstream model
+    forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.1, season=24), pipeline=True)
+
+    imputer.score(ts.data, imputer.recov_data, downstream=forecaster)
     ts.print_results(imputer.downstream_metrics, text="Downstream results")
 
 
@@ -343,14 +351,13 @@ Let's illustrate the explainer using the CDRec algorithm and MCAR missingness pa
 
     from imputegap.recovery.manager import TimeSeries
     from imputegap.recovery.explainer import ExplainGAP
-    from imputegap.tools import utils
 
     # initialize the time series and explainer object
     ts = TimeSeries()
     exp = ExplainGAP()
 
     # load and normalize the dataset
-    ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+    ts.load_series("eeg-alcohol", normalizer="z_score")
 
     # configure the explanation
     exp.shap_explainer(input_data=ts.data, extractor="pycatch", pattern="mcar", file_name=ts.name, algorithm="CDRec")

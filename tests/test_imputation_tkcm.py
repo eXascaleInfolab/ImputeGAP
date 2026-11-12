@@ -20,7 +20,7 @@ class TestTKCM(unittest.TestCase):
         dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+        ts.load_series("chlorine", normalizer="z_score")
 
         incomp_data = GenGAP.aligned(ts.data, single_series=0)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
@@ -56,7 +56,7 @@ class TestTKCM(unittest.TestCase):
 
     def test_imputation_multiple_tkcm(self, name="tkcm", limit=0.05):
         ts = TimeSeries()
-        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+        ts.load_series("chlorine", normalizer="z_score")
         incomp_data = GenGAP.aligned(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()

@@ -8,7 +8,7 @@ from imputegap.tools import utils
 ts = TimeSeries()
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series("eeg-alcohol", normalizer="z_score")
 
 # contaminate and impute the time series
 ts_m = GenGAP.mcar(ts.data)

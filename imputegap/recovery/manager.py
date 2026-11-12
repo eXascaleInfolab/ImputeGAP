@@ -117,6 +117,7 @@ class TimeSeries:
         self.denorm = None
         self.reversed = False
         self.current_dataset = None
+        self.healthy = True
         select_backend()
 
         if verbose:
@@ -523,13 +524,16 @@ class TimeSeries:
         -------
         .. code-block:: python
 
-            ts.load_series(utils.search_path("eeg-alcohol"), nbr_series=50, nbr_val=100)
+            ts.load_series("eeg-alcohol.txt", nbr_series=50, nbr_val=100)
 
         """
 
         if data is not None:
             if isinstance(data, str):
                 old_path = data
+
+                if not data.endswith((".txt", ".data")):
+                    data += ".txt"
 
                 #  update path form inner library datasets
                 if data in utils.list_of_datasets(txt=True):
@@ -568,6 +572,10 @@ class TimeSeries:
 
             if normalizer is not None:
                 self.data = self.normalize(normalizer=normalizer, data=self.data, verbose=verbose)
+
+            if np.isnan(self.data).any():
+                self.healthy = False
+                print(f"\n(SYS) The loaded dataset contains NaN values. Please bypass GenGAP and pass `ts.data` directly to the imputer. The evaluation module is now unavailable. {self.healthy=}\n")
 
             return self
 

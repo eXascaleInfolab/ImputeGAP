@@ -54,7 +54,7 @@ class TestContaminationDistribution(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
             P = math.ceil(ts.data.shape[0] * 0.1)
             print(f"{P=}")
             for S in series_impacted:
@@ -81,7 +81,7 @@ class TestContaminationDistribution(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
+        ts_1.load_series("test-logic-llm.txt")
 
         series_impacted = [0.4, 0.8]
         missing_rates = [0.1, 0.4, 0.6]
@@ -112,7 +112,7 @@ class TestContaminationDistribution(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
 
             for S in nbr_series_impacted:
                 for R in missing_rates_per_series:
@@ -149,7 +149,7 @@ class TestContaminationDistribution(unittest.TestCase):
 
         for dataset in datasets:
             ts_1 = TimeSeries()
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
                     D = self.load_probabilities(ts_1.data, std_dev=std_dev)

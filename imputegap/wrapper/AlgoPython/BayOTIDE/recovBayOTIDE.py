@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 args = utils.parse_args_dynamic_streaming()
 
 
-def recovBayOTIDE(incomp_data, K_trend=None, K_season=None, n_season=None, K_bias=None, time_scale=None, a0=None, b0=None, v=None, num_fold=1, tr_ratio=0.7, reversed=True, verbose=True, deep_verbose=False, replicat=False):
+def recovBayOTIDE(incomp_data, K_trend=None, K_season=None, n_season=None, K_bias=None, time_scale=None, a0=None, b0=None, v=None, num_fold=1, tr_ratio=0.7, reversed=True, verbose=True, deep_verbose=False, use_cuda=False, replicat=False):
 
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)
@@ -53,7 +53,7 @@ def recovBayOTIDE(incomp_data, K_trend=None, K_season=None, n_season=None, K_bia
         config["R"] = ts_r
         args.dataset = "imputegap"
 
-    hyper_dict = utils.make_hyper_dict(config, args)
+    hyper_dict = utils.make_hyper_dict(config, use_cuda=use_cuda, args=args)
 
     if verbose:
         print(f"(IMPUTATION) BayOTIDE\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tK_trend: {config['K_trend']}\n\tK_season: {config['K_season']}\n\tn_season: {config['n_season']}\n\tK_bias: {config['K_bias']}\n\ttime_scale: {config['time_scale']}\n\ta0: {config['a0']}\n\tb0: {config['b0']}\n\tb0: {config['v']}\n\tnum_fold: {config['fold']}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {config['R']}\n\tval_ratio: {val_r}\n\tdevice: {hyper_dict['device']}\n")

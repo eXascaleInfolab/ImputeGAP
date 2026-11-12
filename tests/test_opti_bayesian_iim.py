@@ -17,7 +17,7 @@ class TestOptiIMM(unittest.TestCase):
         dataset = "chlorine"
 
         ts_1 = TimeSeries()
-        ts_1.load_series(data=utils.search_path(dataset), nbr_val=100)
+        ts_1.load_series(data=dataset, nbr_val=100)
 
 
         incomp_data = GenGAP.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)

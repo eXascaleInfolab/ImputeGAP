@@ -12,7 +12,7 @@ class TestExplainerPyCatch(unittest.TestCase):
         Verify if the SHAP TSFEL EXTRACTOR is working
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series("chlorine")
 
         exp = ExplainGAP()
 

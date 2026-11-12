@@ -1433,14 +1433,14 @@ class Downstream:
         ax : matplotlib.axes.Axes, optional
             Existing subplot axis. If None, create a standalone figure.
         metrics : dict, optional
-            Pipeline metrics used in the subplot title, including RMSE and RUNTIME.
+            Pipeline metrics used in the subplot title, including sMAPE and RUNTIME.
 
         Returns
         -------
-        matplotlib.figure.Figure
-            Figure containing the downstream plot.
+        matplotlib.figure.Figure or matplotlib.pyplot
+            Figure for an existing subplot, or pyplot for a standalone plot.
         """
-        # initialize figure or reuse an existing subplot
+        # Initialize figure or reuse an existing subplot
         standalone = ax is None
         if standalone:
             fig, ax = plt.subplots(figsize=(24, 5))
@@ -1452,7 +1452,6 @@ class Downstream:
 
         # Select the contaminated series
         valid_indices = [i for i in range(incomp_data.shape[1]) if np.isnan(incomp_data[:, i]).any()]
-
         if not valid_indices:
             if standalone:
                 plt.close(fig)
@@ -1473,7 +1472,7 @@ class Downstream:
         pred_series = predictions[:, pred_to_call]
         recov_series = recov_data[:, series_idx]
 
-        # Extract original ground truth, independently of recovered training data
+        # Extract original ground truth independently of recovered training data
         train_len = len(train_series)
         test_len = len(test_series)
         if ground_truth is None:
@@ -1481,7 +1480,6 @@ class Downstream:
             ground_test = test_series.copy()
         else:
             ground_train = ground_truth[:train_len, series_idx]
-            # Use original testing values when available; otherwise use y_test
             if ground_truth.shape[0] >= train_len + test_len:
                 ground_test = ground_truth[train_len:train_len + test_len, series_idx]
             else:
@@ -1492,56 +1490,89 @@ class Downstream:
 
         # Identify missing values in the training portion
         missing_mask = np.isnan(incomp_data[:train_len, series_idx])
-
-        # Full timeline
         full_series = np.concatenate([ground_train, ground_test])
 
-        # Plot original ground truth over the entire timeline
+        # Plot observed ground truth outside contaminated regions
         ground_normal = ground_train.copy()
         ground_normal[missing_mask] = np.nan
-        ax.plot(range(train_len), ground_normal, label="ground truth", color="gray", linewidth=1.5, alpha=0.9, zorder=2)
+        ax.plot(range(train_len), ground_normal, label="ground truth",
+                color="gray", linewidth=1.5, alpha=0.9, zorder=2)
 
-        # Ground truth inside contaminated regions (more transparent)
-        ground_missing = ground_train.copy()
-        ground_missing[~missing_mask] = np.nan
-        ax.plot(range(train_len), ground_missing, label="_nolegend_", color="gray", linewidth=1.5, alpha=0.5, zorder=2)
-        ax.plot(range(train_len, train_len + test_len), ground_test, label="_nolegend_", color="gray", linewidth=0.8, alpha=0.5, zorder=1)
+        # Plot ground truth as dashed lines inside each contaminated interval.
+        # Include adjacent observed endpoints so even short gaps remain visible.
+        missing_indices = np.flatnonzero(missing_mask)
+        if missing_indices.size:
+            groups = np.split(missing_indices, np.where(np.diff(missing_indices) > 1)[0] + 1)
+            for j, group in enumerate(groups):
+                start = max(0, int(group[0]) - 1)
+                end = min(train_len, int(group[-1]) + 2)
+                ax.plot(range(start, end), ground_train[start:end],
+                        label="ground truth (missing)" if j == 0 else "_nolegend_",
+                        color="gray", linestyle="--", linewidth=1.5,
+                        alpha=0.65, zorder=3)
 
-        # Highlight recovered values only where contamination occurred
+                # Very light black shading over the contaminated region
+                ax.axvspan(group[0] - 0.5, group[-1] + 0.5,
+                           color="black", alpha=0.025, zorder=0)
+
+        # Plot ground truth in the forecasting region
+        ax.plot(range(train_len, train_len + test_len), ground_test,
+                label="_nolegend_", color="gray", linewidth=1.2,
+                alpha=0.65, zorder=2)
+
+        # Plot recovered values only around contaminated regions
         imputed_series = ground_train.copy()
         imputed_series[missing_mask] = recov_series[:train_len][missing_mask]
         plot_mask = missing_mask.copy()
         plot_mask[1:] |= missing_mask[:-1]
         plot_mask[:-1] |= missing_mask[1:]
         imputed_series[~plot_mask] = np.nan
+        ax.plot(range(train_len), imputed_series,
+                label=f"{algorithm.lower()} imputation",
+                color="black", linestyle="-", linewidth=1.8,
+                alpha=0.95, zorder=5)
 
-        # Light red background only over contaminated timestamp zones
-        missing_indices = np.where(missing_mask)[0]
-        if len(missing_indices) > 0:
-            groups = np.split(missing_indices, np.where(np.diff(missing_indices) > 1)[0] + 1)
-            for group in groups:
-                ax.axvspan(group[0] - 0.5, group[-1] + 0.5, color="red", alpha=0.08, zorder=0)
+        # Very light green shading over the forecasting region
+        ax.axvspan(train_len - 0.5, train_len + test_len - 0.5,
+                   color="green", alpha=0.14, zorder=0)
 
-        ax.plot(range(len(train_series)), imputed_series, label=f"{algorithm.lower()} imputation", color="red",
-                linestyle="-", linewidth=1.8, alpha=0.9, zorder=5)
-
-        # Plot forecasted data on top of testing data
+        # Plot forecasted values in green
         label = f"{type or ''} {model or ''}".strip()
-        ax.plot(range(len(train_series), len(full_series)), pred_series, label=label, linestyle="-", marker=None, color="green", zorder=4)
+        ax.plot(range(train_len, len(full_series)), pred_series,
+                label=label, linestyle="-", marker=None,
+                color="green", linewidth=1.8, alpha=0.95, zorder=4)
 
-        # Add a vertical line at the split point
-        ax.axvline(x=len(train_series), color="orange", linestyle="--")
+        # Prominent orange dashed separator between imputation and forecasting
+        ax.axvline(x=train_len - 0.5, color="darkorange", linestyle="--",
+                   linewidth=3.5, alpha=1.0, zorder=10)
+
+        # Label both timeline regions above the plot
+        ax.text((train_len - 1) / 2, 1.02, "Imputation",
+                transform=ax.get_xaxis_transform(), ha="center", va="bottom",
+                fontsize=11, fontweight="bold", color="black", clip_on=False)
+        ax.text(train_len + (test_len - 1) / 2, 1.02, "Forecasting",
+                transform=ax.get_xaxis_transform(), ha="center", va="bottom",
+                fontsize=11, fontweight="bold", color="green", clip_on=False)
+
+        # Show timestamp indices explicitly along the x-axis
+        ax.set_xlim(-0.5, train_len + test_len - 0.5)
+        ax.xaxis.set_major_locator(plt.MaxNLocator(nbins=12, integer=True))
+        ax.tick_params(axis="x", labelbottom=True)
 
         # Add labels, title, and grid
         if metrics is not None:
             smape = metrics.get("smape_imputer", float("nan"))
             runtime = metrics.get("RUNTIME", float("nan"))
             if standalone:
-                ax.set_title(f"{algorithm.lower()} - {model} - horizon {metrics.get('HORIZON', len(test_series))} | sMAPE: {smape:.4f} | Time: {runtime:.2f} ms")
+                ax.set_title(
+                    f"{algorithm.lower()} - {model} - horizon {metrics.get('HORIZON', len(test_series))} | sMAPE: {smape:.4f} | Time: {runtime:.2f} ms")
             else:
-                ax.set_title(f"{str(model).upper()}  |  Horizon: {metrics.get('HORIZON', len(test_series))}  |  sMAPE: {smape:.4f}  |  Time: {runtime:.2f} ms", fontsize=14, fontweight="bold", pad=12)
+                ax.set_title(
+                    f"{str(model).upper()}  |  Horizon: {metrics.get('HORIZON', len(test_series))}  |  sMAPE: {smape:.4f}  |  Time: {runtime:.2f} ms",
+                    fontsize=14, fontweight="bold", pad=12)
         else:
             ax.set_title(f"{algorithm.lower()} imputation, series_{series_idx + 1}")
+        ax.title.set_y(1.10)
         ax.set_xlabel("Timestamp")
         ax.set_ylabel("Value")
         ax.legend(loc="upper left", fontsize=7, frameon=True, fancybox=True, framealpha=0.8)

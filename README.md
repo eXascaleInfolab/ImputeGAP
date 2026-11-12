@@ -35,48 +35,63 @@ In detail, the package provides:
 
 
 # Available Imputation Algorithms
-| **Algorithm**             | **Family**        | **Venue -- Year**            |
-|---------------------------|-------------------|------------------------------|
-| MOMENT [[39]](#ref39)     | LLMs              | ICML -- 2024                 |
-| NuwaTS [[35]](#ref35)     | LLMs              | Arxiv -- 2024                |
-| GPT4TS [[36]](#ref36)     | LLMs              | NeurIPS -- 2023              |
-| 🚧 UniTS [[44]](#ref44)   | LLMs              | NeurIPS -- 2024              |
-| 🚧 Timer [[45]](#ref45)   | LLMs              | ICML -- 2024                 |
-| MissNet [[27]](#ref27)    | Deep Learning     | KDD -- 2024                  |
-| BayOTIDE [[30]](#ref30)   | Deep Learning     | ICML -- 2024                 |
-| BitGraph [[32]](#ref32)   | Deep Learning     | ICLR -- 2024                 |
-| MPIN [[25]](#ref25)       | Deep Learning     | PVLDB -- 2023                |
-| TimesNet [[37]](#ref37)   | Deep Learning     | ICLR -- 2023                 |
-| SAITS [[41]](#ref41)      | Deep Learning     | ESWA -- 2023                 |
-| PRISTI [[26]](#ref26)     | Deep Learning     | ICDE -- 2023                 |
-| GRIN [[29]](#ref29)       | Deep Learning     | ICLR -- 2022                 |
-| CSDI [[38]](#ref38)       | Deep Learning     | NeurIPS -- 2021              |
-| HKMFT [[31]](#ref31)      | Deep Learning     | TKDE -- 2021                 |
-| DeepMVI [[24]](#ref24)    | Deep Learning     | PVLDB -- 2021                |
-| MRNN [[22]](#ref22)       | Deep Learning     | IEEE Trans on BE -- 2019     |
-| BRITS [[23]](#ref23)      | Deep Learning     | NeurIPS -- 2018              |
-| GAIN [[28]](#ref28)       | Deep Learning     | ICML -- 2018                 |
-| CDRec [[1]](#ref1)        | Matrix Completion | KAIS -- 2020                 |
-| TRMF [[8]](#ref8)         | Matrix Completion | NeurIPS -- 2016              |
-| ROSL [[4]](#ref4)         | Matrix Completion | CVPR -- 2014                 |
-| GROUSE [[3]](#ref3)       | Matrix Completion | Arxiv -- 2010                |
-| SoftImpute [[6]](#ref6)   | Matrix Completion | JMLR -- 2010                 |
-| SVT [[7]](#ref7)          | Matrix Completion | SIAM J. OPTIM -- 2010        |
-| SPIRIT [[5]](#ref5)       | Matrix Completion | VLDB -- 2005                 |
-| IterativeSVD [[2]](#ref2) | Matrix Completion | BIOINFORMATICS -- 2001       |
-| TKCM [[11]](#ref11)       | Pattern Search    | EDBT -- 2017                 |
-| STMVL [[9]](#ref9)        | Pattern Search    | IJCAI -- 2016                |
-| DynaMMo [[10]](#ref10)    | Pattern Search    | KDD -- 2009                  |
-| IIM [[12]](#ref12)        | Machine Learning  | ICDE -- 2019                 |
-| XGBOOST [[13]](#ref13)    | Machine Learning  | KDD -- 2016                  |
-| MissForest [[15]](#ref15) | Machine Learning  | BioInformatics -- 2012       |
-| MICE [[14]](#ref14)       | Machine Learning  | Statistical Software -- 2011 |
-| KNNImpute                 | Statistics        | -                            |
-| Interpolation             | Statistics        | -                            |
-| MinImpute                 | Statistics        | -                            |
-| ZeroImpute                | Statistics        | -                            |
-| MeanImpute                | Statistics        | -                            |
-| MeanImputeBySeries        | Statistics        | -                            |
+| **Algorithm**               | **Family**           | **Venue -- Year**            |
+|-----------------------------|----------------------|------------------------------|
+| MOMENT [[39]](#ref39)       | LLMs                 | ICML -- 2024                 |
+| NuwaTS [[35]](#ref35)       | LLMs                 | Arxiv -- 2024                |
+| GPT4TS [[36]](#ref36)       | LLMs                 | NeurIPS -- 2023              |
+| 🚧 LLM4HRS [[46]](#ref46)   | LLMs                 | IEEE Tr Geo RS -- 2025       |
+| 🚧 UniTS [[44]](#ref44)     | LLMs                 | NeurIPS -- 2024              |
+| 🚧 Timer [[45]](#ref45)     | LLMs                 | ICML -- 2024                 |
+| MissNet [[27]](#ref27)      | Deep Learning        | KDD -- 2024                  |
+| BayOTIDE [[30]](#ref30)     | Deep Learning        | ICML -- 2024                 |
+| BitGraph [[32]](#ref32)     | Deep Learning        | ICLR -- 2024                 |
+| MPIN [[25]](#ref25)         | Deep Learning        | PVLDB -- 2023                |
+| TimesNet [[37]](#ref37)     | Deep Learning        | ICLR -- 2023                 |
+| SAITS [[41]](#ref41)        | Deep Learning        | ESWA -- 2023                 |
+| PRISTI [[26]](#ref26)       | Deep Learning        | ICDE -- 2023                 |
+| GRIN [[29]](#ref29)         | Deep Learning        | ICLR -- 2022                 |
+| CSDI [[38]](#ref38)         | Deep Learning        | NeurIPS -- 2021              |
+| HKMFT [[31]](#ref31)        | Deep Learning        | TKDE -- 2021                 |
+| DeepMVI [[24]](#ref24)      | Deep Learning        | PVLDB -- 2021                |
+| MRNN [[22]](#ref22)         | Deep Learning        | IEEE Trans on BE -- 2019     |
+| BRITS [[23]](#ref23)        | Deep Learning        | NeurIPS -- 2018              |
+| GAIN [[28]](#ref28)         | Deep Learning        | ICML -- 2018                 |
+| 🚧 T1 [[47]](#ref47)        | Deep Learning        | ICLR -- 2026                 |
+| 🚧 FIM-ℓ [[48]](#ref48)     | Deep Learning        | ICLR -- 2025                 |
+| 🚧 SSD-TS [[49]](#ref49)    | Deep Learning        | KDD -- 2025                  |
+| 🚧 ImputeINR [[50]](#ref50) | Deep Learning        | IJCAI -- 2025                |
+| 🚧 CoFill [[51]](#ref51)    | Deep Learning        | IJCAI -- 2025                |
+| 🚧 SADI [[52]](#ref52)      | Deep Learning        | AAAI -- 2025                 |
+| 🚧 LSCD [[53]](#ref53)      | Deep Learning        | ICML -- 2025                 |
+| 🚧 FGTI [[54]](#ref54)      | Deep Learning        | NeurIPS -- 2024              |
+| 🚧 SSSD [[55]](#ref55)      | Deep Learning        | TMLR -- 2023                 |
+| 🚧 MTSIT [[56]](#ref56)     | Deep Learning        | IEEE SPL -- 2022             |
+| 🚧 SSGAN [[57]](#ref57)     | Deep Learning        | AAAI -- 2021                 |
+| 🚧 PoGeVon [[58]](#ref58)   | Deep Learning        | KDD -- 2023                  |
+| CDRec [[1]](#ref1)          | Matrix Completion    | KAIS -- 2020                 |
+| TRMF [[8]](#ref8)           | Matrix Completion    | NeurIPS -- 2016              |
+| ROSL [[4]](#ref4)           | Matrix Completion    | CVPR -- 2014                 |
+| GROUSE [[3]](#ref3)         | Matrix Completion    | Arxiv -- 2010                |
+| SoftImpute [[6]](#ref6)     | Matrix Completion    | JMLR -- 2010                 |
+| SVT [[7]](#ref7)            | Matrix Completion    | SIAM J. OPTIM -- 2010        |
+| SPIRIT [[5]](#ref5)         | Matrix Completion    | VLDB -- 2005                 |
+| IterativeSVD [[2]](#ref2)   | Matrix Completion    | BIOINFORMATICS -- 2001       |
+| 🚧 TIDER [[59]](#ref59)     | Matrix Completion    | ICLR -- 2023                 |
+| TKCM [[11]](#ref11)         | Pattern Search       | EDBT -- 2017                 |
+| STMVL [[9]](#ref9)          | Pattern Search       | IJCAI -- 2016                |
+| DynaMMo [[10]](#ref10)      | Pattern Search       | KDD -- 2009                  |
+| 🚧 PSW-I [[60]](#ref60)     | Pattern Search       | ICLR -- 2025                 |
+| IIM [[12]](#ref12)          | Machine Learning     | ICDE -- 2019                 |
+| XGBOOST [[13]](#ref13)      | Machine Learning     | KDD -- 2016                  |
+| MissForest [[15]](#ref15)   | Machine Learning     | BioInformatics -- 2012       |
+| MICE [[14]](#ref14)         | Machine Learning     | Statistical Software -- 2011 |
+| KNNImpute                   | Statistics           | -                            |
+| Interpolation               | Statistics           | -                            |
+| MinImpute                   | Statistics           | -                            |
+| ZeroImpute                  | Statistics           | -                            |
+| MeanImpute                  | Statistics           | -                            |
+| MeanImputeBySeries          | Statistics           | -                            |
 ---
 
 ### **Quick Navigation**
@@ -188,13 +203,12 @@ To load and plot the eeg-alcohol dataset from the library:
 
 ```python
 from imputegap.recovery.manager import TimeSeries
-from imputegap.tools import utils
 
 # initialize the time series object
 ts = TimeSeries()
 
 # load and normalize the dataset from the library
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series("eeg-alcohol", normalizer="z_score")
 
 # print and plot a subset of time series
 ts.print(nbr_series=4, nbr_val=4)
@@ -225,13 +239,12 @@ As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pat
 ```python
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.contamination import GenGAP
-from imputegap.tools import utils
 
 # initialize the time series object
 ts = TimeSeries()
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series("eeg-alcohol", normalizer="z_score")
 
 # contaminate the time series with MCAR pattern
 ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
@@ -266,13 +279,12 @@ Let's illustrate the imputation using the CDRec algorithm from the Matrix Comple
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
-from imputegap.tools import utils
 
 # initialize the time series object
 ts = TimeSeries()
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series("eeg-alcohol", normalizer="z_score")
 
 # contaminate the time series
 ts_m = GenGAP.mcar(ts.data)
@@ -286,14 +298,19 @@ imputer.score(ts.data, imputer.recov_data)
 ts.print_results(imputer.metrics)
 
 # plot the recovered time series
-ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True,
-        algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
+ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
 ```
 
 Imputation can be performed using either default values or user-defined values. To specify the parameters, please use a dictionary in the following format:
 
 ```python
 imputer.impute(params={"rank": 5, "epsilon": 0.01, "iteration": 100})
+```
+
+For Deep Learning and LLM-based algorithms, the computing device (CPU or GPU) can be specified manually or selected automatically through the imputation parameters:
+
+```python
+imputer = Imputation.LLMs.GPT4TS(ts_m, use_cuda=1)
 ```
 
 All algorithms developed in ImputeGAP are available in the ``ts.algorithms`` module, which can be listed as follows:
@@ -325,7 +342,7 @@ from imputegap.tools import utils
 ts = TimeSeries()
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series("eeg-alcohol", normalizer="z_score")
 
 # contaminate and impute the time series
 ts_m = GenGAP.mcar(ts.data)
@@ -395,27 +412,30 @@ Below is an example of how to call the  process for the model Prophet by definin
 downstream
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
-from imputegap.tools import utils
+from imputegap.recovery.downstream import Artifact, Forecaster
 
 # initialize the time series object
 ts = TimeSeries()
+print(f"\nImputeGAP downstream models for forcasting : {ts.forecasters}")
 
-# load and normalize the timeseries
-ts.load_series(utils.search_path("forecast-economy"), normalizer="z_score")
+# load and normalize the dataset
+ts.load_series("chlorine", normalizer="z_score")
 
 # contaminate the time series
-ts_m = GenGAP.aligned(ts.data, rate_series=0.8)
+ts_m = GenGAP.mcar(ts.data, rate_series=0.4, offset=0)
 
 # define and impute the contaminated series
 imputer = Imputation.MatrixCompletion.CDRec(ts_m)
 imputer.impute()
 
-# compute and print the downstream results
-downstream_config = {"task": "forecast", "model": "hw-add", "baseline": "ZeroImpute"}
-imputer.score(ts.data, imputer.recov_data, downstream=downstream_config)
+# define downstream model
+forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.1, season=24), pipeline=True)
+
+imputer.score(ts.data, imputer.recov_data, downstream=forecaster)
 ts.print_results(imputer.downstream_metrics, text="Downstream results")
 ```
 
@@ -445,14 +465,13 @@ Let’s illustrate the explainer using the CDRec algorithm and MCAR missingness 
 ```python
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.explainer import ExplainGAP
-from imputegap.tools import utils
 
 # initialize the time series and explainer object
 ts = TimeSeries()
 exp = ExplainGAP()
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series("eeg-alcohol", normalizer="z_score")
 
 # configure the explanation
 exp.shap_explainer(input_data=ts.data, extractor="pycatch", pattern="mcar", file_name=ts.name, algorithm="CDRec")
@@ -700,6 +719,52 @@ If you use ImputeGAP in your research, please cite these papers:
 
 <a name="ref45"></a>
 [45] Yong Liu, Haoran Zhang, Chenyu Li, Xiangdong Huang, Jianmin Wang, Mingsheng Long : Timer: Generative Pre-trained Transformers Are Large Time Series Models. ICML 2024
+
+<a name="ref46"></a>
+[46] Wang Shuyu, Li Wengen, Yang Hanchen, Guan Jihong, Liu Xiwei, Zhang Yichao, Qin Rufu, Zhou Shuigeng: LLM4HRS: LLM-based spatio-temporal imputation model for highly-sparse remote sensing data. IEEE Transactions on Geoscience and Remote Sensing. IEEE 2025
+
+<a name="ref457"></a>
+[47] Dongik Park, Hyunwoo Ryu, Suahn Bae, Keondo Park, Hyung-Sin Kim: T1: One-to-One Channel-Head Binding for Multivariate Time-Series Imputation. ICLR (2026)
+
+<a name="ref48"></a>
+[48] Patrick Seifner, Kostadin Cvejoski, Antonia Körner, Ramsés J. Sánchez: Zero-shot Imputation with Foundation Inference Models for Dynamical Systems. ICLR (2025)
+
+<a name="ref49"></a>
+[49] Hongfan Gao, Wangmeng Shen, Xiangfei Qiu, Ronghui Xu, Bin Yang, Jilin Hu: SSD-TS: Exploring the Potential of Linear State Space Models for Diffusion Models in Time Series Imputation. KDD (2025)
+
+<a name="ref50"></a>
+[50] Mengxuan Li, Ke Liu, Jialong Guo, Jiajun Bu, Hongwei Wang, Haishuai Wang: ImputeINR: Time Series Imputation via Implicit Neural Representations for Disease Diagnosis with Missing Data. IJCAI (2025)
+
+<a name="ref51"></a>
+[51] Wenying He, Jieling Huang, Junhua Gu, Ji Zhang, Yude Bai: Filling the Missings: Spatiotemporal Data Imputation by Conditional Diffusion. IJCAI (2025).
+
+<a name="ref52"></a>
+[52] Mohammad Rafid Ul Islam, Prasad Tadepalli, Alan Fern: Self-attention-based Diffusion Model for Time-series Imputation in Partial Blackout Scenarios. AAAI (2025)
+
+<a name="ref53"></a>
+[53] Elizabeth Fons, Alejandro Sztrajman, Yousef El-Laham, Luciana Ferrer, Svitlana Vyetrenko, Manuela Veloso: LSCD: Lomb–Scargle Conditioned Diffusion for Time series Imputation. ICML (2025)
+
+<a name="ref54"></a>
+[54] Xinyu Yang, Yu Sun, Xiaojie Yuan, Xinyang Chen: Frequency-aware Generative Models for Multivariate Time Series Imputation. NeurIPS (2024)
+
+<a name="ref55"></a>
+[55] Juan Lopez Alcaraz, Nils Strodthoff: Diffusion-Based Time Series Imputation and Forecasting with Structured State Space Models. TMLR (2023)
+
+<a name="ref56"></a>
+[56] A. Yarkin Yıldız, Emirhan Koç, Aykut Koç: Multivariate Time Series Imputation With Transformers. IEEE Signal Processing Letters 29 (2022)
+
+<a name="ref45"></a>
+[57] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin: Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI (2021)
+
+<a name="ref45"></a>
+[58] Dingsu Wang, Yuchen Yan, Ruizhong Qiu, Yada Zhu, Kaiyu Guan, Andrew Margenot, Hanghang Tong: Networked Time Series Imputation via Position-aware Graph Enhanced Variational Autoencoders. KDD (2023)
+
+<a name="ref45"></a>
+[59] Shuai Liu, Xiucheng Li, Gao Cong, Yile Chen, Yue Jiang: Multivariate Time-Series Imputation with Disentangled Temporal Representations. ICLR (2023)
+
+<a name="ref45"></a>
+[60] Hao Wang, Zhengnan Li, Haoxuan Li, Xu Chen, Mingming Gong, Bin Chen, Zhichao Chen: Optimal Transport for Time Series Imputation. ICLR (2025)
+
 
 
 

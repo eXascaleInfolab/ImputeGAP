@@ -136,14 +136,14 @@ def handle_parser(argv=None):
 
     return args
 
-def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_workers=0, model="GPT4TS", tr_ratio=0.7, seed=2021, verbose=True, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq", remove_checkpoint=False):
+def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_workers=0, model="GPT4TS", tr_ratio=0.7, seed=2021, verbose=True, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq", use_cuda=0, remove_checkpoint=False):
 
     data_m = np.copy(ts_m)
     recov = np.copy(ts_m)
     m_mask = np.isnan(ts_m)
 
     args = handle_parser()
-    args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
+    args.use_gpu = bool(use_cuda)
     args.ts_m = data_m
     M, N = ts_m.shape
 
@@ -218,7 +218,7 @@ def recovGPT4TS(ts_m, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_wo
         print(args)
 
     if verbose:
-        print(f"(IMPUTATION) GPT4TS (LLMs)\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_length: {args.seq_len}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\tpred_len: {args.pred_len}\n\tlabel_length: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n\ttr_ratio: {args.tr_ratio}\n\tremove_checkpoint: {remove_checkpoint}\n")
+        print(f"(IMPUTATION) GPT4TS (LLMs)\n\tMatrix: {ts_m.shape[0]}, {ts_m.shape[1]}\n\tseq_length: {args.seq_len}\n\tpatch_size: {args.patch_size}\n\tbatch_size: {args.batch_size}\n\tpred_len: {args.pred_len}\n\tlabel_length: {args.label_len}\n\tenc_in: {args.enc_in}\n\tdec_in: {args.dec_in}\n\tc_out: {args.c_out}\n\tgpt_layers: {args.gpt_layers}\n\tnum_workers: {args.num_workers}\n\tmask_rate: {args.mask_rate}\n\tseed: {seed}\n\tverbose: {verbose}\n\tGPU: {args.use_gpu}\n\tscaling: {args.scaling}\n\tinner normalizer: {args.normalization}\n\tshuffle: {args.shuffle}\n\ttr_ratio: {args.tr_ratio}\n\tremove_checkpoint: {remove_checkpoint}\n\tuse_cuda: {use_cuda}\n")
         print(f"\ncall: gpt4ts.impute(params={{'seq_len': {args.seq_len}, 'batch_size': {args.batch_size}, 'epochs': {args.train_epochs}, 'gpt_layers': {args.gpt_layers}, 'num_workers': {args.num_workers}, 'seed': {seed}}})\n\n")
         print('\nArgs in experiment:')
         print_args(args)

@@ -58,8 +58,7 @@ class BenchGAP:
         self.heatmap = None
         self.subplots = None
 
-    def _benchmark_error(self, code, e, runs_plots_scores, ts_m, classifiers, dataset, algorithm, pattern, x, save_dir,
-                         verbose):
+    def _benchmark_error(self, code, e, runs_plots_scores, ts_m, classifiers, dataset, algorithm, pattern, x, save_dir, verbose):
 
         print(f"\t\tbypass benchmark: {dataset}, {algorithm}, {pattern}, {x}")
 
@@ -111,31 +110,6 @@ class BenchGAP:
 
         return imputer_tr, runs_plots_scores
 
-    #def _benchmark_exception(self, data, algorithm, pattern, x, N, F):
-        #return False
-
-        #if algorithm.upper() == 'DEEPMVI' or algorithm.upper() == 'DEEP_MVI':
-        #    if pattern.lower() == "mcar" or pattern.lower() == "missing_completely_at_random":
-        #        if x > 0.6:
-        #            print(
-        #                 f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {pattern} with missingness rate more than 0.6.")
-        #            return True
-        #    if pattern.lower() == "mp" or pattern.lower() == "aligned":
-        #        if x < 0.15:
-        #           print(
-        #                f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {pattern} with missingness rate less then 0.15.")
-        #            return True
-        #    if data == "meteo":
-        #        return True
-        #
-        #if data == "meteo":
-        #    if x >= 0.8:
-        #        print(
-        #            f"\n(BENCH) The imputation algorithm {algorithm} is not compatible with this configuration {data}. Not enough series to train the model.")
-        #       return True
-        #
-        #
-        #return False
 
     def _config_optimization(self, opti_mean, ts_test, pattern, algorithm, block_size_mcar):
         """
@@ -1657,7 +1631,7 @@ class BenchGAP:
                     header = True
 
                 reshp = False
-                default_data.load_series(data=utils.search_path(dataset), header=header, verbose=False)
+                default_data.load_series(data=dataset, header=header, verbose=False)
                 Ndef, Mdef = default_data.data.shape
 
                 if Ndef > nbr_vals or Mdef > nbr_series:
@@ -1666,8 +1640,7 @@ class BenchGAP:
                         f"\nThe dataset {dataset} contains a large number of values {default_data.data.shape}, which may be too much for some algorithms to handle efficiently. Consider reducing the number of series or the volume of data.")
                 default_data = None
 
-                ts_test.load_series(data=utils.search_path(dataset), nbr_series=nbr_series, nbr_val=nbr_vals,
-                                    header=header, normalizer=normalizer, verbose=verbose)
+                ts_test.load_series(data=dataset, nbr_series=nbr_series, nbr_val=nbr_vals, header=header, normalizer=normalizer, verbose=verbose)
                 N, M = ts_test.data.shape
 
                 if M <= 0:
@@ -3206,7 +3179,7 @@ class BenchGAP:
             print(f"Error during report generation: {e}")
 
 
-    def eval_imputation(self, algorithms=None, datasets=None, patterns=None, x_axis=None, metrics=None, save_dir="./imputegap_assets/benchmark", normalizer="z_score", report_title="", nbr_series=1000, nbr_vals=1000, to_cache=True, use_cache=True, fixed_rate=0.2, bypass_error=False, generate_plot=True, plots=True, inner_plots=True, verbose=False):
+    def eval_imputation(self, algorithms=None, datasets=None, patterns=None, x_axis=None, metrics=None, save_dir="./imputegap_assets/benchmark", normalizer="z_score", report_title="", nbr_series=1000, nbr_vals=1000, to_cache=True, use_cache=True, fixed_rate=0.2, bypass_error=False, display_plots=True, gen_artefacts=True, gen_inner_plots=True, use_cuda=0, verbose=False):
         """
         Benchmark imputation/recovery algorithms across datasets, missingness patterns, and missingness rates.
 
@@ -3276,17 +3249,22 @@ class BenchGAP:
             If True, this variable will put automatically NaN values if an error is encountered.
             Put to true if you want to get the results of all success imputer
 
-        generate_plot: bool, optional
+        gen_artefacts: bool, optional
             If True, generates and saves plots (e.g., heatmaps/line plots) for benchmark results.
             Default is True.
 
-        plots : bool, optional
+        display_plots : bool, optional
             If True, display plots (e.g., heatmaps/line plots) for benchmark results.
             Default is True.
 
-        inner_plots : bool, optional
+        gen_inner_plots : bool, optional
             If True, generates and saves every steps plots for each individual datasets for benchmark results.
             Default is True.
+
+        use_cuda: int, optional, default 0
+            If 0 force to use CPU for deep learning and llms algorithms
+            If 1 force to use cuda CPU for deep learning and llms algorithms
+            If 2 check if cuda is available for deep learning and llms algorithms
 
         verbose : bool, optional
             Verbosity flag controlling detailed logging and plotting behavior. Default is False.
@@ -3349,6 +3327,7 @@ class BenchGAP:
             dynammic_fixed = True
         else:
             dynammic_fixed = False
+
         loaded_cache = False
         evaluate_upstream = True
         model = "imputation"
@@ -3362,14 +3341,15 @@ class BenchGAP:
             nbr_series = 10000000
         if nbr_vals is None:
             nbr_vals = 10000000
-        if not generate_plot:
-            plots = False
-            inner_plots = False
+        if not gen_artefacts:
+            display_plots = False
+            gen_inner_plots = False
 
         benchmark_time = time.time()
         runs=1
+        use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
-        definition_of_exp = f"\nThe benchmark has been called (imputation):\n\talgorithms: {algorithms}\n\tdatasets: {datasets}\n\tpatterns: {patterns}\n\tmissing_percentages: {x_axis}\n\tmetrics: {metrics}\n\tnormalizer: {normalizer}\n\tfixed_rate: {fixed_rate}\n\tto_cache: {to_cache}\n\tuse_cache: {use_cache}\n\tbypass_error: {bypass_error}\n\tnumber max series: {nbr_series}\n\tnumber max values: {nbr_vals}\n\n"
+        definition_of_exp = f"\nThe benchmark has been called (imputation):\n\talgorithms: {algorithms}\n\tdatasets: {datasets}\n\tpatterns: {patterns}\n\tmissing_percentages: {x_axis}\n\tmetrics: {metrics}\n\tnormalizer: {normalizer}\n\tfixed_rate: {fixed_rate}\n\tto_cache: {to_cache}\n\tuse_cache: {use_cache}\n\tbypass_error: {bypass_error}\n\tnumber max series: {nbr_series}\n\tnumber max values: {nbr_vals}\n\tuse_cuda: {use_cuda}\n\n"
         print(definition_of_exp)
 
         if normalizer == "denorm":
@@ -3392,7 +3372,7 @@ class BenchGAP:
                 # DATASET LOADING
                 # -----------------------------------------------------------------------------------------------------
                 ts = TimeSeries(verbose=verbose)
-                ts.load_series(utils.search_path(dataset), normalizer=normalizer, verbose=verbose, nbr_series=nbr_series, nbr_val=nbr_vals)
+                ts.load_series(dataset, normalizer=normalizer, verbose=verbose, nbr_series=nbr_series, nbr_val=nbr_vals)
                 N, M = ts.data.shape
                 print(f"{dataset}:{ts.data.shape = }")
 
@@ -3449,15 +3429,16 @@ class BenchGAP:
                                         incomp_data = utils.config_contamination(ts=ts, pattern="aligned", dataset_rate=fixed_rate, series_rate=x, verbose=verbose, offset=0.05)
                                     elif pattern == "aligned_timestamps" or pattern == "blks":
                                         incomp_data = utils.config_contamination(ts=ts, pattern="aligned", dataset_rate=x, series_rate=fixed_rate, verbose=verbose, offset=0.05)
-                                    else:
+                                    else:  # all other patterns
                                         incomp_data = utils.config_contamination(ts=ts, pattern=pattern, dataset_rate=fixed_rate, series_rate=x, block_size=block_size_mcar, verbose=verbose, offset=0.05)
+
                                     miss = incomp_data.copy()
 
                                     try:
                                         # ------------------------------------------------------------------------------------
                                         # IMPUTATION OF THE DATA
                                         # ------------------------------------------------------------------------------------
-                                        imputer = utils.config_impute_algorithm(incomp_data=miss, algorithm=algorithm, task=b_task, verbose=verbose)
+                                        imputer = utils.config_impute_algorithm(incomp_data=miss, algorithm=algorithm, task=b_task, use_cuda=use_cuda, verbose=verbose)
                                         imputer.verbose = verbose
                                         imputer.task = b_task
                                         imputer.impute()
@@ -3502,7 +3483,7 @@ class BenchGAP:
                                     imputer.metrics["RUNTIME_LOG"] = log_time_imputation
                                     imputer.metrics["DOWNSTREAM_SMAPE"] = np.nan
 
-                                    if inner_plots:
+                                    if gen_inner_plots:
                                         try:
                                             ts.plot(input_data=ts.data, incomp_data=imputer.incomp_data,
                                                     recov_data=imputer.recov_data, nbr_series=6, subplot=True,
@@ -3545,9 +3526,9 @@ class BenchGAP:
         for x, m in enumerate(reversed(metrics)):
             scores_list, algos, sets = self.avg_results_task(*run_storage, metric=m, upstream=evaluate_upstream)
             try:
-                if generate_plot:
+                if gen_artefacts:
                     _ = self.generate_heatmap(scores_list=scores_list, algos=algos, sets=sets, metric=m, save_dir=save_dir, display=False)
-                if not plots:
+                if not display_plots:
                     plt.close('all')
             except Exception as e:
                 print(f"Error during plotting: {e}")
@@ -3572,14 +3553,14 @@ class BenchGAP:
             save_dir_agg_set = save_dir + "/" + dataset_name
 
             try:
-                if generate_plot:
+                if gen_artefacts:
                     self.generate_reports_txt(runs_plots_scores=scores, save_dir=save_dir_agg_set, given_dataset=dataset_name, metrics=metrics, rt=total_time_benchmark, upstream=evaluate_upstream, run=-1)
             except Exception as e:
                 print(f"Error during file report generation: {e}")
             try:
-                if generate_plot:
+                if gen_artefacts:
                     self.generate_plots(runs_plots_scores=scores, ticks=x_axis, metrics=metrics, subplot=True, y_size=y_p_size, save_dir=save_dir_agg_set, upstream=evaluate_upstream, display=verb)
-                if not plots:
+                if not display_plots:
                     plt.close('all')
             except Exception as e:
                 print(f"Error during plotting: {e}")

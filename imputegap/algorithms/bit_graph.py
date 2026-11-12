@@ -1,9 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.BitGraph.recovBitGRAPH import recovBitGRAPH
+from imputegap.tools import utils
 
 
-def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel_set=None, epochs=50, batch_size=-1, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
+def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel_set=None, epochs=50, batch_size=-1, subgraph_size=5, num_workers=0, tr_ratio=0.7, seed=42, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
 
@@ -46,6 +47,9 @@ def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel
     logs : bool, optional
         Whether to log the execution time (default is True).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
 
@@ -65,12 +69,13 @@ def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel
     https://github.com/chenxiaodanhit/BiTGraph
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
     if kernel_set is None:
         kernel_set = [2, 3, 6, 7]
 
     #recov_data = recoveryBitGRAPH(input=incomp_data, node_number=node_number, kernel_set=kernel_set, dropout=dropout, subgraph_size=subgraph_size, node_dim=node_dim, seq_len=seq_len, lr=lr, batch_size=batch_size, tr_ratio=tr_ratio, epoch=epoch, num_workers=num_workers, seed=seed, verbose=verbose)
-    recov_data = recovBitGRAPH(ts_m=incomp_data, seq_len=seq_len, sliding_windows=sliding_windows, kernel_size=kernel_size, kernel_set=kernel_set, epochs=epochs, batch_size=batch_size, subgraph_size=subgraph_size, tr_ratio=tr_ratio, num_workers=num_workers, seed=seed, verbose=verbose)
+    recov_data = recovBitGRAPH(ts_m=incomp_data, seq_len=seq_len, sliding_windows=sliding_windows, kernel_size=kernel_size, kernel_set=kernel_set, epochs=epochs, batch_size=batch_size, subgraph_size=subgraph_size, tr_ratio=tr_ratio, num_workers=num_workers, seed=seed, use_cuda=use_cuda, verbose=verbose)
     #recov_data = run(ts_m=incomp_data, seq_len=8, pred_len=1, kernel_size=2, epochs=100)
 
     end_time = time.time()

@@ -1,9 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.HKMFT.recovHKMFT import recovHKMFT
+from imputegap.tools import utils
 
 
-def hkmf_t(incomp_data, tags=None, seq_len=7, blackouts_begin=None, blackouts_end=None, epochs=10, tr_ratio=0.9, logs=True, verbose=True):
+def hkmf_t(incomp_data, tags=None, seq_len=7, blackouts_begin=None, blackouts_end=None, epochs=10, tr_ratio=0.9, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
 
@@ -37,6 +38,9 @@ def hkmf_t(incomp_data, tags=None, seq_len=7, blackouts_begin=None, blackouts_en
     logs : bool, optional
         Whether to log the execution time (default is True).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
 
@@ -56,6 +60,7 @@ def hkmf_t(incomp_data, tags=None, seq_len=7, blackouts_begin=None, blackouts_en
     https://github.com/wangliang-cs/hkmf-t?tab=readme-ov-file
     """
     start_time = time.time()  # Record start time
+    _ = utils.check_cuda(use_cuda=use_cuda, exception="HKMF-T")
 
     recov_data = recovHKMFT(dataset=incomp_data, tags=tags, seq_len=seq_len, blackouts_begin=blackouts_begin, blackouts_end=blackouts_end, max_epoch=epochs, tr_ratio=tr_ratio, verbose=verbose)
 

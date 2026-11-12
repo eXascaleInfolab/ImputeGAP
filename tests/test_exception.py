@@ -44,7 +44,7 @@ class TestException(unittest.TestCase):
         the goal is to test the exception to algorithms
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"), nbr_series=10, nbr_val=40)
+        ts_1.load_series("chlorine", nbr_series=10, nbr_val=40)
 
         exp = ExplainGAP()
 
@@ -198,7 +198,7 @@ class TestException(unittest.TestCase):
 
         # initialize the time series object
         ts = TimeSeries()
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None)
+        ts.load_series("eeg-alcohol", normalizer=None)
         print(f"{ts.data.shape = }")
 
         ts_m = GenGAP.mcar(ts.data, offset=10, seed=False)
@@ -239,7 +239,7 @@ class TestException(unittest.TestCase):
         ts.range(3,4)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None, replace_nan=True)
+        ts.load_series("eeg-alcohol", normalizer=None, replace_nan=True)
         self.assertTrue(ts.data.shape == (256,64))
 
         ts.print(nbr_val=-1, nbr_series=-1)
@@ -478,7 +478,7 @@ class TestException(unittest.TestCase):
 
         for pattern in s:
             ts = TimeSeries()
-            ts.load_series(utils.search_path("chlorine"), normalizer="min_max")
+            ts.load_series("chlorine", normalizer="min_max")
             _ = utils.config_contamination(ts=ts, pattern=pattern, logic_by_series=False)
 
 
@@ -603,7 +603,7 @@ class TestException(unittest.TestCase):
         print(f"\nImputation algorithms : {ts.algorithms}")
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+        ts.load_series("chlorine", normalizer="z_score")
 
         # contaminate the time series
         ts_m = GenGAP.mcar(ts.data)

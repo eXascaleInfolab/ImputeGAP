@@ -344,7 +344,7 @@ def impute_all_missing_data(model, train_data, val_data, test_data, args=None, l
 
     return np.array(imputed_matrix)
 
-def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, n_head=8, num_workers=0, shuffle=True, seed=26, tr_ratio=0.7, verbose=False, replicat=False):
+def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, n_head=8, num_workers=0, shuffle=True, seed=26, tr_ratio=0.7, verbose=False, use_cuda=0, replicat=False):
 
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)
@@ -395,7 +395,7 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     args.model_name = ""
     args.feature_num = feature_num
     args.batch_size = batch_size
-    args.device = "cuda" if torch.cuda.is_available() else "cpu"
+    args.device = "cuda" if use_cuda else "cpu"
     args.n_head = n_head
     dshere = os.path.join(dshere, args.result_saving_base_dir)
 
@@ -487,9 +487,8 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     if verbose:
         logger.info(f"Num of total trainable params is: {args.total_params}")
 
-    # if utilize GPU and GPU available, then move
-    if "cuda" in args.device and torch.cuda.is_available():
-        model = model.to(args.device)
+    model = model.to(args.device)
+    #print(f"SAITS > Device: {next(model.parameters()).device}")
 
     if verbose:
         logger.info(f"Creating {args.optimizer_type} optimizer...")

@@ -14,7 +14,7 @@ class TestContaminationDisjoint(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
+        ts_1.load_series("test-logic-llm.txt")
 
         series_impacted = [0.4, 0.9]
         ten_percent_index = int(ts_1.data.shape[0] * 0.1)
@@ -51,7 +51,7 @@ class TestContaminationDisjoint(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
 
             for S in series_rate:
                 # Generate disjoint contamination

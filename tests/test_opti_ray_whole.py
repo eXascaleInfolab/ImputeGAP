@@ -17,7 +17,7 @@ class TestOptiRAY(unittest.TestCase):
         check = False
 
         # 2. load the timeseries from file or from the code
-        ts_1.load_series(utils.search_path("eeg-alcohol"))
+        ts_1.load_series("eeg-alcohol")
         ts_1.normalize(normalizer="min_max")
 
         # 3. contamination of the data

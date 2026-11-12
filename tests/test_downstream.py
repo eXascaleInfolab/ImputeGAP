@@ -18,7 +18,7 @@ class TestDownstream(unittest.TestCase):
         """
         # Load and normalize the series
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("forecast-economy"))
+        ts_1.load_series("forecast-economy")
 
         print(f"{utils.list_of_forecasters() = }")
         print(f"{utils.list_of_downstreams_darts() = }")
@@ -81,7 +81,7 @@ class TestDownstream(unittest.TestCase):
         """
         # Load and normalize the series
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("forecast-economy"))
+        ts_1.load_series("forecast-economy")
 
         print(f"{utils.list_of_forecasters() = }")
         print(f"{utils.list_of_downstreams_darts() = }")

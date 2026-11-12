@@ -1,10 +1,10 @@
 import time
 
-#from imputegap.wrapper.AlgoPython.GRIN.recoveryGRIN import recoveryGRIN
 from imputegap.wrapper.AlgoPython.GRIN.runnerGRIN import runGRIN
+from imputegap.tools import utils
 
 
-def grin(incomp_data, seq_len=-1, sim_type="corr", epochs=30, batch_size=-1, sliding_windows=1, adj_threshold=0.1, patience=40, num_workers=0, tr_ratio=0.7, logs=True, verbose=True):
+def grin(incomp_data, seq_len=-1, sim_type="corr", epochs=30, batch_size=-1, sliding_windows=1, adj_threshold=0.1, patience=40, num_workers=0, tr_ratio=0.7, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using the Multivariate Recurrent Neural Network (MRNN) algorithm.
 
@@ -44,6 +44,9 @@ def grin(incomp_data, seq_len=-1, sim_type="corr", epochs=30, batch_size=-1, sli
     logs : bool, optional
         Whether to log the execution time (default is True).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
 
@@ -63,9 +66,10 @@ def grin(incomp_data, seq_len=-1, sim_type="corr", epochs=30, batch_size=-1, sli
     https://github.com/Graph-Machine-Learning-Group/grin
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
     #recov_data = recoveryGRIN(input=incomp_data, d_hidden=d_hidden, lr=lr, batch_size=batch_size, window=window, alpha=alpha, patience=patience, epochs=epochs, workers=workers, tr_ratio=tr_ratio, verbose=verbose)
-    recov_data = runGRIN(incomp_data=incomp_data, seq_len=seq_len, sim_type=sim_type, epochs=epochs, batch_size=batch_size, sliding_windows=sliding_windows, adj_threshold=adj_threshold, patience=patience, num_workers=num_workers, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = runGRIN(incomp_data=incomp_data, seq_len=seq_len, sim_type=sim_type, epochs=epochs, batch_size=batch_size, sliding_windows=sliding_windows, adj_threshold=adj_threshold, patience=patience, num_workers=num_workers, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

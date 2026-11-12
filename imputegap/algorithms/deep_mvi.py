@@ -1,8 +1,9 @@
 import time
 
 from imputegap.wrapper.AlgoPython.DeepMVI.recovDeepMVI import deep_mvi_recovery
+from imputegap.tools import utils
 
-def deep_mvi(incomp_data, max_epoch=1000, patience=2, lr=0.001, batch_size=-1, tr_ratio=0.9, logs=True, verbose=True):
+def deep_mvi(incomp_data, max_epoch=1000, patience=2, lr=0.001, batch_size=-1, tr_ratio=0.9, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using the DEEP MVI (Deep Multivariate Imputation) algorithm.
 
@@ -10,18 +11,28 @@ def deep_mvi(incomp_data, max_epoch=1000, patience=2, lr=0.001, batch_size=-1, t
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
+
     max_epoch : int, optional
         Limit of training epoch (default is 1000)
+
     patience : int, optional
         Number of threshold error that can be crossed during the training (default is 2)
+
     lr : float, optional
         Learning rate of the training (default is 0.001)
+
     batch_size: int, optional
         Number of samples processed before the model's weights are updated (default is -1)
+
     tr_ratio: float, optional
         Split ratio between training and testing sets (default is 0.9).
+
     logs : bool, optional
         Whether to log the execution time (default is True).
+
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
 
@@ -32,8 +43,10 @@ def deep_mvi(incomp_data, max_epoch=1000, patience=2, lr=0.001, batch_size=-1, t
 
     Example
     -------
-        >>> recov_data = deep_mvi(incomp_data, 1000, 2, 0.001, 16)
-        >>> print(recov_data)
+    .. code-block:: python
+
+        recov_data = deep_mvi(incomp_data, 1000, 2, 0.001, 16)
+        print(recov_data)
 
     References
     ----------
@@ -41,8 +54,9 @@ def deep_mvi(incomp_data, max_epoch=1000, patience=2, lr=0.001, batch_size=-1, t
     https://github.com/pbansal5/DeepMVI
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
-    recov_data = deep_mvi_recovery(input=incomp_data, max_epoch=max_epoch, patience=patience, lr=lr, batch_size=batch_size, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = deep_mvi_recovery(input=incomp_data, max_epoch=max_epoch, patience=patience, lr=lr, batch_size=batch_size, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

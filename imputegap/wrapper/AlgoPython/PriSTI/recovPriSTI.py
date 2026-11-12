@@ -39,7 +39,7 @@ def handle_parser(argv=None):
 
     return args
 
-def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function="none", nsamples=100, sliding_windows=1, target_strategy="mix", beta=[0.0001, 0.2], num_workers=0, shuffle=True, normalize=False, tr_ratio=0.7, seed=42, verbose=True, deep_verbose=False, replicat=False):
+def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function="none", nsamples=100, sliding_windows=1, target_strategy="mix", beta=[0.0001, 0.2], num_workers=0, shuffle=True, normalize=False, tr_ratio=0.7, seed=42, verbose=True, use_cuda=0, replicat=False):
     args = handle_parser()
 
     ts_m = np.copy(incomp_data)
@@ -61,6 +61,7 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
     foldername = ""
     np.random.seed(SEED)
     torch.manual_seed(SEED)
+    torch.cuda.manual_seed(SEED)
     torch.cuda.manual_seed(SEED)
 
     here = os.path.dirname(os.path.abspath(__file__))
@@ -90,11 +91,11 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
     args.targetstrategy = target_strategy
     args.num_workers = num_workers
 
-    args.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    args.device = torch.device("cuda" if use_cuda else "cpu")
     test_len, val_len = utils_imp.sets_splitter_based_on_training(tr_ratio, verbose=False)
 
     if verbose:
-        print(f"(IMPUTATION) PriSTI\n\tMatrix Shape: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_length: {seq_len}\n\tbatch_size: {batch_size}\n\tepochs: {config['train']['epochs']}\n\tadjacency function: {adj_function}\n\tsamples: {nsamples}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {config['model']['target_strategy']}\n\tunconditional: {config['model']['is_unconditional']}\n\tbeta_start: {config['diffusion']['beta_start']}\n\tbeta_end: {config['diffusion']['beta_end']}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {test_len}\n\tval_ratio: {val_len}\n\tseed: {config['seed']}\n")
+        print(f"(IMPUTATION) PriSTI\n\tMatrix Shape: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_length: {seq_len}\n\tbatch_size: {batch_size}\n\tepochs: {config['train']['epochs']}\n\tadjacency function: {adj_function}\n\tsamples: {nsamples}\n\tsliding_windows: {sliding_windows}\n\ttarget_strategy: {config['model']['target_strategy']}\n\tunconditional: {config['model']['is_unconditional']}\n\tbeta_start: {config['diffusion']['beta_start']}\n\tbeta_end: {config['diffusion']['beta_end']}\n\tnum_workers: {args.num_workers}\n\ttr_ratio: {tr_ratio}\n\tts_ratio: {test_len}\n\tval_ratio: {val_len}\n\tseed: {config['seed']}\n\tuse_cuda: {use_cuda}\n")
         print(f"call: pristi.impute(params={{'seq_len': {seq_len}, 'batch_size': {batch_size}, 'epochs': {config['train']['epochs']}, 'sliding_windows': {sliding_windows}, 'target_strategy': '{config['model']['target_strategy']}', 'nsamples': {nsamples}, 'beta': {beta}, 'num_workers': {args.num_workers}}})\n")
 
         print("\npre-processing...\n")
@@ -114,6 +115,8 @@ def recovPriSTI(incomp_data, seq_len=-1, batch_size=-1, epochs=200, adj_function
             is_interpolate=config["model"]["use_guide"], num_workers=args.num_workers, target_strategy=args.targetstrategy, test_len=test_len, val_len=val_len, multivariate=multivariate, verbose=verbose, deep_verbose=False)
 
         model = PriSTI_ImputeGAP(train_loader, config, args.device, target_dim=ts_m.shape[1], seq_len=seq_len).to(args.device)
+
+    #print(f"PriSTI > Device: {next(model.parameters()).device}")
 
     if verbose:
         print("\n\n\ntraining...\n")

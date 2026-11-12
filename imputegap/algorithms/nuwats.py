@@ -1,9 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.NuwaTS.recovNuwa import recovLLMs
+from imputegap.tools import utils
 
 
-def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=6, gpt_layers=3, num_workers=0, tr_ratio=0.7, seed=42, logs=True, verbose=True):
+def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=6, gpt_layers=3, num_workers=0, tr_ratio=0.7, seed=42, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using NuwaTS: Transformer-based recovery from missing values in multivariate time series.
 
@@ -37,6 +38,9 @@ def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=6, gpt_layers=3, num_w
     logs : bool, optional
         Whether to print/log execution time and key events (default: True).
 
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
     verbose : bool, optional
         Whether to print detailed output information during execution (default: True).
 
@@ -47,8 +51,10 @@ def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=6, gpt_layers=3, num_w
 
     Example
     -------
-        >>> imputed = nuwats(incomp_data, seq_length=48, batch_size=16, patch_size=4)
-        >>> print(imputed.shape)
+    .. code-block:: python
+
+        imputed = nuwats(incomp_data, seq_length=48, batch_size=16, patch_size=4)
+        print(imputed.shape)
 
     References
     ----------
@@ -56,10 +62,9 @@ def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=6, gpt_layers=3, num_w
     https://github.com/Chengyui/NuwaTS/tree/master
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda)
 
-    #recov_data = recovGPT4TS(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=10, gpt_layers=gpt_layers, num_workers=num_workers, model="NuwaTS", tr_ratio=tr_ratio, seed=seed, verbose=verbose)
-    recov_data = recovLLMs(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, gpt_layers=gpt_layers, num_workers=num_workers, tr_ratio=tr_ratio, model="NuwaTS", seed=seed, verbose=verbose)
-    #recov_data = recovLLMs(ts_m=incomp_data)
+    recov_data = recovLLMs(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, gpt_layers=gpt_layers, num_workers=num_workers, tr_ratio=tr_ratio, model="NuwaTS", seed=seed, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

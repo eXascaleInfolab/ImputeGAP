@@ -20,7 +20,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
             P = math.ceil(ts.data.shape[0] * 0.1)
 
             for S in series_impacted:
@@ -51,7 +51,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
             P = math.ceil(ts.data.shape[0] * 0.1)
 
             for S in series_impacted:
@@ -77,7 +77,7 @@ class TestContaminationGaussian(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("drift"))
+        ts_1.load_series("drift")
         series_impacted = [0.4, 0.8]
         missing_rates = [0.1, 0.4, 0.6]
         ten_percent_index = int(ts_1.data.shape[1] * 0.1)
@@ -104,7 +104,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
 
             for S in nbr_series_impacted:
                 for R in missing_rates_per_series:
@@ -144,7 +144,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
             T = ts.data.shape[0]
             P_idx = int(np.ceil(offset * T))
             center = (P_idx + (T - 1)) / 2
@@ -175,7 +175,7 @@ class TestContaminationGaussian(unittest.TestCase):
 
         for dataset in datasets:
             ts_1 = TimeSeries()
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:

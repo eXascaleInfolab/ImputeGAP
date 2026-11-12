@@ -978,7 +978,47 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         return None
 
 
-def config_impute_algorithm(incomp_data, algorithm, task="default", verbose=True):
+def check_cuda(use_cuda, exception=None):
+    """
+    Check CUDA availability based on the specified configuration.
+
+    Parameters
+    ----------
+    use_cuda : int, optional
+        CUDA usage mode:
+        - 0: Force CPU.
+        - 1: Use CUDA if available, otherwise fall back to CPU.
+        - 2: Automatically detect CUDA availability.
+
+    exception: bool, optional
+        If true trigger an exeption
+
+    Returns
+    -------
+    int
+        1 if CUDA is enabled and available, otherwise 0.
+    """
+    if exception is not None and use_cuda!=0:
+        print(f"\n(SYS) ImputeGAP's check_cuda() > {exception} does not support GPU, using CPU...\n")
+        return 0
+
+    if use_cuda not in (0, 1, 2):
+        raise ValueError("use_cuda must be 0, 1, or 2.")
+
+    if use_cuda == 0:
+        print("\n(SYS) ImputeGAP's check_cuda() > use_cuda is set to 0, using CPU...\n")
+        return 0
+
+    import torch
+    if torch.cuda.is_available():
+        print("\n(SYS) ImputeGAP's check_cuda() > CUDA is available, using GPU...\n")
+        return 1
+
+    print("\n(SYS) ImputeGAP's check_cuda() > CUDA is not available, using CPU...\n")
+    return 0
+
+
+def config_impute_algorithm(incomp_data, algorithm, task="default", use_cuda=0, verbose=True):
     """
     Initialize and configure the selected imputation algorithm for the specified task.
 
@@ -993,6 +1033,10 @@ def config_impute_algorithm(incomp_data, algorithm, task="default", verbose=True
     task: string, optional
         Task of the model (default is "default"). It will load the default parameters for the specific task.
         "default" for regular imputation / "classification" for classification. / "forecasting" for forecasting.
+
+    use_cuda: int, optional, default 0
+            If 0 force to use CPU for deep learning and llms algorithms
+            If 1 force to use cuda CPU for deep learning and llms algorithms
 
     verbose : bool, optional
         Whether to display execution information (default is True).
@@ -1109,6 +1153,7 @@ def config_impute_algorithm(incomp_data, algorithm, task="default", verbose=True
     if imputer is not None:
         imputer.verbose = verbose
         imputer.task = task
+        imputer.use_cuda = use_cuda
 
     return imputer
 
@@ -4459,7 +4504,7 @@ def list_of_datasets(txt=False):
         "climate",
         "drift",
         "eeg-alcohol",
-        "eeg-reading",
+        #"eeg-reading",
         "electricity",
         #"fmri-stoptask",
         "forecast-economy",

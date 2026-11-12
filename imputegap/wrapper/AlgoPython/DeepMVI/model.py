@@ -12,7 +12,6 @@ import torch
 import torch.nn as nn
 import math
 from typing import List
-device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 class PositionalEncoding(nn.Module):
@@ -206,7 +205,8 @@ class OurModel(nn.Module):
         return {'loss_values':loss,'values':mean}
 
     def mae_loss(self,y,y_pred,mask,context_info):
-        temp = torch.abs((y_pred - y).to(device) * self.std[context_info[0]].to(device))
+        temp = torch.abs((y_pred - y) * self.std[context_info[0]].to(y.device))
+        #temp = torch.abs((y_pred - y).to(device) * self.std[context_info[0]].to(device))
         loss = temp[mask>0]
         #print (loss.mean())
         return loss

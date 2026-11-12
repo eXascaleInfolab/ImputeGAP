@@ -17,7 +17,7 @@ class TestOptiCDRECEEG(unittest.TestCase):
         dataset = "eeg-alcohol"
 
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path(dataset), header=False)
+        ts_1.load_series(dataset, header=False)
 
         incomp_data = GenGAP.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)
 

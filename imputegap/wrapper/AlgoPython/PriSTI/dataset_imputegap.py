@@ -16,7 +16,6 @@ import numpy as np
 import torch
 import torchcde
 from imputegap.wrapper.AlgoPython.PriSTI.utils import get_randmask, get_block_mask
-device = "cuda" if torch.cuda.is_available() else "cpu"
 
 import os
 os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"

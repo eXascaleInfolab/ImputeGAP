@@ -18,9 +18,9 @@ class TestPipeline(unittest.TestCase):
 
         # 1. ===========================================================================================================
         ts_none = TimeSeries()
-        ts_none.load_series(utils.search_path("test-logic-llm.txt"), normalizer=None)
+        ts_none.load_series("test-logic-llm.txt", normalizer=None)
         ts_max = TimeSeries()
-        ts_max.load_series(utils.search_path("test-logic-llm.txt"), normalizer="min-max")
+        ts_max.load_series("test-logic-llm.txt", normalizer="min-max")
         test = utils.list_of_algorithms()
         test = utils.list_of_datasets()
         test = utils.list_of_extractors()
@@ -31,7 +31,7 @@ class TestPipeline(unittest.TestCase):
         print(f"\nImputeGAP datasets : {ts.datasets}")
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z_score")
+        ts.load_series("test-logic-llm.txt", normalizer="z_score")
 
         # plot and print a subset of time series
         ts.print(nbr_series=3, nbr_val=20)
@@ -79,7 +79,7 @@ class TestPipeline(unittest.TestCase):
         print(f"\nMissingness patterns : {ts.patterns}")
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+        ts.load_series("eeg-alcohol", normalizer="z_score")
 
         # contaminate the time series with MCAR pattern
         ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
@@ -117,7 +117,7 @@ class TestPipeline(unittest.TestCase):
         print(f"\nImputation algorithms : {ts.algorithms}")
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+        ts.load_series("eeg-alcohol", normalizer="z_score")
 
         # contaminate the time series
         ts_m = GenGAP.mcar(ts.data)
@@ -170,7 +170,7 @@ class TestPipeline(unittest.TestCase):
         ts = TimeSeries()
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+        ts.load_series("eeg-alcohol", normalizer="z_score")
 
         # contaminate and impute the time series
         ts_m = GenGAP.mcar(ts.data)
@@ -235,7 +235,7 @@ class TestPipeline(unittest.TestCase):
         print(f"\nImputeGAP explainer features extractor : {ts.extractors}")
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+        ts.load_series("eeg-alcohol", normalizer="z_score")
 
         # configure the explanation
         exp.shap_explainer(input_data=ts.data, extractor="tsfresh", pattern="mcar", file_name=ts.name, algorithm="CDRec")
@@ -309,7 +309,7 @@ class TestPipeline(unittest.TestCase):
         for name in utils.list_of_algorithms_deep_learning():
             # load and normalize the dataset
             ts = TimeSeries()
-            ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z-score", nbr_series=11, nbr_val=42)
+            ts.load_series("eeg-alcohol", normalizer="z-score", nbr_series=11, nbr_val=42)
             incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             if name == "DeepMVI":
@@ -355,7 +355,7 @@ class TestPipeline(unittest.TestCase):
             # load and normalize the dataset
             if name != "NuwaTS":
                 ts = TimeSeries()
-                ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z-score", nbr_series=16, nbr_val=69)
+                ts.load_series("eeg-alcohol", normalizer="z-score", nbr_series=16, nbr_val=69)
                 incomp_data = GenGAP.mcar(ts.data)
                 print(f"\n\n{incomp_data.shape = }")
                 algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
@@ -389,7 +389,7 @@ class TestPipeline(unittest.TestCase):
         for name in utils.list_of_algorithms_matrix_completion():
             # load and normalize the dataset
             ts = TimeSeries()
-            ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
+            ts.load_series("test-logic-llm.txt", normalizer="z-score")
             incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             if name == "SPIRIT":
@@ -425,7 +425,7 @@ class TestPipeline(unittest.TestCase):
         for name in utils.list_of_algorithms_pattern_search():
             # load and normalize the dataset
             ts = TimeSeries()
-            ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
+            ts.load_series("test-logic-llm.txt", normalizer="z-score")
             incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             if name == "TKCM":
@@ -461,7 +461,7 @@ class TestPipeline(unittest.TestCase):
         for name in utils.list_of_algorithms_statistics():
             # load and normalize the dataset
             ts = TimeSeries()
-            ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
+            ts.load_series("test-logic-llm.txt", normalizer="z-score")
             incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)
@@ -495,7 +495,7 @@ class TestPipeline(unittest.TestCase):
         for name in utils.list_of_algorithms_machine_learning():
             # load and normalize the dataset
             ts = TimeSeries()
-            ts.load_series(utils.search_path("test-logic-llm.txt"), normalizer="z-score")
+            ts.load_series("test-logic-llm.txt", normalizer="z-score")
             incomp_data = GenGAP.mcar(ts.data)
             print(f"\n\n{incomp_data.shape = }")
             algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=False)

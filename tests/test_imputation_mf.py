@@ -17,7 +17,7 @@ class TestMissForest(unittest.TestCase):
         dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path("chlorine"), normalizer="z_score", nbr_series=10, nbr_val=100)
+        ts.load_series("chlorine", normalizer="z_score", nbr_series=10, nbr_val=100)
 
 
         incomp_data = GenGAP.mcar(ts.data)

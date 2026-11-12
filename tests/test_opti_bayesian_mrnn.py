@@ -15,7 +15,7 @@ class TestOptiMRNN(unittest.TestCase):
         dataset, algorithm = "chlorine", "mrnn"
 
         ts_1 = TimeSeries()
-        ts_1.load_series(data=utils.search_path(dataset), nbr_val=200)
+        ts_1.load_series(data=dataset, nbr_val=200)
 
         incomp_data = GenGAP.mcar(input_data=ts_1.data)
 

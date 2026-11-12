@@ -131,13 +131,13 @@ def test(model, test_loader, val_feats, device, deep_verbose=False):
     return output_matrix
 
 
-def transformer_recovery(input_feats, max_epoch=1000, patience=2, lr=0.001, batch_size=16, seed=0, verbose=True, deep_verbose=False):
+def transformer_recovery(input_feats, max_epoch=1000, patience=2, lr=0.001, batch_size=16, seed=0, verbose=True, use_cuda=0, deep_verbose=False):
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if use_cuda else "cpu")
 
     global interval
     interval = 1000
@@ -149,7 +149,10 @@ def transformer_recovery(input_feats, max_epoch=1000, patience=2, lr=0.001, batc
 
     train_feats, val_feats, val_points, test_points, block_size, kernel_size = make_validation(input_feats,num_missing=num_missing)
 
+    #print(f"DeepMVI > Device: {device}")
+
     if deep_verbose:
+        print(f"\nNATERQ__LOGS__; {input_feats.shape = }")
         print(f"\nNATERQ__LOGS__; {input_feats.shape = }")
         print(f"NATERQ__LOGS__; {train_feats.shape = }")
         print(f"NATERQ__LOGS__; {val_feats.shape = }")
