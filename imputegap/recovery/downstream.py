@@ -359,7 +359,7 @@ class Downstream:
 
         return xlsx_path
 
-    def comparator(self, recov_data=None, input_data=None, incomp_data=None, horizons=None, season=None, models=None, meta_algorithm=None, meta_pattern=None, meta_rate=None, save_path="./imputegap_assets/downstream", export_excel=True, verbose=False, display_plot=True):
+    def comparator(self, imp_algs=None, input_data=None, incomp_data=None, model=None, horizons=None, season=None, meta_pattern=None, meta_rate=None, save_path="./imputegap_assets/downstream", export_excel=True, verbose=False, display_plot=True):
         """
         Compare the downstream forecasting performance of imputed time series across multiple models and prediction horizons.
 
@@ -375,7 +375,7 @@ class Downstream:
             List of forecasting horizons. Positive values represent the number of timestamps to predict, while negative values represent a fraction of the dataset. Defaults to [12].
         season : int, optional
             Seasonal period of the time series. Defaults to 12.
-        models : list, optional
+        models : str, optional
             List of downstream forecasting models to evaluate. Defaults to ["chronos"].
         meta_algorithm : str, optional
             Name of the imputation algorithm used to recover the data. Defaults to self.algorithm or "imputer".
@@ -410,26 +410,18 @@ class Downstream:
         print(f"\n\n(DOWNSTREAM): ImputeGAP Comparator of Downstream Models has been launched.")
 
         # retrieve default data and parameters
-        if recov_data is None:
-            recov_data = self.recov_data
+        if imp_algs is None:
+            raise ValueError("No imputation algorithm provided.")
         if input_data is None:
             input_data = self.input_data
         if incomp_data is None:
             incomp_data = self.incomp_data
         if horizons is None:
             horizons = [12]
-        if models is None:
-            models = ["chronos"]
-        if meta_algorithm is None:
-            meta_algorithm = self.algorithm
-
-        # validate input data and metadata
-        if recov_data is None:
-            raise ValueError("Recovery data not provided, at least provide a recovery matrix.")
+        if model is None:
+            model = "chronos"
         if input_data is None:
             print("\t\t(INFO): Input data (raw-data/ground truth) not provided, the analysis will only provide recovery downstream effects.")
-        if meta_algorithm is None:
-            meta_algorithm = "imputer"
         if meta_pattern is None:
             meta_pattern = "pattern"
         if meta_rate is None:
@@ -445,10 +437,14 @@ class Downstream:
         saved_pipelines = []  # saved pipelines will store data required for the combined plot
 
         # pipelines
-        for model_ in models:
+        for algorithm in imp_algs:
             for horizon_ in horizons:
 
-                print(f"\tpipeline: {meta_algorithm}-{model_}-{horizon_}:")
+                print(f"\tpipeline: {algorithm}-{model}-{horizon_}:")
+                imputer = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=algorithm, task="forecasting", verbose=verbose)
+                imputer.verbose = verbose
+                imputer.impute()
+                recov_data = imputer.recov_data
 
                 start_time_downstream = time.time()
 
@@ -466,15 +462,14 @@ class Downstream:
                 print(f"\t\t\tcomparator: converting the dataset into forecasting task... horizon:{horizon_}, data_len:{train_len}, prediction_len:{recov_data.shape[0]-train_len}")
 
                 # initialize downstream forecasting model
-                artifact = Artifact(dataset="recov_data", model=model_, algorithm=meta_algorithm, pattern=meta_pattern, x=meta_rate, contamination_by_class=None, imputation_by_class=s_horizon, fixed_x=meta_rate, horizon=horizon_, season=season)
-                forcaster = Forecaster(task="forecast", model=model_, y_train=None, plots=False, use_cache=False, to_cache=True, artifact=artifact, referential=False, bypass_error=False, s_exception=False, pipeline=True, verbose=False)
+                artifact = Artifact(dataset="recov_data", model=model, algorithm=algorithm, pattern=meta_pattern, x=meta_rate, contamination_by_class=None, imputation_by_class=s_horizon, fixed_x=meta_rate, horizon=horizon_, season=season)
+                forcaster = Forecaster(task="forecast", model=model, y_train=None, plots=False, use_cache=False, to_cache=True, artifact=artifact, referential=False, bypass_error=False, s_exception=False, pipeline=True, verbose=False)
 
                 self.downstream=forcaster
 
                 # evaluate downstream forecasting performance
-                downstream_analyser = Imputation.Statistics.MeanImpute(incomp_data)
-                downstream_analyser.verbose = verbose
-                downstream_analyser.score(input_data, recov_data, downstream=forcaster)
+                imputer.score(input_data, recov_data)
+                imputer.score(input_data, recov_data, downstream=forcaster)
                 end_time_downstream = time.time()
 
                 # compute downstream execution time in milliseconds
@@ -482,19 +477,18 @@ class Downstream:
                 time_downstream = max(time_downstream, 1)
 
                 # collect downstream metrics and pipeline metadata
-                final_metric = {key: val for key, val in downstream_analyser.downstream_metrics.items() if not np.isnan(val)}
+                final_metric = {key: val for key, val in imputer.metrics.items() if not np.isnan(val)}
+                final_metric.update({key: val for key, val in imputer.downstream_metrics.items() if not np.isnan(val)})
                 final_metric["RUNTIME"] = time_downstream
-                final_metric["MODEL"] = model_
+                final_metric["ALGORITHM"] = algorithm
+                final_metric["MODEL"] = model
                 final_metric["HORIZON"] = horizon_
-                final_metric["ALGORITHM"] = meta_algorithm
                 final_metric["PATTERN"] = meta_pattern
                 final_metric["RATE"] = meta_rate
 
                 saved_info.append(final_metric)
                 # save pipeline data for the combined downstream plot
-                saved_pipelines.append({"y_train": np.array(forcaster.y_train, copy=True), "y_test": np.array(forcaster.y_test, copy=True), "y_pred": np.array(forcaster.y_pred, copy=True),
-                     "incomp_data": incomp_data, "ground_truth": input_data, "recov_data": recov_data, "model": model_,
-                     "metrics": final_metric.copy()})
+                saved_pipelines.append({"y_train": np.array(forcaster.y_train, copy=True), "y_test": np.array(forcaster.y_test, copy=True), "y_pred": np.array(forcaster.y_pred, copy=True), "incomp_data": incomp_data, "ground_truth": input_data, "recov_data": recov_data, "metrics": final_metric.copy()})
 
                 print(f"\tresult of the pipeline: {final_metric=}\n")
 
@@ -519,7 +513,7 @@ class Downstream:
 
         # generate combined downstream comparator plot
         if saved_pipelines:
-            fig = self._plot_comparator_downstream(pipelines=saved_pipelines, algorithm=meta_algorithm, series_index=self.downstream.selected_series[0], title=f"Downstream forecasting comparison - {meta_algorithm}", display=display_plot, save_path=save_path, verbose=verbose)
+            fig = self._plot_comparator_downstream(pipelines=saved_pipelines, series_index=self.downstream.selected_series[0], title=f"Downstream forecasting comparison - {model}", display=display_plot, save_path=save_path, verbose=verbose)
             plt.close(fig)
 
         return saved_pipelines
@@ -1320,7 +1314,7 @@ class Downstream:
         return plt
 
     @staticmethod
-    def _plot_comparator_downstream(pipelines, algorithm, series_index, title="", save_path="./imputegap_assets/downstream", display=True, verbose=True):
+    def _plot_comparator_downstream(pipelines, series_index, title="", save_path="./imputegap_assets/downstream", display=True, verbose=True):
         """
         Combine multiple downstream forecasting pipelines into vertically stacked subplots.
 
@@ -1328,8 +1322,6 @@ class Downstream:
         ----------
         pipelines : list of dict
             Pipeline records containing y_train, y_test, y_pred, incomp_data, ground_truth, recov_data, model and metrics.
-        algorithm : str
-            Name of the imputation algorithm.
         series_index : int
             Index of the time series to display.
         title : str, optional
@@ -1349,32 +1341,30 @@ class Downstream:
         if not pipelines:
             raise ValueError("No downstream pipelines available for plotting.")
 
+
         # initialize combined figure
         n_pipelines = len(pipelines)
         fig, axes = plt.subplots(n_pipelines, 1, figsize=(24, 4 * n_pipelines), sharex=True, sharey=True, squeeze=False)
         if fig.canvas.manager is not None:
             fig.canvas.manager.set_window_title("downstream comparator evaluation")
-        fig.suptitle(title or f"Downstream comparator - {algorithm}", fontsize=16)
+        fig.suptitle(title or f"Downstream comparator", fontsize=16)
 
         # plot each pipeline on its corresponding subplot
         for i, pipeline in enumerate(pipelines):
             ax = axes[i, 0]
+            algorithm   = pipeline["metrics"].get("ALGORITHM")
+            model       = pipeline["metrics"].get("MODEL")
+
             Downstream._plot_single_downstream(y_train=pipeline["y_train"], y_test=pipeline["y_test"],
                                                y_pred=pipeline["y_pred"], incomp_data=pipeline["incomp_data"],
                                                ground_truth=pipeline["ground_truth"], recov_data=pipeline["recov_data"],
-                                               algorithm=algorithm, series_index=series_index, model=pipeline["model"],
+                                               algorithm=algorithm, series_index=series_index, model=model,
                                                type="forecasting", display=False, verbose=False, ax=ax,
                                                metrics=pipeline["metrics"])
 
-            # keep the legend on the first subplot only
-            if i > 0:
-                legend = ax.get_legend()
-                if legend is not None:
-                    legend.remove()
-
         # adjust layout
-        fig.tight_layout(rect=[0, 0.02, 1, 0.97])
-        fig.subplots_adjust(hspace=0.35)
+        fig.tight_layout(rect=[0, 0.02, 1, 0.94])
+        fig.subplots_adjust(hspace=0.55)
 
         # save combined figure
         if save_path:
@@ -1507,7 +1497,7 @@ class Downstream:
                 start = max(0, int(group[0]) - 1)
                 end = min(train_len, int(group[-1]) + 2)
                 ax.plot(range(start, end), ground_train[start:end],
-                        label="ground truth (missing)" if j == 0 else "_nolegend_",
+                        label="missing data" if j == 0 else "_nolegend_",
                         color="gray", linestyle="--", linewidth=1.5,
                         alpha=0.65, zorder=3)
 
@@ -1528,31 +1518,25 @@ class Downstream:
         plot_mask[:-1] |= missing_mask[1:]
         imputed_series[~plot_mask] = np.nan
         ax.plot(range(train_len), imputed_series,
-                label=f"{algorithm.lower()} imputation",
+                label=f"imputation {algorithm.lower()}",
                 color="black", linestyle="-", linewidth=1.8,
                 alpha=0.95, zorder=5)
 
-        # Very light green shading over the forecasting region
-        ax.axvspan(train_len - 0.5, train_len + test_len - 0.5,
-                   color="green", alpha=0.14, zorder=0)
+        # forecasting background
+        # ax.axvspan(train_len - 0.5, train_len + test_len - 0.5, color="green", alpha=0.14, zorder=0)
 
         # Plot forecasted values in green
         label = f"{type or ''} {model or ''}".strip()
-        ax.plot(range(train_len, len(full_series)), pred_series,
-                label=label, linestyle="-", marker=None,
-                color="green", linewidth=1.8, alpha=0.95, zorder=4)
+        ax.plot(range(train_len, len(full_series)), pred_series, label=label, linestyle="-", marker=None, color="red", linewidth=1.8, alpha=0.95, zorder=4)
 
         # Prominent orange dashed separator between imputation and forecasting
-        ax.axvline(x=train_len - 0.5, color="darkorange", linestyle="--",
-                   linewidth=3.5, alpha=1.0, zorder=10)
+        ax.axvline(x=train_len - 0.5, color="darkorange", linestyle="--", linewidth=1.5, alpha=1.0, zorder=10)
 
         # Label both timeline regions above the plot
-        ax.text((train_len - 1) / 2, 1.02, "Imputation",
-                transform=ax.get_xaxis_transform(), ha="center", va="bottom",
-                fontsize=11, fontweight="bold", color="black", clip_on=False)
-        ax.text(train_len + (test_len - 1) / 2, 1.02, "Forecasting",
-                transform=ax.get_xaxis_transform(), ha="center", va="bottom",
-                fontsize=11, fontweight="bold", color="green", clip_on=False)
+        # Label both timeline regions without overlapping the subplot title
+        # ax.text((train_len - 1) / 2, 0.96, "Imputation", transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=11, fontweight="bold", color="black", clip_on=False)  middle
+        ax.text(0.07, 0.78, "Imputation", transform=ax.transAxes, ha="left", va="top", fontsize=11, fontweight="bold", color="black")
+        ax.text(train_len + (test_len - 1) / 2, 1.02, "Forecasting", transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=11, fontweight="bold", color="red", clip_on=False)
 
         # Show timestamp indices explicitly along the x-axis
         ax.set_xlim(-0.5, train_len + test_len - 0.5)
@@ -1561,15 +1545,11 @@ class Downstream:
 
         # Add labels, title, and grid
         if metrics is not None:
+            rmse = metrics.get("RMSE", len(test_series))
+            horizon = metrics.get("HORIZON", len(test_series))
             smape = metrics.get("smape_imputer", float("nan"))
-            runtime = metrics.get("RUNTIME", float("nan"))
-            if standalone:
-                ax.set_title(
-                    f"{algorithm.lower()} - {model} - horizon {metrics.get('HORIZON', len(test_series))} | sMAPE: {smape:.4f} | Time: {runtime:.2f} ms")
-            else:
-                ax.set_title(
-                    f"{str(model).upper()}  |  Horizon: {metrics.get('HORIZON', len(test_series))}  |  sMAPE: {smape:.4f}  |  Time: {runtime:.2f} ms",
-                    fontsize=14, fontweight="bold", pad=12)
+            #runtime = metrics.get("RUNTIME", float("nan"))
+            ax.set_title(f"{algorithm} | {model} (h{horizon}) | RMSE: {rmse:.3f} | SMAPE: {smape:.3f}", fontsize=13, fontweight="bold", pad=28)
         else:
             ax.set_title(f"{algorithm.lower()} imputation, series_{series_idx + 1}")
         ax.title.set_y(1.10)
@@ -1581,7 +1561,7 @@ class Downstream:
         # Adjust layout and save only standalone plots
         if standalone:
             plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-            fig.subplots_adjust(top=0.88)
+            fig.subplots_adjust(top=0.84)
 
             if save_path:
                 os.makedirs(save_path, exist_ok=True)
