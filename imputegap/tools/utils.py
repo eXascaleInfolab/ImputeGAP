@@ -2538,7 +2538,7 @@ def prepare_series_by_class(labels, raw_data, imputer="cdrec", pattern="mcar", t
                 from imputegap.recovery.manager import TimeSeries
                 ts = TimeSeries()
                 print("\n")
-                ts.print_results(alg.metrics)
+                utils.print_results(alg.metrics)
 
         # if no imputation asked or needed
         # __________________________________________________
@@ -2737,6 +2737,48 @@ def prepare_caching(dataset, algorithm, pattern, x, contamination_by_class, impu
     os.makedirs(dir_cache, exist_ok=True)
 
     return name, dir_cache
+
+
+def print_results(metrics, algorithm="", text="Results"):
+    """
+    Prints the results of the imputation process.
+
+    Parameters
+    ----------
+    metrics : dict
+       A dictionary containing the imputation metrics to display.
+    algorithm : str, optional The name of the algorithm used for imputation.
+    algorithm : str, optional
+       Output text to help the user.
+
+    Returns
+    -------
+    None
+
+    Example
+    -------
+    .. code-block:: python
+
+        print_results(imputer.metrics, imputer.algorithm)
+
+    """
+
+    if algorithm != "":
+        print(f"\n{text} ({algorithm}) :")
+    else:
+        print(f"\n{text} :")
+
+    if "Downstream" in text:
+        inc = 0
+        for key, value in metrics.items():
+            if inc % 3 == 0:
+                print(f"\n{key.split('_', 1)[0].upper()}:")
+            inc = inc + 1
+            print(f"\t{key:<20} = {value}")
+
+    else:
+        for key, value in metrics.items():
+            print(f"{key:<20} = {value}")
 
 
 def ts_caching_save(data, type="classification", artifact=None, name="", dir_cache="", verbose=True):

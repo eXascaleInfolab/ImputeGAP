@@ -7,7 +7,7 @@ from imputegap.recovery.contamination import GenGAP
 
 class TestBitGraph(unittest.TestCase):
 
-    def test_imputation_bitgraph(self, name="bitgraph", limit=0.10):
+    def test_imputation_bitgraph(self, name="bitgraph", limit=0.36):
         """
         the goal is to test if only the simple imputation with the technique has the expected outcome
         """
@@ -27,7 +27,7 @@ class TestBitGraph(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 

@@ -166,7 +166,7 @@ class Optimization:
                             ts.load_forecasting_dataset(dataset, normalizer=normalizer, verbose=verbose, horizon=horizon, nbr_series=10000, nbr_val=10000)
                             y_train, season = ts.load_proper_output_forecasting()
                             incomp_data = utils.config_contamination(ts=ts, pattern="mcar", dataset_rate=0.2, series_rate=0.2, verbose=False, offset=0)
-                            miss = GenGAP.mirror_gap(raw_data=ts.data, ts_m=incomp_data)
+                            miss = GenGAP.mirror_gap(input_data=ts.data, ts_m=incomp_data)
                             start_time_imputation = time.time()
 
                             params = {param_to_opti: value}

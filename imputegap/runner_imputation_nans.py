@@ -8,10 +8,10 @@ ts = TimeSeries()
 print(f"\nImputation algorithms : {ts.algorithms}")
 
 # load the dataset that contains nans values
-ts.load_series("test-logic-nans-llm", normalizer=None)
+ts.load_series(data="test-logic-nans-llm", normalizer=None)
 
 # skip the contamination and impute the series
-imputer = Imputation.MatrixCompletion.CDRec(ts.data, use_cuda=0)
+imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts.data, use_cuda=0)
 imputer.impute()
 print(f"Reconstructed data:\n{imputer.recov_data[:10]}")
 

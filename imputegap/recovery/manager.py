@@ -630,47 +630,7 @@ class TimeSeries:
         if nbr_series < nbr_tot_series:
             print("...")
 
-    def print_results(self, metrics, algorithm="", text="Results"):
-        """
-        Prints the results of the imputation process.
 
-        Parameters
-        ----------
-        metrics : dict
-           A dictionary containing the imputation metrics to display.
-        algorithm : str, optional
-           The name of the algorithm used for imputation.
-        algorithm : str, optional
-           Output text to help the user.
-
-        Returns
-        -------
-        None
-
-        Example
-        -------
-        .. code-block:: python
-
-            ts.print_results(imputer.metrics, imputer.algorithm)
-
-        """
-
-        if algorithm != "":
-            print(f"\n{text} ({algorithm}) :")
-        else:
-            print(f"\n{text} :")
-
-        if "Downstream" in text:
-            inc = 0
-            for key, value in metrics.items():
-                if inc % 3 == 0:
-                    print(f"\n{key.split('_', 1)[0].upper()}:")
-                inc = inc + 1
-                print(f"\t{key:<20} = {value}")
-
-        else:
-            for key, value in metrics.items():
-                print(f"{key:<20} = {value}")
 
     def normalize(self, normalizer="z_score", data=None, verbose=True):
         """
@@ -905,6 +865,11 @@ class TimeSeries:
             ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, save_path="./imputegap_assets") # imputation
 
         """
+
+        if input_data is None or np.isnan(input_data).any():
+            print("\n(EVAL) Cannot plot the series without complete ground truth data. Please provide the original data as input_data to the function.\n")
+            return None
+
         select_backend()
 
         if reverse:

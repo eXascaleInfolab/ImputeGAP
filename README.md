@@ -295,7 +295,7 @@ imputer.impute()
 
 # compute and print the imputation metrics
 imputer.score(ts.data, imputer.recov_data)
-ts.print_results(imputer.metrics)
+utils.print_results(imputer.metrics)
 
 # plot the recovered time series
 ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
@@ -359,8 +359,8 @@ imputer_def = Imputation.MatrixCompletion.CDRec(ts_m).impute()
 imputer_def.score(ts.data, imputer_def.recov_data)
 
 # print the imputation metrics with default and optimized parameter values
-ts.print_results(imputer_def.metrics, text="Default values")
-ts.print_results(imputer.metrics, text="Optimized values")
+utils.print_results(imputer_def.metrics, text="Default values")
+utils.print_results(imputer.metrics, text="Optimized values")
 
 # plot the recovered time series
 ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True,
@@ -436,7 +436,7 @@ imputer.impute()
 forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.1, season=24), pipeline=True)
 
 imputer.score(ts.data, imputer.recov_data, downstream=forecaster)
-ts.print_results(imputer.downstream_metrics, text="Downstream results")
+utils.print_results(imputer.downstream_metrics, text="Downstream results")
 ```
 
 All downstream models developed in ImputeGAP are available in the ``ts.forecasters`` module, which can be listed as follows:

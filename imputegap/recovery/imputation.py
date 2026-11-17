@@ -62,7 +62,7 @@ class BaseImputer:
         """
         raise NotImplementedError("This method should be overridden by subclasses")
 
-    def score(self, input_data, recov_data=None, downstream=None, mask=None, security=True, verbose=True):
+    def score(self, input_data, recov_data=None, downstream=None, mask=None, security=True, print_results=True, text="Results", verbose=True):
         """
         Compute evaluation metrics for the imputed time series.
         Upstream and downstream metrics can be computed.
@@ -86,6 +86,12 @@ class BaseImputer:
         security: bool, optional
             Check if the no imputed values are the same in the imputed matrix and the raw data
 
+        print_results: bool, optional
+            print the results of the imputed time series. (default is True)
+
+        text: str, optional
+            text to present the results of the imputed time series. (default is "").
+
         verbose : bool, optional
             Display the message from the evaluator (default is True).
 
@@ -98,15 +104,21 @@ class BaseImputer:
             >>> imputer.score(ts.data, imputer.recov_data) # upstream
             >>> imputer.score(ts.data, imputer.recov_data, Forecaster()) # downstream
         """
-        from imputegap.recovery.downstream import Downstream, Forecaster, Classifier, Artifact
+        from imputegap.recovery.downstream import Downstream, Forecaster, Classifier
+
         if recov_data is not None:
             self.recov_data = recov_data
 
         if isinstance(downstream, (Forecaster, Classifier)):
             downstream_score = Downstream(input_data, self.recov_data, self.incomp_data, self.algorithm, downstream, self.verbose)
             self.downstream_metrics, self.downstream_plot = downstream_score.downstream_analysis()
+            if print_results:
+                utils.print_results(metrics=self.downstream_metrics, text=text)
         else:
             self.metrics = Evaluation(input_data, self.recov_data, self.incomp_data, self.algorithm, mask=mask, security=security, verbose=verbose).compute_all_metrics()
+            if print_results:
+                utils.print_results(metrics=self.metrics, text=text)
+
 
     def _define_parameters_imputers(self, params, user_def, task="default"):
 

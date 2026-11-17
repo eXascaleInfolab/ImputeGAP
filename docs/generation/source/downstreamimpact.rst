@@ -41,7 +41,7 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
     forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.1, season=24), pipeline=True)
 
     imputer.score(ts.data, imputer.recov_data, downstream=forecaster)
-    ts.print_results(imputer.downstream_metrics, text="Downstream results")
+    utils.print_results(imputer.downstream_metrics, text="Downstream results")
 
 
 

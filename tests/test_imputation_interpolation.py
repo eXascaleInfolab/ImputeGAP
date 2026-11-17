@@ -28,7 +28,7 @@ class TestInterpolation(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 
@@ -44,7 +44,7 @@ class TestInterpolation(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 
@@ -62,7 +62,7 @@ class TestInterpolation(unittest.TestCase):
                 algo.score(ts.data)
                 metrics = algo.metrics
                 print(f"{name}:{metrics = }\n")
-                ts.print_results(algo.metrics, algo.algorithm)
+                utils.print_results(algo.metrics, algo.algorithm)
                 self.assertTrue(metrics["RMSE"]<100)
                 self.assertTrue(metrics["MAE"]<100)
             else:

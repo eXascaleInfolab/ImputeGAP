@@ -2889,7 +2889,7 @@ class BenchGAP:
 
                                         # MIRROR OF THE CONTAMINATION (FOR FORECASTING PURPOSE - START AT THE HORIZON)
                                         # ---------------------------------------------------------------------------------------
-                                        miss = GenGAP.mirror_gap(raw_data=ts.data, ts_m=incomp_data)
+                                        miss = GenGAP.mirror_gap(input_data=ts.data, ts_m=incomp_data)
 
                                         try:
                                             # ------------------------------------------------------------------------------------

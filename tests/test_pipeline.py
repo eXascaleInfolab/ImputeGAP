@@ -188,8 +188,8 @@ class TestPipeline(unittest.TestCase):
         imputer_def.score(ts.data, imputer_def.recov_data)
 
         # print the imputation metrics with default and optimized parameter values
-        ts.print_results(imputer_def.metrics, text="Default values")
-        ts.print_results(imputer.metrics, text="Optimized values")
+        utils.print_results(imputer_def.metrics, text="Default values")
+        utils.print_results(imputer.metrics, text="Optimized values")
 
         # plot the recovered time series
         ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation", display=True)

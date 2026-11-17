@@ -3,9 +3,10 @@ ImputeGAP Documentation
 
 .. admonition:: 📢 News !
 
-        - [11-12-2026] Version 1.1.3 is out! The new release includes the following major updates:
+        - [11-18-2026] Version 1.1.3 is out! The new release includes the following major updates:
             - New LLMs algorithms
-            - New parameter to select CPU or GPU execution for imputation algorithms.
+            - CPU/GPU knob
+            - New downstream impact evaluator
         - [04-06-2025] ImputeGAP was be presented as a Tutorial at KDD 2025 in Toronto! `[Link] <https://imputegap-tutorials.github.io/KDD-2025/>`_
 
 

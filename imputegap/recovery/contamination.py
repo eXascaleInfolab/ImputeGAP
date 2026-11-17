@@ -57,13 +57,13 @@ class GenGAP:
         else:
             return offset
 
-    def mirror_gap(raw_data, ts_m, axis=0, verbose=False):
+    def mirror_gap(input_data, ts_m, axis=0, verbose=False):
         """
         Mirror the missing-value positions of a contaminated time series.
 
         Parameters
         ----------
-        raw_data : numpy.ndarray
+        input_data : numpy.ndarray
         Original time series matrix.
 
         ts_m : numpy.ndarray
@@ -88,7 +88,7 @@ class GenGAP:
             print(f"{mask = }")
             print(f"{mirrored_mask = }")
 
-        mirror = raw_data.copy()
+        mirror = input_data.copy()
         mirror[mirrored_mask] = np.nan
         return mirror
 

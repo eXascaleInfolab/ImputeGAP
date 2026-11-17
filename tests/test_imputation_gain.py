@@ -38,7 +38,7 @@ class TestGAIN(unittest.TestCase):
 
             print(f"{name}:{metrics = }\n")
 
-            ts.print_results(algo.metrics, algo.algorithm)
+            utils.print_results(algo.metrics, algo.algorithm)
 
             expected_metrics = {"RMSE": rmse, "MAE": mae}
 

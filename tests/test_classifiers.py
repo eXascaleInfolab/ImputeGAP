@@ -58,7 +58,7 @@ class TestClassifiers(unittest.TestCase):
                                 plots=False)
 
         imputer.score(ts.data, imputer.recov_data, downstream=classifier)
-        ts.print_results(imputer.downstream_metrics, text="Downstream results")
+        utils.print_results(imputer.downstream_metrics, text="Downstream results")
 
         self.assertIsInstance(imputer.downstream_metrics, dict)
         self.assertTrue(len(imputer.downstream_metrics) > 0, "Metrics dict is empty")
@@ -119,7 +119,7 @@ class TestClassifiers(unittest.TestCase):
                                 plots=False)
 
         imputer.score(ts.data, imputer.recov_data, downstream=classifier)
-        ts.print_results(imputer.downstream_metrics, text="Downstream results")
+        utils.print_results(imputer.downstream_metrics, text="Downstream results")
 
         self.assertIsInstance(imputer.downstream_metrics, dict)
         self.assertTrue(len(imputer.downstream_metrics) > 0, "Metrics dict is empty")

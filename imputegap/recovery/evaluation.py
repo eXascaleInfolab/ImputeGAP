@@ -78,6 +78,13 @@ class Evaluation:
             - "CORRELATION": Pearson Correlation Coefficient
         """
 
+        if self.input_data is None:
+            print("\n(EVAL) N/A missing ground truth\n\tPlease provide the original data as input to the Evaluation module.\n")
+            return {"RMSE": np.nan, "MAE": np.nan, "MI": np.nan, "CORRELATION": np.nan}
+        if np.isnan(self.input_data).any():
+            print("\n(EVAL) Cannot compute evaluation scores without contaminated ground truth data.\n")
+            return {"RMSE": np.nan, "MAE": np.nan, "MI": np.nan, "CORRELATION": np.nan}
+
         if self.mask is None:
             nan_locations = np.isnan(self.incomp_data)
         else:

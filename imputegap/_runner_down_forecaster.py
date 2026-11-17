@@ -19,7 +19,7 @@ y_train, artifact.season = ts.load_proper_output_forecasting()
 
 # contaminate the time series
 ts_m = GenGAP.aligned(ts.data, rate_dataset=artifact.fixed_x, rate_series=artifact.x, offset=0)
-ts_m = GenGAP.mirror_gap(raw_data=ts.data, ts_m=ts_m)
+ts_m = GenGAP.mirror_gap(input_data=ts.data, ts_m=ts_m)
 
 # define and impute the contaminated series
 imputer = Imputation.MatrixCompletion.CDRec(ts_m)
@@ -36,5 +36,5 @@ forecaster = Forecaster(model=artifact.model,
 imputer.score(input_data=ts.data, recov_data=imputer.recov_data)
 imputer.score(input_data=ts.data, recov_data=imputer.recov_data, downstream=forecaster)
 
-ts.print_results(imputer.metrics, text="Upstream results")
-ts.print_results(imputer.downstream_metrics, text="Downstream results")
+utils.print_results(imputer.metrics, text="Upstream results")
+utils.print_results(imputer.downstream_metrics, text="Downstream results")
