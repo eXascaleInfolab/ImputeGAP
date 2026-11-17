@@ -3,7 +3,7 @@ from imputegap.recovery.benchmark import BenchGAP
 
 # launch the evaluation
 bench = BenchGAP()
-bench.eval_imputation(algorithms=["MeanImpute", "SoftImpute"],
+bench.eval_imputation(algorithms=["MeanImpute", "CDRec"],
            datasets=["eeg-alcohol"],
            patterns=["mcar"],
            x_axis=[0.1, 0.2, 0.4, 0.6, 0.8],

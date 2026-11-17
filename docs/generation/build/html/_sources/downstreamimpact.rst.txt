@@ -5,15 +5,6 @@ Downstream Impact
 
 ImputeGAP includes a dedicated module for systematically evaluating the impact of data imputation on downstream tasks. Currently, forecasting is the primary supported task, with plans to expand to additional tasks in the future.
 
-
-
-.. _downstream:
-
-Downstream
-----------
-
-ImputeGAP includes a dedicated module for systematically evaluating the impact of data imputation on downstream tasks. Currently, forecasting is the primary supported task, with plans to expand to additional tasks in the future.
-
 .. code-block:: python
 
     # ImputeGAP imports
@@ -32,11 +23,12 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
     # contaminate the time series
     ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.2, offset=0)
 
-    # define and impute the contaminated series
-    imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
-
     # reverse the contamination to amplify its impact on forecasting.
     ts_m = GenGAP.mirror_gap(input_data=ts.data, ts_m=ts_m)
+
+    # define and impute the contaminated series
+    imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
+    imputer.impute()
 
     # define the parameters for the downstream model
     forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.36, season=24), pipeline=True)

@@ -182,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -302,7 +302,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -310,9 +310,6 @@
         <article role="main" id="furo-main-content">
           <section id="downstream-impact">
 <h1>Downstream Impact<a class="headerlink" href="#downstream-impact" title="Link to this heading">¶</a></h1>
-<p>ImputeGAP includes a dedicated module for systematically evaluating the impact of data imputation on downstream tasks. Currently, forecasting is the primary supported task, with plans to expand to additional tasks in the future.</p>
-<section id="downstream">
-<span id="id1"></span><h2>Downstream<a class="headerlink" href="#downstream" title="Link to this heading">¶</a></h2>
 <p>ImputeGAP includes a dedicated module for systematically evaluating the impact of data imputation on downstream tasks. Currently, forecasting is the primary supported task, with plans to expand to additional tasks in the future.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
@@ -330,11 +327,12 @@
 <span class="c1"># contaminate the time series</span>
 <span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="c1"># define and impute the contaminated series</span>
-<span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MatrixCompletion</span><span class="o">.</span><span class="n">CDRec</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
-
 <span class="c1"># reverse the contamination to amplify its impact on forecasting.</span>
 <span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mirror_gap</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ts_m</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
+
+<span class="c1"># define and impute the contaminated series</span>
+<span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MatrixCompletion</span><span class="o">.</span><span class="n">CDRec</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
+<span class="n">imputer</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
 
 <span class="c1"># define the parameters for the downstream model</span>
 <span class="n">forecaster</span> <span class="o">=</span> <span class="n">Forecaster</span><span class="p">(</span><span class="n">artifact</span><span class="o">=</span><span class="n">Artifact</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;chronos&quot;</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mf">0.36</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="mi">24</span><span class="p">),</span> <span class="n">pipeline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -381,7 +379,6 @@
 </pre></div>
 </div>
 <br></section>
-</section>
 
         </article>
       </div>
@@ -426,27 +423,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Downstream Impact</a><ul>
-<li><a class="reference internal" href="#downstream">Downstream</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

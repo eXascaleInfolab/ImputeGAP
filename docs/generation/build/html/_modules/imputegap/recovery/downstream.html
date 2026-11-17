@@ -1204,6 +1204,9 @@
 
         <span class="n">save_sele</span> <span class="o">=</span> <span class="n">selected_series</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">referential</span><span class="p">:</span>
             <span class="n">cl_range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1464,7 +1467,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">baseline</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">baseline</span> <span class="o">=</span> <span class="s2">&quot;mean-impute&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">baseline</span> <span class="o">=</span> <span class="s2">&quot;mean-impute&quot;</span>
 
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">evaluator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downstream</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -1829,8 +1832,7 @@
                         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.65</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
                 <span class="c1"># Very light black shading over the contaminated region</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">group</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span>
-                           <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">group</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># Plot ground truth in the forecasting region</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">train_len</span><span class="p">,</span> <span class="n">train_len</span> <span class="o">+</span> <span class="n">test_len</span><span class="p">),</span> <span class="n">ground_test</span><span class="p">,</span>
@@ -1846,7 +1848,7 @@
         <span class="n">imputed_series</span><span class="p">[</span><span class="o">~</span><span class="n">plot_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">train_len</span><span class="p">),</span> <span class="n">imputed_series</span><span class="p">,</span>
                 <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;imputation </span><span class="si">{</span><span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span>
                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
         <span class="c1"># forecasting background</span>

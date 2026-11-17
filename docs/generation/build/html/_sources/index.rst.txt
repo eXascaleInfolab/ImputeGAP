@@ -52,7 +52,7 @@ Getting Started
    <div class="index-navigation" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
 
       <div class="card">
-        <h3><a href="getting_started.html">🚀 Installation</a></h3>
+        <h3><a href="installation.html">🚀 Installation</a></h3>
         <p>Read the guide on how to install ImputeGAP on your system.</p>
       </div>
 

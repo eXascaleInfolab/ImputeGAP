@@ -1138,7 +1138,7 @@ class Downstream:
         """
 
         if self.downstream.baseline is None:
-            baseline = "mean-impute"
+            self.downstream.baseline = "mean-impute"
 
         model = self.downstream.model.lower()
         evaluator = self.downstream.task.lower()
@@ -1502,8 +1502,7 @@ class Downstream:
                         alpha=0.65, zorder=3)
 
                 # Very light black shading over the contaminated region
-                ax.axvspan(group[0] - 0.5, group[-1] + 0.5,
-                           color="black", alpha=0.025, zorder=0)
+                ax.axvspan(group[0] - 0.5, group[-1] + 0.5, color="black", alpha=0.025, zorder=0)
 
         # Plot ground truth in the forecasting region
         ax.plot(range(train_len, train_len + test_len), ground_test,

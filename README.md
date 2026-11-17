@@ -14,11 +14,11 @@ In detail, the package provides:
   - Unified benchmarking pipeline to evaluate the performance of imputation algorithms ([Benchmark](#benchmark))
   - Modular analysis tools to assess the impact of imputation on time series downstream tasks ([Downstream](#downstream))
   - Expainability module to understand the impact of time series features on the imputation results ([Explainer](#explainer))
-  - Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R ([Integration](https://imputegap.readthedocs.io/en/latest/contributing.html))
+  - Adjustable wrappers to integrate new algorithms in different languages ([Integration](https://imputegap.readthedocs.io/en/latest/contributing.html))
 
 <br>
 
-![Python](https://img.shields.io/badge/Python-v3.13-blue) ![Release](https://img.shields.io/badge/Release-v1.1.2-brightgreen)  ![Coverage](https://img.shields.io/badge/Coverage-94%25-brightgreen) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20MacOS-informational) [![Docs](https://img.shields.io/badge/Docs-available-brightgreen?style=flat&logo=readthedocs)](https://imputegap.readthedocs.io/)
+![Python](https://img.shields.io/badge/Python-v3.13-blue) ![Release](https://img.shields.io/badge/Release-v1.1.3-brightgreen)  ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20MacOS-informational) [![Docs](https://img.shields.io/badge/Docs-available-brightgreen?style=flat&logo=readthedocs)](https://imputegap.readthedocs.io/)
 
 <i>If you like our library, please add a ⭐ in our GitHub repository.</i>
 
@@ -102,12 +102,12 @@ In detail, the package provides:
 
 - **Code Snippets**  
   - [Dataset Loading](#dataset-loading)  
-  - [GenGAP](#GenGAP)  
+  - [Gap Generator](#Gap-Generator)  
   - [Imputation](#imputation)  
   - [Auto-ML](#Parameter-Tuning)  
-  - [ExplainGAP](#explainGAP)  
-  - [Downstream Evaluation](#downstream)
-  - [BenchGAP](#benchgap)  
+  - [Explainability](#Explainability)  
+  - [Downstream Impact](#Downstream-Impact)
+  - [Benchmarking](#Benchmarking)  
   - [Notebooks](#Jupyter-Notebooks)  
 
 - **Contribute**  
@@ -126,40 +126,49 @@ In detail, the package provides:
 
 ## System Requirements
 
-ImputeGAP is compatible with Python>=3.11 and Unix-compatible environment.
-
-<i>To create and set up an environment with Python 3.12, please refer to the [installation guide](https://imputegap.readthedocs.io/en/latest/getting_started.html).</i>
+ImputeGAP is compatible with Python>=3.11 and Unix/WSL environment.
 
 
-<br>
+### Full Installer
 
-## Installation
+If you are using ImputeGAP for the first time, run the following script, which installs the required dependencies and library through a virtual environment.
 
+```bash
+git init
+git clone https://github.com/eXascaleInfolab/ImputeGAP.git
+cd ImputeGAP/
+source imputegap_lib.sh
+``` 
 
-### pip
+### Pip
 
-To install/update the latest version of ImputeGAP, run the following command:
+Update your package list and install prerequisites:
+
+```bash
+sudo apt-get update
+sudo apt install -y build-essential libssl-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev python3-tk libopenblas0 libarmadillo-dev software-properties-common python3-pip
+``` 
+
+Run the following command to install the latest version of ImputeGAP:
 
 ```bash
 pip install imputegap
 ``` 
 
-<br>
 
 ### Source
 
-If you would like to extend the library, you can install from source:
+To install ImputeGAP directly from the GitHub source in editable mode, clone the repository and run the source script:
 
 ```bash
 git init
-git clone https://github.com/eXascaleInfolab/ImputeGAP
+git clone https://github.com/eXascaleInfolab/ImputeGAP.git
 cd ImputeGAP/
 source imputegap_source.sh
 ```
 
-<br>
 
-### Docker
+<!-- ### Docker
 
 Alternatively, you can download the latest version of ImputeGAP with all dependencies pre-installed using Docker.
 
@@ -180,9 +189,10 @@ Run the Docker container:
 ```bash
 docker run -p 8888:8888 qnater/imputegap:1.1.21
 ``` 
+-->
 
+------
 
----
 
 
 <br> <br>
@@ -202,17 +212,19 @@ You can find this example of normalization in the file [`runner_loading.py`](htt
 To load and plot the eeg-alcohol dataset from the library:
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
 
 # initialize the time series object
 ts = TimeSeries()
+print(f"\nImputeGAP datasets : {ts.datasets}")
 
-# load and normalize the dataset from the library
-ts.load_series("eeg-alcohol", normalizer="z_score")
+# load and normalize the dataset
+ts.load_series(data="eeg-alcohol", normalizer=None)
 
-# print and plot a subset of time series
+# plot and print a subset of time series
 ts.print(nbr_series=4, nbr_val=4)
-ts.plot(input_data=ts.data, nbr_series=6, nbr_val=100, save_path="./imputegap_assets")
+ts.plot(input_data=ts.data, nbr_series=9, nbr_val=100, save_path="./imputegap_assets")
 ```
 
 The module ``ts.datasets`` contains all the publicly available datasets provided by the library, which can be listed as follows:
@@ -225,11 +237,11 @@ print(f"ImputeGAP datasets : {ts.datasets}")
 
 ---
 
-## GenGAP
-We now describe how to simulate missing values in the loaded dataset. ImputeGAP implements eight different missingness patterns. For more details about the patterns, please refer to the documentation on this [page](https://imputegap.readthedocs.io/en/latest/missingness_patterns.html).
+## Gap Generator
+We now describe how to simulate missing values in the loaded dataset. ImputeGAP implements eight different missingness patterns. For more details about the patterns, please refer to the documentation on this [page](https://imputegap.readthedocs.io/en/latest/gapgenerator.html).
 <br></br>
 
-### Example Contamination
+### Example GenGAP
 You can find this example in the file [`runner_contamination.py`](https://github.com/eXascaleInfolab/ImputeGAP/blob/main/imputegap/runner_contamination.py).
 
 ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGap module can be invoked externally. The patterns are described [here](https://imputegap.readthedocs.io/en/latest/missingness_patterns.html)
@@ -237,20 +249,22 @@ ImputeGAP implements a module to simulate different missingness patterns in time
 As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.contamination import GenGAP
 
 # initialize the time series object
 ts = TimeSeries()
+print(f"\nMissingness patterns : {ts.patterns}")
 
 # load and normalize the dataset
-ts.load_series("eeg-alcohol", normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score")
 
 # contaminate the time series with MCAR pattern
-ts_m = GenGAP.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
+ts_m = GenGAP.mcar(input_data=ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
 
 # plot the contaminated time series
-ts.plot(ts.data, ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets/contamination")
+ts.plot(input_data=ts.data, incomp_data=ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets/contamination")
 ```
 
 All missingness patterns developed in ImputeGAP are available in the ``ts.patterns`` module. They can be listed as follows:
@@ -268,7 +282,7 @@ print(f"Missingness patterns : {ts.patterns}")
 ## Imputation
 
 In this section, we will illustrate how to impute the contaminated time series. Our library implements six families of imputation algorithms: Statistical, Machine Learning, Matrix Completion, Deep Learning, Pattern Search, and Large Language Models.
-The list of algorithms is described [here](https://imputegap.readthedocs.io/en/latest/algorithms.html).
+The list of algorithms is described [here](https://imputegap.readthedocs.io/en/latest/index.html#imputation-algorithms).
 
 ### Example Imputation
 You can find this example in the file [`runner_imputation.py`](https://github.com/eXascaleInfolab/ImputeGAP/blob/main/imputegap/runner_imputation.py).
@@ -276,26 +290,27 @@ You can find this example in the file [`runner_imputation.py`](https://github.co
 Let's illustrate the imputation using the CDRec algorithm from the Matrix Completion family.
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
 
 # initialize the time series object
 ts = TimeSeries()
+print(f"\nImputation algorithms : {ts.algorithms}")
 
 # load and normalize the dataset
-ts.load_series("eeg-alcohol", normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score", nbr_series=32, nbr_val=128)
 
 # contaminate the time series
-ts_m = GenGAP.mcar(ts.data)
+ts_m = GenGAP.mcar(input_data=ts.data)
 
 # impute the contaminated series
-imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m, use_cuda=0)
 imputer.impute()
 
 # compute and print the imputation metrics
-imputer.score(ts.data, imputer.recov_data)
-utils.print_results(imputer.metrics)
+imputer.score(input_data=ts.data, recov_data=imputer.recov_data)
 
 # plot the recovered time series
 ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
@@ -307,10 +322,10 @@ Imputation can be performed using either default values or user-defined values. 
 imputer.impute(params={"rank": 5, "epsilon": 0.01, "iteration": 100})
 ```
 
-For Deep Learning and LLM-based algorithms, the computing device (CPU or GPU) can be specified manually or selected automatically through the imputation parameters:
+CPU or GPU can be selected manually or automatically through the imputation parameters. If the algorithm does not support GPU acceleration, CPU is used by default. Set `0` for CPU, `1` for GPU, or `2` for automatic device selection.
 
 ```python
-imputer = Imputation.LLMs.GPT4TS(ts_m, use_cuda=1)
+imputer = Imputation.LLMs.GPT4TS(incomp_data=ts_m, use_cuda=1)
 ```
 
 All algorithms developed in ImputeGAP are available in the ``ts.algorithms`` module, which can be listed as follows:
@@ -333,6 +348,7 @@ You can find this example in the file [`runner_optimization.py`](https://github.
 Let's illustrate the imputation using the CDRec algorithm and Ray-Tune AutoML:
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
@@ -342,29 +358,26 @@ from imputegap.tools import utils
 ts = TimeSeries()
 
 # load and normalize the dataset
-ts.load_series("eeg-alcohol", normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score")
 
 # contaminate and impute the time series
-ts_m = GenGAP.mcar(ts.data)
-imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+ts_m = GenGAP.mcar(input_data=ts.data)
+imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
+imputer.verbose = False
 
 # use Ray Tune to fine tune the imputation algorithm
 imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})
 
-# compute the imputation metrics with optimized parameter values
-imputer.score(ts.data, imputer.recov_data)
-
 # compute the imputation metrics with default parameter values
-imputer_def = Imputation.MatrixCompletion.CDRec(ts_m).impute()
-imputer_def.score(ts.data, imputer_def.recov_data)
+imputer_def = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m).impute()
+imputer_def.score(input_data=ts.data, recov_data=imputer_def.recov_data, text="Default values")
 
-# print the imputation metrics with default and optimized parameter values
-utils.print_results(imputer_def.metrics, text="Default values")
-utils.print_results(imputer.metrics, text="Optimized values")
+# compute the imputation metrics with optimized parameter values
+imputer.score(input_data=ts.data, recov_data=imputer.recov_data, text="Optimized values")
+
 
 # plot the recovered time series
-ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True,
-        algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
+ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation", display=True)
 
 # save hyperparameters
 utils.save_optimization(optimal_params=imputer.parameters, algorithm=imputer.algorithm, dataset="eeg-alcohol", optimizer="ray_tune")
@@ -375,7 +388,7 @@ utils.save_optimization(optimal_params=imputer.parameters, algorithm=imputer.alg
 
 
 
-## BenchGAP
+## Benchmarking
 
 ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms[[33]](#ref33) . Users have full control over the benchmark by customizing various parameters,  including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
 
@@ -386,14 +399,16 @@ You can find this example in the file [`runner_benchmark.py`](https://github.com
 The benchmarking module can be utilized as follows:
 
 ```python
+# ImputeGAP import
 from imputegap.recovery.benchmark import BenchGAP
 
 # launch the evaluation
 bench = BenchGAP()
-bench.eval_imputation(algorithms=["MeanImpute", "SoftImpute"],
-                      datasets=["eeg-alcohol"],
-                      patterns=["mcar"],
-                      x_axis=[0.1, 0.2, 0.4, 0.6, 0.8])
+bench.eval_imputation(algorithms=["MeanImpute", "CDRec"],
+           datasets=["eeg-alcohol"],
+           patterns=["mcar"],
+           x_axis=[0.1, 0.2, 0.4, 0.6, 0.8],
+           use_cache=False)
 
 # display the plot
 bench.subplots.show()
@@ -402,7 +417,7 @@ bench.subplots.show()
 ---
 
 
-## Downstream
+## Downstream Impact
 ImputeGAP includes a dedicated module for systematically evaluating the impact of data imputation on downstream tasks. Currently, forecasting is the primary supported task, with plans to expand to additional applications in the future.
 
 ### Example Downstream
@@ -423,20 +438,23 @@ ts = TimeSeries()
 print(f"\nImputeGAP downstream models for forcasting : {ts.forecasters}")
 
 # load and normalize the dataset
-ts.load_series("chlorine", normalizer="z_score")
+ts.load_series(data="chlorine", normalizer="z_score")
 
 # contaminate the time series
-ts_m = GenGAP.mcar(ts.data, rate_series=0.4, offset=0)
+ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.2, offset=0)
+
+# reverse the contamination to amplify its impact on forecasting.
+ts_m = GenGAP.mirror_gap(input_data=ts.data, ts_m=ts_m)
 
 # define and impute the contaminated series
-imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
 imputer.impute()
 
-# define downstream model
-forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.1, season=24), pipeline=True)
+# define the parameters for the downstream model
+forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.36, season=24), pipeline=True)
 
-imputer.score(ts.data, imputer.recov_data, downstream=forecaster)
-utils.print_results(imputer.downstream_metrics, text="Downstream results")
+# compute the downstream analysis and display the results
+imputer.score(input_data=ts.data, recov_data=imputer.recov_data, downstream=forecaster)
 ```
 
 All downstream models developed in ImputeGAP are available in the ``ts.forecasters`` module, which can be listed as follows:
@@ -452,7 +470,7 @@ print(f"ImputeGAP downstream models for forecasting : {ts.forecasters}")
 ---
 
 
-## ExplainGAP
+## Explainability
 
 The library provides insights into the algorithm’s behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations ([SHAP](https://shap.readthedocs.io/en/latest/)) to reveal how different time series features influence the model’s predictions.
 
@@ -463,23 +481,25 @@ You can find this example in the file [`runner_explainer.py`](https://github.com
 Let’s illustrate the explainer using the CDRec algorithm and MCAR missingness pattern:
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.explainer import ExplainGAP
 
 # initialize the time series and explainer object
 ts = TimeSeries()
 exp = ExplainGAP()
+print(f"\nImputeGAP explainer features extractor : {ts.extractors}")
 
 # load and normalize the dataset
-ts.load_series("eeg-alcohol", normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score")
 
 # configure the explanation
 exp.shap_explainer(input_data=ts.data, extractor="pycatch", pattern="mcar", file_name=ts.name, algorithm="CDRec")
 
 # print the impact of each feature
-exp.print(exp.shap_values, exp.shap_details)
+exp.print(shap_values=exp.shap_values, shap_details=exp.shap_details)
 
-# plot the features impact
+# plot the feature impacts
 exp.show()
 ```
 
@@ -513,6 +533,8 @@ ImputeGAP provides Google Colab notebooks available through the following links:
 
 
 ---
+
+<br> <br>
 
 ## Integration
 To add your own imputation algorithm, please refer to the detailed [integration guide](https://imputegap.readthedocs.io/en/latest/integration.html).
