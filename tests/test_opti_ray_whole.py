@@ -36,7 +36,7 @@ class TestOptiRAY(unittest.TestCase):
             imputer.score(ts_1.data, imputer.recov_data)
 
             # 6. display the results
-            ts_1.print_results(imputer.metrics)
+            utils.print_results(imputer.metrics)
 
             # 7. save hyperparameters
             utils.save_optimization(optimal_params=imputer.parameters, algorithm=alg, dataset="eeg", optimizer="ray")

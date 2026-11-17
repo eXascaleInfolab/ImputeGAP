@@ -28,17 +28,19 @@ To load and plot the eeg-alcohol dataset from the library:
 
 .. code-block:: python
 
+    # ImputeGAP imports
     from imputegap.recovery.manager import TimeSeries
 
     # initialize the time series object
     ts = TimeSeries()
+    print(f"\nImputeGAP datasets : {ts.datasets}")
 
-    # load and normalize the dataset from the library
-    ts.load_series("eeg-alcohol", normalizer="z_score")
+    # load and normalize the dataset
+    ts.load_series(data="eeg-alcohol", normalizer=None)
 
-    # print and plot a subset of time series
+    # plot and print a subset of time series
     ts.print(nbr_series=4, nbr_val=4)
-    ts.plot(input_data=ts.data, nbr_series=6, nbr_val=100, save_path="./imputegap_assets")
+    ts.plot(input_data=ts.data, nbr_series=9, nbr_val=100, save_path="./imputegap_assets")
 
 
 
@@ -82,6 +84,7 @@ To import the time series as a matrix, pass it as an argument of the ``ts.import
 .. raw:: html
 
    <br>
+
 
 
 

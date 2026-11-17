@@ -15,26 +15,27 @@ Let's illustrate the imputation using the CDRec algorithm from the Matrix Comple
 
 .. code-block:: python
 
+    # ImputeGAP imports
     from imputegap.recovery.imputation import Imputation
     from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
 
     # initialize the time series object
     ts = TimeSeries()
+    print(f"\nImputation algorithms : {ts.algorithms}")
 
     # load and normalize the dataset
-    ts.load_series("eeg-alcohol", normalizer="z_score")
+    ts.load_series(data="eeg-alcohol", normalizer="z_score", nbr_series=32, nbr_val=128)
 
     # contaminate the time series
-    ts_m = GenGAP.mcar(ts.data)
+    ts_m = GenGAP.mcar(input_data=ts.data)
 
     # impute the contaminated series
-    imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+    imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m, use_cuda=0)
     imputer.impute()
 
     # compute and print the imputation metrics
-    imputer.score(ts.data, imputer.recov_data)
-    utils.print_results(imputer.metrics)
+    imputer.score(input_data=ts.data, recov_data=imputer.recov_data)
 
     # plot the recovered time series
     ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
@@ -81,6 +82,7 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
 
 .. code-block:: python
 
+    # ImputeGAP imports
     from imputegap.recovery.imputation import Imputation
     from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
@@ -90,28 +92,26 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
     ts = TimeSeries()
 
     # load and normalize the dataset
-    ts.load_series("eeg-alcohol", normalizer="z_score")
+    ts.load_series(data="eeg-alcohol", normalizer="z_score")
 
     # contaminate and impute the time series
-    ts_m = GenGAP.mcar(ts.data)
-    imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+    ts_m = GenGAP.mcar(input_data=ts.data)
+    imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
+    imputer.verbose = False
 
     # use Ray Tune to fine tune the imputation algorithm
     imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})
 
-    # compute the imputation metrics with optimized parameter values
-    imputer.score(ts.data, imputer.recov_data)
-
     # compute the imputation metrics with default parameter values
-    imputer_def = Imputation.MatrixCompletion.CDRec(ts_m).impute()
-    imputer_def.score(ts.data, imputer_def.recov_data)
+    imputer_def = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m).impute()
+    imputer_def.score(input_data=ts.data, recov_data=imputer_def.recov_data, text="Default values")
 
-    # print the imputation metrics with default and optimized parameter values
-    utils.print_results(imputer_def.metrics, text="Default values")
-    utils.print_results(imputer.metrics, text="Optimized values")
+    # compute the imputation metrics with optimized parameter values
+    imputer.score(input_data=ts.data, recov_data=imputer.recov_data, text="Optimized values")
+
 
     # plot the recovered time series
-    ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
+    ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation", display=True)
 
     # save hyperparameters
     utils.save_optimization(optimal_params=imputer.parameters, algorithm=imputer.algorithm, dataset="eeg-alcohol", optimizer="ray_tune")
@@ -125,3 +125,33 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
 
    <br>
 
+
+To impute a dataset that already contains missing values (NaNs), load it directly and pass the marix to the imputation algorithm, bypassing the contamination step. Note that evaluation metrics and visualizations are unavailable without the complete dataset.
+
+.. code-block:: python
+
+    # ImputeGAP imports
+    from imputegap.recovery.imputation import Imputation
+    from imputegap.recovery.manager import TimeSeries
+    from imputegap.tools import utils
+
+    # initialize the time series object
+    ts = TimeSeries()
+    print(f"\nImputation algorithms : {ts.algorithms}")
+
+    # load the dataset that contains nans values
+    ts.load_series(data="test-logic-nans-llm", normalizer=None)
+
+    # skip the contamination and impute the series
+    imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts.data, use_cuda=0)
+    imputer.impute()
+    print(f"Reconstructed data:\n{imputer.recov_data[:10]}")
+
+    # save the imputed data
+    path = utils.ts_caching_save(data=imputer.recov_data, type="imputation", dir_cache="./_caching")
+    print(f"\nReconstruction saved: {path}")
+
+
+.. raw:: html
+
+   <br>

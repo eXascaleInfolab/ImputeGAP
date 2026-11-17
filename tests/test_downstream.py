@@ -50,19 +50,12 @@ class TestDownstream(unittest.TestCase):
             print(f"{imputer.metrics=}")
 
             if (isinstance(forecaster, Forecaster) or isinstance(forecaster, Classifier)) and forecaster is not None:
-                assert True, (
-                    f"Unexpected options value: {forecaster} "
-                    f"{type(forecaster)=} vs {Forecaster=}"
-                )
+                assert True, (f"Unexpected options value: {forecaster} " f"{type(forecaster)=} vs {Forecaster=}" )
             else:
-                assert False, (
-                    f"Unexpected options value: {forecaster} "
-                    f"{type(forecaster)=} vs {Forecaster=}"
-                )
+                assert False, (f"Unexpected options value: {forecaster} " f"{type(forecaster)=} vs {Forecaster=}" )
 
             imputer.score(ts_1.data, imputer.recov_data, downstream=forecaster)
             print(f"{imputer.downstream_metrics=}")
-
 
             # Assert metrics are dictionaries with values
             self.assertIsInstance(imputer.metrics, dict, "imputer.metrics should be a dictionary, for " + model)
@@ -72,8 +65,8 @@ class TestDownstream(unittest.TestCase):
             self.assertTrue(imputer.downstream_metrics, "imputer.downstream_metrics should not be empty, for " + model)
 
             # Display the results
-            ts_1.print_results(imputer.metrics, algorithm=model)
-            ts_1.print_results(imputer.downstream_metrics, algorithm=model)
+            utils.print_results(imputer.metrics, algorithm=model)
+            utils.print_results(imputer.downstream_metrics, algorithm=model)
 
     def test_downstream_empty(self):
         """

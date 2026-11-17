@@ -2538,7 +2538,7 @@ def prepare_series_by_class(labels, raw_data, imputer="cdrec", pattern="mcar", t
                 from imputegap.recovery.manager import TimeSeries
                 ts = TimeSeries()
                 print("\n")
-                utils.print_results(alg.metrics)
+                print_results(alg.metrics)
 
         # if no imputation asked or needed
         # __________________________________________________

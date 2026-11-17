@@ -20,7 +20,6 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
     from imputegap.recovery.imputation import Imputation
     from imputegap.recovery.contamination import GenGAP
     from imputegap.recovery.manager import TimeSeries
-    from imputegap.tools import utils
     from imputegap.recovery.downstream import Artifact, Forecaster
 
     # initialize the time series object
@@ -28,20 +27,22 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
     print(f"\nImputeGAP downstream models for forcasting : {ts.forecasters}")
 
     # load and normalize the dataset
-    ts.load_series("chlorine", normalizer="z_score")
+    ts.load_series(data="chlorine", normalizer="z_score")
 
     # contaminate the time series
-    ts_m = GenGAP.mcar(ts.data, rate_series=0.4, offset=0)
+    ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.2, offset=0)
 
     # define and impute the contaminated series
-    imputer = Imputation.MatrixCompletion.CDRec(ts_m)
-    imputer.impute()
+    imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
 
-    # define downstream model
-    forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.1, season=24), pipeline=True)
+    # reverse the contamination to amplify its impact on forecasting.
+    ts_m = GenGAP.mirror_gap(input_data=ts.data, ts_m=ts_m)
 
-    imputer.score(ts.data, imputer.recov_data, downstream=forecaster)
-    utils.print_results(imputer.downstream_metrics, text="Downstream results")
+    # define the parameters for the downstream model
+    forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.36, season=24), pipeline=True)
+
+    # compute the downstream analysis and display the results
+    imputer.score(input_data=ts.data, recov_data=imputer.recov_data, downstream=forecaster)
 
 
 
@@ -55,7 +56,44 @@ All downstream models developed in ImputeGAP are available in the ``ts.forecaste
 
 
 
+.. raw:: html
 
+   <br>
+
+
+
+To evaluate and compare the impact of multiple imputation algorithms on downstream forecasting performance, use the `comparator()` method. The following example compares CDRec, MICE, and ZeroImpute using the Chronos forecasting model:
+
+.. code-block:: python
+
+    # ImputeGAP imports
+    from imputegap.recovery.manager import TimeSeries
+    from imputegap.recovery.contamination import GenGAP
+    from imputegap.recovery.downstream import Downstream
+
+    # initialize the time series object
+    ts = TimeSeries()
+    print(f"\nImputeGAP downstream models for forcasting : {ts.forecasters}")
+
+    # load and normalize the dataset
+    ts.load_series(data="chlorine", normalizer="z_score")
+
+    # contaminate the time series
+    ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.4, offset=0)
+
+    # reverse the contamination to amplify its impact on forecasting.
+    ts_m = GenGAP.mirror_gap(input_data=ts.data, ts_m=ts_m)
+
+    # define the downstream options
+    downstream = Downstream(input_data=ts.data, incomp_data=ts_m)
+
+    # launch the analysis
+    comparison = downstream.comparator(imp_algs=["CDRec", "MICE", "ZeroImpute"],
+                                       model="chronos",
+                                       horizons=[0.36],
+                                       season=24,
+                                       meta_pattern="mcar",
+                                       meta_rate=0.4)
 
 
 .. raw:: html

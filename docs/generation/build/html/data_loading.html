@@ -322,17 +322,19 @@
 <span id="loadingtutorial"></span><h2>Loading Tutorial<a class="headerlink" href="#loading-tutorial" title="Link to this heading">¶</a></h2>
 <p>ImputeGAP comes with several time series datasets. As an example, we use the eeg-alcohol dataset, composed of individuals with a genetic predisposition to alcoholism. The dataset contains measurements from 64 electrodes placed on subject’s scalps, sampled at 256 Hz. The dimensions of the dataset are 64 series, each containing 256 values.</p>
 <p>To load and plot the eeg-alcohol dataset from the library:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
 
 <span class="c1"># initialize the time series object</span>
 <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ImputeGAP datasets : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">datasets</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="c1"># load and normalize the dataset from the library</span>
-<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">)</span>
+<span class="c1"># load and normalize the dataset</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
-<span class="c1"># print and plot a subset of time series</span>
+<span class="c1"># plot and print a subset of time series</span>
 <span class="n">ts</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">nbr_series</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets&quot;</span><span class="p">)</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The module <code class="docutils literal notranslate"><span class="pre">ts.datasets</span></code> contains all the publicly available datasets provided by the library. They can be listed as follows:</p>

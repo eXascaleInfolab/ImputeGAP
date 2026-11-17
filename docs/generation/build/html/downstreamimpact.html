@@ -318,7 +318,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGAP</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.downstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">Forecaster</span>
 
 <span class="c1"># initialize the time series object</span>
@@ -326,26 +325,59 @@
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ImputeGAP downstream models for forcasting : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">forecasters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1"># load and normalize the dataset</span>
-<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="s2">&quot;chlorine&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">)</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;chlorine&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">)</span>
 
 <span class="c1"># contaminate the time series</span>
-<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># define and impute the contaminated series</span>
-<span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MatrixCompletion</span><span class="o">.</span><span class="n">CDRec</span><span class="p">(</span><span class="n">ts_m</span><span class="p">)</span>
-<span class="n">imputer</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
+<span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MatrixCompletion</span><span class="o">.</span><span class="n">CDRec</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
 
-<span class="c1"># define downstream model</span>
-<span class="n">forecaster</span> <span class="o">=</span> <span class="n">Forecaster</span><span class="p">(</span><span class="n">artifact</span><span class="o">=</span><span class="n">Artifact</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;chronos&quot;</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="mi">24</span><span class="p">),</span> <span class="n">pipeline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># reverse the contamination to amplify its impact on forecasting.</span>
+<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mirror_gap</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ts_m</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
 
-<span class="n">imputer</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="n">downstream</span><span class="o">=</span><span class="n">forecaster</span><span class="p">)</span>
-<span class="n">utils</span><span class="o">.</span><span class="n">print_results</span><span class="p">(</span><span class="n">imputer</span><span class="o">.</span><span class="n">downstream_metrics</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Downstream results&quot;</span><span class="p">)</span>
+<span class="c1"># define the parameters for the downstream model</span>
+<span class="n">forecaster</span> <span class="o">=</span> <span class="n">Forecaster</span><span class="p">(</span><span class="n">artifact</span><span class="o">=</span><span class="n">Artifact</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;chronos&quot;</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mf">0.36</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="mi">24</span><span class="p">),</span> <span class="n">pipeline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># compute the downstream analysis and display the results</span>
+<span class="n">imputer</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">recov_data</span><span class="o">=</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="n">downstream</span><span class="o">=</span><span class="n">forecaster</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>All downstream models developed in ImputeGAP are available in the <code class="docutils literal notranslate"><span class="pre">ts.forecasters</span></code> module, which can be listed as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
 <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ImputeGAP downstream models for forecasting : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">forecasters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<br><p>To evaluate and compare the impact of multiple imputation algorithms on downstream forecasting performance, use the <cite>comparator()</cite> method. The following example compares CDRec, MICE, and ZeroImpute using the Chronos forecasting model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGAP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.downstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">Downstream</span>
+
+<span class="c1"># initialize the time series object</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ImputeGAP downstream models for forcasting : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">forecasters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># load and normalize the dataset</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;chlorine&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">)</span>
+
+<span class="c1"># contaminate the time series</span>
+<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># reverse the contamination to amplify its impact on forecasting.</span>
+<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mirror_gap</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ts_m</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
+
+<span class="c1"># define the downstream options</span>
+<span class="n">downstream</span> <span class="o">=</span> <span class="n">Downstream</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
+
+<span class="c1"># launch the analysis</span>
+<span class="n">comparison</span> <span class="o">=</span> <span class="n">downstream</span><span class="o">.</span><span class="n">comparator</span><span class="p">(</span><span class="n">imp_algs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CDRec&quot;</span><span class="p">,</span> <span class="s2">&quot;MICE&quot;</span><span class="p">,</span> <span class="s2">&quot;ZeroImpute&quot;</span><span class="p">],</span>
+                                   <span class="n">model</span><span class="o">=</span><span class="s2">&quot;chronos&quot;</span><span class="p">,</span>
+                                   <span class="n">horizons</span><span class="o">=</span><span class="p">[</span><span class="mf">0.36</span><span class="p">],</span>
+                                   <span class="n">season</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+                                   <span class="n">meta_pattern</span><span class="o">=</span><span class="s2">&quot;mcar&quot;</span><span class="p">,</span>
+                                   <span class="n">meta_rate</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
 </pre></div>
 </div>
 <br></section>

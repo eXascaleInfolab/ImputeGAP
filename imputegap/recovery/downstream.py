@@ -359,7 +359,7 @@ class Downstream:
 
         return xlsx_path
 
-    def comparator(self, imp_algs=None, input_data=None, incomp_data=None, model=None, horizons=None, season=None, meta_pattern=None, meta_rate=None, save_path="./imputegap_assets/downstream", export_excel=True, verbose=False, display_plot=True):
+    def comparator(self, imp_algs=None, input_data=None, incomp_data=None, model=None, horizons=None, season=None, meta_pattern=None, meta_rate=None, save_path="./imputegap_assets/downstream", export_excel=True, titles=False, verbose=False, display_plot=True):
         """
         Compare the downstream forecasting performance of imputed time series across multiple models and prediction horizons.
 
@@ -389,6 +389,8 @@ class Downstream:
             Directory for the Excel report and combined plot.
         export_excel : bool, optional
             Export the comparison results to Excel. Defaults to True.
+        titles: bool, optional
+            Display the detail titles. Defaults to False.
         display_plot : bool, optional
             Display the combined comparison figure. Defaults to True.
         verbose : bool, optional
@@ -451,7 +453,7 @@ class Downstream:
                 s_horizon = str(horizon_)
 
                 # split recovered data into training and testing sets
-                if horizon_ > 0:
+                if horizon_ >= 1:
                     train_len = recov_data.shape[0] - horizon_
                 else:
                     train_len = recov_data.shape[0] - int(recov_data.shape[0] * abs(horizon_))
@@ -468,8 +470,8 @@ class Downstream:
                 self.downstream=forcaster
 
                 # evaluate downstream forecasting performance
-                imputer.score(input_data, recov_data)
-                imputer.score(input_data, recov_data, downstream=forcaster)
+                imputer.score(input_data, recov_data, print_results=False, verbose=False)
+                imputer.score(input_data, recov_data, downstream=forcaster, print_results=False, verbose=False)
                 end_time_downstream = time.time()
 
                 # compute downstream execution time in milliseconds
@@ -513,7 +515,7 @@ class Downstream:
 
         # generate combined downstream comparator plot
         if saved_pipelines:
-            fig = self._plot_comparator_downstream(pipelines=saved_pipelines, series_index=self.downstream.selected_series[0], title=f"Downstream forecasting comparison - {model}", display=display_plot, save_path=save_path, verbose=verbose)
+            fig = self._plot_comparator_downstream(pipelines=saved_pipelines, series_index=self.downstream.selected_series[0], title=False, display=display_plot, save_path=save_path, verbose=verbose)
             plt.close(fig)
 
         return saved_pipelines
@@ -1314,7 +1316,7 @@ class Downstream:
         return plt
 
     @staticmethod
-    def _plot_comparator_downstream(pipelines, series_index, title="", save_path="./imputegap_assets/downstream", display=True, verbose=True):
+    def _plot_comparator_downstream(pipelines, series_index, title=False, save_path="./imputegap_assets/downstream", display=True, verbose=True):
         """
         Combine multiple downstream forecasting pipelines into vertically stacked subplots.
 
@@ -1324,7 +1326,7 @@ class Downstream:
             Pipeline records containing y_train, y_test, y_pred, incomp_data, ground_truth, recov_data, model and metrics.
         series_index : int
             Index of the time series to display.
-        title : str, optional
+        title : bool, optional
             Title of the combined figure.
         save_path : str, optional
             Directory where the combined figure is saved.
@@ -1345,9 +1347,9 @@ class Downstream:
         # initialize combined figure
         n_pipelines = len(pipelines)
         fig, axes = plt.subplots(n_pipelines, 1, figsize=(24, 4 * n_pipelines), sharex=True, sharey=True, squeeze=False)
-        if fig.canvas.manager is not None:
-            fig.canvas.manager.set_window_title("downstream comparator evaluation")
-        fig.suptitle(title or f"Downstream comparator", fontsize=16)
+        #if fig.canvas.manager is not None:
+        #    fig.canvas.manager.set_window_title("downstream comparator evaluation")
+        #fig.suptitle(title or f"Downstream comparator", fontsize=16)
 
         # plot each pipeline on its corresponding subplot
         for i, pipeline in enumerate(pipelines):
@@ -1360,10 +1362,10 @@ class Downstream:
                                                ground_truth=pipeline["ground_truth"], recov_data=pipeline["recov_data"],
                                                algorithm=algorithm, series_index=series_index, model=model,
                                                type="forecasting", display=False, verbose=False, ax=ax,
-                                               metrics=pipeline["metrics"])
+                                               metrics=pipeline["metrics"], title=title)
 
         # adjust layout
-        fig.tight_layout(rect=[0, 0.02, 1, 0.94])
+        fig.tight_layout(rect=[0, 0.02, 1, 0.99])
         fig.subplots_adjust(hspace=0.55)
 
         # save combined figure
@@ -1371,7 +1373,7 @@ class Downstream:
             os.makedirs(save_path, exist_ok=True)
             now = datetime.datetime.now()
             current_time = now.strftime("%y_%m_%d_%H_%M_%S")
-            file_path = os.path.join(save_path, current_time + "_" + str(algorithm) + "_comparator_downstream.jpg")
+            file_path = os.path.join(save_path, current_time + "_" + str(model) + "_comparator_downstream.jpg")
             fig.savefig(file_path, bbox_inches="tight", dpi=200)
             if verbose:
                 print("\nplots saved in: ", file_path)
@@ -1382,9 +1384,7 @@ class Downstream:
         return fig
 
     @staticmethod
-    def _plot_single_downstream(y_train, y_test, y_pred, incomp_data, ground_truth, recov_data, algorithm, series_index,
-                                model=None, type=None, title="", save_path="./imputegap_assets/downstream",
-                                display=True, verbose=True, pred_to_call=0, ax=None, metrics=None):
+    def _plot_single_downstream(y_train, y_test, y_pred, incomp_data, ground_truth, recov_data, algorithm, series_index, model=None, type=None, title=False, save_path="./imputegap_assets/downstream", display=True, verbose=True, pred_to_call=0, ax=None, metrics=None):
         """
         Plot ground truth, imputed values, and predictions for a contaminated series.
 
@@ -1410,7 +1410,7 @@ class Downstream:
             Name of the forecasting model.
         type : str, optional
             Name of the current task type.
-        title : str, optional
+        title : bool, optional
             Title of the standalone plot.
         save_path : str, optional
             Directory where standalone plots are saved.
@@ -1436,7 +1436,7 @@ class Downstream:
             fig, ax = plt.subplots(figsize=(24, 5))
             if fig.canvas.manager is not None:
                 fig.canvas.manager.set_window_title("downstream evaluation")
-            fig.suptitle(title, fontsize=16)
+            fig.suptitle("downstream evaluation", fontsize=16)
         else:
             fig = ax.figure
 
@@ -1535,8 +1535,9 @@ class Downstream:
         # Label both timeline regions above the plot
         # Label both timeline regions without overlapping the subplot title
         # ax.text((train_len - 1) / 2, 0.96, "Imputation", transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=11, fontweight="bold", color="black", clip_on=False)  middle
-        ax.text(0.07, 0.78, "Imputation", transform=ax.transAxes, ha="left", va="top", fontsize=11, fontweight="bold", color="black")
-        ax.text(train_len + (test_len - 1) / 2, 1.02, "Forecasting", transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=11, fontweight="bold", color="red", clip_on=False)
+        if title:
+            ax.text(0.07, 0.97, "Imputation", transform=ax.transAxes, ha="left", va="top", fontsize=9, fontweight="bold", color="black")
+            ax.text(train_len + (test_len - 1) / 2, 0.94, "Forecasting", transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=9, fontweight="bold", color="red", clip_on=False)
 
         # Show timestamp indices explicitly along the x-axis
         ax.set_xlim(-0.5, train_len + test_len - 0.5)
@@ -1544,15 +1545,17 @@ class Downstream:
         ax.tick_params(axis="x", labelbottom=True)
 
         # Add labels, title, and grid
-        if metrics is not None:
-            rmse = metrics.get("RMSE", len(test_series))
-            horizon = metrics.get("HORIZON", len(test_series))
-            smape = metrics.get("smape_imputer", float("nan"))
-            #runtime = metrics.get("RUNTIME", float("nan"))
-            ax.set_title(f"{algorithm} | {model} (h{horizon}) | RMSE: {rmse:.3f} | SMAPE: {smape:.3f}", fontsize=13, fontweight="bold", pad=28)
-        else:
-            ax.set_title(f"{algorithm.lower()} imputation, series_{series_idx + 1}")
-        ax.title.set_y(1.10)
+        if title:
+            if metrics is not None:
+                rmse = metrics.get("RMSE", len(test_series))
+                horizon = metrics.get("HORIZON", len(test_series))
+                smape = metrics.get("smape_imputer", float("nan"))
+                #runtime = metrics.get("RUNTIME", float("nan"))
+                ax.set_title(f"{algorithm} | {model} (h{horizon}) | RMSE: {rmse:.3f} | SMAPE: {smape:.3f}", fontsize=13, fontweight="bold", pad=28)
+            else:
+                ax.set_title(f"{algorithm.lower()} imputation, series_{series_idx + 1}")
+            ax.title.set_y(1.10)
+
         ax.set_xlabel("Timestamp")
         ax.set_ylabel("Value")
         ax.legend(loc="upper left", fontsize=7, frameon=True, fancybox=True, framealpha=0.8)

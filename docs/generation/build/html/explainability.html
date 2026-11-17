@@ -323,22 +323,26 @@ On the x-axis, input data with positive SHAP values increase the model’s outpu
 <br><section id="explaingap-tutorial">
 <span id="explaingaptuto"></span><h2>ExplainGAP Tutorial<a class="headerlink" href="#explaingap-tutorial" title="Link to this heading">¶</a></h2>
 <p>Let’s illustrate the explainer using the CDRec algorithm and MCAR missingness pattern:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.explainer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExplainGAP</span>
 
 <span class="c1"># initialize the time series and explainer object</span>
 <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
 <span class="n">exp</span> <span class="o">=</span> <span class="n">ExplainGAP</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ImputeGAP explainer features extractor : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">extractors</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1"># load and normalize the dataset</span>
-<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">)</span>
-<span class="n">ts</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">)</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">)</span>
 
 <span class="c1"># configure the explanation</span>
 <span class="n">exp</span><span class="o">.</span><span class="n">shap_explainer</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">extractor</span><span class="o">=</span><span class="s2">&quot;pycatch&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;mcar&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;CDRec&quot;</span><span class="p">)</span>
 
 <span class="c1"># print the impact of each feature</span>
-<span class="n">exp</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">exp</span><span class="o">.</span><span class="n">shap_details</span><span class="p">)</span>
+<span class="n">exp</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">shap_values</span><span class="o">=</span><span class="n">exp</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">shap_details</span><span class="o">=</span><span class="n">exp</span><span class="o">.</span><span class="n">shap_details</span><span class="p">)</span>
+
+<span class="c1"># plot the feature impacts</span>
+<span class="n">exp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>All feature extractors developed in ImputeGAP are available in the <code class="docutils literal notranslate"><span class="pre">ts.extractors</span></code> module, which can be listed as follows:</p>

@@ -1,7 +1,6 @@
 # ImputeGAP imports
-from imputegap.recovery.imputation import Imputation
-from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.downstream import Downstream
 
 # initialize the time series object
@@ -16,10 +15,6 @@ ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.4, offset=0)
 
 # reverse the contamination to amplify its impact on forecasting.
 ts_m = GenGAP.mirror_gap(input_data=ts.data, ts_m=ts_m)
-
-# define and impute the contaminated series
-imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
-imputer.impute()
 
 # define the downstream options
 downstream = Downstream(input_data=ts.data, incomp_data=ts_m)
