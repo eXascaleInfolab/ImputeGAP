@@ -2,25 +2,9 @@
 Benchmarking
 ============
 
-ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms [33]_.  Users have full control over the benchmark by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
+BenchGAP is a module for benchmarking the performance (efficacy and runtime) of time series imputation algorithms. Users have full control over BenchGAP by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
 
-.. raw:: html
-
-   <p style="text-align: center; font-weight: bold;">
-      Time Series → Contamination → Imputation → Evaluation
-   </p><br />
-
-.. raw:: html
-
-   <div class="gengap-contents">
-
-      <div class="gengap-nav">
-         <a href="index.html#algorithms">▦ Algorithms</a>
-         <a href="data_loading.html#datasets">▦ Datasets</a>
-         <a href="#benchgaptuto">📖 BenchGAP Tutorial</a>
-      </div>
-   </div>
-
+The algorithms here `here <index.html#algorithms>`_ and the datasets are available `here <data_loading.html#datasets>`_.
 
 
 .. .. _imputationalgorithms:
@@ -110,12 +94,9 @@ The benchmarking module can be utilized as follows:
                x_axis=[0.1, 0.2, 0.4, 0.6, 0.8],
                use_cache=False)
 
-    # display the plot
+    # display the results
     bench.subplots.show()
 
-
-
-.. [33] Mourad Khayati, Alberto Lerner, Zakhar Tymchenko, Philippe Cudré-Mauroux: Mind the Gap: An Experimental Evaluation of Imputation of Missing Values Techniques in Time Series. Proc. VLDB Endow. 13(5): 768-782 (2020)
 
 
 .. raw:: html
@@ -127,13 +108,28 @@ The benchmarking module can be utilized as follows:
 Output Directory
 ----------------
 
-Each benchmark execution creates a unique experiment directory. The
-directory tree below directly describes the purpose of each generated
-folder and file:
+The benchmark structure keeps every run self-contained while allowing detailed results to be traced back to the corresponding dataset, missingness pattern, and experiment configuration. Each execution creates a unique experiment directory.
+
+
+In short, the outputs are organized at three levels:
 
 .. code-block:: text
 
-   CleanImp/
+   <experiment>
+       ├── <dataset>/<pattern>/   → Detailed results
+       ├── _heatmaps/             → Aggregated visual analysis
+       └── summary/log files      → Global experiment results and configuration
+
+
+.. raw:: html
+
+   <br>
+
+The following tree representation describes the location of each generated folder and file:
+
+.. code-block:: text
+
+   imputegap/
    │
    ├── _caching/                                  # Cache used to avoid recomputing expensive pipelines
    │   └── ...                                    # Imputed matrices and downstream predictions
@@ -161,19 +157,6 @@ folder and file:
    └── *_log.txt                                  # General execution logs
 
 
-In short, the outputs are organized at three levels:
-
-.. code-block:: text
-
-   <experiment>
-       ├── <dataset>/<pattern>/   → Detailed results
-       ├── _heatmaps/             → Aggregated visual analysis
-       └── summary/log files      → Global experiment results and configuration
-
-
-This structure keeps every benchmark run self-contained while allowing
-detailed results to be traced back to the corresponding dataset,
-missingness pattern, and experiment configuration.
 
 
 

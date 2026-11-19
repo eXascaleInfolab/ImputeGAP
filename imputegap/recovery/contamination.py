@@ -93,7 +93,7 @@ class GenGAP:
         return mirror
 
 
-    def mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
+    def mcar(input_data, rate_dataset=0.2, rate_series=0.2, block_size=10, offset=0.1, seed=True, logic_by_series=True, explainer=False, reverse=False, verbose=True):
         """
         Missing blocks are introduced completely at random. Time series are selected at random, and blocks of a fixed size are removed at randomly chosen positions.
 
@@ -127,6 +127,9 @@ class GenGAP:
 
         explainer : bool, optional
             Only used within the Explainer Module to contaminate one series at a time (default: False).
+
+        reverse: bool, optional
+            Reverse/mirror the mask of missing values (used in forecasting) (default: False).
 
         verbose : bool, optional
             Whether to display the contamination information (default is True).
@@ -245,13 +248,16 @@ class GenGAP:
 
                     ts_contaminated[S, position] = np.nan
 
+        if reverse:
+            ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
+
         if logic_by_series:
             return ts_contaminated.T
         else:
             return ts_contaminated
 
 
-    def aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, verbose=True):
+    def aligned(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, single_series=-1, logic_by_series=True, explainer=False, reverse=False, verbose=True):
         """
         Missing blocks start and end at the same selected positions across the chosen series, resulting in aligned missing intervals.
 
@@ -282,6 +288,9 @@ class GenGAP:
 
         explainer : bool, optional
             Only used within the Explainer Module to contaminate one series at a time (default: False).
+
+        reverse: bool, optional
+                    Reverse/mirror the mask of missing values (used in forecasting) (default: False).
 
         verbose : bool, optional
             Whether to display the contamination information (default is True).
@@ -352,12 +361,15 @@ class GenGAP:
                 index = P + to_remove
                 ts_contaminated[S, index] = np.nan
 
+        if reverse:
+            ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
+
         if logic_by_series:
             return ts_contaminated.T
         else:
             return ts_contaminated
 
-    def scattered(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
+    def scattered(input_data, rate_dataset=0.2, rate_series=0.2, offset=0.1, seed=True, logic_by_series=True, explainer=False, reverse=False, verbose=True):
         """
         A contiguous interval of missing values is introduced at a randomly selected position within each selected series.
         Docs: https://imputegap.readthedocs.io/en/latest/missingness_patterns.html
@@ -384,6 +396,9 @@ class GenGAP:
 
         explainer : bool, optional
             Only used within the Explainer Module to contaminate one series at a time (default: False).
+
+        reverse: bool, optional
+            Reverse/mirror the mask of missing values (used in forecasting) (default: False).
 
         verbose : bool, optional
             Whether to display the contamination information (default is True).
@@ -457,13 +472,16 @@ class GenGAP:
                 index = P + start_index + to_remove
                 ts_contaminated[S, index] = np.nan
 
+        if reverse:
+            ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
+
         if logic_by_series:
             return ts_contaminated.T
         else:
             return ts_contaminated
 
 
-    def blackout(input_data, rate_series=0.2, offset=0.1, logic_by_series=True, verbose=True):
+    def blackout(input_data, rate_series=0.2, offset=0.1, logic_by_series=True, reverse=False, verbose=True):
         """
         Apply blackout contamination to selected series
 
@@ -481,6 +499,9 @@ class GenGAP:
         logic_by_series : bool, optional
             Contaminate the series based on the series (sensor) malfunction (default: True).
 
+        reverse: bool, optional
+            Reverse/mirror the mask of missing values (used in forecasting) (default: False).
+
         verbose : bool, optional
             Whether to display the contamination information (default is True).
 
@@ -496,11 +517,11 @@ class GenGAP:
             ts_m =GenGap.blackout(ts.data, series_rate=0.2)
 
         """
-        return GenGAP.aligned(input_data, rate_dataset=1, rate_series=rate_series, offset=offset, logic_by_series=logic_by_series, verbose=verbose)
+        return GenGAP.aligned(input_data, rate_dataset=1, rate_series=rate_series, offset=offset, logic_by_series=logic_by_series, reverse=reverse, verbose=verbose)
 
 
 
-    def gaussian(input_data, rate_dataset=0.2, rate_series=0.2, selected_mean="position", std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
+    def gaussian(input_data, rate_dataset=0.2, rate_series=0.2, selected_mean="position", std_dev=0.2, offset=0.1, seed=True, logic_by_series=True, explainer=False, reverse=False, verbose=True):
         """
         Missingness follows a probability distribution, each position has a certain chance of being missing.
 
@@ -536,6 +557,9 @@ class GenGAP:
 
         explainer : bool, optional
             Only used within the Explainer Module to contaminate one series at a time (default: False).
+
+        reverse: bool, optional
+            Reverse/mirror the mask of missing values (used in forecasting) (default: False).
 
         verbose : bool, optional
             Whether to display the contamination information (default is True).
@@ -627,12 +651,15 @@ class GenGAP:
             # apply missing values
             ts_contaminated[S, missing_indices] = np.nan
 
+        if reverse:
+            ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
+
         if logic_by_series:
             return ts_contaminated.T
         else:
             return ts_contaminated
 
-    def distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities_list=None, offset=0.1, seed=True, logic_by_series=True, explainer=False, verbose=True):
+    def distribution(input_data, rate_dataset=0.2, rate_series=0.2, probabilities_list=None, offset=0.1, seed=True, logic_by_series=True, explainer=False, reverse=False, verbose=True):
         """
         Missingness follows a probability distribution, each position has a certain chance of being missing.
 
@@ -665,6 +692,9 @@ class GenGAP:
 
         explainer : bool, optional
             Only used within the Explainer Module to contaminate one series at a time (default: False).
+
+        reverse: bool, optional
+            Reverse/mirror the mask of missing values (used in forecasting) (default: False).
 
         verbose : bool, optional
             Whether to display the contamination information (default is True).
@@ -744,13 +774,16 @@ class GenGAP:
             # apply missing values
             ts_contaminated[S, missing_indices] = np.nan
 
+        if reverse:
+            ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
+
         if logic_by_series:
             return ts_contaminated.T
         else:
             return ts_contaminated
 
 
-    def disjoint(input_data, rate_series=0.1, limit=1, offset=0.1, logic_by_series=True, verbose=True):
+    def disjoint(input_data, rate_series=0.1, limit=1, offset=0.1, logic_by_series=True, reverse=False, verbose=True):
         """
         Each missing block begins where the previous one ends, so the missing intervals are consecutive and do not overlap.
 
@@ -773,6 +806,9 @@ class GenGAP:
 
         logic_by_series : bool, optional
             Contaminate the series based on the series (sensor) malfunction (default: True).
+
+        reverse: bool, optional
+            Reverse/mirror the mask of missing values (used in forecasting) (default: False).
 
         verbose : bool, optional
             Whether to display the contamination information (default is True).
@@ -830,6 +866,10 @@ class GenGAP:
                 ts_contaminated[S, index] = np.nan
 
                 if index >= final_limit:  # reach the limitation
+
+                    if reverse:
+                        ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
+
                     if logic_by_series:
                         return ts_contaminated.T
                     else:
@@ -838,12 +878,15 @@ class GenGAP:
             X = L
             S = S + 1
 
+        if reverse:
+            ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
+
         if logic_by_series:
             return ts_contaminated.T
         else:
             return ts_contaminated
 
-    def overlap(input_data, rate_series=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, verbose=True):
+    def overlap(input_data, rate_series=0.2, limit=1, shift=0.05, offset=0.1, logic_by_series=True, reverse=False, verbose=True):
         """
         Each missing block starts at the end of the previous one with a specified shift, so the missing intervals are consecutive and overlap.
 
@@ -868,6 +911,9 @@ class GenGAP:
 
         logic_by_series : bool, optional
             Contaminate the series based on the series (sensor) malfunction (default: True).
+
+        reverse: bool, optional
+            Reverse/mirror the mask of missing values (used in forecasting) (default: False).
 
         verbose : bool, optional
             Whether to display the contamination information (default is True).
@@ -932,6 +978,8 @@ class GenGAP:
                 ts_contaminated[S, index] = np.nan
 
                 if index >= final_limit:  # reach the limitation
+                    if reverse:
+                        ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
                     if logic_by_series:
                         return ts_contaminated.T
                     else:
@@ -939,6 +987,9 @@ class GenGAP:
 
             X = L
             S = S + 1
+
+        if reverse:
+            ts_contaminated = GenGAP.mirror_gap(input_data=input_data, ts_m=ts_contaminated, axis=1)
 
         if logic_by_series:
             return ts_contaminated.T

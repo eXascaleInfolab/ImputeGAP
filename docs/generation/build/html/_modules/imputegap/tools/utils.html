@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/page_s_gobal.css?v=6bb1dc07" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/page_s_gobal.css?v=8b8c9d16" />
     
     
 
@@ -244,11 +244,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_loading.html">Data Loading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../gapgenerator.html">Gap Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gapgeneration.html">Gap Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../imputation.html">Imputation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../downstreamimpact.html">Downstream Impact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../explainability.html">Explainability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../downstream.html">Downstream</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../explainer.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -1267,13 +1267,13 @@
     <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;other&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">config</span>
 
-        <span class="c1"># Your own default parameters #contributing-load-params</span>
-        <span class="c1">#</span>
-        <span class="c1">#elif algorithm == &quot;your_algo_name&quot;:</span>
-        <span class="c1">#    param1 = int(config[algorithm][&#39;param_1&#39;])</span>
-        <span class="c1">#    param2 = config[algorithm][&#39;param_2&#39;]</span>
-        <span class="c1">#    param3 = float(config[algorithm][&#39;param_3&#39;])</span>
-        <span class="c1">#    return {&quot;param_1&quot;: param1,&quot;param_2&quot;: param2, &quot;param_3&quot;: param3}</span>
+    <span class="c1"># Your own default parameters #contributing-load-params</span>
+    <span class="c1">#</span>
+    <span class="c1">#elif algorithm == &quot;new_alg&quot;:</span>
+    <span class="c1">#    param_integer = int(config[algorithm][&#39;param_integer&#39;])</span>
+    <span class="c1">#    param_float = config[algorithm][&#39;param_float&#39;]</span>
+    <span class="c1">#    param_string = float(config[algorithm][&#39;param_string&#39;])</span>
+    <span class="c1">#    return {&quot;param_integer&quot;: param_integer, &quot;param_float&quot;: param_float, &quot;param_string&quot;: param_string}</span>
 
     <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;mean_impute&quot;</span><span class="p">:</span>
         <span class="n">logic</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">algorithm</span><span class="p">][</span><span class="s2">&quot;logic&quot;</span><span class="p">])</span>
@@ -1456,8 +1456,9 @@
 
     <span class="c1"># your own implementation #contributing-add-toolkit</span>
     <span class="c1">#</span>
-    <span class="c1">#elif alg == &quot;your_algo_name&quot;:</span>
-    <span class="c1">#    imputer = Imputation.MyFamily.NewAlg(incomp_data)</span>
+    <span class="c1">#elif alg == &quot;new_alg&quot;:</span>
+    <span class="c1">#    imputer = Imputation.YourFamily.NewAlg(incomp_data)</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(IMP) Algorithm &#39;</span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">&#39; not recognized, please choose your algorithm from this list:</span><span class="se">\n\t</span><span class="si">{</span><span class="n">TimeSeries</span><span class="p">()</span><span class="o">.</span><span class="n">algorithms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">imputer</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1763,12 +1764,12 @@
 
     <span class="c1"># Your own optimal save parameters #contributing-optimization-save</span>
     <span class="c1">#</span>
-    <span class="c1">#elif algorithm == &quot;your_algo_name&quot;:</span>
+    <span class="c1">#elif algorithm == &quot;new_alg&quot;:</span>
     <span class="c1">#    params_to_save = {</span>
-    <span class="c1">#        &quot;param_1&quot;: int(optimal_params[0]),</span>
-    <span class="c1">#    &quot;param_2&quot;: optimal_params[1],</span>
-    <span class="c1">#    &quot;param_3&quot;: float(optimal_params[2]),</span>
-    <span class="c1">#}</span>
+    <span class="c1">#       &quot;param_integer&quot;: int(optimal_params[0]),</span>
+    <span class="c1">#       &quot;param_float&quot;: float(optimal_params[1]),</span>
+    <span class="c1">#       &quot;param_string&quot;: str(optimal_params[2])</span>
+    <span class="c1">#   }</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -3104,8 +3105,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    metrics : dict</span>
 <span class="sd">       A dictionary containing the imputation metrics to display.</span>
-<span class="sd">    algorithm : str, optional The name of the algorithm used for imputation.</span>
+
 <span class="sd">    algorithm : str, optional</span>
+<span class="sd">        The name of the algorithm used for imputation.</span>
+
+<span class="sd">    text : str, optional</span>
 <span class="sd">       Output text to help the user.</span>
 
 <span class="sd">    Returns</span>

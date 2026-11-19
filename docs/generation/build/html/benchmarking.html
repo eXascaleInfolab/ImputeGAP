@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Downstream Impact" href="downstreamimpact.html" /><link rel="prev" title="Imputation" href="imputation.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Downstream" href="downstream.html" /><link rel="prev" title="Imputation" href="imputation.html" />
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>Benchmarking - ImputeGAP 1.1.3</title>
@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=6bb1dc07" />
+    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=8b8c9d16" />
     
     
 
@@ -245,11 +245,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_loading.html">Data Loading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gapgenerator.html">Gap Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gapgeneration.html">Gap Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="imputation.html">Imputation</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="downstreamimpact.html">Downstream Impact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="explainability.html">Explainability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downstream.html">Downstream</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explainer.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -310,17 +310,9 @@
         <article role="main" id="furo-main-content">
           <section id="benchmarking">
 <h1>Benchmarking<a class="headerlink" href="#benchmarking" title="Link to this heading">¶</a></h1>
-<p>ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>33<span class="fn-bracket">]</span></a>.  Users have full control over the benchmark by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.</p>
-<p style="text-align: center; font-weight: bold;">
-   Time Series → Contamination → Imputation → Evaluation
-</p><br /><div class="gengap-contents">
-
-   <div class="gengap-nav">
-      <a href="index.html#algorithms">▦ Algorithms</a>
-      <a href="data_loading.html#datasets">▦ Datasets</a>
-      <a href="#benchgaptuto">📖 BenchGAP Tutorial</a>
-   </div>
-</div><section id="benchmarking-tutorial">
+<p>BenchGAP is a module for benchmarking the performance (efficacy and runtime) of time series imputation algorithms. Users have full control over BenchGAP by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.</p>
+<p>The algorithms here <a class="reference external" href="index.html#algorithms">here</a> and the datasets are available <a class="reference external" href="data_loading.html#datasets">here</a>.</p>
+<section id="benchmarking-tutorial">
 <span id="benchgaptuto"></span><h2>Benchmarking Tutorial<a class="headerlink" href="#benchmarking-tutorial" title="Link to this heading">¶</a></h2>
 <p>The benchmarking module can be utilized as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP import</span>
@@ -334,23 +326,23 @@
            <span class="n">x_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
            <span class="n">use_cache</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="c1"># display the plot</span>
+<span class="c1"># display the results</span>
 <span class="n">bench</span><span class="o">.</span><span class="n">subplots</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id2" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">33</a><span class="fn-bracket">]</span></span>
-<p>Mourad Khayati, Alberto Lerner, Zakhar Tymchenko, Philippe Cudré-Mauroux: Mind the Gap: An Experimental Evaluation of Imputation of Missing Values Techniques in Time Series. Proc. VLDB Endow. 13(5): 768-782 (2020)</p>
-</aside>
-</aside>
 <br></section>
 <section id="output-directory">
 <h2>Output Directory<a class="headerlink" href="#output-directory" title="Link to this heading">¶</a></h2>
-<p>Each benchmark execution creates a unique experiment directory. The
-directory tree below directly describes the purpose of each generated
-folder and file:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CleanImp/
+<p>The benchmark structure keeps every run self-contained while allowing detailed results to be traced back to the corresponding dataset, missingness pattern, and experiment configuration. Each execution creates a unique experiment directory.</p>
+<p>In short, the outputs are organized at three levels:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;experiment&gt;
+    ├── &lt;dataset&gt;/&lt;pattern&gt;/   → Detailed results
+    ├── _heatmaps/             → Aggregated visual analysis
+    └── summary/log files      → Global experiment results and configuration
+</pre></div>
+</div>
+<br><p>The following tree representation describes the location of each generated folder and file:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>imputegap/
 │
 ├── _caching/                                  # Cache used to avoid recomputing expensive pipelines
 │   └── ...                                    # Imputed matrices and downstream predictions
@@ -378,16 +370,6 @@ folder and file:</p>
 └── *_log.txt                                  # General execution logs
 </pre></div>
 </div>
-<p>In short, the outputs are organized at three levels:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;experiment&gt;
-    ├── &lt;dataset&gt;/&lt;pattern&gt;/   → Detailed results
-    ├── _heatmaps/             → Aggregated visual analysis
-    └── summary/log files      → Global experiment results and configuration
-</pre></div>
-</div>
-<p>This structure keeps every benchmark run self-contained while allowing
-detailed results to be traced back to the corresponding dataset,
-missingness pattern, and experiment configuration.</p>
 <br></section>
 </section>
 
@@ -396,12 +378,12 @@ missingness pattern, and experiment configuration.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="downstreamimpact.html">
+          <a class="next-page" href="downstream.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Downstream Impact</div>
+                <div class="title">Downstream</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>

@@ -106,43 +106,59 @@ The datasets follow this format:
 
 
 
-.. list-table::
-   :header-rows: 1
-   :widths: 30 30
-   :class: benchmark-table
+.. raw:: html
 
-   * - **Datasets**
-     - **Categories**
-   * - `climate <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Climate-Change-Dataset>`_
-     - Weather
-   * - `meteo <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#MeteoSwiss-Weather-Dataset>`_
-     - Weather
-   * - `temperature <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#China-Climate-Temperature-Dataset>`_
-     - Weather
-   * - `airq <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Air-Quality-Dataset>`_
-     - Air Quality
-   * - `drift <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Gas-Sensor-Array-Drift-Dataset>`_
-     - Air Quality
-   * - `bafu <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#BAFU-Water-Discharge-Dataset>`_
-     - Water Quality
-   * - `chlorine <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Chlorine-Residual-Dataset>`_
-     - Water Quality
-   * - `eeg-alcohol <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-Alcohol-Dataset>`_
-     - Neuroscience
-   * - `motion <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Motion-Sensor-Dataset>`_
-     - IoT Sensing
-   * - `traffic <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#PEMS-Traffic-Dataset>`_
-     - IoT Sensing
-   * - `soccer <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Soccer-Player-Tracking-Dataset>`_
-     - Sports
-   * - `sport-activity <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Sport-Activity-Dataset>`_
-     - Sports
-   * - `electricity <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Electricity-Consumption-Dataset>`_
-     - Energy
-   * - `stock-exchange <https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Stock-Exchange-Rates-Dataset>`_
-     - Finance
+   <table class="benchmark-table docutils align-default">
+     <thead>
+       <tr><th>Categories</th><th>Datasets</th></tr>
+     </thead>
+     <tbody>
+       <tr>
+         <td rowspan="3">Weather</td>
+         <td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Climate-Change-Dataset">climate</a></td>
+       </tr>
+       <tr><td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#MeteoSwiss-Weather-Dataset">meteo</a></td></tr>
+       <tr><td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#China-Climate-Temperature-Dataset">temperature</a></td></tr>
 
+       <tr>
+         <td rowspan="2">Air Quality</td>
+         <td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Air-Quality-Dataset">airq</a></td>
+       </tr>
+       <tr><td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Gas-Sensor-Array-Drift-Dataset">drift</a></td></tr>
 
+       <tr>
+         <td rowspan="2">Water Quality</td>
+         <td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#BAFU-Water-Discharge-Dataset">bafu</a></td>
+       </tr>
+       <tr><td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Chlorine-Residual-Dataset">chlorine</a></td></tr>
+
+       <tr>
+         <td>Neuroscience</td>
+         <td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#EEG-Alcohol-Dataset">eeg-alcohol</a></td>
+       </tr>
+
+       <tr>
+         <td rowspan="2">IoT Sensing</td>
+         <td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Motion-Sensor-Dataset">motion</a></td>
+       </tr>
+       <tr><td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#PEMS-Traffic-Dataset">traffic</a></td></tr>
+
+       <tr>
+         <td rowspan="2">Sports</td>
+         <td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Soccer-Player-Tracking-Dataset">soccer</a></td>
+       </tr>
+       <tr><td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Sport-Activity-Dataset">sport-activity</a></td></tr>
+
+       <tr>
+         <td>Energy</td>
+         <td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Electricity-Consumption-Dataset">electricity</a></td>
+       </tr>
+       <tr>
+         <td>Finance</td>
+         <td><a href="https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets#Stock-Exchange-Rates-Dataset">stock-exchange</a></td>
+       </tr>
+     </tbody>
+   </table>
 
 .. raw:: html
 

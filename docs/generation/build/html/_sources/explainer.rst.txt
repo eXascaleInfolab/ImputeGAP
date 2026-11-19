@@ -1,34 +1,13 @@
-==============
-Explainability
-==============
+=========
+Explainer
+=========
 
-The library provides insights into the algorithm's behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (`SHAP <https://shap.readthedocs.io/en/latest/>`_) to reveal how different time series features influence the model’s predictions.
-
-.. raw:: html
-
-   <br><br>
-
-ExplainGAP module generates visualizations in the form of detailed reports and plots. In Figure 1, the SHAP values for each feature are plotted to illustrate their impact on the imputation results for a dataset.
-
-
-.. figure:: _img/explainer_output.png
-   :alt: ImputeGAP Explainer Plot
-   :align: left
-   :class: portrait
-
-   Fig 1. Features Visualization with SHAP-Based Explainer.
-
-.. raw:: html
-
-   <br><br>
-
-Each point on the plot represents the contribution of a specific input value with the color scale indicating the data value, ranging from low (blue) to high (red).
-On the x-axis, input data with positive SHAP values increase the model’s output, while negative SHAP values decrease it.
-
+ExplainGAP module provides insights into the algorithm's behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (`SHAP <https://shap.readthedocs.io/en/latest/>`_) to reveal how different time series features influence the model’s predictions.
 
 .. raw:: html
 
    <br>
+
 
 
 .. _explaingaptuto:
@@ -74,3 +53,26 @@ All feature extractors developed in ImputeGAP are available in the ``ts.extracto
 .. raw:: html
 
    <br>
+
+ExplainGAP module generates visualizations in the form of detailed reports and plots. In Fig 1, the SHAP values for each feature are plotted to illustrate their impact on the imputation results for a dataset.
+
+
+.. figure:: _img/explainer_output.png
+   :alt: ImputeGAP Explainer Plot
+   :align: left
+   :class: portrait
+
+   Fig 1. Features Visualization with SHAP-Based Explainer.
+
+.. raw:: html
+
+   <br><br>
+
+Each point on the plot represents the contribution of a specific input value with the color scale indicating the data value, ranging from low (blue) to high (red).
+On the x-axis, input data with positive SHAP values increase the model’s output, while negative SHAP values decrease it.
+
+
+.. raw:: html
+
+   <br>
+

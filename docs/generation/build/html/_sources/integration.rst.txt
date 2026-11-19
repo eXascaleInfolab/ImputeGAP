@@ -1,85 +1,75 @@
 Integration
 ===========
 
-ImputeGAP allows users to integrate their own algorithms. We describe in turn the integration python and other languages.
+ImputeGAP allows users to integrate their own algorithms. In this page, we describe how to integrate algorithms implemented in Python and other languages.
 
 Initialization
-~~~~~~~~~~~~~~
+--------------
 
-Initialize a Git Repository::
+Initialize the GitHub repository and install the requirements::
 
-    git init
     git clone https://github.com/eXascaleInfolab/ImputeGAP
     cd ImputeGAP/
     source imputegap_source.sh
 
 
 
-
-Integration Steps
-~~~~~~~~~~~~~~~~~
-
 Basic Features
 --------------
 
-1. Navigate to the ``./imputegap/algorithms`` directory.
-2. Create a new file by copying ``mean_impute.py`` and rename it with the name of your algorithm, e.g., ``new_alg.py``.
-3. Rename the function ``def mean_impute()``, e.g., ``def new_alg()``.
-4. Replace the section under ``# core of the algorithm`` with your algorithm’s implementation. The algorithms should take as input the ``TimeSeries`` object structure and should return a ``numpy.ndarray`` matrix.
-5. Navigate to ``./imputegap/recovery/imputation.py`` and search ``#mean-impute-class-contribution``:
+We will use the ``mean_impute`` algorithm as a template for integration. Throughout this guide, ``new_alg`` will serve as an example placeholder. Replace it with the name of your own algorithm.
 
-   a. Copy the ``class MeanImpute(BaseImputer)`` into the corresponding class of algorithms' family.
 
-   b. Rename the class. e.g., ``class NewAlg(BaseImputer)``.
+.. rst-class:: integration-steps
 
-   c. Change the value of the ``algorithm`` variable from ``mean_impute`` to ``new_alg``
+1. Inside ``./imputegap/algorithms``, rename the file ``mean_impute.py`` to ``new_alg.py``.
 
-   d. In the ``def impute()`` method, replace the call of the function to link into your new algorithm, e.g.,
+2. Rename the function ``def mean_impute()`` to ``def new_alg()``, and adapt the parameters and their default values.
+
+3. Replace the section under ``# core of the algorithm`` with your algorithm’s implementation. The algorithm must accept a contaminated matrix as input and return a recovered matrix as output, both in ``numpy.ndarray`` format.
+
+4. Open ``./imputegap/recovery/imputation.py`` and search ``#mean-impute-class-contribution``:
+
+   a. Copy the ``class MeanImpute(BaseImputer)`` code into the appropriate algorithm family and rename it ``class NewAlg(BaseImputer):``.
+
+   b. Change the value of the ``algorithm`` variable from ``mean_impute`` to ``new_alg``.
+
+   c. In the ``def impute()`` method, update the function call to invoke your new algorithm.
 
     .. code-block:: python
 
         from imputegap.algorithms.new_alg import new_alg
-        self.recov_data = new_alg(self.incomp_data, **params)
+        self.recov_data = new_alg(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params)
+
+
+5. To set the default values of your algorithm, please update ``./imputegap/env/default_values.toml``. Search ``#env-params-contribution``, uncomment the lines and add your configuration::
+
+    [new_alg]
+    param_integer = 42
+    param_float = 0.42
+    param_string = "value_42"
+
+
+6. Update the ``./imputegap/tools/utils.py`` file, and search ``#contributing-load-params``, uncomment the lines, and specify your configuration to match the one in the env file.
+
+.. code-block:: python
+
+    elif algorithm == "new_alg":
+        param_integer = int(config[algorithm]['param_integer'])
+        param_float = float(config[algorithm]['param_float'])
+        param_string = str(config[algorithm]['param_string'])
+        return {"param_integer": param_integer,"param_float": param_float, "param_string": param_string}
+
+
+7. To access the benchmarking utilities, please update ``./imputegap/tools/utils.py``. Search for ``#contributing-add-toolkit``, uncomment the relevant section, and add your algorithm.
+
+.. code-block:: python
+
+    elif alg == "new_alg":
+        imputer = Imputation.YourFamily.NewAlg(incomp_data)
 
 
 
-
-Advanced Features
------------------
-
-
-I. Initialize default values
-____________________________
-
-1. To set the default values of your algorithm, please update ``./imputegap/env/default_values.toml`` (lines 3-6) and add your configuration. For example::
-
-        [new_alg]
-        param_integer = 42
-        param_float = 0.42
-        param_string = "value_42"
-
-
-2. Update the ``./imputegap/tools/utils.py`` file, and search ``#contributing-load-params``, and specify your configuration in the ``load_parameters`` function.
-
-
-.. raw:: html
-
-   <br>
-
-
-II. Benchmark and Toolkit
-_________________________
-
-To access the benchmarking features, please update ``./imputegap/tools/utils.py`` by adding your algorithm in the ``def config_impute_algorithm`` function (search ``#contributing-add-toolkit``) .
-
-    .. code-block:: python
-
-
-        elif algorithm == "your_algo_name":
-            imputer = Imputation.MyFamily.NewAlg(incomp_data)
-
-
-Replace MyFamily with either: Statistics, MatrixCompletion, PatternSearch, MachineLearning, DeepLearning, or LLMs.
 
 
 .. raw:: html
@@ -87,32 +77,34 @@ Replace MyFamily with either: Statistics, MatrixCompletion, PatternSearch, Machi
    <br>
 
 
-III. Optimizer
-______________
+Optimizer
+_________
 
 To enable the optimization module, please update ``./imputegap/tools/algorithm_parameters.py``.
 
-1. Open ``./imputegap/tools/algorithm_parameters.py``, search ``#contributing-optimization`` copy paste the lines and update the algorithm name and parameters, e.g.,
+.. rst-class:: integration-steps
+
+1. Search for ``#contributing-optimization``, uncomment the relevant lines, update the algorithm name and change parameter ranges.
 
     .. code-block:: python
 
-        'your_algo_name': {
-                "param_integer": tune.grid_search([i for i in range(2, 20 1)]),
-                "param_float": tune.loguniform(1e-6, 1),
-                "param_string": ["value_1", "value_n"]
-            },
+        "new_alg": {
+            "param_integer": tune.grid_search(list(range(2, 20, 1))),
+            "param_float": tune.loguniform(1e-6, 1),
+            "param_string": tune.choice(["value_1", "value_n"])
+        },
 
 
-2. Add your parameters in the ``def save_optimization()`` (search ``#contributing-optimization-save``) function of the file ``./imputegap/tools/utils.py`` to save the optimal parameters:
+2. Add your parameters in the ``def save_optimization()`` (search ``#contributing-optimization-save``) function of the file ``./imputegap/tools/utils.py`` to save the optimal parameters.
 
     .. code-block:: python
 
-        if algorithm == "your_algo_name":
+        elif algorithm == "new_alg":
             params_to_save = {
                 "param_integer": int(optimal_params[0]),
                 "param_float": float(optimal_params[1]),
                 "param_string": str(optimal_params[2])
-        }
+            }
 
 
 .. raw:: html
@@ -120,9 +112,30 @@ To enable the optimization module, please update ``./imputegap/tools/algorithm_p
    <br>
 
 
+Contribution
+------------
 
-Library Architecture
---------------------
+ImputeGAP endorses well-established algorithms for integration. The visibility conditions need to be met
+
+    -   The paper must be published in a peer-review venue
+    -   The results must be fully reproducible
+    -   The algorithm handles time series imputation
+
+
+To ensure reproducibility, the following technical requirements must be fulfilled:
+
+    - The algorithm's output must preserve the matrix format used throughout the library.
+    - All existing unit tests must continue to pass after integration.
+    - A new unit test must be implemented using ``tests/test_imputation_cdrec.py`` as a template. It must reproduce the results reported in the original paper, with the expected values recorded in ``imputegap/env/imputegap_results.toml``.
+
+
+.. raw:: html
+
+    <br>
+
+
+Library Folder Structure
+------------------------
 
 ImputeGAP is organized into six main directories, each responsible for a specific aspect of the framework.
 
@@ -144,7 +157,6 @@ ImputeGAP is organized into six main directories, each responsible for a specifi
      - Provides shared utilities and helper functions used throughout the library.
    * - ``wrapper/``
      - Contains external algorithm implementations, including code adapted from research papers and third-party sources.
-
 
 .. note::
 

@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=6bb1dc07" />
+    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=8b8c9d16" />
     
     
 
@@ -246,11 +246,11 @@
 <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_loading.html">Data Loading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gapgenerator.html">Gap Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gapgeneration.html">Gap Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="imputation.html">Imputation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="downstreamimpact.html">Downstream Impact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="explainability.html">Explainability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downstream.html">Downstream</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explainer.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -315,17 +315,11 @@
 <span id="id1"></span><h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading">¶</a></h2>
 <p>ImputeGAP is compatible with Python&gt;=3.11 and Unix/WSL environment.</p>
 <div class="sphinx-tabs docutils container" id="id2">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">full installer</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">pip</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">source</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><p>If you are using ImputeGAP for the first time, run the following script, which installs the required dependencies and library through a virtual environment.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>init
-git<span class="w"> </span>clone<span class="w"> </span>https://github.com/eXascaleInfolab/ImputeGAP.git
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">pip</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">source</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><p>If you are using ImputeGAP for the first time, the following script installs the required dependencies through a virtual environment.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/eXascaleInfolab/ImputeGAP.git
 <span class="nb">cd</span><span class="w"> </span>ImputeGAP/
 <span class="nb">source</span><span class="w"> </span>imputegap_lib.sh
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><p>Update your package list and install prerequisites:</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
-sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>build-essential<span class="w"> </span>libssl-dev<span class="w"> </span>zlib1g-dev<span class="w"> </span>libncurses5-dev<span class="w"> </span>libncursesw5-dev<span class="w"> </span>libreadline-dev<span class="w"> </span>libsqlite3-dev<span class="w"> </span>libgdbm-dev<span class="w"> </span>libdb5.3-dev<span class="w"> </span>libbz2-dev<span class="w"> </span>libexpat1-dev<span class="w"> </span>liblzma-dev<span class="w"> </span>tk-dev<span class="w"> </span>python3-tk<span class="w"> </span>libopenblas0<span class="w"> </span>libarmadillo-dev<span class="w"> </span>software-properties-common<span class="w"> </span>python3-pip
 </pre></div>
 </div>
 </div></blockquote>
@@ -333,11 +327,12 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>imputegap
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><p>To install ImputeGAP directly from the GitHub source in editable mode, clone the repository and run the source script:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>init
-git<span class="w"> </span>clone<span class="w"> </span>https://github.com/eXascaleInfolab/ImputeGAP.git
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><p>To install ImputeGAP directly from the GitHub source in editable mode, clone the repository and run the source script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/eXascaleInfolab/ImputeGAP.git
 <span class="nb">cd</span><span class="w"> </span>ImputeGAP/
 <span class="nb">source</span><span class="w"> </span>imputegap_source.sh
+
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span><span class="c1"># local installation</span>
 </pre></div>
 </div>
 </div></div>

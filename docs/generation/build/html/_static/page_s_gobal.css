@@ -417,3 +417,8 @@ article p {
 article figcaption p {
     text-align: center;
 }
+
+/* Spacing between integration steps */
+ol.integration-steps > li {
+    margin-bottom: 24px;
+}

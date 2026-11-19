@@ -961,13 +961,13 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
     elif algorithm == "other":
             return config
 
-        # Your own default parameters #contributing-load-params
-        #
-        #elif algorithm == "your_algo_name":
-        #    param1 = int(config[algorithm]['param_1'])
-        #    param2 = config[algorithm]['param_2']
-        #    param3 = float(config[algorithm]['param_3'])
-        #    return {"param_1": param1,"param_2": param2, "param_3": param3}
+    # Your own default parameters #contributing-load-params
+    #
+    #elif algorithm == "new_alg":
+    #    param_integer = int(config[algorithm]['param_integer'])
+    #    param_float = config[algorithm]['param_float']
+    #    param_string = float(config[algorithm]['param_string'])
+    #    return {"param_integer": param_integer, "param_float": param_float, "param_string": param_string}
 
     elif algorithm == "mean_impute":
         logic = str(config[algorithm]["logic"])
@@ -1144,8 +1144,9 @@ def config_impute_algorithm(incomp_data, algorithm, task="default", use_cuda=0, 
 
     # your own implementation #contributing-add-toolkit
     #
-    #elif alg == "your_algo_name":
-    #    imputer = Imputation.MyFamily.NewAlg(incomp_data)
+    #elif alg == "new_alg":
+    #    imputer = Imputation.YourFamily.NewAlg(incomp_data)
+
     else:
         raise ValueError(f"(IMP) Algorithm '{algorithm}' not recognized, please choose your algorithm from this list:\n\t{TimeSeries().algorithms}")
         imputer = None
@@ -1448,12 +1449,12 @@ def save_optimization(optimal_params, algorithm="cdrec", dataset="", optimizer="
 
     # Your own optimal save parameters #contributing-optimization-save
     #
-    #elif algorithm == "your_algo_name":
+    #elif algorithm == "new_alg":
     #    params_to_save = {
-    #        "param_1": int(optimal_params[0]),
-    #    "param_2": optimal_params[1],
-    #    "param_3": float(optimal_params[2]),
-    #}
+    #       "param_integer": int(optimal_params[0]),
+    #       "param_float": float(optimal_params[1]),
+    #       "param_string": str(optimal_params[2])
+    #   }
 
     else:
         if verbose:
@@ -2747,8 +2748,11 @@ def print_results(metrics, algorithm="", text="Results"):
     ----------
     metrics : dict
        A dictionary containing the imputation metrics to display.
-    algorithm : str, optional The name of the algorithm used for imputation.
+
     algorithm : str, optional
+        The name of the algorithm used for imputation.
+
+    text : str, optional
        Output text to help the user.
 
     Returns

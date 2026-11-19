@@ -359,7 +359,7 @@ class Downstream:
 
         return xlsx_path
 
-    def comparator(self, imp_algs=None, input_data=None, incomp_data=None, model=None, horizons=None, season=None, meta_pattern=None, meta_rate=None, save_path="./imputegap_assets/downstream", export_excel=True, titles=False, verbose=False, display_plot=True):
+    def eval(self, imp_algs=None, input_data=None, incomp_data=None, model=None, horizons=None, season=None, meta_pattern=None, meta_rate=None, save_path="./imputegap_assets/downstream", export_excel=True, use_cuda=2, titles=False, verbose=False, display_plot=True):
         """
         Compare the downstream forecasting performance of imputed time series across multiple models and prediction horizons.
 
@@ -389,6 +389,8 @@ class Downstream:
             Directory for the Excel report and combined plot.
         export_excel : bool, optional
             Export the comparison results to Excel. Defaults to True.
+        use_cuda: int, optional, default 2
+            CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
         titles: bool, optional
             Display the detail titles. Defaults to False.
         display_plot : bool, optional
@@ -443,7 +445,7 @@ class Downstream:
             for horizon_ in horizons:
 
                 print(f"\tpipeline: {algorithm}-{model}-{horizon_}:")
-                imputer = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=algorithm, task="forecasting", verbose=verbose)
+                imputer = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=algorithm, task="forecasting", use_cuda=use_cuda, verbose=verbose)
                 imputer.verbose = verbose
                 imputer.impute()
                 recov_data = imputer.recov_data
@@ -515,7 +517,7 @@ class Downstream:
 
         # generate combined downstream comparator plot
         if saved_pipelines:
-            fig = self._plot_comparator_downstream(pipelines=saved_pipelines, series_index=self.downstream.selected_series[0], title=False, display=display_plot, save_path=save_path, verbose=verbose)
+            fig = self._plot_comparator_downstream(pipelines=saved_pipelines, series_index=self.downstream.selected_series[0], title=titles, display=display_plot, save_path=save_path, verbose=verbose)
             plt.close(fig)
 
         return saved_pipelines
@@ -1436,7 +1438,7 @@ class Downstream:
             fig, ax = plt.subplots(figsize=(24, 5))
             if fig.canvas.manager is not None:
                 fig.canvas.manager.set_window_title("downstream evaluation")
-            fig.suptitle("downstream evaluation", fontsize=16)
+            #fig.suptitle("downstream evaluation", fontsize=16)
         else:
             fig = ax.figure
 
@@ -1485,8 +1487,7 @@ class Downstream:
         # Plot observed ground truth outside contaminated regions
         ground_normal = ground_train.copy()
         ground_normal[missing_mask] = np.nan
-        ax.plot(range(train_len), ground_normal, label="ground truth",
-                color="gray", linewidth=1.5, alpha=0.9, zorder=2)
+        ax.plot(range(train_len), ground_normal, label="ground truth", color="black", linewidth=1.5, alpha=0.9, zorder=2)
 
         # Plot ground truth as dashed lines inside each contaminated interval.
         # Include adjacent observed endpoints so even short gaps remain visible.
@@ -1497,17 +1498,13 @@ class Downstream:
                 start = max(0, int(group[0]) - 1)
                 end = min(train_len, int(group[-1]) + 2)
                 ax.plot(range(start, end), ground_train[start:end],
-                        label="missing data" if j == 0 else "_nolegend_",
-                        color="gray", linestyle="--", linewidth=1.5,
-                        alpha=0.65, zorder=3)
+                        label="missing data" if j == 0 else "_nolegend_", color="black", linestyle="--", linewidth=1.5, alpha=0.65, zorder=3)
 
                 # Very light black shading over the contaminated region
                 ax.axvspan(group[0] - 0.5, group[-1] + 0.5, color="black", alpha=0.025, zorder=0)
 
         # Plot ground truth in the forecasting region
-        ax.plot(range(train_len, train_len + test_len), ground_test,
-                label="_nolegend_", color="gray", linewidth=1.2,
-                alpha=0.65, zorder=2)
+        ax.plot(range(train_len, train_len + test_len), ground_test, label="_nolegend_", color="black", linewidth=1.2, alpha=0.65, zorder=2)
 
         # Plot recovered values only around contaminated regions
         imputed_series = ground_train.copy()
@@ -1516,10 +1513,7 @@ class Downstream:
         plot_mask[1:] |= missing_mask[:-1]
         plot_mask[:-1] |= missing_mask[1:]
         imputed_series[~plot_mask] = np.nan
-        ax.plot(range(train_len), imputed_series,
-                label=f"imputation {algorithm.lower()}",
-                color="black", linestyle="-", linewidth=1.8,
-                alpha=0.95, zorder=5)
+        ax.plot(range(train_len), imputed_series, label=f"imputation {algorithm.lower()}", color="silver", linestyle="-", linewidth=1.8, alpha=0.95, zorder=5)
 
         # forecasting background
         # ax.axvspan(train_len - 0.5, train_len + test_len - 0.5, color="green", alpha=0.14, zorder=0)

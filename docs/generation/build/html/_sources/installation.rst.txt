@@ -14,26 +14,15 @@ ImputeGAP is compatible with Python>=3.11 and Unix/WSL environment.
 .. tabs::
 
 
-    .. tab:: full installer
+    .. tab:: pip
 
-            If you are using ImputeGAP for the first time, run the following script, which installs the required dependencies and library through a virtual environment.
+        If you are using ImputeGAP for the first time, the following script installs the required dependencies through a virtual environment.
 
             .. code-block:: bash
 
-                git init
                 git clone https://github.com/eXascaleInfolab/ImputeGAP.git
                 cd ImputeGAP/
                 source imputegap_lib.sh
-
-
-    .. tab:: pip
-
-        Update your package list and install prerequisites:
-
-            .. code-block:: bash
-
-                sudo apt-get update
-                sudo apt install -y build-essential libssl-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev python3-tk libopenblas0 libarmadillo-dev software-properties-common python3-pip
 
 
         Run the following command to install the latest version of ImputeGAP:
@@ -50,10 +39,12 @@ ImputeGAP is compatible with Python>=3.11 and Unix/WSL environment.
 
             .. code-block:: bash
 
-                git init
                 git clone https://github.com/eXascaleInfolab/ImputeGAP.git
                 cd ImputeGAP/
                 source imputegap_source.sh
+
+                pip install -e . # local installation
+
 
 
 

@@ -423,6 +423,7 @@ class Imputation:
 
                 return self
 
+        # contribution, start copy
         class MeanImpute(BaseImputer):  #mean-impute-class-contribution
             """
             MeanImpute class to impute missing values with the mean value of the ground truth.
@@ -452,11 +453,11 @@ class Imputation:
                 self : MeanImpute
                     The object with `recov_data` set.
                 """
-                from imputegap.algorithms.mean_impute import mean_impute
+                from imputegap.algorithms.mean_impute import mean_impute  # link to the file (point: 1 to 3)
 
-                params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
+                params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task) # load automatically the parameters from the env file
 
-                self.recov_data = mean_impute(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = mean_impute(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, use_cuda=self.use_cuda, **params) # call your function
 
                 return self
         # contribution, end copy

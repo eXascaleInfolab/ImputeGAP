@@ -3,17 +3,17 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Integration" href="integration.html" /><link rel="prev" title="Downstream Impact" href="downstreamimpact.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Imputation" href="imputation.html" /><link rel="prev" title="Data Loading" href="data_loading.html" />
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Explainability - ImputeGAP 1.1.3</title>
+        <title>Gap Generation - ImputeGAP 1.1.3</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=6bb1dc07" />
+    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=8b8c9d16" />
     
     
 
@@ -245,11 +245,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_loading.html">Data Loading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gapgenerator.html">Gap Generator</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Gap Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="imputation.html">Imputation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="downstreamimpact.html">Downstream Impact</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Explainability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downstream.html">Downstream</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explainer.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -288,7 +288,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/explainability.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/gapgeneration.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -308,47 +308,131 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="explainability">
-<h1>Explainability<a class="headerlink" href="#explainability" title="Link to this heading">¶</a></h1>
-<p>The library provides insights into the algorithm’s behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (<a class="reference external" href="https://shap.readthedocs.io/en/latest/">SHAP</a>) to reveal how different time series features influence the model’s predictions.</p>
-<br><br><p>ExplainGAP module generates visualizations in the form of detailed reports and plots. In Figure 1, the SHAP values for each feature are plotted to illustrate their impact on the imputation results for a dataset.</p>
-<figure class="align-left" id="id1">
-<img alt="ImputeGAP Explainer Plot" class="portrait" src="_images/explainer_output.png" />
-<figcaption>
-<p><span class="caption-text">Fig 1. Features Visualization with SHAP-Based Explainer.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
-<br><br><p>Each point on the plot represents the contribution of a specific input value with the color scale indicating the data value, ranging from low (blue) to high (red).
-On the x-axis, input data with positive SHAP values increase the model’s output, while negative SHAP values decrease it.</p>
-<br><section id="explaingap-tutorial">
-<span id="explaingaptuto"></span><h2>ExplainGAP Tutorial<a class="headerlink" href="#explaingap-tutorial" title="Link to this heading">¶</a></h2>
-<p>Let’s illustrate the explainer using the CDRec algorithm and MCAR missingness pattern:</p>
+          <section id="gap-generation">
+<h1>Gap Generation<a class="headerlink" href="#gap-generation" title="Link to this heading">¶</a></h1>
+<p>GenGAP is a module to generate realistic missing gaps in sensor data. It allows users to fully customize all the properties of the missing gaps: start, size, position, frequency, etc., and can be easily imported inside any project.</p>
+<div class="gengap-contents">
+   <h2>Setup</h2>
+
+   <div class="gengap-nav">
+      <a href="#scenariomonoblock">▦ Mono-Block</a>
+      <a href="#scenariomultiblock">▦ Multi-Block</a>
+      <a href="#contaminationtutorial">📖 GenGAP Tutorial</a>
+   </div>
+</div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>(N, M) : number of timestamps, number of series</p></li>
+<li><p>W : user-defined offset window in the beginning of the series (default = 25)</p></li>
+<li><p>R : user-defined % of missing values (default = 20%)</p></li>
+<li><p>S : user-defined % of contaminated series (default = 20%)</p></li>
+</ul>
+</div>
+<section class="gengap-main-block" id="mono-block-one-missing-block-per-series">
+<span id="scenariomonoblock"></span><h2>MONO-BLOCK : One missing block per series<a class="headerlink" href="#mono-block-one-missing-block-per-series" title="Link to this heading">¶</a></h2>
+<p><strong>Aligned</strong></p>
+<p>Missing blocks start at the same selected positions and have the same fixed size across the chosen series, resulting in aligned missing intervals.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
+<li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
+<li><p>The starting position is the same and begins at <code class="docutils literal notranslate"><span class="pre">W</span></code> and progresses until the size of the missing block is reached, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGAP.aligned(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
+</ul>
+</div>
+<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="_images/imputegap_aligned.png" />
+<p><strong>Disjoint</strong></p>
+<p>Each missing block begins where the previous one ends, so the missing intervals are consecutive and do not overlap.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
+<li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
+<li><p>The starting position of the first missing block begins at <code class="docutils literal notranslate"><span class="pre">W</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGAP.disjoint(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
+</ul>
+</div>
+<br><img alt="ImputeGAP Disjoint Pattern" class="portrait align-left" src="_images/imputegap_disjoint.png" />
+<p><strong>Overlap</strong></p>
+<p>Each missing block overlaps with the previous one.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
+<li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
+<li><p>The starting position of the first missing block begins at <code class="docutils literal notranslate"><span class="pre">W</span></code>.</p></li>
+<li><p>The overlap is controlled by the variable <code class="docutils literal notranslate"><span class="pre">shift</span></code>.</p></li>
+<li><p>This pattern continues until the limit or <code class="docutils literal notranslate"><span class="pre">N</span></code> is reached.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGAP.overlap(ts.data,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25,</span> <span class="pre">shift=0.1)</span></code></p></li>
+</ul>
+</div>
+<br><img alt="ImputeGAP Overlap Pattern" class="portrait align-left" src="_images/imputegap_overlap.png" />
+<p><strong>Scattered</strong></p>
+<p>The starting position of the missing block is chosen at random, all missing blocks share the same size.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
+<li><p>The size of a single missing block varies between 1% and (100 - <code class="docutils literal notranslate"><span class="pre">W</span></code>)% of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
+<li><p>The starting position is random, then progresses until the size of the missing block is reached, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGAP.scattered(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25)</span></code></p></li>
+</ul>
+</div>
+<br><img alt="ImputeGAP Scatter Pattern" class="portrait align-left" src="_images/imputegap_scattered.png" />
+</section>
+<section class="gengap-main-block" id="multi-block-multiple-missing-blocks-per-series">
+<span id="scenariomultiblock"></span><h2>MULTI-BLOCK : Multiple missing blocks per series<a class="headerlink" href="#multi-block-multiple-missing-blocks-per-series" title="Link to this heading">¶</a></h2>
+<p><strong>MCAR</strong></p>
+<p>Missing blocks have the same size and are introduced completely at random. The affected time series are selected at random.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
+<li><p>Data blocks of the same size are removed from arbitrary series at a random position between <code class="docutils literal notranslate"><span class="pre">W</span></code> and <code class="docutils literal notranslate"><span class="pre">N</span></code>, until the total number of missing values per series is reached.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGAP.mcar(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.2,</span> <span class="pre">offset=25,</span> <span class="pre">seed=False,</span> <span class="pre">block_size=20)</span></code></p></li>
+</ul>
+</div>
+<br><img alt="ImputeGAP Aligned Pattern" class="portrait align-left" src="_images/imputegap_mcar.png" />
+<p><strong>Block Distribution</strong></p>
+<p>Missing data follows a probability distribution, each position has a certain chance of being missing.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">∈</span> <span class="pre">[1%,</span> <span class="pre">(100-W)%]</span></code></p></li>
+<li><p>Data is removed following a distribution given by the user for every values of the series, affecting the first series from the top up to <code class="docutils literal notranslate"><span class="pre">S%</span></code> of the dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenGAP.gaussian(ts.data,</span> <span class="pre">rate_dataset=1,</span> <span class="pre">rate_series=0.4,</span> <span class="pre">offset=25,</span> <span class="pre">selected_mean=&quot;position&quot;,</span> <span class="pre">std_dev=0.2)</span></code></p></li>
+</ul>
+</div>
+<p>To configure the block distribution pattern, please refer to this <a class="reference external" href="tutorials_distribution.html">page</a>.</p>
+<img alt="ImputeGAP Distribution Pattern" class="portrait align-left" src="_images/imputegap_distribution.png" />
+</section>
+<section id="gengap-tutorial">
+<span id="contaminationtutorial"></span><h2>GenGAP Tutorial<a class="headerlink" href="#gengap-tutorial" title="Link to this heading">¶</a></h2>
+<p>ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGAP module can be invoked externally.</p>
+<p>As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.explainer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExplainGAP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGAP</span>
 
-<span class="c1"># initialize the time series and explainer object</span>
+<span class="c1"># initialize the time series object</span>
 <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
-<span class="n">exp</span> <span class="o">=</span> <span class="n">ExplainGAP</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ImputeGAP explainer features extractor : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">extractors</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Missingness patterns : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">patterns</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1"># load and normalize the dataset</span>
 <span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">)</span>
 
-<span class="c1"># configure the explanation</span>
-<span class="n">exp</span><span class="o">.</span><span class="n">shap_explainer</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">extractor</span><span class="o">=</span><span class="s2">&quot;pycatch&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;mcar&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;CDRec&quot;</span><span class="p">)</span>
+<span class="c1"># contaminate the time series with MCAR pattern</span>
+<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_dataset</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># print the impact of each feature</span>
-<span class="n">exp</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">shap_values</span><span class="o">=</span><span class="n">exp</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">shap_details</span><span class="o">=</span><span class="n">exp</span><span class="o">.</span><span class="n">shap_details</span><span class="p">)</span>
-
-<span class="c1"># plot the feature impacts</span>
-<span class="n">exp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># plot the contaminated time series</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="o">=</span><span class="n">ts_m</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">subplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;./imputegap_assets/contamination&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>All feature extractors developed in ImputeGAP are available in the <code class="docutils literal notranslate"><span class="pre">ts.extractors</span></code> module, which can be listed as follows:</p>
+<p>All missingness patterns developed in ImputeGAP are available in the <code class="docutils literal notranslate"><span class="pre">ts.patterns</span></code> module. They can be listed as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
 <span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ImputeGAP features extractors : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">extractors</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missingness patterns : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">patterns</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <br></section>
@@ -359,23 +443,23 @@ On the x-axis, input data with positive SHAP values increase the model’s outpu
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="integration.html">
+          <a class="next-page" href="imputation.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Integration</div>
+                <div class="title">Imputation</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="downstreamimpact.html">
+          <a class="prev-page" href="data_loading.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Downstream Impact</div>
+                <div class="title">Data Loading</div>
                 
               </div>
             </a>
@@ -409,8 +493,10 @@ On the x-axis, input data with positive SHAP values increase the model’s outpu
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Explainability</a><ul>
-<li><a class="reference internal" href="#explaingap-tutorial">ExplainGAP Tutorial</a></li>
+<li><a class="reference internal" href="#">Gap Generation</a><ul>
+<li><a class="reference internal" href="#mono-block-one-missing-block-per-series">MONO-BLOCK : One missing block per series</a></li>
+<li><a class="reference internal" href="#multi-block-multiple-missing-blocks-per-series">MULTI-BLOCK : Multiple missing blocks per series</a></li>
+<li><a class="reference internal" href="#gengap-tutorial">GenGAP Tutorial</a></li>
 </ul>
 </li>
 </ul>

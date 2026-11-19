@@ -79,7 +79,7 @@ To import the time series as a matrix, pass it as an argument of the ``ts.import
 
 GenGAP: Missing Data Simulation
 -------------------------------
-ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGAP module can be invoked externally. The patterns are described here: `missingness_patterns.html <missingness_patterns.html>`_.
+GenGAP is a module to generate realistic missing gaps in sensor data. It allows users to fully customize all the properties of the missing gaps: start, size, position, frequency, etc., and can be easily imported inside any project.
 
 As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:
 
@@ -189,6 +189,32 @@ All algorithms developed in ImputeGAP are available in the ``ts.algorithms`` mod
 
 
 
+To impute a dataset that already contains missing values (NaNs), load it directly and pass the marix to the imputation algorithm, bypassing the contamination step. Note that evaluation metrics and visualizations are unavailable without the complete dataset.
+
+.. code-block:: python
+
+    # ImputeGAP imports
+    from imputegap.recovery.imputation import Imputation
+    from imputegap.recovery.manager import TimeSeries
+    from imputegap.tools import utils
+
+    # initialize the time series object
+    ts = TimeSeries()
+    print(f"\nImputation algorithms : {ts.algorithms}")
+
+    # load the dataset that contains nans values
+    ts.load_series(data="test-logic-nans-llm", normalizer=None)
+
+    # skip the contamination and impute the series
+    imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts.data, use_cuda=0)
+    imputer.impute()
+    print(f"Reconstructed data:\n{imputer.recov_data[:10]}")
+
+    # save the imputed data
+    path = utils.ts_caching_save(data=imputer.recov_data, type="imputation", dir_cache="./_caching")
+    print(f"\nReconstruction saved: {path}")
+
+
 .. raw:: html
 
    <br>
@@ -231,7 +257,6 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
     # compute the imputation metrics with optimized parameter values
     imputer.score(input_data=ts.data, recov_data=imputer.recov_data, text="Optimized values")
 
-
     # plot the recovered time series
     ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation", display=True)
 
@@ -255,8 +280,7 @@ The Optimizer component manages algorithm configuration and hyperparameter tunin
 BenchGAP
 --------
 
-ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms [33]_.  Users have full control over the benchmark by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
-
+BenchGAP is a module for benchmarking the performance (efficacy and runtime) of time series imputation algorithms. Users have full control over BenchGAP by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
 
 The benchmarking module can be utilized as follows:
 
@@ -310,17 +334,14 @@ ImputeGAP includes a dedicated module for systematically evaluating the impact o
     ts.load_series(data="chlorine", normalizer="z_score")
 
     # contaminate the time series
-    ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.2, offset=0)
-
-    # reverse the contamination to amplify its impact on forecasting.
-    ts_m = GenGAP.mirror_gap(input_data=ts.data, ts_m=ts_m)
+    ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.2, offset=0, reverse=True)
 
     # define and impute the contaminated series
     imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
     imputer.impute()
 
     # define the parameters for the downstream model
-    forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=0.36, season=24), pipeline=True)
+    forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=128, season=24), pipeline=True)
 
     # compute the downstream analysis and display the results
     imputer.score(input_data=ts.data, recov_data=imputer.recov_data, downstream=forecaster)
@@ -351,8 +372,7 @@ All downstream models developed in ImputeGAP are available in the ``ts.forecaste
 ExplainGAP
 ----------
 
-
-The library provides insights into the algorithm's behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (`SHAP <https://shap.readthedocs.io/en/latest/>`_) to measure how different time series features influence the model’s predictions.
+ExplainGAP module provides insights into the algorithm's behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (`SHAP <https://shap.readthedocs.io/en/latest/>`_) to reveal how different time series features influence the model’s predictions.
 
 Let's illustrate the explainer using the CDRec algorithm and MCAR missingness pattern:
 

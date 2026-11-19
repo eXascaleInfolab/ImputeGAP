@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Benchmarking" href="benchmarking.html" /><link rel="prev" title="Gap Generator" href="gapgenerator.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Benchmarking" href="benchmarking.html" /><link rel="prev" title="Gap Generation" href="gapgeneration.html" />
 
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/favicon.png"/><!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>Imputation - ImputeGAP 1.1.3</title>
@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=6bb1dc07" />
+    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=8b8c9d16" />
     
     
 
@@ -245,11 +245,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_loading.html">Data Loading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gapgenerator.html">Gap Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gapgeneration.html">Gap Generation</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Imputation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="downstreamimpact.html">Downstream Impact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="explainability.html">Explainability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downstream.html">Downstream</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explainer.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -312,8 +312,8 @@
 <h1>Imputation<a class="headerlink" href="#imputation" title="Link to this heading">¶</a></h1>
 <p>In this section, we will illustrate how to impute the contaminated time series. Our library implements six families of imputation algorithms: Statistical, Machine Learning, Matrix Completion, Deep Learning, Pattern Search, and Large Language Models.
 The list of algorithms is described here: <a class="reference external" href="index.html#algorithms">imputation algorithms</a>.</p>
-<section id="imputation-tutorial">
-<span id="imputationtuto"></span><h2>Imputation Tutorial<a class="headerlink" href="#imputation-tutorial" title="Link to this heading">¶</a></h2>
+<section id="imputation-of-simulated-missing-data">
+<span id="imputationtuto"></span><h2>Imputation of simulated missing data<a class="headerlink" href="#imputation-of-simulated-missing-data" title="Link to this heading">¶</a></h2>
 <p>Let’s illustrate the imputation using the CDRec algorithm from the Matrix Completion family.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
@@ -357,6 +357,32 @@ The list of algorithms is described here: <a class="reference external" href="in
 </pre></div>
 </div>
 <br></section>
+<section id="imputation-of-raw-missing-data">
+<span id="imputationincomplete"></span><h2>Imputation of raw missing data<a class="headerlink" href="#imputation-of-raw-missing-data" title="Link to this heading">¶</a></h2>
+<p>To impute a dataset that already contains missing values (NaNs), load it directly and pass the marix to the imputation algorithm, bypassing the contamination step. Note that evaluation metrics and visualizations are unavailable without the complete dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+
+<span class="c1"># initialize the time series object</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Imputation algorithms : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">algorithms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># load the dataset that contains nans values</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;test-logic-nans-llm&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># skip the contamination and impute the series</span>
+<span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MatrixCompletion</span><span class="o">.</span><span class="n">CDRec</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">imputer</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstructed data:</span><span class="se">\n</span><span class="si">{</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># save the imputed data</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ts_caching_save</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;imputation&quot;</span><span class="p">,</span> <span class="n">dir_cache</span><span class="o">=</span><span class="s2">&quot;./_caching&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reconstruction saved: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<br></section>
 <section id="parameter-tuning">
 <span id="parameterization"></span><h2>Parameter Tuning<a class="headerlink" href="#parameter-tuning" title="Link to this heading">¶</a></h2>
 <p>The Optimizer component manages algorithm configuration and hyperparameter tuning. The parameters are defined by providing a dictionary containing the ground truth, the chosen optimizer, and the optimizer’s options. Several search algorithms are available, including those provided by <a class="reference external" href="https://docs.ray.io/en/latest/tune/index.html">Ray Tune</a>.</p>
@@ -395,29 +421,6 @@ The list of algorithms is described here: <a class="reference external" href="in
 <span class="n">utils</span><span class="o">.</span><span class="n">save_optimization</span><span class="p">(</span><span class="n">optimal_params</span><span class="o">=</span><span class="n">imputer</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">imputer</span><span class="o">.</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;ray_tune&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<br><p>To impute a dataset that already contains missing values (NaNs), load it directly and pass the marix to the imputation algorithm, bypassing the contamination step. Note that evaluation metrics and visualizations are unavailable without the complete dataset.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
-
-<span class="c1"># initialize the time series object</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Imputation algorithms : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">algorithms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># load the dataset that contains nans values</span>
-<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;test-logic-nans-llm&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-
-<span class="c1"># skip the contamination and impute the series</span>
-<span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MatrixCompletion</span><span class="o">.</span><span class="n">CDRec</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">imputer</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstructed data:</span><span class="se">\n</span><span class="si">{</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># save the imputed data</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ts_caching_save</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;imputation&quot;</span><span class="p">,</span> <span class="n">dir_cache</span><span class="o">=</span><span class="s2">&quot;./_caching&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reconstruction saved: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <br></section>
 </section>
 
@@ -435,14 +438,14 @@ The list of algorithms is described here: <a class="reference external" href="in
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="gapgenerator.html">
+          <a class="prev-page" href="gapgeneration.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Gap Generator</div>
+                <div class="title">Gap Generation</div>
                 
               </div>
             </a>
@@ -477,7 +480,8 @@ The list of algorithms is described here: <a class="reference external" href="in
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Imputation</a><ul>
-<li><a class="reference internal" href="#imputation-tutorial">Imputation Tutorial</a></li>
+<li><a class="reference internal" href="#imputation-of-simulated-missing-data">Imputation of simulated missing data</a></li>
+<li><a class="reference internal" href="#imputation-of-raw-missing-data">Imputation of raw missing data</a></li>
 <li><a class="reference internal" href="#parameter-tuning">Parameter Tuning</a></li>
 </ul>
 </li>

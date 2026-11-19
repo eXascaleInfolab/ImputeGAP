@@ -314,9 +314,9 @@ RAYTUNE_PARAMS = {
 
     # your ray-tune limitation #contributing-optimization
     #
-    #'your_algo_name': {
-    #    "param_1": tune.grid_search([i for i in range(2, 16, 1)]),
-    #    "param_2": tune.loguniform(1e-6, 1),
-    #    "param_3": tune.grid_search([i * 50 for i in range(1, 4)])
+    #"new_alg": {
+    #    "param_integer": tune.grid_search(list(range(2, 20, 1))),
+    #    "param_float": tune.loguniform(1e-6, 1),
+    #    "param_string": tune.choice(["value_1", "value_n"])
     #},
 }

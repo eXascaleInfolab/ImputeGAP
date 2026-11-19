@@ -11,18 +11,15 @@ print(f"\nImputeGAP downstream models for forcasting : {ts.forecasters}")
 ts.load_series(data="chlorine", normalizer="z_score")
 
 # contaminate the time series
-ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.4, offset=0)
-
-# reverse the contamination to amplify its impact on forecasting.
-ts_m = GenGAP.mirror_gap(input_data=ts.data, ts_m=ts_m)
+ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.4, offset=0, reverse=True)
 
 # define the downstream options
 downstream = Downstream(input_data=ts.data, incomp_data=ts_m)
 
 # launch the analysis
-comparison = downstream.comparator(imp_algs=["CDRec", "MICE", "ZeroImpute"],
-                                   model="chronos",
-                                   horizons=[0.36],
-                                   season=24,
-                                   meta_pattern="mcar",
-                                   meta_rate=0.4)
+comparison = downstream.eval(imp_algs=["SAITS", "ZeroImpute"],
+                             model="chronos",
+                             horizons=[128],
+                             season=24,
+                             meta_pattern="mcar",
+                             meta_rate=0.4)

@@ -1,6 +1,7 @@
 # IMPUTATION DEFAULT VALUES ==========================================================================
 
-#[your_algo_name]
+
+#[your_algo_name] #env-params-contribution
 #param_1 = 3
 #param_2 = "test"
 #param_3 = 0.01

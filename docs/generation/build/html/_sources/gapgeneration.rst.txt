@@ -1,6 +1,6 @@
-=============
-Gap Generator
-=============
+==============
+Gap Generation
+==============
 
 GenGAP is a module to generate realistic missing gaps in sensor data. It allows users to fully customize all the properties of the missing gaps: start, size, position, frequency, etc., and can be easily imported inside any project.
 

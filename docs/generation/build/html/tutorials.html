@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=6bb1dc07" />
+    <link rel="stylesheet" type="text/css" href="_static/page_s_gobal.css?v=8b8c9d16" />
     
     
 
@@ -245,11 +245,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_loading.html">Data Loading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gapgenerator.html">Gap Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gapgeneration.html">Gap Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="imputation.html">Imputation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="downstreamimpact.html">Downstream Impact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="explainability.html">Explainability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downstream.html">Downstream</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explainer.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -354,7 +354,7 @@
 <br></section>
 <section id="gengap-missing-data-simulation">
 <span id="contamination"></span><h2>GenGAP: Missing Data Simulation<a class="headerlink" href="#gengap-missing-data-simulation" title="Link to this heading">¶</a></h2>
-<p>ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGAP module can be invoked externally. The patterns are described here: <a class="reference external" href="missingness_patterns.html">missingness_patterns.html</a>.</p>
+<p>GenGAP is a module to generate realistic missing gaps in sensor data. It allows users to fully customize all the properties of the missing gaps: start, size, position, frequency, etc., and can be easily imported inside any project.</p>
 <p>As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
@@ -427,6 +427,29 @@ The list of algorithms is described here: <a class="reference external" href="al
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Imputation algorithms : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">algorithms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>To impute a dataset that already contains missing values (NaNs), load it directly and pass the marix to the imputation algorithm, bypassing the contamination step. Note that evaluation metrics and visualizations are unavailable without the complete dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+
+<span class="c1"># initialize the time series object</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Imputation algorithms : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">algorithms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># load the dataset that contains nans values</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;test-logic-nans-llm&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># skip the contamination and impute the series</span>
+<span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MatrixCompletion</span><span class="o">.</span><span class="n">CDRec</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">imputer</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstructed data:</span><span class="se">\n</span><span class="si">{</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># save the imputed data</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ts_caching_save</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;imputation&quot;</span><span class="p">,</span> <span class="n">dir_cache</span><span class="o">=</span><span class="s2">&quot;./_caching&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reconstruction saved: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <br></section>
 <section id="parameter-tuning">
 <span id="parameterization"></span><h2>Parameter Tuning<a class="headerlink" href="#parameter-tuning" title="Link to this heading">¶</a></h2>
@@ -469,7 +492,7 @@ The list of algorithms is described here: <a class="reference external" href="al
 <br></section>
 <section id="benchgap">
 <span id="benchmark"></span><h2>BenchGAP<a class="headerlink" href="#benchgap" title="Link to this heading">¶</a></h2>
-<p>ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms <a class="footnote-reference brackets" href="#id3" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>33<span class="fn-bracket">]</span></a>.  Users have full control over the benchmark by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.</p>
+<p>BenchGAP is a module for benchmarking the performance (efficacy and runtime) of time series imputation algorithms. Users have full control over BenchGAP by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.</p>
 <p>The benchmarking module can be utilized as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP import</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.benchmark</span><span class="w"> </span><span class="kn">import</span> <span class="n">BenchGAP</span>
@@ -487,14 +510,14 @@ The list of algorithms is described here: <a class="reference external" href="al
 </pre></div>
 </div>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id3" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">33</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>33<span class="fn-bracket">]</span></span>
 <p>Mourad Khayati, Alberto Lerner, Zakhar Tymchenko, Philippe Cudré-Mauroux: Mind the Gap: An Experimental Evaluation of Imputation of Missing Values Techniques in Time Series. Proc. VLDB Endow. 13(5): 768-782 (2020)</p>
 </aside>
 </aside>
 <br></section>
 <section id="downstream">
-<span id="id4"></span><h2>Downstream<a class="headerlink" href="#downstream" title="Link to this heading">¶</a></h2>
+<span id="id3"></span><h2>Downstream<a class="headerlink" href="#downstream" title="Link to this heading">¶</a></h2>
 <p>ImputeGAP includes a dedicated module for systematically evaluating the impact of data imputation on downstream tasks. Currently, forecasting is the primary supported task, with plans to expand to additional tasks in the future.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
@@ -510,17 +533,14 @@ The list of algorithms is described here: <a class="reference external" href="al
 <span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;chlorine&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">)</span>
 
 <span class="c1"># contaminate the time series</span>
-<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="c1"># reverse the contamination to amplify its impact on forecasting.</span>
-<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mirror_gap</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ts_m</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
+<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rate_series</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># define and impute the contaminated series</span>
 <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">MatrixCompletion</span><span class="o">.</span><span class="n">CDRec</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
 <span class="n">imputer</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
 
 <span class="c1"># define the parameters for the downstream model</span>
-<span class="n">forecaster</span> <span class="o">=</span> <span class="n">Forecaster</span><span class="p">(</span><span class="n">artifact</span><span class="o">=</span><span class="n">Artifact</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;chronos&quot;</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mf">0.36</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="mi">24</span><span class="p">),</span> <span class="n">pipeline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">forecaster</span> <span class="o">=</span> <span class="n">Forecaster</span><span class="p">(</span><span class="n">artifact</span><span class="o">=</span><span class="n">Artifact</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;chronos&quot;</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="mi">24</span><span class="p">),</span> <span class="n">pipeline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># compute the downstream analysis and display the results</span>
 <span class="n">imputer</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">recov_data</span><span class="o">=</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">,</span> <span class="n">downstream</span><span class="o">=</span><span class="n">forecaster</span><span class="p">)</span>
@@ -535,7 +555,7 @@ The list of algorithms is described here: <a class="reference external" href="al
 <br></section>
 <section id="explaingap">
 <span id="explainer"></span><h2>ExplainGAP<a class="headerlink" href="#explaingap" title="Link to this heading">¶</a></h2>
-<p>The library provides insights into the algorithm’s behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (<a class="reference external" href="https://shap.readthedocs.io/en/latest/">SHAP</a>) to measure how different time series features influence the model’s predictions.</p>
+<p>ExplainGAP module provides insights into the algorithm’s behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations (<a class="reference external" href="https://shap.readthedocs.io/en/latest/">SHAP</a>) to reveal how different time series features influence the model’s predictions.</p>
 <p>Let’s illustrate the explainer using the CDRec algorithm and MCAR missingness pattern:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>

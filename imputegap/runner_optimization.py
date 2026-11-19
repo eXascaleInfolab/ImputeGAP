@@ -25,7 +25,6 @@ imputer_def.score(input_data=ts.data, recov_data=imputer_def.recov_data, text="D
 # compute the imputation metrics with optimized parameter values
 imputer.score(input_data=ts.data, recov_data=imputer.recov_data, text="Optimized values")
 
-
 # plot the recovered time series
 ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation", display=True)
 

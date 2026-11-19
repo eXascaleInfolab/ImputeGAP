@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/page_s_gobal.css?v=6bb1dc07" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/page_s_gobal.css?v=8b8c9d16" />
     
     
 
@@ -244,11 +244,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_loading.html">Data Loading</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../gapgenerator.html">Gap Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gapgeneration.html">Gap Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../imputation.html">Imputation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../downstreamimpact.html">Downstream Impact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../explainability.html">Explainability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../downstream.html">Downstream</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../explainer.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../integration.html">Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">About Us</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../imputegap.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -752,6 +752,7 @@
 </div>
 
 
+        <span class="c1"># contribution, start copy</span>
 <div class="viewcode-block" id="Imputation.Statistics.MeanImpute">
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.Statistics.MeanImpute">[docs]</a>
         <span class="k">class</span><span class="w"> </span><span class="nc">MeanImpute</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>  <span class="c1">#mean-impute-class-contribution</span>
@@ -785,11 +786,11 @@
 <span class="sd">                self : MeanImpute</span>
 <span class="sd">                    The object with `recov_data` set.</span>
 <span class="sd">                &quot;&quot;&quot;</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.algorithms.mean_impute</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_impute</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.algorithms.mean_impute</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_impute</span>  <span class="c1"># link to the file (point: 1 to 3)</span>
 
-                <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_parameters_imputers</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="n">user_def</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">)</span>
+                <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_parameters_imputers</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="n">user_def</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">)</span> <span class="c1"># load automatically the parameters from the env file</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">mean_impute</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">mean_impute</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span> <span class="c1"># call your function</span>
 
                 <span class="k">return</span> <span class="bp">self</span></div>
 </div>
