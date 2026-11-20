@@ -672,6 +672,7 @@ class Imputation:
         class CDRec(BaseImputer):
             """
             CDRec class to impute missing values using Centroid Decomposition (CDRec).
+
             Python and C++ implementations.
 
             Methods
@@ -692,7 +693,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, language="python"):
                 """
                 Perform imputation using the CDRec algorithm.
+
                 Python and C++ implementations.
+
 
                 Parameters
                 ----------
@@ -752,7 +755,9 @@ class Imputation:
         class IterativeSVD(BaseImputer):
             """
             IterativeSVD class to impute missing values using Iterative SVD.
-            Python and C++ implementations
+
+            Python and C++ implementations,
+
 
             Methods
             -------
@@ -772,7 +777,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, language="python"):
                 """
                 Perform imputation using the Iterative SVD algorithm.
-                Python and C++ implementations
+
+                Python and C++ implementations.
+
 
                 Parameters
                 ----------
@@ -826,7 +833,9 @@ class Imputation:
         class GROUSE(BaseImputer):
             """
             GROUSE class to impute missing values using GROUSE.
-            C++ implementation
+
+            C++ implementation.
+
 
             Methods
             -------
@@ -846,7 +855,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the GROUSE algorithm.
-                C++ implementation
+
+                C++ implementation.
+
 
                 Parameters
                 ----------
@@ -897,7 +908,9 @@ class Imputation:
         class ROSL(BaseImputer):
             """
             ROSL class to impute missing values using Robust Online Subspace Learning algorithm.
-            C++ implementation
+
+            C++ implementation.
+
 
             Methods
             -------
@@ -917,7 +930,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the ROSL algorithm.
-                C++ implementation
+
+                C++ implementation.
+
 
                 Parameters
                 ----------
@@ -973,7 +988,9 @@ class Imputation:
         class SoftImpute(BaseImputer):
             """
             SoftImpute class to impute missing values using Soft Impute algorithm.
-            Python and C++ implementations
+
+            Python and C++ implementations.
+
 
             Methods
             -------
@@ -993,7 +1010,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, language="python"):
                 """
                 Perform imputation using the Soft Impute algorithm.
-                Python and C++ implementations
+
+                Python and C++ implementations.
+
 
                 Parameters
                 ----------
@@ -1048,7 +1067,9 @@ class Imputation:
         class SPIRIT(BaseImputer):
             """
             SPIRIT class to impute missing values using SPIRIT algorithm.
-            C++ implementation
+
+            C++ implementation. This algorithm only works when a single time series is contaminated.
+
 
             Methods
             -------
@@ -1068,7 +1089,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the SPIRIT algorithm.
-                C++ implementation
+
+                C++ implementation.
+
 
                 Parameters
                 ----------
@@ -1130,7 +1153,9 @@ class Imputation:
         class SVT(BaseImputer):
             """
             SVT class to impute missing values using Singular Value Thresholding algorithm.
-            C++ implementation
+
+            C++ implementation.
+
 
             Methods
             -------
@@ -1150,7 +1175,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the SVT algorithm.
-                C++ implementation
+
+                C++ implementation.
+
 
                 Parameters
                 ----------
@@ -1199,7 +1226,9 @@ class Imputation:
         class TRMF(BaseImputer):
             """
             TRMF class to impute missing values using Temporal Regularized Matrix Factorization.
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -1219,7 +1248,8 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the TRMF algorithm.
-                Python implementation
+
+                Python implementation.
 
                 Parameters
                 ----------
@@ -1306,7 +1336,8 @@ class Imputation:
         class MissForest(BaseImputer):
             """
             MissForest class to impute missing values with Miss Forest.
-            Python implementation
+
+            Python implementation.
 
             Methods
             -------
@@ -1325,7 +1356,8 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the Miss Forest algorithm.
-                Python implementation
+
+                Python implementation.
 
                 Parameters
                 ----------
@@ -1383,7 +1415,9 @@ class Imputation:
         class MICE(BaseImputer):
             """
             MICE class to impute missing values with Multivariate imputation of chained equations (MICE).
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -1402,7 +1436,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the MICE algorithm.
-                Python implementation
+
+                Python implementation.
+
 
                 Parameters
                 ----------
@@ -1461,7 +1497,9 @@ class Imputation:
         class XGBOOST(BaseImputer):
             """
             XGBOOST class to impute missing values with Extreme Gradient Boosting (XGBOOST).
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -1480,7 +1518,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the XGBOOST algorithm.
-                Python implementation
+
+                Python implementation.
+
 
                 Parameters
                 ----------
@@ -1538,7 +1578,9 @@ class Imputation:
         class IIM(BaseImputer):
             """
             IIM class to impute missing values using Iterative Imputation with Metric Learning (IIM).
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -1557,7 +1599,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the IIM algorithm.
-                Python implementation
+
+                Python implementation.
+
 
                 Parameters
                 ----------
@@ -1627,7 +1671,9 @@ class Imputation:
         class STMVL(BaseImputer):
             """
             STMVL class to impute missing values using Spatio-Temporal Matrix Variational Learning (STMVL).
-            C++ implementation
+
+            C++ implementation.
+
 
             Methods
             -------
@@ -1646,7 +1692,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the STMVL algorithm.
-                C++ implementation
+
+                C++ implementation.
+
 
                 Parameters
                 ----------
@@ -1696,7 +1744,9 @@ class Imputation:
         class DynaMMo(BaseImputer):
             """
             DynaMMo class to impute missing values using Dynamic Multi-Mode modeling with Missing Observations algorithm.
-            C++ implementation
+
+            C++ implementation.
+
 
             Methods
             -------
@@ -1716,7 +1766,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the DynaMMo algorithm.
-                C++ implementation
+
+                C++ implementation.
+
 
                 Parameters
                 ----------
@@ -1767,7 +1819,9 @@ class Imputation:
         class TKCM(BaseImputer):
             """
             TKCM class to impute missing values using Tensor Kernelized Coupled Matrix Completion algorithm.
-            C++ implementation
+
+            C++ implementation. This algorithm only works when a single time series is contaminated.
+
 
             Methods
             -------
@@ -1787,7 +1841,9 @@ class Imputation:
             def impute(self, user_def=True, params=None):
                 """
                 Perform imputation using the TKCM algorithm.
-                C++ implementation
+
+                C++ implementation.
+
 
                 Parameters
                 ----------
@@ -1839,6 +1895,13 @@ class Imputation:
         """
         A class containing imputation algorithms for deep learning-based methods.
 
+        The algorithm automatically generates the metadata (e.g., adjacency matrix) if it is not provided.
+
+        The model training procedures have been updated to accommodate ImputeGAP's existing contamination mechanisms.
+
+        Univariate datasets are processed using a sliding-window or sampling strategy to enable missing value imputation with multivariate algorithms.
+
+
         Subclasses
         ----------
         MRNN :
@@ -1867,7 +1930,9 @@ class Imputation:
         class MRNN(BaseImputer):
             """
             MRNN class to impute missing values using Multi-directional Recurrent Neural Networks (MRNN).
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -1902,7 +1967,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=0.7):
                 """
                 Perform imputation using the MRNN algorithm.
-                Python implementation
+
+                Python implementation.
+
 
                 Parameters
                 ----------
@@ -1970,8 +2037,10 @@ class Imputation:
 
         class BRITS(BaseImputer):
             """
-            BRITS class to impute missing values using Bidirectional Recurrent Imputation for Time Series
-            Python implementation
+            BRITS class to impute missing values using Bidirectional Recurrent Imputation for Time Series.
+
+            Python implementation.
+
 
             Methods
             -------
@@ -2006,7 +2075,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=0.9):
                 """
                 Perform imputation using the BRITS algorithm.
-                Python implementation
+
+                Python implementation.
+
 
                 Parameters
                 ----------
@@ -2080,8 +2151,10 @@ class Imputation:
 
         class DeepMVI(BaseImputer):
             """
-            DeepMVI class to impute missing values using Deep Multivariate Imputation
-            Python implementation
+            DeepMVI class to impute missing values using Deep Multivariate Imputation.
+
+            Python implementation.
+
 
             Methods
             -------
@@ -2106,7 +2179,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=None):
                 """
                 Perform imputation using the DeepMVI algorithm.
-                Python implementation
+
+                Python implementation.
+
 
                 Parameters
                 ----------
@@ -2161,6 +2236,7 @@ class Imputation:
         class MPIN(BaseImputer):
             """
             MPIN class to impute missing values using Multi-attribute Sensor Data Streams via Message Propagation algorithm.
+
             Python implementation - Need torch-cluster to work.
 
             Methods
@@ -2190,7 +2266,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=0.9):
                 """
                 Perform imputation using the MPIN algorithm.
+
                 Python implementation - Need torch-cluster to work.
+
 
                 Parameters
                 ----------
@@ -2265,7 +2343,9 @@ class Imputation:
         class PriSTI(BaseImputer):
             """
             PRISTI class to impute missing values using A Conditional Diffusion Framework for Spatiotemporal Imputation algorithm.
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -2296,7 +2376,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=0.7):
                 """
                 Perform imputation using the PRISTI algorithm.
-                Python implementation
+
+                Python implementation.
+
 
                 Parameters
                 ----------
@@ -2376,7 +2458,9 @@ class Imputation:
         class MissNet(BaseImputer):
             """
             MissNet class to impute missing values using Mining of Switching Sparse Networks for Missing Value.
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -2402,7 +2486,9 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=None):
                 """
                 Perform imputation using the MissNet algorithm.
-                Python implementation
+
+                Python implementation.
+
 
                 Parameters
                 ----------
@@ -2472,7 +2558,11 @@ class Imputation:
         class GAIN(BaseImputer):
             """
             GAIN class to impute missing values using Missing Data Imputation using Generative Adversarial Nets.
-            Python implementation
+
+            Python implementation.
+
+            GAIN is incompatible with certain macOS components. Therefore, an error is raised when running GAIN on macOS.
+
 
             Methods
             -------
@@ -2563,7 +2653,8 @@ class Imputation:
         class GRIN(BaseImputer):
             """
             GRIN class to impute missing values using MULTIVARIATE TIME SERIES IMPUTATION BY GRAPH NEURAL NETWORKS.
-            Python implementation
+
+            Python implementation.
 
             Methods
             -------
@@ -2602,7 +2693,8 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=0.7):
                 """
                 Perform imputation using the Multivariate Time Series Imputation by Graph Neural Networks
-                Python implementation
+
+                Python implementation.
 
                 Parameters
                 ----------
@@ -2795,7 +2887,8 @@ class Imputation:
         class HKMFT(BaseImputer):
             """
             HKMF-T class to impute missing values using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
-            Python implementation
+
+            Python implementation.
 
             Methods
             -------
@@ -2824,7 +2917,8 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=0.9):
                 """
                 Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
-                Python implementation
+
+                Python implementation.
 
                 Parameters
                 ----------
@@ -2893,7 +2987,9 @@ class Imputation:
         class BitGraph(BaseImputer):
             """
             BitGraph class to impute missing values using BIASED TEMPORAL CONVOLUTION GRAPH NETWORK FOR TIME SERIES FORECASTING WITH MISSING VALUES
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -3002,7 +3098,9 @@ class Imputation:
         class SAITS(BaseImputer):
             """
             SAITS class to impute missing values using Self-Attention-based Imputation for Time Series
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -3110,7 +3208,8 @@ class Imputation:
         class TimesNet(BaseImputer):
             """
             TimesNet class to impute missing values (Model used from the TimesNet repository)
-            Python implementation
+
+            Python implementation.
 
             Methods
             -------
@@ -3251,8 +3350,10 @@ class Imputation:
 
             def impute(self, user_def=True, params=None, tr_ratio=0.7):
                 """
-                Perform imputation using CSDI
+                Perform imputation using CSDI.
+
                 Python implementation
+
 
                 Parameters
                 ----------
@@ -3331,12 +3432,30 @@ class Imputation:
     class LLMs:
         """
         A class containing specific imputation algorithms for Pre-trained Language Models (LLMs)
-        Python implementation
+
+        The algorithm automatically generates the metadata (e.g., adjacency matrix) if it is not provided.
+
+        The model training procedures have been updated to accommodate ImputeGAP's existing contamination mechanisms.
+
+        Univariate datasets are processed using a sliding-window or sampling strategy to enable missing value imputation with multivariate algorithms.
+
+
+        Subclasses
+        ----------
+        NuwaTS :
+            NuwaTS class to impute missing values using Foundation Model Mending Every Incomplete Time Series
+        GPT4TS :
+            GPT4TS class to impute missing values using Foundation Model Mending Every Incomplete Time Series
+        Moment :
+            Moment class to impute missing values using a family of open-source foundation models for general-purpose time series analysis.
         """
 
         class NuwaTS(BaseImputer):
             """
             NuwaTS class to impute missing values using Foundation Model Mending Every Incomplete Time Series
+
+            Python implementation. NuwaTS may require longer processing times on large datasets compared to other LLM-based algorithms.
+
 
             Methods
             -------
@@ -3429,7 +3548,9 @@ class Imputation:
         class GPT4TS(BaseImputer):
             """
             GPT4TS class to impute missing values using Foundation Model Mending Every Incomplete Time Series
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -3534,7 +3655,9 @@ class Imputation:
         class Moment(BaseImputer):
             """
             Moment class to impute missing values using a family of open-source foundation models for general-purpose time series analysis.
-            Python implementation
+
+            Python implementation.
+
 
             Methods
             -------
@@ -3555,7 +3678,8 @@ class Imputation:
             def impute(self, user_def=True, params=None, tr_ratio=None):
                 """
                 Perform imputation using Moment (a family of open-source foundation models for general-purpose time series analysis.)
-                Python implementation
+
+                Python implementation.
 
                 Parameters
                 ----------
