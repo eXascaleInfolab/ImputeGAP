@@ -37,7 +37,7 @@ class TestInterativeSVD(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(params={'rank': 3})
+        algo.impute(params={'rank': 3}, language="c++")
         algo.score(ts.data)
         metrics = algo.metrics
 

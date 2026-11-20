@@ -467,7 +467,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.BRITS">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BRITS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.BRITS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.BRITS" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>BRITS class to impute missing values using Bidirectional Recurrent Imputation for Time Series</p>
+<p>BRITS class to impute missing values using Bidirectional Recurrent Imputation for Time Series
+Python implementation</p>
 <section id="id4">
 <h5>Methods<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -513,7 +514,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.BRITS.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.BRITS.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.BRITS.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the BRITS algorithm.</p>
+<dd><p>Perform imputation using the BRITS algorithm.
+Python implementation</p>
 <section id="id7">
 <h6>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h6>
 <dl>
@@ -631,7 +633,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.BayOTIDE">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BayOTIDE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.BayOTIDE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.BayOTIDE" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>BayOTIDE class to impute missing values using Bayesian Online Multivariate Time series Imputation with functional decomposition</p>
+<p>BayOTIDE class to impute missing values using Bayesian Online Multivariate Time series Imputation with functional decomposition
+Python implementation</p>
 <section id="id13">
 <h5>Methods<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -678,7 +681,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.BayOTIDE.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.BayOTIDE.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.BayOTIDE.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the Multivariate Time Series Imputation by Deep Learning</p>
+<dd><p>Perform imputation using the Multivariate Time Series Imputation by Deep Learning
+Python implementation</p>
 <section id="id18">
 <h6>Parameters<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h6>
 <dl>
@@ -801,7 +805,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.BitGraph">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BitGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.BitGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.BitGraph" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>BitGraph class to impute missing values using BIASED TEMPORAL CONVOLUTION GRAPH NETWORK FOR TIME SERIES FORECASTING WITH MISSING VALUES</p>
+<p>BitGraph class to impute missing values using BIASED TEMPORAL CONVOLUTION GRAPH NETWORK FOR TIME SERIES FORECASTING WITH MISSING VALUES
+Python implementation</p>
 <section id="id25">
 <h5>Methods<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -847,7 +852,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.BitGraph.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.BitGraph.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.BitGraph.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using BIASED TEMPORAL CONVOLUTION GRAPH NETWORK FOR TIME SERIES FORECASTING WITH MISSING VALUES</p>
+<dd><p>Perform imputation using BIASED TEMPORAL CONVOLUTION GRAPH NETWORK FOR TIME SERIES FORECASTING WITH MISSING VALUES
+Python implementation</p>
 <section id="id29">
 <h6>Parameters<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h6>
 <dl>
@@ -961,7 +967,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.CSDI">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CSDI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.CSDI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.CSDI" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>CSDI class to impute missing values (Model used from the CSDI repository)</p>
+<p>CSDI class to impute missing values (Model used from the CSDI repository)
+Python implementation</p>
 <section id="id36">
 <h5>Methods<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -1004,7 +1011,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.CSDI.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.CSDI.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.CSDI.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using CSDI</p>
+<dd><p>Perform imputation using CSDI
+Python implementation</p>
 <section id="id40">
 <h6>Parameters<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h6>
 <dl>
@@ -1122,7 +1130,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.DeepMVI">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DeepMVI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.DeepMVI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.DeepMVI" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>DeepMVI class to impute missing values using Deep Multivariate Imputation</p>
+<p>DeepMVI class to impute missing values using Deep Multivariate Imputation
+Python implementation</p>
 <section id="id47">
 <h5>Methods<a class="headerlink" href="#id47" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -1163,7 +1172,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.DeepMVI.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.DeepMVI.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.DeepMVI.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the DeepMVI algorithm.</p>
+<dd><p>Perform imputation using the DeepMVI algorithm.
+Python implementation</p>
 <section id="id51">
 <h6>Parameters<a class="headerlink" href="#id51" title="Link to this heading">¶</a></h6>
 <dl>
@@ -1270,7 +1280,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.GAIN">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GAIN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.GAIN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.GAIN" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>GAIN class to impute missing values using Missing Data Imputation using Generative Adversarial Nets,</p>
+<p>GAIN class to impute missing values using Missing Data Imputation using Generative Adversarial Nets.
+Python implementation</p>
 <section id="id58">
 <h5>Methods<a class="headerlink" href="#id58" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -1312,7 +1323,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.GAIN.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.GAIN.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.GAIN.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the GAIN algorithm.</p>
+<dd><p>Perform imputation using the GAIN algorithm.
+Python implementation</p>
 <section id="id62">
 <h6>Parameters<a class="headerlink" href="#id62" title="Link to this heading">¶</a></h6>
 <dl>
@@ -1424,7 +1436,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.GRIN">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GRIN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.GRIN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.GRIN" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>GRIN class to impute missing values using MULTIVARIATE TIME SERIES IMPUTATION BY GRAPH NEURAL NETWORKS.</p>
+<p>GRIN class to impute missing values using MULTIVARIATE TIME SERIES IMPUTATION BY GRAPH NEURAL NETWORKS.
+Python implementation</p>
 <section id="id69">
 <h5>Methods<a class="headerlink" href="#id69" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -1471,7 +1484,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.GRIN.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.GRIN.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.GRIN.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the Multivariate Time Series Imputation by Graph Neural Networks</p>
+<dd><p>Perform imputation using the Multivariate Time Series Imputation by Graph Neural Networks
+Python implementation</p>
 <section id="id73">
 <h6>Parameters<a class="headerlink" href="#id73" title="Link to this heading">¶</a></h6>
 <dl>
@@ -1586,7 +1600,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.HKMFT">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">HKMFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.HKMFT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.HKMFT" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>HKMF-T class to impute missing values using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization</p>
+<p>HKMF-T class to impute missing values using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
+Python implementation</p>
 <section id="id80">
 <h5>Methods<a class="headerlink" href="#id80" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -1629,7 +1644,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.HKMFT.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.HKMFT.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.HKMFT.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization</p>
+<dd><p>Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization
+Python implementation</p>
 <section id="id83">
 <h6>Parameters<a class="headerlink" href="#id83" title="Link to this heading">¶</a></h6>
 <dl>
@@ -1745,7 +1761,7 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MPIN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.MPIN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.MPIN" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
 <p>MPIN class to impute missing values using Multi-attribute Sensor Data Streams via Message Propagation algorithm.
-Need torch-cluster to work.</p>
+Python implementation - Need torch-cluster to work.</p>
 <section id="id90">
 <h5>Methods<a class="headerlink" href="#id90" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -1789,7 +1805,7 @@ Need torch-cluster to work.</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.MPIN.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.MPIN.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.MPIN.impute" title="Link to this definition">¶</a></dt>
 <dd><p>Perform imputation using the MPIN algorithm.
-Need torch-cluster to work.</p>
+Python implementation - Need torch-cluster to work.</p>
 <section id="id94">
 <h6>Parameters<a class="headerlink" href="#id94" title="Link to this heading">¶</a></h6>
 <dl>
@@ -1908,7 +1924,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.MRNN">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MRNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.MRNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.MRNN" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>MRNN class to impute missing values using Multi-directional Recurrent Neural Networks (MRNN).</p>
+<p>MRNN class to impute missing values using Multi-directional Recurrent Neural Networks (MRNN).
+Python implementation</p>
 <section id="id101">
 <h5>Methods<a class="headerlink" href="#id101" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -1954,7 +1971,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.MRNN.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.MRNN.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.MRNN.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the MRNN algorithm.</p>
+<dd><p>Perform imputation using the MRNN algorithm.
+Python implementation</p>
 <section id="id105">
 <h6>Parameters<a class="headerlink" href="#id105" title="Link to this heading">¶</a></h6>
 <dl>
@@ -2069,10 +2087,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.MissNet">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MissNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.MissNet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.MissNet" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<dl class="simple">
-<dt>MissNet class to impute missing values using Mining of Switching Sparse Networks for Missing Value</dt><dd><p>Imputation in Multivariate Time Series.</p>
-</dd>
-</dl>
+<p>MissNet class to impute missing values using Mining of Switching Sparse Networks for Missing Value.
+Python implementation</p>
 <section id="id112">
 <h5>Methods<a class="headerlink" href="#id112" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -2113,7 +2129,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.MissNet.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.MissNet.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.MissNet.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the MissNet algorithm.</p>
+<dd><p>Perform imputation using the MissNet algorithm.
+Python implementation</p>
 <section id="id116">
 <h6>Parameters<a class="headerlink" href="#id116" title="Link to this heading">¶</a></h6>
 <dl class="simple">
@@ -2227,7 +2244,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.PriSTI">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PriSTI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.PriSTI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.PriSTI" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>PRISTI class to impute missing values using A Conditional Diffusion Framework for Spatiotemporal Imputation algorithm.</p>
+<p>PRISTI class to impute missing values using A Conditional Diffusion Framework for Spatiotemporal Imputation algorithm.
+Python implementation</p>
 <section id="id123">
 <h5>Methods<a class="headerlink" href="#id123" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -2271,7 +2289,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.PriSTI.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.PriSTI.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.PriSTI.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the PRISTI algorithm.</p>
+<dd><p>Perform imputation using the PRISTI algorithm.
+Python implementation</p>
 <section id="id127">
 <h6>Parameters<a class="headerlink" href="#id127" title="Link to this heading">¶</a></h6>
 <dl>
@@ -2390,7 +2409,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.SAITS">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SAITS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.SAITS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.SAITS" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>SAITS class to impute missing values using Self-Attention-based Imputation for Time Series</p>
+<p>SAITS class to impute missing values using Self-Attention-based Imputation for Time Series
+Python implementation</p>
 <section id="id134">
 <h5>Methods<a class="headerlink" href="#id134" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -2440,7 +2460,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.SAITS.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.SAITS.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.SAITS.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using Self-Attention-based Imputation for Time Series</p>
+<dd><p>Perform imputation using Self-Attention-based Imputation for Time Series
+Python implementation</p>
 <section id="id138">
 <h6>Parameters<a class="headerlink" href="#id138" title="Link to this heading">¶</a></h6>
 <dl>
@@ -2556,7 +2577,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.TimesNet">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TimesNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.TimesNet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.TimesNet" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>TimesNet class to impute missing values (Model used from the TimesNet repository)</p>
+<p>TimesNet class to impute missing values (Model used from the TimesNet repository)
+Python implementation</p>
 <section id="id145">
 <h5>Methods<a class="headerlink" href="#id145" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -2601,7 +2623,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.DeepLearning.TimesNet.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.DeepLearning.TimesNet.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.DeepLearning.TimesNet.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using TimesNet</p>
+<dd><p>Perform imputation using TimesNet
+Python implementation</p>
 <section id="id149">
 <h6>Parameters<a class="headerlink" href="#id149" title="Link to this heading">¶</a></h6>
 <dl>
@@ -2719,13 +2742,14 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.LLMs">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LLMs</span></span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.LLMs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.LLMs" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class containing specific imputation algorithms for Pre-trained Language Models (LLMs)</p>
+<p>A class containing specific imputation algorithms for Pre-trained Language Models (LLMs)
+Python implementation</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.LLMs.GPT4TS">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GPT4TS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.LLMs.GPT4TS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.LLMs.GPT4TS" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
 <p>GPT4TS class to impute missing values using Foundation Model Mending Every Incomplete Time Series
-(Model used from the NuwaTS repository)</p>
+Python implementation</p>
 <section id="id156">
 <h4>Methods<a class="headerlink" href="#id156" title="Link to this heading">¶</a></h4>
 <dl class="simple">
@@ -2771,7 +2795,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.LLMs.GPT4TS.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.LLMs.GPT4TS.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.LLMs.GPT4TS.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using GPT4TS (Foundation Model Mending Every Incomplete Time Series)</p>
+<dd><p>Perform imputation using GPT4TS (Foundation Model Mending Every Incomplete Time Series)
+Python implementation</p>
 <section id="id160">
 <h5>Parameters<a class="headerlink" href="#id160" title="Link to this heading">¶</a></h5>
 <dl>
@@ -2884,7 +2909,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.LLMs.Moment">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Moment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.LLMs.Moment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.LLMs.Moment" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>Moment class to impute missing values using a family of open-source foundation models for general-purpose time series analysis.</p>
+<p>Moment class to impute missing values using a family of open-source foundation models for general-purpose time series analysis.
+Python implementation</p>
 <section id="id167">
 <h4>Methods<a class="headerlink" href="#id167" title="Link to this heading">¶</a></h4>
 <dl class="simple">
@@ -2918,7 +2944,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.LLMs.Moment.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.LLMs.Moment.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.LLMs.Moment.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using Moment (a family of open-source foundation models for general-purpose time series analysis.)</p>
+<dd><p>Perform imputation using Moment (a family of open-source foundation models for general-purpose time series analysis.)
+Python implementation</p>
 <section id="id170">
 <h5>Parameters<a class="headerlink" href="#id170" title="Link to this heading">¶</a></h5>
 <dl>
@@ -3070,7 +3097,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.LLMs.NuwaTS.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.LLMs.NuwaTS.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.LLMs.NuwaTS.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using Foundation Model Mending Every Incomplete Time Series</p>
+<dd><p>Perform imputation using Foundation Model Mending Every Incomplete Time Series
+Python implementation</p>
 <section id="id181">
 <h5>Parameters<a class="headerlink" href="#id181" title="Link to this heading">¶</a></h5>
 <dl>
@@ -3202,7 +3230,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MachineLearning.IIM">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IIM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MachineLearning.IIM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MachineLearning.IIM" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>IIM class to impute missing values using Iterative Imputation with Metric Learning (IIM).</p>
+<p>IIM class to impute missing values using Iterative Imputation with Metric Learning (IIM).
+Python implementation</p>
 <section id="id189">
 <h5>Methods<a class="headerlink" href="#id189" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -3236,7 +3265,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MachineLearning.IIM.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MachineLearning.IIM.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MachineLearning.IIM.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the IIM algorithm.</p>
+<dd><p>Perform imputation using the IIM algorithm.
+Python implementation</p>
 <section id="id192">
 <h6>Parameters<a class="headerlink" href="#id192" title="Link to this heading">¶</a></h6>
 <dl>
@@ -3339,7 +3369,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MachineLearning.MICE">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MICE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MachineLearning.MICE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MachineLearning.MICE" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>MICE class to impute missing values with Multivariate imputation of chained equations (MICE).</p>
+<p>MICE class to impute missing values with Multivariate imputation of chained equations (MICE).
+Python implementation</p>
 <section id="id199">
 <h5>Methods<a class="headerlink" href="#id199" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -3373,7 +3404,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MachineLearning.MICE.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MachineLearning.MICE.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MachineLearning.MICE.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the MICE algorithm.</p>
+<dd><p>Perform imputation using the MICE algorithm.
+Python implementation</p>
 <section id="id202">
 <h6>Parameters<a class="headerlink" href="#id202" title="Link to this heading">¶</a></h6>
 <dl>
@@ -3484,7 +3516,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MachineLearning.MissForest">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MissForest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MachineLearning.MissForest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MachineLearning.MissForest" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>MissForest class to impute missing values with Miss Forest.</p>
+<p>MissForest class to impute missing values with Miss Forest.
+Python implementation</p>
 <section id="id209">
 <h5>Methods<a class="headerlink" href="#id209" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -3518,7 +3551,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MachineLearning.MissForest.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MachineLearning.MissForest.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MachineLearning.MissForest.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the Miss Forest algorithm.</p>
+<dd><p>Perform imputation using the Miss Forest algorithm.
+Python implementation</p>
 <section id="id212">
 <h6>Parameters<a class="headerlink" href="#id212" title="Link to this heading">¶</a></h6>
 <dl>
@@ -3628,7 +3662,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MachineLearning.XGBOOST">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">XGBOOST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MachineLearning.XGBOOST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MachineLearning.XGBOOST" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>XGBOOST class to impute missing values with Extreme Gradient Boosting (XGBOOST).</p>
+<p>XGBOOST class to impute missing values with Extreme Gradient Boosting (XGBOOST).
+Python implementation</p>
 <section id="id219">
 <h5>Methods<a class="headerlink" href="#id219" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -3662,7 +3697,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MachineLearning.XGBOOST.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MachineLearning.XGBOOST.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MachineLearning.XGBOOST.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the XGBOOST algorithm.</p>
+<dd><p>Perform imputation using the XGBOOST algorithm.
+Python implementation</p>
 <section id="id222">
 <h6>Parameters<a class="headerlink" href="#id222" title="Link to this heading">¶</a></h6>
 <dl>
@@ -3794,7 +3830,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.CDRec">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CDRec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.CDRec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.CDRec" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>CDRec class to impute missing values using Centroid Decomposition (CDRec).</p>
+<p>CDRec class to impute missing values using Centroid Decomposition (CDRec).
+Python and C++ implementations.</p>
 <section id="id230">
 <h5>Methods<a class="headerlink" href="#id230" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -3828,7 +3865,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.CDRec.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'python'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.CDRec.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.CDRec.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the CDRec algorithm.</p>
+<dd><p>Perform imputation using the CDRec algorithm.
+Python and C++ implementations.</p>
 <section id="id233">
 <h6>Parameters<a class="headerlink" href="#id233" title="Link to this heading">¶</a></h6>
 <dl>
@@ -3847,77 +3885,6 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt>iteration<span class="classifier">int</span></dt><dd><p>The number of iteration to perform.</p>
 </dd>
 </dl>
-</div></blockquote>
-<p><strong>Auto-ML parameters:</strong></p>
-<blockquote>
-<div><dl class="simple">
-<dt>input_data<span class="classifier">numpy.ndarray</span></dt><dd><p>The original time series dataset without contamination.</p>
-</dd>
-<dt>optimizer<span class="classifier">str</span></dt><dd><p>The optimizer to use for parameter optimization. Valid values are “bayesian”, “greedy”, “pso”, or “sh”.</p>
-</dd>
-<dt>options<span class="classifier">dict, optional</span></dt><dd><p>Optional parameters specific to the optimizer.</p>
-</dd>
-</dl>
-<p><strong>Bayesian:</strong></p>
-<blockquote>
-<div><dl class="simple">
-<dt>n_calls<span class="classifier">int, optional</span></dt><dd><p>Number of calls to the objective function. Default is 3.</p>
-</dd>
-<dt>metrics<span class="classifier">list, optional</span></dt><dd><p>List of selected metrics to consider for optimization. Default is [“RMSE”].</p>
-</dd>
-<dt>n_random_starts<span class="classifier">int, optional</span></dt><dd><p>Number of initial calls to the objective function, from random points. Default is 50.</p>
-</dd>
-<dt>acq_func<span class="classifier">str, optional</span></dt><dd><p>Acquisition function to minimize over the Gaussian prior. Valid values: ‘LCB’, ‘EI’, ‘PI’, ‘gp_hedge’ (default is ‘gp_hedge’).</p>
-</dd>
-</dl>
-</div></blockquote>
-<p><strong>Greedy:</strong></p>
-<blockquote>
-<div><dl class="simple">
-<dt>n_calls<span class="classifier">int, optional</span></dt><dd><p>Number of calls to the objective function. Default is 3.</p>
-</dd>
-<dt>metrics<span class="classifier">list, optional</span></dt><dd><p>List of selected metrics to consider for optimization. Default is [“RMSE”].</p>
-</dd>
-</dl>
-</div></blockquote>
-<p><strong>PSO:</strong></p>
-<blockquote>
-<div><dl class="simple">
-<dt>n_particles<span class="classifier">int, optional</span></dt><dd><p>Number of particles used.</p>
-</dd>
-<dt>c1<span class="classifier">float, optional</span></dt><dd><p>PSO learning coefficient c1 (personal learning).</p>
-</dd>
-<dt>c2<span class="classifier">float, optional</span></dt><dd><p>PSO learning coefficient c2 (global learning).</p>
-</dd>
-<dt>w<span class="classifier">float, optional</span></dt><dd><p>PSO inertia weight.</p>
-</dd>
-<dt>iterations<span class="classifier">int, optional</span></dt><dd><p>Number of iterations for the optimization.</p>
-</dd>
-<dt>n_processes<span class="classifier">int, optional</span></dt><dd><p>Number of processes during optimization.</p>
-</dd>
-</dl>
-</div></blockquote>
-<p><strong>Successive Halving (SH):</strong></p>
-<blockquote>
-<div><dl class="simple">
-<dt>num_configs<span class="classifier">int, optional</span></dt><dd><p>Number of configurations to try.</p>
-</dd>
-<dt>num_iterations<span class="classifier">int, optional</span></dt><dd><p>Number of iterations to run the optimization.</p>
-</dd>
-<dt>reduction_factor<span class="classifier">int, optional</span></dt><dd><p>Reduction factor for the number of configurations kept after each iteration.</p>
-</dd>
-</dl>
-</div></blockquote>
-<p><strong>RAY TUNE (ray_tune):</strong></p>
-<blockquote>
-<div><dl class="simple">
-<dt>n_calls<span class="classifier">int, optional</span></dt><dd><p>Number of calls to the objective function (default is 10).</p>
-</dd>
-<dt>max_concurrent_trials<span class="classifier">int, optional</span></dt><dd><p>Number of trials run in parallel, related to your total memory / cpu / gpu (default is 2).
-Please increase the value if you have more resources</p>
-</dd>
-</dl>
-</div></blockquote>
 </div></blockquote>
 </dd>
 </dl>
@@ -4005,7 +3972,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.GROUSE">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GROUSE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.GROUSE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.GROUSE" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>GROUSE class to impute missing values using GROUSE.</p>
+<p>GROUSE class to impute missing values using GROUSE.
+C++ implementation</p>
 <section id="id240">
 <h5>Methods<a class="headerlink" href="#id240" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -4039,7 +4007,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.GROUSE.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.GROUSE.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.GROUSE.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the GROUSE algorithm.</p>
+<dd><p>Perform imputation using the GROUSE algorithm.
+C++ implementation</p>
 <section id="id243">
 <h6>Parameters<a class="headerlink" href="#id243" title="Link to this heading">¶</a></h6>
 <dl>
@@ -4141,7 +4110,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.IterativeSVD">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IterativeSVD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.IterativeSVD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.IterativeSVD" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>IterativeSVD class to impute missing values using Iterative SVD.</p>
+<p>IterativeSVD class to impute missing values using Iterative SVD.
+Python and C++ implementations</p>
 <section id="id250">
 <h5>Methods<a class="headerlink" href="#id250" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -4174,8 +4144,9 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.IterativeSVD.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.IterativeSVD.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.IterativeSVD.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the Iterative SVD algorithm.</p>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'python'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.IterativeSVD.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.IterativeSVD.impute" title="Link to this definition">¶</a></dt>
+<dd><p>Perform imputation using the Iterative SVD algorithm.
+Python and C++ implementations</p>
 <section id="id253">
 <h6>Parameters<a class="headerlink" href="#id253" title="Link to this heading">¶</a></h6>
 <blockquote>
@@ -4186,6 +4157,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 </div></blockquote>
 <dl>
 <dt>params<span class="classifier">dict, optional</span></dt><dd><p>Parameters of the Iterative SVD algorithm or Auto-ML configuration, if None, default ones are loaded.</p>
+</dd>
+<dt>language<span class="classifier">str, optional</span></dt><dd><p>Set the language version of the code, C++ or Python, default “python”</p>
 <p><strong>Algorithm parameters:</strong></p>
 <blockquote>
 <div><dl class="simple">
@@ -4279,7 +4252,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.ROSL">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ROSL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.ROSL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.ROSL" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>ROSL class to impute missing values using Robust Online Subspace Learning algorithm.</p>
+<p>ROSL class to impute missing values using Robust Online Subspace Learning algorithm.
+C++ implementation</p>
 <section id="id260">
 <h5>Methods<a class="headerlink" href="#id260" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -4313,7 +4287,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.ROSL.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.ROSL.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.ROSL.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the ROSL algorithm.</p>
+<dd><p>Perform imputation using the ROSL algorithm.
+C++ implementation</p>
 <section id="id263">
 <h6>Parameters<a class="headerlink" href="#id263" title="Link to this heading">¶</a></h6>
 <dl>
@@ -4419,7 +4394,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.SPIRIT">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SPIRIT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.SPIRIT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.SPIRIT" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>SPIRIT class to impute missing values using SPIRIT algorithm.</p>
+<p>SPIRIT class to impute missing values using SPIRIT algorithm.
+C++ implementation</p>
 <section id="id270">
 <h5>Methods<a class="headerlink" href="#id270" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -4453,7 +4429,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.SPIRIT.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.SPIRIT.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.SPIRIT.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the SPIRIT algorithm.</p>
+<dd><p>Perform imputation using the SPIRIT algorithm.
+C++ implementation</p>
 <section id="id273">
 <h6>Parameters<a class="headerlink" href="#id273" title="Link to this heading">¶</a></h6>
 <dl>
@@ -4562,7 +4539,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.SVT">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SVT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.SVT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.SVT" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>SVT class to impute missing values using Singular Value Thresholding algorithm.</p>
+<p>SVT class to impute missing values using Singular Value Thresholding algorithm.
+C++ implementation</p>
 <section id="id280">
 <h5>Methods<a class="headerlink" href="#id280" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -4596,7 +4574,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.SVT.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.SVT.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.SVT.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the SVT algorithm.</p>
+<dd><p>Perform imputation using the SVT algorithm.
+C++ implementation</p>
 <section id="id283">
 <h6>Parameters<a class="headerlink" href="#id283" title="Link to this heading">¶</a></h6>
 <dl>
@@ -4699,7 +4678,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.SoftImpute">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SoftImpute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.SoftImpute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.SoftImpute" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>SoftImpute class to impute missing values using Soft Impute algorithm.</p>
+<p>SoftImpute class to impute missing values using Soft Impute algorithm.
+Python and C++ implementations</p>
 <section id="id290">
 <h5>Methods<a class="headerlink" href="#id290" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -4732,14 +4712,17 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.SoftImpute.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.SoftImpute.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.SoftImpute.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the Soft Impute algorithm.</p>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'python'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.SoftImpute.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.SoftImpute.impute" title="Link to this definition">¶</a></dt>
+<dd><p>Perform imputation using the Soft Impute algorithm.
+Python and C++ implementations</p>
 <section id="id293">
 <h6>Parameters<a class="headerlink" href="#id293" title="Link to this heading">¶</a></h6>
 <dl>
 <dt>user_def<span class="classifier">bool, optional</span></dt><dd><p>Whether to use user-defined or default parameters (default is True).</p>
 </dd>
 <dt>params<span class="classifier">dict, optional</span></dt><dd><p>Parameters of the Soft Impute algorithm or Auto-ML configuration, if None, default ones are loaded.</p>
+</dd>
+<dt>language<span class="classifier">str, optional</span></dt><dd><p>Set the language version of the code, C++ or Python, default “python”</p>
 <p><strong>Algorithm parameters:</strong></p>
 <blockquote>
 <div><dl class="simple">
@@ -4836,7 +4819,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.TRMF">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TRMF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.TRMF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.TRMF" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>TRMF class to impute missing values using Temporal Regularized Matrix Factorization.</p>
+<p>TRMF class to impute missing values using Temporal Regularized Matrix Factorization.
+Python implementation</p>
 <section id="id300">
 <h5>Methods<a class="headerlink" href="#id300" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -4870,7 +4854,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.MatrixCompletion.TRMF.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.MatrixCompletion.TRMF.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.MatrixCompletion.TRMF.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the TRMF algorithm.</p>
+<dd><p>Perform imputation using the TRMF algorithm.
+Python implementation</p>
 <section id="id303">
 <h6>Parameters<a class="headerlink" href="#id303" title="Link to this heading">¶</a></h6>
 <dl>
@@ -5005,7 +4990,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.PatternSearch.DynaMMo">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DynaMMo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.PatternSearch.DynaMMo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.PatternSearch.DynaMMo" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>DynaMMo class to impute missing values using Dynamic Multi-Mode modeling with Missing Observations algorithm.</p>
+<p>DynaMMo class to impute missing values using Dynamic Multi-Mode modeling with Missing Observations algorithm.
+C++ implementation</p>
 <section id="id311">
 <h5>Methods<a class="headerlink" href="#id311" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -5039,7 +5025,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.PatternSearch.DynaMMo.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.PatternSearch.DynaMMo.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.PatternSearch.DynaMMo.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the DynaMMo algorithm.</p>
+<dd><p>Perform imputation using the DynaMMo algorithm.
+C++ implementation</p>
 <section id="id314">
 <h6>Parameters<a class="headerlink" href="#id314" title="Link to this heading">¶</a></h6>
 <dl>
@@ -5145,7 +5132,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.PatternSearch.STMVL">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">STMVL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.PatternSearch.STMVL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.PatternSearch.STMVL" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>STMVL class to impute missing values using Spatio-Temporal Matrix Variational Learning (STMVL).</p>
+<p>STMVL class to impute missing values using Spatio-Temporal Matrix Variational Learning (STMVL).
+C++ implementation</p>
 <section id="id321">
 <h5>Methods<a class="headerlink" href="#id321" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -5179,7 +5167,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.PatternSearch.STMVL.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.PatternSearch.STMVL.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.PatternSearch.STMVL.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the STMVL algorithm.</p>
+<dd><p>Perform imputation using the STMVL algorithm.
+C++ implementation</p>
 <section id="id324">
 <h6>Parameters<a class="headerlink" href="#id324" title="Link to this heading">¶</a></h6>
 <dl class="simple">
@@ -5290,7 +5279,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.PatternSearch.TKCM">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TKCM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomp_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.PatternSearch.TKCM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.PatternSearch.TKCM" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#imputegap.recovery.imputation.BaseImputer" title="imputegap.recovery.imputation.BaseImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseImputer</span></code></a></p>
-<p>TKCM class to impute missing values using Tensor Kernelized Coupled Matrix Completion algorithm.</p>
+<p>TKCM class to impute missing values using Tensor Kernelized Coupled Matrix Completion algorithm.
+C++ implementation</p>
 <section id="id331">
 <h5>Methods<a class="headerlink" href="#id331" title="Link to this heading">¶</a></h5>
 <dl class="simple">
@@ -5324,7 +5314,8 @@ If None, take the missing values in the ts_m matrix (contaminated matrix).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imputegap.recovery.imputation.Imputation.PatternSearch.TKCM.impute">
 <span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_def</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="modules/imputegap/recovery/imputation.html#Imputation.PatternSearch.TKCM.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imputegap.recovery.imputation.Imputation.PatternSearch.TKCM.impute" title="Link to this definition">¶</a></dt>
-<dd><p>Perform imputation using the TKCM algorithm.</p>
+<dd><p>Perform imputation using the TKCM algorithm.
+C++ implementation</p>
 <section id="id334">
 <h6>Parameters<a class="headerlink" href="#id334" title="Link to this heading">¶</a></h6>
 <dl>

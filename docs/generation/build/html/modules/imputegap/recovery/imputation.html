@@ -1036,6 +1036,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">CDRec</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            CDRec class to impute missing values using Centroid Decomposition (CDRec).</span>
+<span class="sd">            Python and C++ implementations.</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1057,6 +1058,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the CDRec algorithm.</span>
+<span class="sd">                Python and C++ implementations.</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1073,70 +1075,12 @@
 
 <span class="sd">                        rank : int</span>
 <span class="sd">                            Rank of matrix reduction, which should be higher than 1 and smaller than the number of series.</span>
+
 <span class="sd">                        epsilon : float</span>
 <span class="sd">                            The learning rate used for the algorithm.</span>
+
 <span class="sd">                        iteration : int</span>
 <span class="sd">                            The number of iteration to perform.</span>
-
-<span class="sd">                    **Auto-ML parameters:**</span>
-
-<span class="sd">                        input_data : numpy.ndarray</span>
-<span class="sd">                            The original time series dataset without contamination.</span>
-<span class="sd">                        optimizer : str</span>
-<span class="sd">                            The optimizer to use for parameter optimization. Valid values are &quot;bayesian&quot;, &quot;greedy&quot;, &quot;pso&quot;, or &quot;sh&quot;.</span>
-<span class="sd">                        options : dict, optional</span>
-<span class="sd">                            Optional parameters specific to the optimizer.</span>
-
-<span class="sd">                        **Bayesian:**</span>
-
-<span class="sd">                            n_calls : int, optional</span>
-<span class="sd">                                Number of calls to the objective function. Default is 3.</span>
-<span class="sd">                            metrics : list, optional</span>
-<span class="sd">                                List of selected metrics to consider for optimization. Default is [&quot;RMSE&quot;].</span>
-<span class="sd">                            n_random_starts : int, optional</span>
-<span class="sd">                                Number of initial calls to the objective function, from random points. Default is 50.</span>
-<span class="sd">                            acq_func : str, optional</span>
-<span class="sd">                                Acquisition function to minimize over the Gaussian prior. Valid values: &#39;LCB&#39;, &#39;EI&#39;, &#39;PI&#39;, &#39;gp_hedge&#39; (default is &#39;gp_hedge&#39;).</span>
-
-<span class="sd">                        **Greedy:**</span>
-
-<span class="sd">                            n_calls : int, optional</span>
-<span class="sd">                                Number of calls to the objective function. Default is 3.</span>
-<span class="sd">                            metrics : list, optional</span>
-<span class="sd">                                List of selected metrics to consider for optimization. Default is [&quot;RMSE&quot;].</span>
-
-<span class="sd">                        **PSO:**</span>
-
-<span class="sd">                            n_particles : int, optional</span>
-<span class="sd">                                Number of particles used.</span>
-<span class="sd">                            c1 : float, optional</span>
-<span class="sd">                                PSO learning coefficient c1 (personal learning).</span>
-<span class="sd">                            c2 : float, optional</span>
-<span class="sd">                                PSO learning coefficient c2 (global learning).</span>
-<span class="sd">                            w : float, optional</span>
-<span class="sd">                                PSO inertia weight.</span>
-<span class="sd">                            iterations : int, optional</span>
-<span class="sd">                                Number of iterations for the optimization.</span>
-<span class="sd">                            n_processes : int, optional</span>
-<span class="sd">                                Number of processes during optimization.</span>
-
-<span class="sd">                        **Successive Halving (SH):**</span>
-
-<span class="sd">                            num_configs : int, optional</span>
-<span class="sd">                                Number of configurations to try.</span>
-<span class="sd">                            num_iterations : int, optional</span>
-<span class="sd">                                Number of iterations to run the optimization.</span>
-<span class="sd">                            reduction_factor : int, optional</span>
-<span class="sd">                                Reduction factor for the number of configurations kept after each iteration.</span>
-
-
-<span class="sd">                        **RAY TUNE (ray_tune):**</span>
-
-<span class="sd">                            n_calls : int, optional</span>
-<span class="sd">                                Number of calls to the objective function (default is 10).</span>
-<span class="sd">                            max_concurrent_trials : int, optional</span>
-<span class="sd">                                Number of trials run in parallel, related to your total memory / cpu / gpu (default is 2).</span>
-<span class="sd">                                Please increase the value if you have more resources</span>
 
 <span class="sd">                Returns</span>
 <span class="sd">                -------</span>
@@ -1178,6 +1122,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">IterativeSVD</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            IterativeSVD class to impute missing values using Iterative SVD.</span>
+<span class="sd">            Python and C++ implementations</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1196,9 +1141,10 @@
 
 <div class="viewcode-block" id="Imputation.MatrixCompletion.IterativeSVD.impute">
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.MatrixCompletion.IterativeSVD.impute">[docs]</a>
-            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the Iterative SVD algorithm.</span>
+<span class="sd">                Python and C++ implementations</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1207,6 +1153,9 @@
 
 <span class="sd">                params : dict, optional</span>
 <span class="sd">                    Parameters of the Iterative SVD algorithm or Auto-ML configuration, if None, default ones are loaded.</span>
+
+<span class="sd">                language : str, optional</span>
+<span class="sd">                    Set the language version of the code, C++ or Python, default &quot;python&quot;</span>
 
 <span class="sd">                    **Algorithm parameters:**</span>
 
@@ -1242,7 +1191,7 @@
 
                 <span class="n">params</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">control_boundaries</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">],</span> <span class="n">boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">algorithm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">iterative_svd</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">iterative_svd</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
                 <span class="k">return</span> <span class="bp">self</span></div>
 </div>
@@ -1253,6 +1202,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">GROUSE</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            GROUSE class to impute missing values using GROUSE.</span>
+<span class="sd">            C++ implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1274,6 +1224,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the GROUSE algorithm.</span>
+<span class="sd">                C++ implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1328,6 +1279,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">ROSL</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            ROSL class to impute missing values using Robust Online Subspace Learning algorithm.</span>
+<span class="sd">            C++ implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1349,6 +1301,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the ROSL algorithm.</span>
+<span class="sd">                C++ implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1408,6 +1361,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">SoftImpute</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SoftImpute class to impute missing values using Soft Impute algorithm.</span>
+<span class="sd">            Python and C++ implementations</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1426,9 +1380,10 @@
 
 <div class="viewcode-block" id="Imputation.MatrixCompletion.SoftImpute.impute">
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.MatrixCompletion.SoftImpute.impute">[docs]</a>
-            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the Soft Impute algorithm.</span>
+<span class="sd">                Python and C++ implementations</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1437,6 +1392,9 @@
 
 <span class="sd">                params : dict, optional</span>
 <span class="sd">                    Parameters of the Soft Impute algorithm or Auto-ML configuration, if None, default ones are loaded.</span>
+
+<span class="sd">                language : str, optional</span>
+<span class="sd">                    Set the language version of the code, C++ or Python, default &quot;python&quot;</span>
 
 <span class="sd">                    **Algorithm parameters:**</span>
 
@@ -1472,7 +1430,7 @@
 
                 <span class="n">params</span><span class="p">[</span><span class="s2">&quot;max_rank&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">control_boundaries</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;max_rank&quot;</span><span class="p">],</span> <span class="n">boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">algorithm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">soft_impute</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">soft_impute</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
                 <span class="k">return</span> <span class="bp">self</span></div>
 </div>
@@ -1484,6 +1442,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">SPIRIT</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SPIRIT class to impute missing values using SPIRIT algorithm.</span>
+<span class="sd">            C++ implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1505,6 +1464,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the SPIRIT algorithm.</span>
+<span class="sd">                C++ implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1570,6 +1530,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">SVT</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SVT class to impute missing values using Singular Value Thresholding algorithm.</span>
+<span class="sd">            C++ implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1591,6 +1552,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the SVT algorithm.</span>
+<span class="sd">                C++ implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1643,6 +1605,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">TRMF</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            TRMF class to impute missing values using Temporal Regularized Matrix Factorization.</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1664,6 +1627,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the TRMF algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1757,6 +1721,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">MissForest</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            MissForest class to impute missing values with Miss Forest.</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1777,6 +1742,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the Miss Forest algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1838,6 +1804,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">MICE</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            MICE class to impute missing values with Multivariate imputation of chained equations (MICE).</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1858,6 +1825,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the MICE algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -1920,6 +1888,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">XGBOOST</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            XGBOOST class to impute missing values with Extreme Gradient Boosting (XGBOOST).</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -1940,6 +1909,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the XGBOOST algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2001,6 +1971,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">IIM</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            IIM class to impute missing values using Iterative Imputation with Metric Learning (IIM).</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2021,6 +1992,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the IIM algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2097,6 +2069,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">STMVL</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            STMVL class to impute missing values using Spatio-Temporal Matrix Variational Learning (STMVL).</span>
+<span class="sd">            C++ implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2117,6 +2090,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the STMVL algorithm.</span>
+<span class="sd">                C++ implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2170,6 +2144,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">DynaMMo</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            DynaMMo class to impute missing values using Dynamic Multi-Mode modeling with Missing Observations algorithm.</span>
+<span class="sd">            C++ implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2191,6 +2166,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the DynaMMo algorithm.</span>
+<span class="sd">                C++ implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2245,6 +2221,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">TKCM</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            TKCM class to impute missing values using Tensor Kernelized Coupled Matrix Completion algorithm.</span>
+<span class="sd">            C++ implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2266,6 +2243,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the TKCM algorithm.</span>
+<span class="sd">                C++ implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2352,6 +2330,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">MRNN</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            MRNN class to impute missing values using Multi-directional Recurrent Neural Networks (MRNN).</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2388,6 +2367,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the MRNN algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2460,6 +2440,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">BRITS</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            BRITS class to impute missing values using Bidirectional Recurrent Imputation for Time Series</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2496,6 +2477,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the BRITS algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2574,6 +2556,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">DeepMVI</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            DeepMVI class to impute missing values using Deep Multivariate Imputation</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2600,6 +2583,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the DeepMVI algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2658,7 +2642,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">MPIN</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            MPIN class to impute missing values using Multi-attribute Sensor Data Streams via Message Propagation algorithm.</span>
-<span class="sd">            Need torch-cluster to work.</span>
+<span class="sd">            Python implementation - Need torch-cluster to work.</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2689,7 +2673,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the MPIN algorithm.</span>
-<span class="sd">                Need torch-cluster to work.</span>
+<span class="sd">                Python implementation - Need torch-cluster to work.</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2768,6 +2752,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">PriSTI</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            PRISTI class to impute missing values using A Conditional Diffusion Framework for Spatiotemporal Imputation algorithm.</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2800,6 +2785,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the PRISTI algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2882,8 +2868,8 @@
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.DeepLearning.MissNet">[docs]</a>
         <span class="k">class</span><span class="w"> </span><span class="nc">MissNet</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            MissNet class to impute missing values using Mining of Switching Sparse Networks for Missing Value</span>
-<span class="sd">             Imputation in Multivariate Time Series.</span>
+<span class="sd">            MissNet class to impute missing values using Mining of Switching Sparse Networks for Missing Value.</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -2911,6 +2897,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the MissNet algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -2983,7 +2970,8 @@
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.DeepLearning.GAIN">[docs]</a>
         <span class="k">class</span><span class="w"> </span><span class="nc">GAIN</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            GAIN class to impute missing values using Missing Data Imputation using Generative Adversarial Nets,</span>
+<span class="sd">            GAIN class to impute missing values using Missing Data Imputation using Generative Adversarial Nets.</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -3013,6 +3001,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the GAIN algorithm.</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3079,6 +3068,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">GRIN</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            GRIN class to impute missing values using MULTIVARIATE TIME SERIES IMPUTATION BY GRAPH NEURAL NETWORKS.</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -3119,6 +3109,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the Multivariate Time Series Imputation by Graph Neural Networks</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3196,6 +3187,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">BayOTIDE</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            BayOTIDE class to impute missing values using Bayesian Online Multivariate Time series Imputation with functional decomposition</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -3230,6 +3222,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the Multivariate Time Series Imputation by Deep Learning</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3319,6 +3312,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">HKMFT</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            HKMF-T class to impute missing values using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -3349,6 +3343,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3421,6 +3416,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">BitGraph</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            BitGraph class to impute missing values using BIASED TEMPORAL CONVOLUTION GRAPH NETWORK FOR TIME SERIES FORECASTING WITH MISSING VALUES</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -3458,6 +3454,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using BIASED TEMPORAL CONVOLUTION GRAPH NETWORK FOR TIME SERIES FORECASTING WITH MISSING VALUES</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3534,6 +3531,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">SAITS</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SAITS class to impute missing values using Self-Attention-based Imputation for Time Series</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -3570,6 +3568,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using Self-Attention-based Imputation for Time Series</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3646,6 +3645,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">TimesNet</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            TimesNet class to impute missing values (Model used from the TimesNet repository)</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -3681,6 +3681,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using TimesNet</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3758,6 +3759,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">CSDI</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            CSDI class to impute missing values (Model used from the CSDI repository)</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -3793,6 +3795,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using CSDI</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3876,6 +3879,7 @@
     <span class="k">class</span><span class="w"> </span><span class="nc">LLMs</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A class containing specific imputation algorithms for Pre-trained Language Models (LLMs)</span>
+<span class="sd">        Python implementation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Imputation.LLMs.NuwaTS">
@@ -3907,6 +3911,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using Foundation Model Mending Every Incomplete Time Series</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -3980,7 +3985,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">GPT4TS</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            GPT4TS class to impute missing values using Foundation Model Mending Every Incomplete Time Series</span>
-<span class="sd">            (Model used from the NuwaTS repository)</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -4018,6 +4023,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using GPT4TS (Foundation Model Mending Every Incomplete Time Series)</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
@@ -4090,6 +4096,7 @@
         <span class="k">class</span><span class="w"> </span><span class="nc">Moment</span><span class="p">(</span><span class="n">BaseImputer</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Moment class to impute missing values using a family of open-source foundation models for general-purpose time series analysis.</span>
+<span class="sd">            Python implementation</span>
 
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
@@ -4112,6 +4119,7 @@
             <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tr_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using Moment (a family of open-source foundation models for general-purpose time series analysis.)</span>
+<span class="sd">                Python implementation</span>
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>

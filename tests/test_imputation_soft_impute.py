@@ -1,5 +1,8 @@
 import os
 import unittest
+
+from triton.knobs import language
+
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 from imputegap.recovery.contamination import GenGAP
@@ -38,7 +41,7 @@ class TestSoftImpute(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(params={'max_rank': 3})
+        algo.impute(params={'max_rank': 3}, language="c++")
         algo.score(ts.data)
         metrics = algo.metrics
 

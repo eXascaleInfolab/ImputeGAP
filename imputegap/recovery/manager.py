@@ -82,9 +82,6 @@ class TimeSeries:
     print(limit=10, view_by_series=False) :
         Prints a limited number of time series from the dataset.
 
-    print_results(metrics, algorithm="") :
-        Prints the results of the imputation process.
-
     normalize(normalizer="z_score", data=None, verbose=True):
         Normalizes the time series dataset.
 

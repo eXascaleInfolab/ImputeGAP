@@ -56,7 +56,7 @@ def mean_impute(incomp_data, logic="test", logs=None, use_cuda=0, verbose=True):
 
     # if you have multiple files, and you want to store them into ./wrapper ============================================
     if logic is not None:
-        recov_data = recovMeanImpute(incomp_data, use_cuda=use_cuda, logic=logic)  # adapt the import in the top of the file, look line 4==
+        recov_data = recovMeanImpute(incomp_data, logic=logic)  # adapt the import in the top of the file, look line 4==
 
 
     # if you want to put your algorithm code into a single file ========================================================

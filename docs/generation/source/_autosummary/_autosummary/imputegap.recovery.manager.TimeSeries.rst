@@ -23,7 +23,6 @@ imputegap.recovery.manager.TimeSeries
       ~TimeSeries.normalize
       ~TimeSeries.plot
       ~TimeSeries.print
-      ~TimeSeries.print_results
    
    
 
