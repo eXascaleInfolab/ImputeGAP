@@ -73,7 +73,7 @@ def csdi(incomp_data, seq_len=-1, batch_size=-1, epochs=25, sliding_windows=1, t
     https://github.com/ermongroup/CSDI
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     if beta is None:
         beta = [0.0001, 0.5]

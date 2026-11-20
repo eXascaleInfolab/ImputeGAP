@@ -78,7 +78,8 @@ To evaluate and compare the impact of multiple imputation algorithms on downstre
                                  horizons=[128],
                                  season=24,
                                  meta_pattern="mcar",
-                                 meta_rate=0.4)
+                                 meta_rate=0.4,
+                                 use_cuda=2)
 
 
 .. raw:: html

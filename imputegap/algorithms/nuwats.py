@@ -62,7 +62,7 @@ def nuwats(incomp_data, seq_len=-1, batch_size=-1, epochs=6, gpt_layers=3, num_w
     https://github.com/Chengyui/NuwaTS/tree/master
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     recov_data = recovLLMs(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, gpt_layers=gpt_layers, num_workers=num_workers, tr_ratio=tr_ratio, model="NuwaTS", seed=seed, use_cuda=use_cuda, verbose=verbose)
 

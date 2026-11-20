@@ -677,8 +677,10 @@ class BenchGAP:
                     seen.add(m)
                     metrics.append(m)
 
+
         # Metric ordering and filtering
         if upstream:
+            metrics = [m for m in metrics if m != "RUNTIME_LOG"]
             if "RMSE" in metrics:
                 metrics = ["RMSE"] + [
                     m for m in metrics
@@ -3332,6 +3334,7 @@ class BenchGAP:
         evaluate_upstream = True
         model = "imputation"
 
+
         directory_now = datetime.datetime.now()
         directory_time = directory_now.strftime("%y_%m_%d_%H_%M_%S")
         save_dir = save_dir + "/" + "benchmark_imputation_" + report_title + "_" + directory_time
@@ -3454,7 +3457,7 @@ class BenchGAP:
                                         dataset_s = dataset.replace("-", "")
                                     save_dir_plot = save_dir + "/" + dataset_s + "/" + pattern + "/recovery/"
                                     cont_rate = int(x * 100)
-                                    imputer.score(input_data=ts.data, recov_data=imputer.recov_data, verbose=False)
+                                    imputer.score(input_data=ts.data, recov_data=imputer.recov_data, verbose=False, print_results=False)
 
                                     # STORAGE OF THE CACHED RESULTS
                                     # -----------------------------------------------------------------------------

@@ -54,7 +54,7 @@ def deep_mvi(incomp_data, max_epoch=1000, patience=2, lr=0.001, batch_size=-1, t
     https://github.com/pbansal5/DeepMVI
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     recov_data = deep_mvi_recovery(input=incomp_data, max_epoch=max_epoch, patience=patience, lr=lr, batch_size=batch_size, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 

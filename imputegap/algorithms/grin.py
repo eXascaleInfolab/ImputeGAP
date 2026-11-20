@@ -66,7 +66,7 @@ def grin(incomp_data, seq_len=-1, sim_type="corr", epochs=30, batch_size=-1, sli
     https://github.com/Graph-Machine-Learning-Group/grin
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     #recov_data = recoveryGRIN(input=incomp_data, d_hidden=d_hidden, lr=lr, batch_size=batch_size, window=window, alpha=alpha, patience=patience, epochs=epochs, workers=workers, tr_ratio=tr_ratio, verbose=verbose)
     recov_data = runGRIN(incomp_data=incomp_data, seq_len=seq_len, sim_type=sim_type, epochs=epochs, batch_size=batch_size, sliding_windows=sliding_windows, adj_threshold=adj_threshold, patience=patience, num_workers=num_workers, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)

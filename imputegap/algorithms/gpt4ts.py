@@ -62,7 +62,7 @@ def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_
     https://github.com/Chengyui/NuwaTS/tree/master
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     recov_data = recovGPT4TS(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, gpt_layers=gpt_layers, num_workers=num_workers, model="GPT4TS", tr_ratio=tr_ratio, seed=seed, use_cuda=use_cuda, verbose=verbose)
 

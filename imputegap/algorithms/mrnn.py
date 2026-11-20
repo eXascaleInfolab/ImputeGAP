@@ -72,7 +72,7 @@ def mrnn(incomp_data, model="m_rnn", seq_len=24, epochs=50, batch_size=64, slidi
     Cao, W., Wang, D., Li, J., Zhou, H., Li, L. & Li, Y. BRITS: Bidirectional Recurrent Imputation for Time Series. Advances in Neural Information Processing Systems, 31 (2018). https://proceedings.neurips.cc/paper_files/paper/2018/file/734e6bfcd358e25ac1db0a4241b95651-Paper.pdf
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     recov_data = recovBRITS(incomp_data=incomp_data, seq_len=seq_len, model_name="m_rnn", epochs=epochs, batch_size=batch_size, sliding_windows=sliding_windows, impute_weight=impute_weight, hid_size=hidden_layers, num_workers=num_workers, seed=seed, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 

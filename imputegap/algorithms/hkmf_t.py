@@ -60,7 +60,7 @@ def hkmf_t(incomp_data, tags=None, seq_len=7, blackouts_begin=None, blackouts_en
     https://github.com/wangliang-cs/hkmf-t?tab=readme-ov-file
     """
     start_time = time.time()  # Record start time
-    _ = utils.check_cuda(use_cuda=use_cuda, exception="HKMF-T")
+    _ = utils.check_cuda(use_cuda=use_cuda, exception="HKMF-T", verbose=verbose)
 
     recov_data = recovHKMFT(dataset=incomp_data, tags=tags, seq_len=seq_len, blackouts_begin=blackouts_begin, blackouts_end=blackouts_end, max_epoch=epochs, tr_ratio=tr_ratio, verbose=verbose)
 

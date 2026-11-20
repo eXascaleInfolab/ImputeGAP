@@ -69,7 +69,7 @@ def bit_graph(incomp_data, seq_len=-1, sliding_windows=1, kernel_size=25, kernel
     https://github.com/chenxiaodanhit/BiTGraph
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     if kernel_set is None:
         kernel_set = [2, 3, 6, 7]

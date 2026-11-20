@@ -172,6 +172,7 @@ echo "[5/5] Installing latest ImputeGAP release from PyPI..."
 
 python -m pip install --upgrade pip
 python -m pip install --upgrade imputegap
+python -m pip uninstall -y triton
 
 # ==================================================
 # Done

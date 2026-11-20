@@ -61,7 +61,7 @@ def miss_net(incomp_data, n_components=20, alpha=0.5, beta=0.1, n_cl=1, max_iter
     """
 
     start_time = time.time()  # Record start time
-    _ = utils.check_cuda(use_cuda=use_cuda, exception="MissNet")
+    _ = utils.check_cuda(use_cuda=use_cuda, exception="MissNet", verbose=verbose)
 
     recov_data = recovMissNet(X=incomp_data, n_components=n_components, alpha=alpha, beta=beta, n_cl=n_cl, max_iter=max_iter, tol=tol, random_init=random_init, verbose=verbose)
 

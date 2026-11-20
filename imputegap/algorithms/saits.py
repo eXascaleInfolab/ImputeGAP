@@ -65,7 +65,7 @@ def saits(incomp_data, seq_len=-1, epochs=10000, batch_size=-1, sliding_windows=
     https://github.com/WenjieDu/SAITS
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     recov_data = recov_saits(incomp_data=incomp_data, seq_len=seq_len, epochs=epochs, batch_size=batch_size, n_head=n_head, sliding_windows=sliding_windows, num_workers=num_workers, seed=seed, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 

@@ -62,7 +62,7 @@ def mpin(incomp_data=None, window=6, incre_mode="alone", base="SAGE", epochs=200
     https://github.com/XLI-2020/MPIN
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     recov_data = recovMPIN(incomp_data=incomp_data, window=window, incre_mode=incre_mode, base=base, epochs=epochs, num_of_iter=num_of_iteration, k=k, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 

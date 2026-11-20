@@ -64,7 +64,7 @@ def moment(incomp_data, model="training-shot", model_size="high", use_mean=False
     https://proceedings.mlr.press/v235/goswami24a.html
     """
     start_time = time.time()  # Record start time
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
     recov_data, _ = recovery_moment(incomp_data=incomp_data, model=model, model_size=model_size, use_mean=use_mean, seq_len=seq_len, sliding_windows=sliding_windows, seed=seed, use_cuda=use_cuda, verbose=verbose)
 

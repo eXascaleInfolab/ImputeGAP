@@ -978,7 +978,7 @@ def load_parameters(query: str = "default", algorithm: str = "cdrec", dataset: s
         return None
 
 
-def check_cuda(use_cuda, exception=None):
+def check_cuda(use_cuda, exception=None, verbose=True):
     """
     Check CUDA availability based on the specified configuration.
 
@@ -1006,15 +1006,18 @@ def check_cuda(use_cuda, exception=None):
         raise ValueError("use_cuda must be 0, 1, or 2.")
 
     if use_cuda == 0:
-        print("\n(SYS) ImputeGAP's check_cuda() > use_cuda is set to 0, using CPU...\n")
+        if verbose:
+            print("\n(SYS) ImputeGAP's check_cuda() > use_cuda is set to 0, using CPU...\n")
         return 0
 
     import torch
     if torch.cuda.is_available():
-        print("\n(SYS) ImputeGAP's check_cuda() > CUDA is available, using GPU...\n")
+        if verbose:
+            print("\n(SYS) ImputeGAP's check_cuda() > CUDA is available, using GPU...\n")
         return 1
 
-    print("\n(SYS) ImputeGAP's check_cuda() > CUDA is not available, using CPU...\n")
+    if verbose:
+        print("\n(SYS) ImputeGAP's check_cuda() > CUDA is not available, using CPU...\n")
     return 0
 
 
@@ -2838,6 +2841,10 @@ def ts_caching_save(data, type="classification", artifact=None, name="", dir_cac
     -----
     Classification files are written as univariate, equal-length time series without timestamps or missing values. The class labels declared in the ``.ts`` header preserve their order of first occurrence in ``artifact``. For non-classification files, values that cannot be converted to ``float`` or that evaluate to ``NaN`` are written as ``NaN``.
     """
+    try:
+        os.makedirs(dir_cache or ".", exist_ok=True)
+    except OSError as e:
+        raise OSError(f"(CACHE) Failed to create cache directory '{dir_cache}': {e}") from e
 
     if type == "classification":
         extention = "_TRcAIN.ts"

@@ -46,12 +46,11 @@ def mean_impute(incomp_data, logic="test", logs=None, use_cuda=0, verbose=True):
                [3., 4., 6.]])
 
     """
-    use_cuda = utils.check_cuda(use_cuda=use_cuda)  # optional, handle cuda inside the library
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)  # optional, handle cuda inside the library
 
     # information for the user (prints and console) ====================================================================
     if verbose:
         print(f"\n(IMPUTATION) MeanImpute\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tlogic: {logic}\n\tlogs: {logs}\n\tverbose: {verbose}\n{use_cuda}:use_cuda\n")
-
 
 
     # if you have multiple files, and you want to store them into ./wrapper ============================================

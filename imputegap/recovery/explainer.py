@@ -52,6 +52,7 @@ class ExplainGAP:
         self.shap_values = None
         self.shap_details = None
         self.plots = None
+        self.seed = 42
 
     def show(self):
         """
@@ -62,7 +63,7 @@ class ExplainGAP:
         if self.plots is not None:
             plt.close("all")
             shval, x_test, optimal_display = self.plots
-            shap.summary_plot(shval, x_test, plot_size=(25, 10), feature_names=optimal_display)
+            shap.summary_plot(shval, x_test, plot_size=(25, 10), feature_names=optimal_display, rng=np.random.default_rng(self.seed))
         else:
             print("(EXP) No plots saved in the object.")
 
@@ -537,7 +538,7 @@ class ExplainGAP:
 
         self.plots = (shval, x_test, optimal_display)
 
-        shap.summary_plot(shval, x_test, plot_size=(25, 10), feature_names=optimal_display, show=display)
+        shap.summary_plot(shval, x_test, plot_size=(25, 10), feature_names=optimal_display, show=display, rng=np.random.default_rng(self.seed))
         alpha = os.path.join(path_file + file + "_" + algorithm + "_" + extractor + "_shap_all.png")
         plt.title("SHAP Details Results")
         os.makedirs(path_file, exist_ok=True)
@@ -556,7 +557,7 @@ class ExplainGAP:
             plt.close()
             alphas.append(alpha)
 
-            shap.summary_plot(np.array(shval).T, np.array(x_test).T, feature_names=series_names, show=display)
+            shap.summary_plot(np.array(shval).T, np.array(x_test).T, feature_names=series_names, show=display, rng=np.random.default_rng(self.seed))
             alpha = os.path.join(path_file_details + file + "_" + algorithm + "_" + extractor + "_shap_reverse.png")
             plt.title("SHAP Features by Series")
             plt.savefig(alpha)
@@ -620,7 +621,7 @@ class ExplainGAP:
         mean_features = np.array(mean_features)
 
         if not display:
-            shap.summary_plot(np.array(geometry).T, np.array(geometryT).T, plot_size=(20, 10), feature_names=geometryDesc, show=display)
+            shap.summary_plot(np.array(geometry).T, np.array(geometryT).T, plot_size=(20, 10), feature_names=geometryDesc, show=display, rng=np.random.default_rng(self.seed))
             alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[0].lower() + ".png")
             plt.title("SHAP details of " + plots_categories[0].lower())
             plt.savefig(alpha)
@@ -628,7 +629,7 @@ class ExplainGAP:
             alphas.append(alpha)
 
             if len(plots_categories) >= 2 and plots_categories[1] != "":
-                shap.summary_plot(np.array(transformation).T, np.array(transformationT).T, plot_size=(20, 10), feature_names=transformationDesc, show=display)
+                shap.summary_plot(np.array(transformation).T, np.array(transformationT).T, plot_size=(20, 10), feature_names=transformationDesc, show=display, rng=np.random.default_rng(self.seed))
                 alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[2].lower() + ".png")
                 plt.title("SHAP details of " + plots_categories[1].lower())
                 plt.savefig(alpha)
@@ -636,7 +637,7 @@ class ExplainGAP:
                 alphas.append(alpha)
 
             if len(plots_categories) >= 3 and plots_categories[2] != "":
-                shap.summary_plot(np.array(correlation).T, np.array(correlationT).T, plot_size=(20, 10), feature_names=correlationDesc, show=display)
+                shap.summary_plot(np.array(correlation).T, np.array(correlationT).T, plot_size=(20, 10), feature_names=correlationDesc, show=display, rng=np.random.default_rng(self.seed))
                 alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[1].lower() + ".png")
                 plt.title("SHAP details of " + plots_categories[1].lower())
                 plt.savefig(alpha)
@@ -644,7 +645,7 @@ class ExplainGAP:
                 alphas.append(alpha)
 
             if len(plots_categories) >= 4 and plots_categories[3] != "":
-                shap.summary_plot(np.array(trend).T, np.array(trendT).T, plot_size=(20, 8), feature_names=trendDesc, show=display)
+                shap.summary_plot(np.array(trend).T, np.array(trendT).T, plot_size=(20, 8), feature_names=trendDesc, show=display, rng=np.random.default_rng(self.seed))
                 alpha = os.path.join(path_file_categories + file + "_" + algorithm + "_" + extractor + "_shap_" + plots_categories[3].lower() + ".png")
                 plt.title("SHAP details of " + plots_categories[3].lower())
                 plt.savefig(alpha)
@@ -662,7 +663,7 @@ class ExplainGAP:
         aggregation_features = np.array(aggregation_features).T
         aggregation_test = np.array(aggregation_test).T
 
-        shap.summary_plot(aggregation_features, aggregation_test, feature_names=plots_categories, show=display)
+        shap.summary_plot(aggregation_features, aggregation_test, feature_names=plots_categories, show=display, rng=np.random.default_rng(self.seed))
         alpha = os.path.join(path_file + file + "_" + algorithm + "_" + extractor + "_shap_cat.png")
         plt.title("SHAP Aggregation Results")
         plt.gca().axes.get_xaxis().set_visible(False)
@@ -671,7 +672,7 @@ class ExplainGAP:
         alphas.append(alpha)
 
         if not display:
-            shap.summary_plot(np.array(aggregation_features).T, np.array(aggregation_test).T, feature_names=series_names, show=display)
+            shap.summary_plot(np.array(aggregation_features).T, np.array(aggregation_test).T, feature_names=series_names, show=display, rng=np.random.default_rng(self.seed))
             alpha = os.path.join(path_file_details + file + "_" + algorithm + "_" + extractor + "_shap_agg_reverse.png")
             plt.title("SHAP Aggregation Features by Series")
             plt.savefig(alpha)

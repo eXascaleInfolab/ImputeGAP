@@ -172,6 +172,7 @@ echo "[5/5] Installing ImputeGAP from GitHub source..."
 
 python -m pip install --upgrade pip
 python -m pip install -e .
+python -m pip uninstall -y triton
 
 # ==================================================
 # Done
