@@ -1,9 +1,10 @@
 import time
 
 from imputegap.wrapper.AlgoPython.GPT4TS.recovGPT4TS import recovGPT4TS
+from imputegap.tools import utils
 
 
-def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, tr_ratio=0.9, seed=42, logs=True, verbose=True):
+def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=3, num_workers=0, tr_ratio=0.7, seed=42, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using GPT4TS
 
@@ -23,19 +24,22 @@ def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_
         Number of epoch for training the model (default: 10).
 
     gpt_layers : int, optional
-        Number of layers in the transformer/generator component (default: 6).
+        Number of layers in the transformer/generator component (default: 3).
 
     num_workers: int, optional
          Number of worker for multiprocess (default is 0).
 
     tr_ratio: float, optional
-         Split ratio between training and testing sets (default is 0.9).
+         Split ratio between training and testing sets (default is 0.7).
 
     seed : int, optional
         Random seed for reproducibility (default: 2021).
 
     logs : bool, optional
         Whether to print/log execution time and key events (default: True).
+
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
 
     verbose : bool, optional
         Whether to print detailed output information during execution (default: True).
@@ -47,8 +51,10 @@ def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_
 
     Example
     -------
-        >>> imputed = gpt4ts(incomp_data, seq_len=48, batch_size=16)
-        >>> print(imputed.shape)
+    .. code-block:: python
+
+        imputed = gpt4ts(incomp_data, seq_len=48, batch_size=16)
+        print(imputed.shape)
 
     References
     ----------
@@ -56,8 +62,9 @@ def gpt4ts(incomp_data, seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_
     https://github.com/Chengyui/NuwaTS/tree/master
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
-    recov_data = recovGPT4TS(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, gpt_layers=gpt_layers, num_workers=num_workers, model="GPT4TS", tr_ratio=tr_ratio, seed=seed, verbose=verbose)
+    recov_data = recovGPT4TS(ts_m=incomp_data, seq_len=seq_len, batch_size=batch_size, epochs=epochs, gpt_layers=gpt_layers, num_workers=num_workers, model="GPT4TS", tr_ratio=tr_ratio, seed=seed, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

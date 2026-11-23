@@ -56,7 +56,7 @@ def handle_parser(argv=None):
   return args
 
 
-def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9, tr_ratio=0.8, verbose=False, replicat=False):
+def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9, tr_ratio=0.8, verbose=False, use_cuda=0, replicat=False):
   '''Main function for UCI letter and spam datasets.
 
   Args:
@@ -78,10 +78,13 @@ def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9,
 
   _ = handle_parser()
 
-  if batch_size > input_data.shape[0]:
+  while batch_size > input_data.shape[0] and batch_size >= 8:
     old_batch_size = batch_size
-    batch_size = input_data.shape[0] // 2
-    print(f"\n(ERROR): {old_batch_size} > {input_data.shape[0]}, in order to train the model, reduction of the batch_size: {batch_size}.")
+    if input_data.shape[0] < 100:
+      batch_size = input_data.shape[0] // 4
+    else:
+      batch_size = input_data.shape[0] // 2
+    print(f"\n(ERROR): {old_batch_size=} > {input_data.shape[0]=}, in order to train the model, reduction of the batch_size: {batch_size=}. dataset={ts_m.shape}")
 
   if verbose:
     print(f"(IMPUTATION) GAIN\n\tMatrix: {input_data.shape[0]}, {input_data.shape[1]}\n\tbatch_size: {batch_size}\n\tepochs: {iterations}\n\talpha: {alpha}\n\thint_rate: {hint_rate}\n\ttr_ratio: {tr_ratio}\n")
@@ -104,7 +107,7 @@ def recovGAIN (ts_m, batch_size=128, iterations=10000, alpha=100, hint_rate=0.9,
     ori_data_x, miss_data_x, data_m = data_loader(data_name="data_name", miss_rate=miss_rate, ts=input_data, inject_nan=False)
 
     # Impute missing data
-    imputed_data_x = gain(miss_data_x, gain_parameters, verbose=verbose)
+    imputed_data_x = gain(miss_data_x, gain_parameters, use_cuda=use_cuda, verbose=verbose)
 
     if replicat:
       model_rmse = rmse_loss(ori_data_x, imputed_data_x, data_m)

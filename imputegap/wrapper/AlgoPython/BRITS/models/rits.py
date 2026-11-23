@@ -126,11 +126,23 @@ class Model(nn.Module):
         labels = data['labels'].view(-1, 1)
         is_train = data['is_train'].view(-1, 1)
 
-        h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
-        c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # olds
+        #h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        #c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        #if torch.cuda.is_available():
+        #    h, c = h.cuda(), c.cuda()
 
-        if torch.cuda.is_available():
-            h, c = h.cuda(), c.cuda()
+        # Create recurrent states on the same device as the input.
+        h = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
+        c = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)# olds
+        #h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        #c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        #if torch.cuda.is_available():
+        #    h, c = h.cuda(), c.cuda()
+
+        # Create recurrent states on the same device as the input.
+        h = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
+        c = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
 
         x_loss = 0.0
         y_loss = 0.0

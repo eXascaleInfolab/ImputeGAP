@@ -222,7 +222,7 @@ class Dataset_ETT_minute(Dataset):
 """
 
 class Dataset_Custom(Dataset):
-    def __init__(self, root_path, flag='train', size=None, features='S', data_path='ETTh1.csv', target='OT', scale=True, timeenc=0, freq='h',  seasonal_patterns=None, percent=10, ts_m=None, reconstruction=False, tr_ratio=0.7, verbose=True, replicat=False, normalizer=False):
+    def __init__(self, root_path, flag='train', size=None, features='S', data_path='ETTh1.csv', target='OT', scale=True, timeenc=0, freq='h',  seasonal_patterns=None, percent=10, ts_m=None, reconstruction=False, tr_ratio=0.7, verbose=True, replicat=False, normalizer=False, size_limitation=False):
 
         # size [seq_len, label_len, pred_len]
         # info
@@ -253,6 +253,7 @@ class Dataset_Custom(Dataset):
         self.is_targeted = False
         self.replicat = replicat
         self.tr_ratio = tr_ratio
+        self.size_limitation=size_limitation
         self.__read_data__()
 
     def __read_data__(self):
@@ -306,10 +307,15 @@ class Dataset_Custom(Dataset):
             num_test = 0
             num_vali = 0
         else:
-            ts_r, _ = utils_imp.sets_splitter_based_on_training(tr=self.tr_ratio, verbose=False)
-            num_train = int(len(df_raw) * self.tr_ratio)
-            num_test = int(len(df_raw) * ts_r)
-            num_vali = len(df_raw) - num_train - num_test
+            if not self.size_limitation:
+                ts_r, _ = utils_imp.sets_splitter_based_on_training(tr=self.tr_ratio, verbose=False)
+                num_train = int(len(df_raw) * self.tr_ratio)
+                num_test = int(len(df_raw) * ts_r)
+                num_vali = len(df_raw) - num_train - num_test
+            else:
+                num_train = int(len(df_raw) * 0.9)
+                num_test = 0
+                num_vali = len(df_raw) - num_train
 
         border1s = [0, num_train - self.seq_len, len(df_raw) - num_test - self.seq_len]
         border2s = [num_train, num_train + num_vali, len(df_raw)]
@@ -353,11 +359,9 @@ class Dataset_Custom(Dataset):
             inds = np.where(np.isnan(data))
             data[inds] = np.take(col_means, inds[1])
 
-        #print(f"{self.set_type}:{border1 = }")
-        #print(f"{self.set_type}:{border2 = }")
-
         self.data_x = data[border1:border2]
         self.data_y = data[border1:border2]
+
         self.data_stamp = data_stamp
 
     def __getitem__(self, index):

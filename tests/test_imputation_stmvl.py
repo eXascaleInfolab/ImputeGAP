@@ -2,7 +2,7 @@ import os
 import unittest
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestSTMVL(unittest.TestCase):
@@ -17,9 +17,9 @@ class TestSTMVL(unittest.TestCase):
         dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+        ts.load_series("chlorine", normalizer="z_score")
 
-        incomp_data = GenGap.mcar(ts.data)
+        incomp_data = GenGAP.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()
         algo.score(ts.data)
@@ -27,7 +27,7 @@ class TestSTMVL(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 
@@ -37,13 +37,13 @@ class TestSTMVL(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(params={'window_size': 7, 'gamma':0.85, 'alpha': 2})
+        algo.impute(params={'window_size': 7, 'gamma':0.85, 'alpha': 2}, language="c++")
         algo.score(ts.data)
         metrics = algo.metrics
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 

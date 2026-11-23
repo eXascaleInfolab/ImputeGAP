@@ -1,4 +1,4 @@
-<img align="right" width="140" height="140" src="https://www.naterscreations.com/imputegap/logo_imputegab.png" >
+<img align="right" width="140" height="140" src="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/logo_imputegab.png">
 <br /> <br />
 
 # Welcome to ImputeGAP
@@ -9,16 +9,16 @@ In detail, the package provides:
 
   - Over 40 state-of-the-art time series imputation algorithms from six different families ([Algorithms](#Available-Imputation-Algorithms))
   - Several imputation univariate time series datasets and utilities to handle multivariate ones ([Datasets](https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets))
-  - Configurable contamination module that simulates real-world missingness patterns ([Patterns](https://imputegap.readthedocs.io/en/latest/missingness_patterns.html))
+  - Configurable contamination module that simulates real-world missingness patterns ([Patterns](https://imputegap.readthedocs.io/en/latest/gapgeneration.html))
   - AutoML techniques to parameterize the imputation algorithms ([AutoML](#Parameter-Tuning))
   - Unified benchmarking pipeline to evaluate the performance of imputation algorithms ([Benchmark](#benchmark))
   - Modular analysis tools to assess the impact of imputation on time series downstream tasks ([Downstream](#downstream))
   - Expainability module to understand the impact of time series features on the imputation results ([Explainer](#explainer))
-  - Adjustable wrappers to integrate new algorithms in different languages: Python, C++, Matlab, Java, and R ([Contributing](https://imputegap.readthedocs.io/en/latest/contributing.html))
+  - Adjustable wrappers to integrate new algorithms in different languages ([Integration](https://imputegap.readthedocs.io/en/latest/integration.html))
 
 <br>
 
-![Python](https://img.shields.io/badge/Python-v3.13-blue) ![Release](https://img.shields.io/badge/Release-v1.1.2-brightgreen)  ![Coverage](https://img.shields.io/badge/Coverage-94%25-brightgreen) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20MacOS-informational) [![Docs](https://img.shields.io/badge/Docs-available-brightgreen?style=flat&logo=readthedocs)](https://imputegap.readthedocs.io/)
+![Python](https://img.shields.io/badge/Python-v3.13-blue) ![Release](https://img.shields.io/badge/Release-v1.1.3-brightgreen)  ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20MacOS-informational) [![Docs](https://img.shields.io/badge/Docs-available-brightgreen?style=flat&logo=readthedocs)](https://imputegap.readthedocs.io/)
 
 <i>If you like our library, please add a ⭐ in our GitHub repository.</i>
 
@@ -35,49 +35,63 @@ In detail, the package provides:
 
 
 # Available Imputation Algorithms
-| **Algorithm**             | **Family**        | **Venue -- Year**            |
-|---------------------------|-------------------|------------------------------|
-| NuwaTS [[35]](#ref35)     | LLMs              | Arxiv -- 2024                |
-| GPT4TS [[36]](#ref36)     | LLMs              | NeurIPS -- 2023              |
-| 🚧 MOMENT [[39]](#ref39)  | LLMs              | ICLR -- 2025                 |
-| MissNet [[27]](#ref27)    | Deep Learning     | KDD -- 2024                  |
-| MPIN [[25]](#ref25)       | Deep Learning     | PVLDB -- 2024                |
-| BayOTIDE [[30]](#ref30)   | Deep Learning     | PMLR -- 2024                 |
-| BitGraph [[32]](#ref32)   | Deep Learning     | ICLR -- 2024                 |
-| TimesNet [[37]](#ref37)   | Deep Learning     | ICLR -- 2023                 |
-| SAITS [[41]](#ref26)      | Deep Learning     | ESWA -- 2023                 |
-| PRISTI [[26]](#ref26)     | Deep Learning     | ICDE -- 2023                 |
-| GRIN [[29]](#ref29)       | Deep Learning     | ICLR -- 2022                 |
-| CSDI [[38]](#ref38)       | Deep Learning     | NeurIPS -- 2021              |
-| HKMFT [[31]](#ref31)      | Deep Learning     | TKDE -- 2021                 |
-| DeepMVI [[24]](#ref24)    | Deep Learning     | PVLDB -- 2021                |
-| MRNN [[22]](#ref22)       | Deep Learning     | IEEE Trans on BE -- 2019     |
-| BRITS [[23]](#ref23)      | Deep Learning     | NeurIPS -- 2018              |
-| GAIN [[28]](#ref28)       | Deep Learning     | ICML -- 2018                 |
-| 🚧 SSGAN [[40]](#ref40)   | Deep Learning     | AAAI -- 2021                 |
-| 🚧 GP-VAE [[42]](#ref41)  | Deep Learning     | AISTATS -- 2020              |
-| 🚧 NAOMI [[43]](#ref42)   | Deep Learning     | NeurIPS -- 2019              |
-| CDRec [[1]](#ref1)        | Matrix Completion | KAIS -- 2020                 |
-| TRMF [[8]](#ref8)         | Matrix Completion | NeurIPS -- 2016              |
-| GROUSE [[3]](#ref3)       | Matrix Completion | PMLR -- 2016                 |
-| ROSL [[4]](#ref4)         | Matrix Completion | CVPR -- 2014                 |
-| SoftImpute [[6]](#ref6)   | Matrix Completion | JMLR -- 2010                 |
-| SVT [[7]](#ref7)          | Matrix Completion | SIAM J. OPTIM -- 2010        |
-| SPIRIT [[5]](#ref5)       | Matrix Completion | VLDB -- 2005                 |
-| IterativeSVD [[2]](#ref2) | Matrix Completion | BIOINFORMATICS -- 2001       |
-| TKCM [[11]](#ref11)       | Pattern Search    | EDBT -- 2017                 |
-| STMVL [[9]](#ref9)        | Pattern Search    | IJCAI -- 2016                |
-| DynaMMo [[10]](#ref10)    | Pattern Search    | KDD -- 2009                  |
-| IIM [[12]](#ref12)        | Machine Learning  | ICDE -- 2019                 |
-| XGBOOST [[13]](#ref13)    | Machine Learning  | KDD -- 2016                  |
-| MICE [[14]](#ref14)       | Machine Learning  | Statistical Software -- 2011 |
-| MissForest [[15]](#ref15) | Machine Learning  | BioInformatics -- 2011       |
-| KNNImpute                 | Statistics        | -                            |
-| Interpolation             | Statistics        | -                            |
-| MinImpute                 | Statistics        | -                            |
-| ZeroImpute                | Statistics        | -                            |
-| MeanImpute                | Statistics        | -                            |
-| MeanImputeBySeries        | Statistics        | -                            |
+| **Algorithm**               | **Family**           | **Venue -- Year**            |
+|-----------------------------|----------------------|------------------------------|
+| MOMENT [[39]](#ref39)       | LLMs                 | ICML -- 2024                 |
+| NuwaTS [[35]](#ref35)       | LLMs                 | Arxiv -- 2024                |
+| GPT4TS [[36]](#ref36)       | LLMs                 | NeurIPS -- 2023              |
+| 🚧 LLM4HRS [[46]](#ref46)   | LLMs                 | IEEE Tr Geo RS -- 2025       |
+| 🚧 UniTS [[44]](#ref44)     | LLMs                 | NeurIPS -- 2024              |
+| 🚧 Timer [[45]](#ref45)     | LLMs                 | ICML -- 2024                 |
+| MissNet [[27]](#ref27)      | Deep Learning        | KDD -- 2024                  |
+| BayOTIDE [[30]](#ref30)     | Deep Learning        | ICML -- 2024                 |
+| BitGraph [[32]](#ref32)     | Deep Learning        | ICLR -- 2024                 |
+| MPIN [[25]](#ref25)         | Deep Learning        | PVLDB -- 2023                |
+| TimesNet [[37]](#ref37)     | Deep Learning        | ICLR -- 2023                 |
+| SAITS [[41]](#ref41)        | Deep Learning        | ESWA -- 2023                 |
+| PRISTI [[26]](#ref26)       | Deep Learning        | ICDE -- 2023                 |
+| GRIN [[29]](#ref29)         | Deep Learning        | ICLR -- 2022                 |
+| CSDI [[38]](#ref38)         | Deep Learning        | NeurIPS -- 2021              |
+| HKMFT [[31]](#ref31)        | Deep Learning        | TKDE -- 2021                 |
+| DeepMVI [[24]](#ref24)      | Deep Learning        | PVLDB -- 2021                |
+| MRNN [[22]](#ref22)         | Deep Learning        | IEEE Trans on BE -- 2019     |
+| BRITS [[23]](#ref23)        | Deep Learning        | NeurIPS -- 2018              |
+| GAIN [[28]](#ref28)         | Deep Learning        | ICML -- 2018                 |
+| 🚧 T1 [[47]](#ref47)        | Deep Learning        | ICLR -- 2026                 |
+| 🚧 FIM-ℓ [[48]](#ref48)     | Deep Learning        | ICLR -- 2025                 |
+| 🚧 SSD-TS [[49]](#ref49)    | Deep Learning        | KDD -- 2025                  |
+| 🚧 ImputeINR [[50]](#ref50) | Deep Learning        | IJCAI -- 2025                |
+| 🚧 CoFill [[51]](#ref51)    | Deep Learning        | IJCAI -- 2025                |
+| 🚧 SADI [[52]](#ref52)      | Deep Learning        | AAAI -- 2025                 |
+| 🚧 LSCD [[53]](#ref53)      | Deep Learning        | ICML -- 2025                 |
+| 🚧 FGTI [[54]](#ref54)      | Deep Learning        | NeurIPS -- 2024              |
+| 🚧 SSSD [[55]](#ref55)      | Deep Learning        | TMLR -- 2023                 |
+| 🚧 MTSIT [[56]](#ref56)     | Deep Learning        | IEEE SPL -- 2022             |
+| 🚧 SSGAN [[57]](#ref57)     | Deep Learning        | AAAI -- 2021                 |
+| 🚧 PoGeVon [[58]](#ref58)   | Deep Learning        | KDD -- 2023                  |
+| CDRec [[1]](#ref1)          | Matrix Completion    | KAIS -- 2020                 |
+| TRMF [[8]](#ref8)           | Matrix Completion    | NeurIPS -- 2016              |
+| ROSL [[4]](#ref4)           | Matrix Completion    | CVPR -- 2014                 |
+| GROUSE [[3]](#ref3)         | Matrix Completion    | Arxiv -- 2010                |
+| SoftImpute [[6]](#ref6)     | Matrix Completion    | JMLR -- 2010                 |
+| SVT [[7]](#ref7)            | Matrix Completion    | SIAM J. OPTIM -- 2010        |
+| SPIRIT [[5]](#ref5)         | Matrix Completion    | VLDB -- 2005                 |
+| IterativeSVD [[2]](#ref2)   | Matrix Completion    | BIOINFORMATICS -- 2001       |
+| 🚧 TIDER [[59]](#ref59)     | Matrix Completion    | ICLR -- 2023                 |
+| TKCM [[11]](#ref11)         | Pattern Search       | EDBT -- 2017                 |
+| STMVL [[9]](#ref9)          | Pattern Search       | IJCAI -- 2016                |
+| DynaMMo [[10]](#ref10)      | Pattern Search       | KDD -- 2009                  |
+| 🚧 PSW-I [[60]](#ref60)     | Pattern Search       | ICLR -- 2025                 |
+| IIM [[12]](#ref12)          | Machine Learning     | ICDE -- 2019                 |
+| XGBOOST [[13]](#ref13)      | Machine Learning     | KDD -- 2016                  |
+| MissForest [[15]](#ref15)   | Machine Learning     | BioInformatics -- 2012       |
+| MICE [[14]](#ref14)         | Machine Learning     | Statistical Software -- 2011 |
+| KNNImpute                   | Statistics           | -                            |
+| Interpolation               | Statistics           | -                            |
+| MinImpute                   | Statistics           | -                            |
+| ZeroImpute                  | Statistics           | -                            |
+| MeanImpute                  | Statistics           | -                            |
+| MeanImputeBySeries          | Statistics           | -                            |
 ---
 
 ### **Quick Navigation**
@@ -88,16 +102,16 @@ In detail, the package provides:
 
 - **Code Snippets**  
   - [Dataset Loading](#dataset-loading)  
-  - [Contamination](#contamination)  
+  - [Gap Generation](#Gap-Generation)  
   - [Imputation](#imputation)  
   - [Auto-ML](#Parameter-Tuning)  
-  - [Explainer](#explainer)  
-  - [Downstream Evaluation](#downstream)
-  - [Benchmark](#benchmark)  
+  - [Explainer](#Explainer)  
+  - [Downstream](#Downstream)
+  - [Benchmarking](#Benchmarking)  
   - [Notebooks](#Jupyter-Notebooks)  
 
 - **Contribute**  
-  - [Integration Guide](#contribution)  
+  - [Integration Guide](#integration)  
 
 - **Additional Information**  
    - [Maintainers](#maintainers)  
@@ -112,40 +126,39 @@ In detail, the package provides:
 
 ## System Requirements
 
-ImputeGAP is compatible with Python>=3.11 and Unix-compatible environment.
-
-<i>To create and set up an environment with Python 3.12, please refer to the [installation guide](https://imputegap.readthedocs.io/en/latest/getting_started.html).</i>
+ImputeGAP is compatible with Python>=3.11 and Unix/WSL environment.
 
 
-<br>
+### Pip
 
-## Installation
+If you are using ImputeGAP for the first time, the following script installs the required dependencies through a virtual environment.
 
+```bash
+git clone https://github.com/eXascaleInfolab/ImputeGAP.git
+cd ImputeGAP/
+source imputegap_lib.sh
+``` 
 
-### pip
-
-To install/update the latest version of ImputeGAP, run the following command:
+Run the following command to install the latest version of ImputeGAP:
 
 ```bash
 pip install imputegap
-``` 
-
-<br>
+```
 
 ### Source
 
-If you would like to extend the library, you can install from source:
+To install ImputeGAP directly from the GitHub source in editable mode, clone the repository and run the source script:
 
 ```bash
-git init
-git clone https://github.com/eXascaleInfolab/ImputeGAP
-cd ./ImputeGAP
-pip install -e .
+git clone https://github.com/eXascaleInfolab/ImputeGAP.git
+cd ImputeGAP/
+source imputegap_source.sh
+
+pip install -e . # local installation
 ```
 
-<br>
 
-### Docker
+<!-- ### Docker
 
 Alternatively, you can download the latest version of ImputeGAP with all dependencies pre-installed using Docker.
 
@@ -166,9 +179,10 @@ Run the Docker container:
 ```bash
 docker run -p 8888:8888 qnater/imputegap:1.1.21
 ``` 
+-->
 
+------
 
----
 
 
 <br> <br>
@@ -188,18 +202,19 @@ You can find this example of normalization in the file [`runner_loading.py`](htt
 To load and plot the eeg-alcohol dataset from the library:
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
-from imputegap.tools import utils
 
 # initialize the time series object
 ts = TimeSeries()
+print(f"\nImputeGAP datasets : {ts.datasets}")
 
-# load and normalize the dataset from the library
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+# load and normalize the dataset
+ts.load_series(data="eeg-alcohol", normalizer=None)
 
-# print and plot a subset of time series
+# plot and print a subset of time series
 ts.print(nbr_series=4, nbr_val=4)
-ts.plot(input_data=ts.data, nbr_series=6, nbr_val=100, save_path="./imputegap_assets")
+ts.plot(input_data=ts.data, nbr_series=9, nbr_val=100, save_path="./imputegap_assets")
 ```
 
 The module ``ts.datasets`` contains all the publicly available datasets provided by the library, which can be listed as follows:
@@ -212,33 +227,34 @@ print(f"ImputeGAP datasets : {ts.datasets}")
 
 ---
 
-## Contamination
-We now describe how to simulate missing values in the loaded dataset. ImputeGAP implements eight different missingness patterns. For more details about the patterns, please refer to the documentation on this [page](https://imputegap.readthedocs.io/en/latest/missingness_patterns.html).
+## Gap Generatiion
+GenGAP is a module to generate realistic missing gaps in sensor data. It allows users to fully customize all the properties of the missing gaps: start, size, position, frequency, etc., and can be easily imported inside any project.
 <br></br>
 
-### Example Contamination
+### Example GenGAP
 You can find this example in the file [`runner_contamination.py`](https://github.com/eXascaleInfolab/ImputeGAP/blob/main/imputegap/runner_contamination.py).
 
-ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGap module can be invoked externally. The patterns are described [here](https://imputegap.readthedocs.io/en/latest/missingness_patterns.html)
+ImputeGAP implements a module to simulate different missingness patterns in time series. The GenGap module can be invoked externally. The patterns are described [here](https://imputegap.readthedocs.io/en/latest/gapgeneration.html)
 
 As example, we show how to contaminate the eeg-alcohol dataset with the MCAR pattern:
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
-from imputegap.tools import utils
+from imputegap.recovery.contamination import GenGAP
 
 # initialize the time series object
 ts = TimeSeries()
+print(f"\nMissingness patterns : {ts.patterns}")
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score")
 
 # contaminate the time series with MCAR pattern
-ts_m = GenGap.mcar(ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
+ts_m = GenGAP.mcar(input_data=ts.data, rate_dataset=0.2, rate_series=0.4, block_size=10, seed=True)
 
 # plot the contaminated time series
-ts.plot(ts.data, ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets/contamination")
+ts.plot(input_data=ts.data, incomp_data=ts_m, nbr_series=9, subplot=True, save_path="./imputegap_assets/contamination")
 ```
 
 All missingness patterns developed in ImputeGAP are available in the ``ts.patterns`` module. They can be listed as follows:
@@ -256,7 +272,7 @@ print(f"Missingness patterns : {ts.patterns}")
 ## Imputation
 
 In this section, we will illustrate how to impute the contaminated time series. Our library implements six families of imputation algorithms: Statistical, Machine Learning, Matrix Completion, Deep Learning, Pattern Search, and Large Language Models.
-The list of algorithms is described [here](https://imputegap.readthedocs.io/en/latest/algorithms.html).
+The list of algorithms is described [here](https://imputegap.readthedocs.io/en/latest/index.html#imputation-algorithms).
 
 ### Example Imputation
 You can find this example in the file [`runner_imputation.py`](https://github.com/eXascaleInfolab/ImputeGAP/blob/main/imputegap/runner_imputation.py).
@@ -264,27 +280,27 @@ You can find this example in the file [`runner_imputation.py`](https://github.co
 Let's illustrate the imputation using the CDRec algorithm from the Matrix Completion family.
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
-from imputegap.tools import utils
 
 # initialize the time series object
 ts = TimeSeries()
+print(f"\nImputation algorithms : {ts.algorithms}")
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score", nbr_series=32, nbr_val=128)
 
 # contaminate the time series
-ts_m = GenGap.mcar(ts.data)
+ts_m = GenGAP.mcar(input_data=ts.data)
 
 # impute the contaminated series
-imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m, use_cuda=0)
 imputer.impute()
 
 # compute and print the imputation metrics
-imputer.score(ts.data, imputer.recov_data)
-ts.print_results(imputer.metrics)
+imputer.score(input_data=ts.data, recov_data=imputer.recov_data)
 
 # plot the recovered time series
 ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
@@ -293,7 +309,13 @@ ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr
 Imputation can be performed using either default values or user-defined values. To specify the parameters, please use a dictionary in the following format:
 
 ```python
-imputer.impute(params={"rank": 5, "epsilon": 0.01, "iterations": 100})
+imputer.impute(params={"rank": 5, "epsilon": 0.01, "iteration": 100})
+```
+
+CPU or GPU can be selected manually or automatically through the imputation parameters. If the algorithm does not support GPU acceleration, CPU is used by default. Set `0` for CPU, `1` for GPU, or `2` for automatic device selection.
+
+```python
+imputer = Imputation.LLMs.GPT4TS(incomp_data=ts_m, use_cuda=1)
 ```
 
 All algorithms developed in ImputeGAP are available in the ``ts.algorithms`` module, which can be listed as follows:
@@ -316,8 +338,9 @@ You can find this example in the file [`runner_optimization.py`](https://github.
 Let's illustrate the imputation using the CDRec algorithm and Ray-Tune AutoML:
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
 
@@ -325,38 +348,28 @@ from imputegap.tools import utils
 ts = TimeSeries()
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score")
 
 # contaminate and impute the time series
-ts_m = GenGap.mcar(ts.data)
-imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+ts_m = GenGAP.mcar(input_data=ts.data)
+imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
+imputer.verbose = False
 
 # use Ray Tune to fine tune the imputation algorithm
 imputer.impute(user_def=False, params={"input_data": ts.data, "optimizer": "ray_tune"})
 
-# compute the imputation metrics with optimized parameter values
-imputer.score(ts.data, imputer.recov_data)
-
 # compute the imputation metrics with default parameter values
-imputer_def = Imputation.MatrixCompletion.CDRec(ts_m).impute()
-imputer_def.score(ts.data, imputer_def.recov_data)
+imputer_def = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m).impute()
+imputer_def.score(input_data=ts.data, recov_data=imputer_def.recov_data, text="Default values")
 
-# print the imputation metrics with default and optimized parameter values
-ts.print_results(imputer_def.metrics, text="Default values")
-ts.print_results(imputer.metrics, text="Optimized values")
+# compute the imputation metrics with optimized parameter values
+imputer.score(input_data=ts.data, recov_data=imputer.recov_data, text="Optimized values")
 
 # plot the recovered time series
-ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation")
+ts.plot(input_data=ts.data, incomp_data=ts_m, recov_data=imputer.recov_data, nbr_series=9, subplot=True, algorithm=imputer.algorithm, save_path="./imputegap_assets/imputation", display=True)
 
 # save hyperparameters
 utils.save_optimization(optimal_params=imputer.parameters, algorithm=imputer.algorithm, dataset="eeg-alcohol", optimizer="ray_tune")
-```
-All optimizers developed in ImputeGAP are available in the ``ts.optimizers`` module, which can be listed as follows:
-
-```python
-from imputegap.recovery.manager import TimeSeries
-ts = TimeSeries()
-print(f"AutoML Optimizers : {ts.optimizers}")
 ```
 
 
@@ -364,44 +377,31 @@ print(f"AutoML Optimizers : {ts.optimizers}")
 
 
 
-## Benchmark
+## Benchmarking
 
-ImputeGAP can serve as a common test-bed for comparing the effectiveness and efficiency of time series imputation algorithms[[33]](#ref33) . Users have full control over the benchmark by customizing various parameters,  including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
+BenchGAP is a module for benchmarking the performance (efficacy and runtime) of time series imputation algorithms. Users have full control over BenchGAP by customizing various parameters, including the list of the algorithms to compare, the optimizer, the datasets to evaluate, the missingness patterns, the range of missing values, and the performance metrics.
 
 
-### Example Benchmark
+### Example BenchGAP
 You can find this example in the file [`runner_benchmark.py`](https://github.com/eXascaleInfolab/ImputeGAP/blob/main/imputegap/runner_benchmark.py).
 
 The benchmarking module can be utilized as follows:
 
 ```python
-from imputegap.recovery.benchmark import Benchmark
-from imputegap.tools import utils
-
-my_algorithms = ["MeanImpute", "SoftImpute"]
-
-my_opt = "default_params"
-
-my_datasets = ["eeg-alcohol"]
-
-my_patterns = ["mcar"]
-
-range = [0.05, 0.1, 0.2, 0.4, 0.6, 0.8]
+# ImputeGAP import
+from imputegap.recovery.benchmark import BenchGAP
 
 # launch the evaluation
-bench = Benchmark()
-bench.eval(algorithms=my_algorithms, datasets=my_datasets, patterns=my_patterns, x_axis=range, optimizer=my_opt)
+bench = BenchGAP()
+bench.eval_imputation(algorithms=["MeanImpute", "CDRec"],
+           datasets=["eeg-alcohol"],
+           patterns=["mcar"],
+           x_axis=[0.1, 0.2, 0.4, 0.6, 0.8],
+           use_cache=False)
 
 # display the plot
 bench.subplots.show()
 ```
-
-You can enable the optimizer using the following command:
-```python
-opt = {"optimizer": "ray_tune", "options": {"n_calls": 1, "max_concurrent_trials": 1}}
-my_opt = [opt]
-```
-
 
 ---
 
@@ -410,77 +410,113 @@ my_opt = [opt]
 ImputeGAP includes a dedicated module for systematically evaluating the impact of data imputation on downstream tasks. Currently, forecasting is the primary supported task, with plans to expand to additional applications in the future.
 
 ### Example Downstream
-You can find this example in the file [`runner_downstream.py`](https://github.com/eXascaleInfolab/ImputeGAP/blob/main/imputegap/runner_downstream.py).
+You can find this example in the file [`runner_down_imputation.py`](https://github.com/eXascaleInfolab/ImputeGAP/blob/main/imputegap/runner_down_imputation.py).
 
-Below is an example of how to call the downstream process for the model Prophet by defining a dictionary for the evaluator and selecting the model:
+Below is an example of how to call the  process for the model Prophet by defining a dictionary for the evaluator and selecting the model:
+downstream
 
 ```python
+# ImputeGAP imports
 from imputegap.recovery.imputation import Imputation
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 from imputegap.recovery.manager import TimeSeries
-from imputegap.tools import utils
+from imputegap.recovery.downstream import Artifact, Forecaster
 
 # initialize the time series object
 ts = TimeSeries()
+print(f"\nImputeGAP downstream models for forcasting : {ts.forecasters}")
 
-# load and normalize the timeseries
-ts.load_series(utils.search_path("forecast-economy"), normalizer="z_score")
+# load and normalize the dataset
+ts.load_series(data="chlorine", normalizer="z_score")
 
 # contaminate the time series
-ts_m = GenGap.aligned(ts.data, rate_series=0.8)
+ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.2, offset=0, reverse=True)
 
 # define and impute the contaminated series
-imputer = Imputation.MatrixCompletion.CDRec(ts_m)
+imputer = Imputation.MatrixCompletion.CDRec(incomp_data=ts_m)
 imputer.impute()
 
-# compute and print the downstream results
-downstream_config = {"task": "forecast", "model": "hw-add", "baseline": "ZeroImpute"}
-imputer.score(ts.data, imputer.recov_data, downstream=downstream_config)
-ts.print_results(imputer.downstream_metrics, text="Downstream results")
+# define the parameters for the downstream model
+forecaster = Forecaster(artifact=Artifact(model="chronos", horizon=128, season=24), pipeline=True)
+
+# compute the downstream analysis and display the results
+imputer.score(input_data=ts.data, recov_data=imputer.recov_data, downstream=forecaster)
 ```
 
-All downstream models developed in ImputeGAP are available in the ``ts.forecasting_models`` module, which can be listed as follows:
+All downstream models developed in ImputeGAP are available in the ``ts.forecasters`` module, which can be listed as follows:
 
 ```python
 from imputegap.recovery.manager import TimeSeries
+
 ts = TimeSeries()
-print(f"ImputeGAP downstream models for forecasting : {ts.forecasting_models}")
+print(f"ImputeGAP downstream models for forecasting : {ts.forecasters}")
 ```
 
+
+To evaluate and compare the impact of multiple imputation algorithms on downstream forecasting performance, use the `eval()` method. The following example compares CDRec, MICE, and ZeroImpute using the Chronos forecasting model:
+
+```python
+# ImputeGAP imports
+from imputegap.recovery.manager import TimeSeries
+from imputegap.recovery.contamination import GenGAP
+from imputegap.recovery.downstream import Downstream
+
+# initialize the time series object
+ts = TimeSeries()
+print(f"\nImputeGAP downstream models for forcasting : {ts.forecasters}")
+
+# load and normalize the dataset
+ts.load_series(data="chlorine", normalizer="z_score")
+
+# contaminate the time series
+ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.4, offset=0, reverse=True)
+
+# define the downstream options
+downstream = Downstream(input_data=ts.data, incomp_data=ts_m)
+
+# launch the analysis
+comparison = downstream.eval(imp_algs=["SAITS", "ZeroImpute"],
+                             model="chronos",
+                             horizons=[128],
+                             season=24,
+                             meta_pattern="mcar",
+                             meta_rate=0.4,
+                             use_cuda=2)
+```
 
 ---
 
 
 ## Explainer
 
-The library provides insights into the algorithm’s behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations ([SHAP](https://shap.readthedocs.io/en/latest/)) to reveal how different time series features influence the model’s predictions.
+ExplainGAP module provides insights into the algorithm's behavior by identifying the features that impact the imputation results. It trains a regression model to predict imputation results across various methods and uses SHapley Additive exPlanations ([SHAP](https://shap.readthedocs.io/en/latest/)) to reveal how different time series features influence the model’s predictions.
 
 
-### Example Explainer
+### Example ExplainGAP
 You can find this example in the file [`runner_explainer.py`](https://github.com/eXascaleInfolab/ImputeGAP/blob/main/imputegap/runner_explainer.py).
 
 Let’s illustrate the explainer using the CDRec algorithm and MCAR missingness pattern:
 
-
 ```python
+# ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.explainer import Explainer
-from imputegap.tools import utils
+from imputegap.recovery.explainer import ExplainGAP
 
 # initialize the time series and explainer object
 ts = TimeSeries()
-exp = Explainer()
+exp = ExplainGAP()
+print(f"\nImputeGAP explainer features extractor : {ts.extractors}")
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score")
 
 # configure the explanation
 exp.shap_explainer(input_data=ts.data, extractor="pycatch", pattern="mcar", file_name=ts.name, algorithm="CDRec")
 
 # print the impact of each feature
-exp.print(exp.shap_values, exp.shap_details)
+exp.print(shap_values=exp.shap_values, shap_details=exp.shap_details)
 
-# plot the features impact
+# plot the feature impacts
 exp.show()
 ```
 
@@ -515,8 +551,10 @@ ImputeGAP provides Google Colab notebooks available through the following links:
 
 ---
 
-## Contribution
-To add your own imputation algorithm, please refer to the detailed [integration guide](https://imputegap.readthedocs.io/en/latest/contributing.html).
+<br> <br>
+
+## Integration
+To add your own imputation algorithm, please refer to the detailed [integration guide](https://imputegap.readthedocs.io/en/latest/integration.html).
 
 
 ---
@@ -619,7 +657,7 @@ If you use ImputeGAP in your research, please cite these papers:
 [2] Olga G. Troyanskaya, Michael N. Cantor, Gavin Sherlock, Patrick O. Brown, Trevor Hastie, Robert Tibshirani, David Botstein, Russ B. Altman: Missing value estimation methods for DNA microarrays. Bioinform. 17(6): 520-525 (2001)
 
 <a name="ref3"></a>
-[3] Dejiao Zhang, Laura Balzano: Global Convergence of a Grassmannian Gradient Descent Algorithm for Subspace Estimation. AISTATS 2016: 1460-1468
+[3] Laura Balzano, Robert D. Nowak, and Benjamin Recht. "Online Identification and Tracking of Subspaces from Highly Incomplete Information." CoRR abs/1006.4046, 2010.
 
 <a name="ref4"></a>
 [4] Xianbiao Shu, Fatih Porikli, Narendra Ahuja: Robust Orthonormal Subspace Learning: Efficient Recovery of Corrupted Low-Rank Matrices. CVPR 2014: 3874-3881
@@ -652,7 +690,7 @@ If you use ImputeGAP in your research, please cite these papers:
 [13] Tianqi Chen, Carlos Guestrin: XGBoost: A Scalable Tree Boosting System. KDD 2016: 785-794
 
 <a name="ref14"></a>
-[14] Royston Patrick , White Ian R.: Multiple Imputation by Chained Equations (MICE): Implementation in Stata. Journal of Statistical Software 2010: 45(4), 1–20.
+[14] Royston Patrick , White Ian R.: Multiple Imputation by Chained Equations (MICE): Implementation in Stata. Journal of Statistical Software 2011: 45(4), 1–20.
 
 <a name="ref15"></a>
 [15] Daniel J. Stekhoven, Peter Bühlmann: MissForest - non-parametric missing value imputation for mixed-type data. Bioinform. 28(1): 112-118 (2012)
@@ -667,7 +705,7 @@ If you use ImputeGAP in your research, please cite these papers:
 [24] Parikshit Bansal, Prathamesh Deshpande, Sunita Sarawagi: Missing Value Imputation on Multidimensional Time Series. Proc. VLDB Endow. 14(11): 2533-2545 (2021)
 
 <a name="ref25"></a>
-[25] Xiao Li, Huan Li, Hua Lu, Christian S. Jensen, Varun Pandey, Volker Markl: Missing Value Imputation for Multi-attribute Sensor Data Streams via Message Propagation (Extended Version). CoRR abs/2311.07344 (2023)
+[25] Xiao Li, Huan Li, Hua Lu, Christian S. Jensen, Varun Pandey, Volker Markl: Missing Value Imputation for Multi-attribute Sensor Data Streams via Message Propagation (Extended Version). Proceedings of the VLDB Endowment, 17(3):345–358, 2023.
 
 <a name="ref26"></a>
 [26]: Mingzhe Liu, Han Huang, Hao Feng, Leilei Sun, Bowen Du, Yanjie Fu: PriSTI: A Conditional Diffusion Framework for Spatiotemporal Imputation. ICDE 2023: 1927-1939
@@ -679,10 +717,10 @@ If you use ImputeGAP in your research, please cite these papers:
 [28] Jinsung Yoon, James Jordon, Mihaela van der Schaar: GAIN: Missing Data Imputation using Generative Adversarial Nets. ICML 2018: 5675-5684
 
 <a name="ref29"></a>
-[29] Andrea Cini, Ivan Marisca, Cesare Alippi: Multivariate Time Series Imputation by Graph Neural Networks. CoRR abs/2108.00298 (2021)
+[29] Andrea Cini, Ivan Marisca, and Cesare Alippi. "Filling the G_ap_s: Multivariate Time Series Imputation by Graph Neural Networks." The Tenth International Conference on Learning Representations (ICLR), 2022.
 
 <a name="ref30"></a>
-[30] Shikai Fang, Qingsong Wen, Yingtao Luo, Shandian Zhe, Liang Sun: BayOTIDE: Bayesian Online Multivariate Time Series Imputation with Functional Decomposition. ICML 2024
+[30] Shikai Fang, Qingsong Wen, Yingtao Luo, Shandian Zhe, Liang Sun: BayOTIDE: Bayesian Online Multivariate Time Series Imputation with Functional Decomposition. ICML 2024 (PMLR 235): 12993-13009.
 
 <a name="ref31"></a>
 [31] Liang Wang, Simeng Wu, Tianheng Wu, Xianping Tao, Jian Lu: HKMF-T: Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization. IEEE Trans. Knowl. Data Eng. 33(11): 3582-3593 (2021)
@@ -693,7 +731,7 @@ If you use ImputeGAP in your research, please cite these papers:
 <a name="ref33"></a>
 [33] Mourad Khayati, Alberto Lerner, Zakhar Tymchenko, Philippe Cudré-Mauroux: Mind the Gap: An Experimental Evaluation of Imputation of Missing Values Techniques in Time Series. Proc. VLDB Endow. 13(5): 768-782 (2020)
 
-<a name="ref33"></a>
+<a name="ref34"></a>
 [34] Mourad Khayati, Quentin Nater, Jacques Pasquier: ImputeVIS: An Interactive Evaluator to Benchmark Imputation Techniques for Time Series Data. Proc. VLDB Endow. 17(12): 4329-4332 (2024)
 
 <a name="ref35"></a>
@@ -708,20 +746,63 @@ If you use ImputeGAP in your research, please cite these papers:
 <a name="ref38"></a>
 [38] Yusuke Tashiro, Jiaming Song, Yang Song, Stefano Ermon: CSDI: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation. NeurIPS 2021
 
-<a name="ref39"></a>
-[39] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. ICLR 2025
 
-<a name="ref40"></a>
-[40] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin : Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI 2021
+<a name="ref39"></a>
+[39] Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski: MOMENT: A Family of Open Time-series Foundation Models. In Forty-first International Conference on Machine Learning, ICML 2024, Vienna, Austria, July 21-27, 2024 (Proceedings of Machine Learning Research). PMLR OpenReview.net, 16115–16152.
 
 <a name="ref41"></a>
 [41] Wenjie Du, David Côté, Yan Liu : SAITS: : Self-attention-based imputation for time series . ESWA 2023
 
-<a name="ref42"></a>
-[42] Vincent Fortuin, Dmitry Baranchuk, Gunnar Rätsch,  Stephan Mandt : GP-VAE: Deep Probabilistic Multivariate Time Series Imputation. AISTATS 2020
+<a name="ref44"></a>
+[44] Shanghua Gao, Teddy Koker, Owen Queen, Thomas Hartvigsen, Theodoros Tsiligkaridis, Marinka Zitnik : UniTS: A Unified Multi-Task Time Series Model. NeurIPS 2024
 
-<a name="ref43W"></a>
-[43] Yukai Liu, Rose Yu, Stephan Zheng, Eric Zhan, Yisong Yue : NAOMI: Non-Autoregressive Multiresolution Sequence Imputation. NeurIPS 2019
+<a name="ref45"></a>
+[45] Yong Liu, Haoran Zhang, Chenyu Li, Xiangdong Huang, Jianmin Wang, Mingsheng Long : Timer: Generative Pre-trained Transformers Are Large Time Series Models. ICML 2024
+
+<a name="ref46"></a>
+[46] Wang Shuyu, Li Wengen, Yang Hanchen, Guan Jihong, Liu Xiwei, Zhang Yichao, Qin Rufu, Zhou Shuigeng: LLM4HRS: LLM-based spatio-temporal imputation model for highly-sparse remote sensing data. IEEE Transactions on Geoscience and Remote Sensing. IEEE 2025
+
+<a name="ref457"></a>
+[47] Dongik Park, Hyunwoo Ryu, Suahn Bae, Keondo Park, Hyung-Sin Kim: T1: One-to-One Channel-Head Binding for Multivariate Time-Series Imputation. ICLR (2026)
+
+<a name="ref48"></a>
+[48] Patrick Seifner, Kostadin Cvejoski, Antonia Körner, Ramsés J. Sánchez: Zero-shot Imputation with Foundation Inference Models for Dynamical Systems. ICLR (2025)
+
+<a name="ref49"></a>
+[49] Hongfan Gao, Wangmeng Shen, Xiangfei Qiu, Ronghui Xu, Bin Yang, Jilin Hu: SSD-TS: Exploring the Potential of Linear State Space Models for Diffusion Models in Time Series Imputation. KDD (2025)
+
+<a name="ref50"></a>
+[50] Mengxuan Li, Ke Liu, Jialong Guo, Jiajun Bu, Hongwei Wang, Haishuai Wang: ImputeINR: Time Series Imputation via Implicit Neural Representations for Disease Diagnosis with Missing Data. IJCAI (2025)
+
+<a name="ref51"></a>
+[51] Wenying He, Jieling Huang, Junhua Gu, Ji Zhang, Yude Bai: Filling the Missings: Spatiotemporal Data Imputation by Conditional Diffusion. IJCAI (2025).
+
+<a name="ref52"></a>
+[52] Mohammad Rafid Ul Islam, Prasad Tadepalli, Alan Fern: Self-attention-based Diffusion Model for Time-series Imputation in Partial Blackout Scenarios. AAAI (2025)
+
+<a name="ref53"></a>
+[53] Elizabeth Fons, Alejandro Sztrajman, Yousef El-Laham, Luciana Ferrer, Svitlana Vyetrenko, Manuela Veloso: LSCD: Lomb–Scargle Conditioned Diffusion for Time series Imputation. ICML (2025)
+
+<a name="ref54"></a>
+[54] Xinyu Yang, Yu Sun, Xiaojie Yuan, Xinyang Chen: Frequency-aware Generative Models for Multivariate Time Series Imputation. NeurIPS (2024)
+
+<a name="ref55"></a>
+[55] Juan Lopez Alcaraz, Nils Strodthoff: Diffusion-Based Time Series Imputation and Forecasting with Structured State Space Models. TMLR (2023)
+
+<a name="ref56"></a>
+[56] A. Yarkin Yıldız, Emirhan Koç, Aykut Koç: Multivariate Time Series Imputation With Transformers. IEEE Signal Processing Letters 29 (2022)
+
+<a name="ref45"></a>
+[57] Xiaoye Miao, Yangyang Wu, Jun Wang, Yunjun Gao, Xudong Mao, Jianwei Yin: Generative Semi-supervised Learning for Multivariate Time Series Imputation. AAAI (2021)
+
+<a name="ref45"></a>
+[58] Dingsu Wang, Yuchen Yan, Ruizhong Qiu, Yada Zhu, Kaiyu Guan, Andrew Margenot, Hanghang Tong: Networked Time Series Imputation via Position-aware Graph Enhanced Variational Autoencoders. KDD (2023)
+
+<a name="ref45"></a>
+[59] Shuai Liu, Xiucheng Li, Gao Cong, Yile Chen, Yue Jiang: Multivariate Time-Series Imputation with Disentangled Temporal Representations. ICLR (2023)
+
+<a name="ref45"></a>
+[60] Hao Wang, Zhengnan Li, Haoxuan Li, Xu Chen, Mingming Gong, Bin Chen, Zhichao Chen: Optimal Transport for Time Series Imputation. ICLR (2025)
 
 
 

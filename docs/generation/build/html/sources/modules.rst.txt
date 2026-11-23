@@ -1,8 +1,6 @@
-imputegap
-=========
+:orphan:
 
-.. toctree::
-   :maxdepth: 4
+API modules overview
+====================
 
-   imputegap
-   modules
+The API reference is available from the :doc:`main API index <imputegap>`.

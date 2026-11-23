@@ -1,5 +1,5 @@
 imputegap.recovery.benchmark package
-=====================================
+====================================
 
 Module contents
 ---------------

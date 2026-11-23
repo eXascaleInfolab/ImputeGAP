@@ -33,8 +33,10 @@ def make_dir(input_dir, delete=False):
 
 def interpolate_matrix(X, how='linear'):
     initial_X = pd.DataFrame(X).interpolate(method=how)
-    initial_X = initial_X.fillna(method='ffill')
-    initial_X = initial_X.fillna(method='bfill')
+    initial_X = initial_X.ffill()
+    initial_X = initial_X.bfill()
+    #initial_X = initial_X.fillna(method='ffill')
+    #initial_X = initial_X.fillna(method='bfill')
     return np.array(initial_X)
 
 

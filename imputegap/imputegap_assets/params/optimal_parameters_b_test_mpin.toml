@@ -1,0 +1,7 @@
+[mpin]
+window = 12
+incre_mode = 32
+base = "test"
+epochs = 3
+num_of_iteration = 1
+k = 2

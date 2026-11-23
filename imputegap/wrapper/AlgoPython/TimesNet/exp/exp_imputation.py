@@ -35,8 +35,8 @@ class Exp_Imputation(Exp_Basic):
             model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
 
-    def _get_data(self, flag, normalization=False, scaling=False, shuffle=False, reconstruction=False, verbose=True, tr_ratio=0.7, replicat=False):
-        data_set, data_loader, l = data_provider(self.args, flag, normalization=normalization, scaling=scaling, shuffle=shuffle, reconstruction=reconstruction, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat)
+    def _get_data(self, flag, normalization=False, scaling=False, shuffle=False, reconstruction=False, verbose=True, tr_ratio=0.7, replicat=False, size_limitation=False):
+        data_set, data_loader, l = data_provider(self.args, flag, normalization=normalization, scaling=scaling, shuffle=shuffle, reconstruction=reconstruction, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat, size_limitation=size_limitation)
         return data_set, data_loader, l
 
     def _select_optimizer(self):
@@ -90,11 +90,11 @@ class Exp_Imputation(Exp_Basic):
         self.model.train()
         return total_loss
 
-    def train(self, setting, verbose=True, deep_verbose=False, normalization=False, scaling=False, shuffle=False, tr_ratio=0.7, replicat=False):
-        train_data, train_loader, len_tr = self._get_data(flag='train', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat)
-        vali_data, vali_loader, len_va = self._get_data(flag='val', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat)
-        test_data, test_loader, len_ts = self._get_data(flag='test', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat)
-        recon_data, recon_loader, len_recon = self._get_data(flag='train', scaling=scaling, shuffle=shuffle, reconstruction=True, verbose=verbose, replicat=replicat)
+    def train(self, setting, verbose=True, deep_verbose=False, normalization=False, scaling=False, shuffle=False, tr_ratio=0.7, replicat=False, size_limitation=False):
+        train_data, train_loader, len_tr = self._get_data(flag='train', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat,size_limitation=size_limitation)
+        vali_data, vali_loader, len_va = self._get_data(flag='val', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat,size_limitation=size_limitation)
+        test_data, test_loader, len_ts = self._get_data(flag='test', normalization=normalization, scaling=scaling, shuffle=shuffle, verbose=verbose, tr_ratio=tr_ratio, replicat=replicat,size_limitation=size_limitation)
+        recon_data, recon_loader, len_recon = self._get_data(flag='train', scaling=scaling, shuffle=shuffle, reconstruction=True, verbose=verbose, replicat=replicat,size_limitation=size_limitation)
 
         if verbose:
             print(f"\nresults of the pre-processing :\n\t{len(train_loader) = } - {len_tr = }\n\t{len(vali_loader) = } - {len_va = }\n\t{len(test_loader) = } - {len_ts = }\n\t{len(recon_loader) = } - {len_recon = }\n")

@@ -3,7 +3,7 @@ import unittest
 from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestOptiCDRECGreedy(unittest.TestCase):
@@ -16,14 +16,14 @@ class TestOptiCDRECGreedy(unittest.TestCase):
         dataset = "eeg-alcohol"
 
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path(dataset), nbr_series=50, nbr_val=100)
+        ts_1.load_series(dataset, nbr_series=50, nbr_val=100)
 
-        incomp_data = GenGap.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)
+        incomp_data = GenGAP.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)
 
         params = utils.load_parameters(query="default", algorithm=algorithm)
 
         algo_opti = Imputation.MatrixCompletion.CDRec(incomp_data)
-        algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "pso", "options": {"n_particles": 2}})
+        algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "test-pso", "options": {"n_particles": 2}})
         algo_opti.score(input_data=ts_1.data)
         metrics_optimal = algo_opti.metrics
 

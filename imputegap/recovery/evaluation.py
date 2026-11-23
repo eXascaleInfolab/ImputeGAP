@@ -1,3 +1,4 @@
+# Standard library
 import numpy as np
 
 class Evaluation:
@@ -76,6 +77,13 @@ class Evaluation:
             - "MI": Mutual Information
             - "CORRELATION": Pearson Correlation Coefficient
         """
+
+        if self.input_data is None:
+            print("\n(EVAL) N/A missing ground truth\n\tPlease provide the original data as input to the Evaluation module.\n")
+            return {"RMSE": np.nan, "MAE": np.nan, "MI": np.nan, "CORRELATION": np.nan}
+        if np.isnan(self.input_data).any():
+            print("\n(EVAL) Cannot compute evaluation scores without contaminated ground truth data.\n")
+            return {"RMSE": np.nan, "MAE": np.nan, "MI": np.nan, "CORRELATION": np.nan}
 
         if self.mask is None:
             nan_locations = np.isnan(self.incomp_data)
@@ -168,18 +176,24 @@ class Evaluation:
         else:
             nan_locations = self.mask
 
-        input_vals = self.input_data[nan_locations]
-        recov_vals = self.recov_data[nan_locations]
+        try:
+                input_vals = self.input_data[nan_locations]
+                recov_vals = self.recov_data[nan_locations]
 
-        if (np.isnan(recov_vals).all() or np.isnan(input_vals).all()) and self.security:
-            return np.nan
+                if (np.isnan(recov_vals).all() or np.isnan(input_vals).all()) and self.security:
+                    return np.nan
 
-        # Discretize the continuous data into bins
-        input_data_binned = np.digitize(input_vals, bins=np.histogram_bin_edges(input_vals, bins=10))
-        imputation_binned = np.digitize(recov_vals, bins=np.histogram_bin_edges(recov_vals, bins=10))
+                # Discretize the continuous data into bins
+                input_data_binned = np.digitize(input_vals, bins=np.histogram_bin_edges(input_vals, bins=10))
+                imputation_binned = np.digitize(recov_vals, bins=np.histogram_bin_edges(recov_vals, bins=10))
 
-        mi_discrete = mutual_info_score(input_data_binned, imputation_binned)
-        # mi_continuous = mutual_info_score(self.input_data[nan_locations], self.input_data[nan_locations])
+                mi_discrete = mutual_info_score(input_data_binned, imputation_binned)
+                # mi_continuous = mutual_info_score(self.input_data[nan_locations], self.input_data[nan_locations])
+        except Exception as e:
+            print(f"Error during MI : {e}")
+            print("The data is not corrupted: there are no NaNs, infinities, or abnormally high or low values in the recovery matrix.")
+            return -1
+
 
         return mi_discrete
 
@@ -206,9 +220,9 @@ class Evaluation:
         imputed_values = self.recov_data[nan_locations]
 
         # Check if input data is constant (i.e., no variance)
-        if np.all(input_data_values == input_data_values[0]) or np.all(imputed_values == imputed_values[0]) and self.security:
+        if self.security and (np.all(input_data_values == input_data_values[0]) or np.all(imputed_values == imputed_values[0])):
             if self.verbose:
-                print("\t\t\t\nAn input array is constant; the correlation coefficient is not defined, set to 0")
+                print("\t\t\t\nAn input array is constant; the correlation coefficient is not defined, set to np.nan")
             return np.nan
 
         correlation, _ = pearsonr(input_data_values, imputed_values)

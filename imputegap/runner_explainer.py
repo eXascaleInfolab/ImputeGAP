@@ -1,20 +1,20 @@
+# ImputeGAP imports
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.explainer import Explainer
-from imputegap.tools import utils
+from imputegap.recovery.explainer import ExplainGAP
 
 # initialize the time series and explainer object
 ts = TimeSeries()
-exp = Explainer()
+exp = ExplainGAP()
 print(f"\nImputeGAP explainer features extractor : {ts.extractors}")
 
 # load and normalize the dataset
-ts.load_series(utils.search_path("eeg-alcohol"), normalizer="z_score")
+ts.load_series(data="eeg-alcohol", normalizer="z_score")
 
 # configure the explanation
 exp.shap_explainer(input_data=ts.data, extractor="pycatch", pattern="mcar", file_name=ts.name, algorithm="CDRec")
 
 # print the impact of each feature
-exp.print(exp.shap_values, exp.shap_details)
+exp.print(shap_values=exp.shap_values, shap_details=exp.shap_details)
 
 # plot the feature impacts
 exp.show()

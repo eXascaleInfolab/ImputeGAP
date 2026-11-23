@@ -10,6 +10,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="ubuntu@134.21.219.180:22 key (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_180" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="ubuntu@134.21.219.181:22 key">
         <serverdata>
           <mappings>

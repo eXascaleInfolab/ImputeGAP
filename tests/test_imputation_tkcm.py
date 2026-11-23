@@ -5,7 +5,7 @@ import numpy as np
 
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestTKCM(unittest.TestCase):
@@ -20,9 +20,9 @@ class TestTKCM(unittest.TestCase):
         dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+        ts.load_series("chlorine", normalizer="z_score")
 
-        incomp_data = GenGap.aligned(ts.data, single_series=0)
+        incomp_data = GenGAP.aligned(ts.data, single_series=0)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()
         algo.score(ts.data)
@@ -30,7 +30,7 @@ class TestTKCM(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 
@@ -46,7 +46,7 @@ class TestTKCM(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 
@@ -56,8 +56,8 @@ class TestTKCM(unittest.TestCase):
 
     def test_imputation_multiple_tkcm(self, name="tkcm", limit=0.05):
         ts = TimeSeries()
-        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
-        incomp_data = GenGap.aligned(ts.data)
+        ts.load_series("chlorine", normalizer="z_score")
+        incomp_data = GenGAP.aligned(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()
         algo.score(ts.data)
@@ -65,7 +65,7 @@ class TestTKCM(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         self.assertTrue(np.isnan(metrics["RMSE"]))
         self.assertTrue(np.isnan(metrics["MAE"]))

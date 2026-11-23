@@ -1,0 +1,5 @@
+[mice]
+max_iter = 10
+tol = 0.001
+initial_strategy = "mean"
+seed = 42

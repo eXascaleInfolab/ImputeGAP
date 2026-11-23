@@ -3,7 +3,7 @@ import numpy as np
 import math
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestContaminationPercentageShift(unittest.TestCase):
@@ -18,13 +18,13 @@ class TestContaminationPercentageShift(unittest.TestCase):
         missing_rates = [0.1, 0.5, 0.9]  # percentage of missing values with NaN
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
             N, M = ts.data.shape  # series, values
             P = math.ceil(ts.data.shape[0] * 0.1)
 
             for S in series_impacted:
                 for R in missing_rates:
-                    incomp_data = GenGap.scattered(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
+                    incomp_data = GenGAP.scattered(input_data=ts.data, rate_dataset=S, rate_series=R, offset=P)
 
                     n_nan = np.isnan(incomp_data).sum()
                     expected_nan_series = math.ceil(S * M)
@@ -45,7 +45,7 @@ class TestContaminationPercentageShift(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test.txt"))
+        ts_1.load_series("test.txt")
 
         series_impacted = [0.4, 0.8]
         missing_rates = [0.1, 0.4, 0.6]
@@ -54,9 +54,9 @@ class TestContaminationPercentageShift(unittest.TestCase):
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = GenGap.scattered(input_data=ts_1.data,
-                                                              rate_dataset=series_sel,
-                                                              rate_series=missing_rate, offset=0.1)
+                ts_contaminate = GenGAP.scattered(input_data=ts_1.data,
+                                                  rate_dataset=series_sel,
+                                                  rate_series=missing_rate, offset=0.1)
 
                 self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_dataset={series_sel}, rate_series={missing_rate})")
 
@@ -72,15 +72,15 @@ class TestContaminationPercentageShift(unittest.TestCase):
         for dataset in datasets:
             ts_1 = TimeSeries()
             ts_1.data = None
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
             N, M = ts_1.data.shape
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = GenGap.scattered(input_data=ts_1.data,
-                                                                  rate_dataset=series_sel,
-                                                                  rate_series=missing_rate,
-                                                                  offset=offset)
+                    ts_contaminate = GenGAP.scattered(input_data=ts_1.data,
+                                                      rate_dataset=series_sel,
+                                                      rate_series=missing_rate,
+                                                      offset=offset)
 
                     nbr_series_contaminated = 0
                     for inx in range(ts_contaminate.shape[1]):

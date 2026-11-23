@@ -40,6 +40,7 @@ args = handle_parser()
 
 
 def train(model, num_workers=4, shuffle=False, replicat=False, verbose=True, deep_verbose=False):
+    device = next(model.parameters()).device
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     data_iter = data_loader.get_loader(batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers, replicat=replicat)
@@ -51,7 +52,9 @@ def train(model, num_workers=4, shuffle=False, replicat=False, verbose=True, dee
         size = len(data_iter) - 1
 
         for idx, data in enumerate(data_iter):
-            data = utils.to_var(data)
+            # data = utils.to_var(data) old
+            data = utils.to_var(data, device=device)
+
             ret = model.run_on_batch(data, optimizer, epoch)
 
             run_loss += ret['loss'].item()
@@ -66,6 +69,7 @@ def train(model, num_workers=4, shuffle=False, replicat=False, verbose=True, dee
 
 def evaluate(model, val_iter, verbose=True, deep_verbose=False):
     model.eval()
+    device = next(model.parameters()).device
 
     labels = []
     preds = []
@@ -80,7 +84,9 @@ def evaluate(model, val_iter, verbose=True, deep_verbose=False):
     save_label = []
 
     for idx, data in enumerate(val_iter):
-        data = utils.to_var(data)
+        #data = utils.to_var(data)
+        data = utils.to_var(data, device=device)
+
         ret = model.run_on_batch(data, None)
 
         # save the imputation results which is used to test the improvement of traditional methods with imputed values
@@ -142,13 +148,15 @@ def evaluate(model, val_iter, verbose=True, deep_verbose=False):
 
 
 #  python main.py -- brits --epochs 1000 --batch_size 64 --impute_weight 0.3 --label_weight 1.0 --hid_size 108
-def recovBRITS(incomp_data, seq_len=24, model_name="rits_i", epochs=1000, batch_size=64, sliding_windows=1, impute_weight=0.3, label_weight=1, hid_size=108, num_workers=4, shuffle=False, tr_ratio=0.9, seed=42, verbose=True, replicat=False):
+def recovBRITS(incomp_data, seq_len=24, model_name="rits_i", epochs=1000, batch_size=64, sliding_windows=1, impute_weight=0.3, label_weight=1, hid_size=108, num_workers=4, shuffle=False, tr_ratio=0.9, seed=42, verbose=True, use_cuda=0, replicat=False):
 
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)
 
+    device = torch.device("cuda" if use_cuda else "cpu")
+
     if verbose:
-        print(f"\n(IMPUTATION) {model_name.upper()}\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_len: {seq_len}\n\tepochs: {epochs}\n\tbatch_size: {batch_size}\n\tsliding_windows: {sliding_windows}\n\thid_size: {hid_size}\n\timpute_weight: {impute_weight}\n\tnum_workers: {num_workers}\n\ttr_ratio: {tr_ratio}\n")
+        print(f"\n(IMPUTATION) {model_name.upper()}\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_len: {seq_len}\n\tepochs: {epochs}\n\tbatch_size: {batch_size}\n\tsliding_windows: {sliding_windows}\n\thid_size: {hid_size}\n\timpute_weight: {impute_weight}\n\tnum_workers: {num_workers}\n\ttr_ratio: {tr_ratio}\n\tuse_cude: {use_cuda}\n")
         print(f"call: brits.impute(params={{'model': {model_name}, 'seq_len': {seq_len}, 'epochs': {epochs}, 'batch_size': {batch_size}, 'sliding_windows': {sliding_windows}, 'hidden_layers': {hid_size}, 'impute_weight': {impute_weight}, 'num_workers': {num_workers}}})\n")
 
     if not replicat:
@@ -171,8 +179,9 @@ def recovBRITS(incomp_data, seq_len=24, model_name="rits_i", epochs=1000, batch_
     if verbose:
         print('Total params is {}'.format(total_params))
 
-    if torch.cuda.is_available():
-        model = model.cuda()
+    #if torch.cuda.is_available():
+    #    model = model.cuda()
+    model = model.to(device)
 
     imputations, evals = train(model, num_workers, shuffle=shuffle, replicat=replicat, verbose=verbose, deep_verbose=False)
 

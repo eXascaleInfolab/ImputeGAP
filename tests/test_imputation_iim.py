@@ -2,7 +2,7 @@ import os
 import unittest
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestIIM(unittest.TestCase):
@@ -17,9 +17,9 @@ class TestIIM(unittest.TestCase):
         dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path(dataset), normalizer="z_score")
+        ts.load_series(dataset, normalizer="z_score")
 
-        incomp_data = GenGap.mcar(ts.data)
+        incomp_data = GenGAP.mcar(ts.data)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()
         algo.score(ts.data)
@@ -27,7 +27,7 @@ class TestIIM(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 

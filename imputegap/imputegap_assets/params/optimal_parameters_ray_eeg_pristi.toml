@@ -1,0 +1,4 @@
+target_strategy = "hybrid"
+unconditional = true
+seed = 42
+device = "cpu"

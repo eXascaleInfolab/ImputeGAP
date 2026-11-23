@@ -1,9 +1,9 @@
 import time
 
-#from imputegap.wrapper.AlgoPython.SAITS.run_models import recov_saits
 from imputegap.wrapper.AlgoPython.SAITS.recovSAITS import recov_saits
+from imputegap.tools import utils
 
-def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num_workers, tr_ratio, seed=26, logs=True, verbose=True):
+def saits(incomp_data, seq_len=-1, epochs=10000, batch_size=-1, sliding_windows=1, n_head=8, num_workers=0, tr_ratio=0.7, seed=26, logs=True, use_cuda=0, verbose=True):
     """
     Perform imputation using the SAITS (Self-Attention-based Imputation for Time Series Imputation) algorithm.
 
@@ -13,12 +13,12 @@ def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num
         The input matrix with contamination (missing values represented as NaNs).
 
     seq_len : int, optional
-        Length of the input sequence for temporal modeling (default: 1).
+        Length of the input sequence for temporal modeling (default: -1).
 
     epochs : int, optional
-        Number of training epochs (default: 10).
+        Number of training epochs (default: 10000).
 
-    batch_size : int, optional, default=32
+    batch_size : int, optional, default=-1
         The number of samples per training batch.
 
     sliding_windows: int, optional
@@ -26,7 +26,7 @@ def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num
             Use values ≥ 1 for univariate datasets (window strategy) and -1 for multivariate datasets (sample strategy).
 
     n_head : int, optional
-        head num of self-attention (default: 4)
+        head num of self-attention (default: 8)
 
     num_workers: int, optional
         Number of worker for multiprocess (default is 0).
@@ -35,10 +35,13 @@ def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num
         Random seed for reproducibility (default: 42).
 
     tr_ratio: float, optional
-        Split ratio between training and testing sets (default is 0.9).
+        Split ratio between training and testing sets (default is 0.7).
 
     logs : bool, optional
         Whether to log the execution time (default is True).
+
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
 
     verbose : bool, optional
         Whether to display the contamination information (default is True).
@@ -50,8 +53,11 @@ def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num
 
     Example
     -------
-        >>> recov_data = saits(incomp_data)
-        >>> print(recov_data)
+    .. code-block:: python
+
+        recov_data = saits(incomp_data)
+        print(recov_data)
+
 
     References
     ----------
@@ -59,8 +65,9 @@ def saits(incomp_data, seq_len, epochs, batch_size, sliding_windows, n_head, num
     https://github.com/WenjieDu/SAITS
     """
     start_time = time.time()  # Record start time
+    use_cuda = utils.check_cuda(use_cuda=use_cuda, verbose=verbose)
 
-    recov_data = recov_saits(incomp_data=incomp_data, seq_len=seq_len, epochs=epochs, batch_size=batch_size, n_head=n_head, sliding_windows=sliding_windows, num_workers=num_workers, seed=seed, tr_ratio=tr_ratio, verbose=verbose)
+    recov_data = recov_saits(incomp_data=incomp_data, seq_len=seq_len, epochs=epochs, batch_size=batch_size, n_head=n_head, sliding_windows=sliding_windows, num_workers=num_workers, seed=seed, tr_ratio=tr_ratio, use_cuda=use_cuda, verbose=verbose)
 
     end_time = time.time()
     if logs and verbose:

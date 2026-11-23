@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from imputegap.recovery.explainer import Explainer
+from imputegap.recovery.explainer import ExplainGAP
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
 
@@ -12,9 +12,9 @@ class TestExplainerPyCatch(unittest.TestCase):
         Verify if the SHAP TSFEL EXTRACTOR is working
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series("chlorine")
 
-        exp = Explainer()
+        exp = ExplainGAP()
 
         categories, features, _ = exp.load_configuration()
         shap_values, shap_details = exp.extractor_pycatch(data=ts_1.data, features_categories=categories, features_list=features, do_catch24=False)

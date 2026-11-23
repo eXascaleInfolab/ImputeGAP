@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
@@ -18,10 +18,10 @@ class TestDLTestSet(unittest.TestCase):
         print(f"Imputation algorithms : {ts.algorithms}")
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("chlorine"))
+        ts.load_series("chlorine")
 
         # contaminate the time series
-        ts_m = GenGap.mcar(ts.data)
+        ts_m = GenGAP.mcar(ts.data)
 
         ts_m = ts_m.T
         ts.data = ts.data.T

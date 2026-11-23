@@ -17,3 +17,7 @@ Module contents
    imputegap.downstream
    imputegap.evaluation
    imputegap.utils
+   imputegap.algorithm_parameters
+   imputegap.algorithms
+   imputegap.tools
+   imputegap.wrapper

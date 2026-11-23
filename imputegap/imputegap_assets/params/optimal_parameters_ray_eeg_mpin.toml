@@ -1,0 +1,9 @@
+incre_mode = "state+transfer"
+window = 1
+k = 10
+learning_rate = 0.006830554671299302
+weight_decay = 0.09716056021702961
+epochs = 20
+num_of_iteration = 5
+threshold = 0.42689943361620475
+base = "GAT"

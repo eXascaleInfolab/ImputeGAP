@@ -1,0 +1,8 @@
+[missnet]
+n_components = 12
+alpha = 32.0
+beta = 1.0
+n_cl = 3
+max_iter = 1
+tol = 2.0
+random_init = true

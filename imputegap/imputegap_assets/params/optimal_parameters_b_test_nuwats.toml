@@ -1,0 +1,7 @@
+[nuwats]
+seq_len = 12
+batch_size = 32.0
+epochs = 5
+gpt_layers = 2
+num_workers = 0
+seed = 42

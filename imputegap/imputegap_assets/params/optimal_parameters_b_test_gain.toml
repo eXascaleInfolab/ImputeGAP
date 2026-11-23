@@ -1,0 +1,5 @@
+[gain]
+batch_size = 64
+epochs = 10
+alpha = 1
+hint_rate = 0.9

@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 
@@ -14,15 +14,15 @@ class TestContaminationDisjoint(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
+        ts_1.load_series("test-logic-llm.txt")
 
         series_impacted = [0.4, 0.9]
         ten_percent_index = int(ts_1.data.shape[0] * 0.1)
 
         for series_sel in series_impacted:
-            ts_contaminate = GenGap.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=0.1)
+            ts_contaminate = GenGAP.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=0.1)
             self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_series={series_sel}, offset=0.1)")
-            ts_contaminate = GenGap.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=4)
+            ts_contaminate = GenGAP.disjoint(input_data=ts_1.data, rate_series=series_sel, limit=1, offset=4)
             self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_series={series_sel}, offset=4)")
 
 
@@ -51,11 +51,11 @@ class TestContaminationDisjoint(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
 
             for S in series_rate:
                 # Generate disjoint contamination
-                ts_miss = GenGap.disjoint(input_data=ts.data, rate_series=S, limit=1, offset=P)
+                ts_miss = GenGAP.disjoint(input_data=ts.data, rate_series=S, limit=1, offset=P)
                 N, M = ts.data.shape
 
                 INC = 0  # Incremental counter to track contamination shifts

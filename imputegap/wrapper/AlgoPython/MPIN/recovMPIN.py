@@ -66,7 +66,7 @@ def handle_parser(argv=None):
 
 
 
-def recovMPIN(incomp_data, window=6, incre_mode="alone", base="SAGE", epochs=15, num_of_iter=5, k=10, seed=2021, tr_ratio=0.7, normalizer=True, verbose=True, deep_verbose=False, replicat=False):
+def recovMPIN(incomp_data, window=6, incre_mode="alone", base="SAGE", epochs=15, num_of_iter=5, k=10, seed=2021, tr_ratio=0.7, normalizer=True, verbose=True, deep_verbose=False, use_cuda=0, replicat=False):
 
     if window > len(incomp_data):
         print(f"(ERROR) The current seq_length {window} is not adapted to the contaminated matrix {len(incomp_data)} !")
@@ -74,7 +74,7 @@ def recovMPIN(incomp_data, window=6, incre_mode="alone", base="SAGE", epochs=15,
 
     args = handle_parser(argv=[])
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if use_cuda else "cpu")
 
     ts_m = np.copy(incomp_data)
     recov = np.copy(incomp_data)
@@ -107,7 +107,7 @@ def recovMPIN(incomp_data, window=6, incre_mode="alone", base="SAGE", epochs=15,
     args.eval_ratio = eval_ratio
 
     if verbose:
-        print(f"(IMPUTATION) MPIN\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\twindow: {args.window}\n\tincre_mode: {args.incre_mode}\n\tbase: {args.base}\n\tepochs: {args.epochs}\n\tnum_of_iter: {num_of_iter}\n\tk: {k}\n\tdevice: {device}\n\ttr_ratio: {tr_ratio}\n\teval_ratio: {args.eval_ratio}")
+        print(f"(IMPUTATION) MPIN\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\twindow: {args.window}\n\tincre_mode: {args.incre_mode}\n\tbase: {args.base}\n\tepochs: {args.epochs}\n\tnum_of_iter: {num_of_iter}\n\tk: {k}\n\tdevice: {device}\n\ttr_ratio: {tr_ratio}\n\teval_ratio: {args.eval_ratio}\n\tuse_cuda: {use_cuda}\n")
         print(f"\ncall: mpin.impute(params={{'window': {window}, 'incre_mode': '{incre_mode}', 'base': '{base}', 'epochs': {epochs}, 'num_of_iteration': {num_of_iter}, 'k': {k}}})\n")
 
     def data_transform(X, X_mask, eval_ratio=0.1, deep_verbose=False):
@@ -154,6 +154,8 @@ def recovMPIN(incomp_data, window=6, incre_mode="alone", base="SAGE", epochs=15,
         elif base == 'SAGE':
             gnn = DynamicGraphSAGE(in_channels=in_channels, out_channels=out_channels, k=k).to(device)
 
+        #print(f"MPIN > Model device: {next(gnn.parameters()).device}")
+
         return gnn
 
     def build_GNN_static(in_channels, out_channels, k, base):
@@ -163,6 +165,9 @@ def recovMPIN(incomp_data, window=6, incre_mode="alone", base="SAGE", epochs=15,
             gnn = StaticGCN(in_channels=in_channels, out_channels=out_channels, k=k).to(device)
         elif base == 'SAGE':
             gnn = StaticGraphSAGE(in_channels=in_channels, out_channels=out_channels, k=k).to(device)
+
+        #print(f"MPIN > Model device: {next(gnn.parameters()).device}")
+
         return gnn
 
 

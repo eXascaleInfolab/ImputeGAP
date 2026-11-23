@@ -1,6 +1,6 @@
 import numpy as np
 from skopt.space import Integer, Real
-from ray import train, tune
+from ray import tune
 
 # CDRec parameters
 CDREC_RANK_RANGE = [i for i in range(1, 11)]  # This will generate a range from 1 to 10
@@ -303,13 +303,20 @@ RAYTUNE_PARAMS = {
         "sliding_windows": tune.grid_search([0, 1]),
         "n_head": tune.grid_search([4, 8]),
         "num_workers": 0
+    },
+    "moment": {
+            "model": "zero-shot",
+            "model_size": "small",
+            "use_mean": tune.grid_search([True, False]),
+            "seq_len": tune.grid_search([-1, 48]),
+            "sliding_windows": tune.grid_search([0, 1]),
     }
 
-    # your ray-tune limitation #contributing
+    # your ray-tune limitation #contributing-optimization
     #
-    #'your_algo_name': {
-    #    "param_1": tune.grid_search([i for i in range(2, 16, 1)]),
-    #    "param_2": tune.loguniform(1e-6, 1),
-    #    "param_3": tune.grid_search([i * 50 for i in range(1, 4)])
+    #"new_alg": {
+    #    "param_integer": tune.grid_search(list(range(2, 20, 1))),
+    #    "param_float": tune.loguniform(1e-6, 1),
+    #    "param_string": tune.choice(["value_1", "value_n"])
     #},
 }

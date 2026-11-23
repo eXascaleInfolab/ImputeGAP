@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 
@@ -14,14 +14,14 @@ class TestContaminationOverlap(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series("chlorine")
 
         series_impacted = [0.4, 0.8]
         ten_percent_index = int(ts_1.data.shape[1] * 0.1)
 
         for series_sel in series_impacted:
 
-            ts_contaminate = GenGap.overlap(input_data=ts_1.data, rate_series=series_sel, limit=1, shift=0.1, offset=100)
+            ts_contaminate = GenGAP.overlap(input_data=ts_1.data, rate_series=series_sel, limit=1, shift=0.1, offset=100)
 
             self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows" )
 
@@ -56,13 +56,13 @@ class TestContaminationOverlap(unittest.TestCase):
 
         for dataset in datasets:
             ts = TimeSeries()
-            ts.load_series(utils.search_path(dataset))
+            ts.load_series(dataset)
 
             for S in series_rate:
 
                 for A in shift:
                     # Generate disjoint contamination
-                    ts_miss = GenGap.overlap(input_data=ts.data, rate_series=S, limit=1, shift=A, offset=P)
+                    ts_miss = GenGAP.overlap(input_data=ts.data, rate_series=S, limit=1, shift=A, offset=P)
 
                     NS, M = ts.data.shape
 

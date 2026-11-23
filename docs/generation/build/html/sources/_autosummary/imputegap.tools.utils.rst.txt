@@ -1,7 +1,10 @@
-﻿imputegap.tools.utils
+:orphan:
+
+imputegap.tools.utils
 =====================
 
 .. automodule:: imputegap.tools.utils
+   :no-index:
 
    
    .. rubric:: Functions

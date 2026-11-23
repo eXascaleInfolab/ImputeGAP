@@ -1,9 +1,11 @@
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
 
 from imputegap.tools import utils
+from imputegap.wrapper.AlgoPython.SVT.recovSVT import recoverySVT
 
-def native_svt(__py_matrix, __py_tau, __verbose=True):
+
+def native_svt(__py_matrix, __py_tau, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the SVT algorithm with native C++ support.
 
@@ -11,9 +13,11 @@ def native_svt(__py_matrix, __py_tau, __verbose=True):
     ----------
     __py_matrix : numpy.ndarray
         The input matrix with missing values (NaNs).
+
     __py_tau : float
         The thresholding parameter for singular values. Controls how singular values are shrunk during the decomposition process.
         Larger values encourage a sparser, lower-rank solution, while smaller values retain more detail.
+
     __verbose : bool, optional
         Whether to display the contamination information (default is False).
 
@@ -47,7 +51,7 @@ def native_svt(__py_matrix, __py_tau, __verbose=True):
     return __py_imputed_matrix;
 
 
-def svt(incomp_data, tau, logs=True, verbose=True, lib_path=None):
+def svt(incomp_data, tau=0.2, logs=True, language="python", verbose=True, lib_path=None):
     """
     SVT algorithm for matrix imputation.
 
@@ -55,13 +59,20 @@ def svt(incomp_data, tau, logs=True, verbose=True, lib_path=None):
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
+
     tau : float
         The thresholding parameter for singular values. Controls how singular values are shrunk during the decomposition process.
         Larger values encourage a sparser, lower-rank solution, while smaller values retain more detail.
+
     logs : bool, optional
         Whether to log the execution time (default is True).
+
+    language : str, optional
+        Set the language version of the code, C++ or Python, default "python"
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
+
     lib_path : str, optional
         Custom path to the shared library file (default is None).
 
@@ -72,14 +83,26 @@ def svt(incomp_data, tau, logs=True, verbose=True, lib_path=None):
 
     Example
     -------
-        >>> recov_data = svt(incomp_data=incomp_data, tau=0.5, logs=True)
-        >>> print(recov_data)
+    .. code-block:: python
 
+        recov_data = svt(incomp_data=incomp_data, tau=0.5, logs=True)
+        print(recov_data)
+
+    References
+    ----------
+    J. Cai, E. J. Candès, and Z. Shen. A singular value thresholding algorithm for matrix completion. SIAM Journal on Optimization, 20(4):1956–1982, 2010. [8] J. Cambronero, J. K. Feser, M. J. Smith, and
     """
     start_time = time.time()  # Record start time
 
-    # Call the C++ function to perform recovery
-    recov_data = native_svt(incomp_data, tau, verbose)
+    if language == "python":
+        if verbose:
+            print(f"\n(IMPUTATION) SVT ({language})\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\ttau: {tau}\n")
+            print(f"call: imputer.impute(params={{'tau': {tau}}})\n")
+
+        recov_data = recoverySVT(matrix=incomp_data, tauScale=tau)
+    else:
+        # Call the C++ function to perform recovery
+        recov_data = native_svt(incomp_data, tau, verbose)
 
     end_time = time.time()
 

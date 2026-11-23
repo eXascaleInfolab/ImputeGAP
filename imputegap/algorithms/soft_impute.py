@@ -1,9 +1,11 @@
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
 
+from imputegap.wrapper.AlgoPython.SoftImpute.soft_impute import SoftImpute
 from imputegap.tools import utils
 
-def native_soft_impute(__py_matrix, __py_max_rank, __verbose=True):
+
+def native_soft_impute(__py_matrix, __py_max_rank, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the Soft Impute algorithm with native C++ support.
 
@@ -49,7 +51,7 @@ def native_soft_impute(__py_matrix, __py_max_rank, __verbose=True):
     return __py_imputed_matrix;
 
 
-def soft_impute(incomp_data, max_rank, logs=True, verbose=True, lib_path=None):
+def soft_impute(incomp_data, max_rank=6, logs=True, verbose=True, language="python", lib_path=None):
     """
     Soft Impute algorithm for matrix imputation.
 
@@ -57,12 +59,19 @@ def soft_impute(incomp_data, max_rank, logs=True, verbose=True, lib_path=None):
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
+
     max_rank : int
         The max rank for matrix decomposition (must be greater than 1 and smaller than the number of series).
+
     logs : bool, optional
         Whether to log the execution time (default is True).
+
+    language : str, optional
+         Set the language version of the code, C++ or Python, default "python"
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
+
     lib_path : str, optional
         Custom path to the shared library file (default is None).
 
@@ -82,9 +91,11 @@ def soft_impute(incomp_data, max_rank, logs=True, verbose=True, lib_path=None):
     if verbose:
         print(f"(IMPUTATION) SoftImpute\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tmax rank: {max_rank}\n")
 
-
-    # Call the C++ function to perform recovery
-    recov_data = native_soft_impute(incomp_data, max_rank, verbose)
+    if language == "python":
+        recov_data = SoftImpute(max_rank=max_rank, verbose=verbose).fit_transform(incomp_data)
+    else:
+        # Call the C++ function to perform recovery
+        recov_data = native_soft_impute(incomp_data, max_rank, verbose)
 
     end_time = time.time()
 

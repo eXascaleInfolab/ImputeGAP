@@ -8,6 +8,7 @@ from torch.nn.parameter import Parameter
 import math
 
 def binary_cross_entropy_with_logits(input, target, weight=None, size_average=True, reduce=True):
+
     if not (target.size() == input.size()):
         raise ValueError("Target size ({}) must be the same as input size ({})".format(target.size(), input.size()))
 
@@ -114,11 +115,15 @@ class Model(nn.Module):
 
         hiddens = []
 
-        h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
-        c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # olds
+        # h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # if torch.cuda.is_available():
+        #    h, c = h.cuda(), c.cuda()
 
-        if torch.cuda.is_available():
-            h, c = h.cuda(), c.cuda()
+        # Create recurrent states on the same device as the input.
+        h = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
+        c = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
 
         for t in range(self.seq_len):
             hiddens.append(h)
@@ -176,16 +181,24 @@ class Model(nn.Module):
         labels = data['labels'].view(-1, 1)
         is_train = data['is_train'].view(-1, 1)
 
-        h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
-        c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # olds
+        # h = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # c = Variable(torch.zeros((values.size()[0], self.rnn_hid_size)))
+        # if torch.cuda.is_available():
+        #    h, c = h.cuda(), c.cuda()
 
-        if torch.cuda.is_available():
-            h, c = h.cuda(), c.cuda()
+        # Create recurrent states on the same device as the input.
+        h = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
+        c = torch.zeros((values.size(0), self.rnn_hid_size), device=values.device)
 
         imputations = Variable(imputations.data, requires_grad = False)
         out, (h, c) = self.pred_rnn(imputations)
 
         y_h = self.out(h.squeeze())
+
+        if y_h.dim() == 1:
+            y_h = y_h.unsqueeze(0)
+
         y_loss = binary_cross_entropy_with_logits(y_h, labels, reduce = False)
         y_loss = torch.sum(y_loss * is_train) / (torch.sum(is_train) + 1e-5)
 

@@ -2,7 +2,7 @@ import os
 import unittest
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 class TestDeepMVI(unittest.TestCase):
@@ -17,9 +17,9 @@ class TestDeepMVI(unittest.TestCase):
         dataset, rmse, mae = utils.get_resuts_unit_tests(algo_name=name, loader=path)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path(dataset), normalizer="z_score", nbr_series=20, nbr_val=400)
+        ts.load_series(dataset, normalizer="z_score", nbr_series=20, nbr_val=400)
 
-        incomp_data = GenGap.mcar(ts.data, block_size=25)
+        incomp_data = GenGAP.mcar(ts.data, block_size=25)
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
         algo.impute()
         algo.score(ts.data)
@@ -27,7 +27,7 @@ class TestDeepMVI(unittest.TestCase):
 
         print(f"{name}:{metrics = }\n")
 
-        ts.print_results(algo.metrics, algo.algorithm)
+        utils.print_results(algo.metrics, algo.algorithm)
 
         expected_metrics = {"RMSE": rmse, "MAE": mae}
 

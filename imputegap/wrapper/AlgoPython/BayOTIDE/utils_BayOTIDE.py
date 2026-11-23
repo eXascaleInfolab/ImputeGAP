@@ -33,7 +33,6 @@ def CRPS_score(target, forecast, eval_points):
         q_loss = quantile_loss(target, q_pred, quantiles[i], eval_points)
         CRPS += q_loss / denom
 
-    print(CRPS/len(quantiles))
     return CRPS/len(quantiles)
 
 
@@ -125,9 +124,9 @@ def make_log(args, hyper_dict, result_dict,other_para = ''):
     print('log written!')
 
 
-def make_hyper_dict(config, args=None):
+def make_hyper_dict(config, use_cuda=0, args=None):
     hyper_dict = config
-    hyper_dict["device"] = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    hyper_dict["device"] = torch.device("cuda" if use_cuda else "cpu")
 
     if args is not None:
         # overwrite config with args if needed

@@ -6,8 +6,8 @@ import pytest
 from imputegap.recovery.imputation import Imputation
 from imputegap.recovery.manager import TimeSeries
 from imputegap.tools import utils
-from imputegap.recovery.contamination import GenGap
-from imputegap.recovery.explainer import Explainer
+from imputegap.recovery.contamination import GenGAP
+from imputegap.recovery.explainer import ExplainGAP
 
 
 class TestException(unittest.TestCase):
@@ -39,26 +39,14 @@ class TestException(unittest.TestCase):
             opt.optimize(None, None, None, None, None)
 
 
-
-    def test_algorithm_test_exc(self):
-        """
-        the goal is to test the exception to algorithms
-        """
-        ts = TimeSeries()
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None)
-        print(f"{ts.data.shape = }")
-        ts_m = GenGap.mcar(ts.data, offset=10, seed=False)
-        imputer = Imputation.Statistics.Test(ts_m)
-        imputer.impute()
-
     def test_extractor_exc(self):
         """
         the goal is to test the exception to algorithms
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"), nbr_series=10, nbr_val=40)
+        ts_1.load_series("chlorine", nbr_series=10, nbr_val=40)
 
-        exp = Explainer()
+        exp = ExplainGAP()
 
         with pytest.raises(KeyError):
             exp.shap_explainer(input_data=ts_1.data, file_name="chlorine", rate_dataset=0.3, seed=True, verbose=True, extractor="test")
@@ -78,37 +66,29 @@ class TestException(unittest.TestCase):
         """
         input_data = None  # Simulate a scenario where raw_data is None
         with pytest.raises(ValueError, match=f"Need input_data to be able to adapt the hyper-parameters: {input_data}"):
-            _ = Imputation.MatrixCompletion.CDRec(None).impute(user_def=False, params={"input_data":input_data, "optimizer": "bayesian", "options":{"n_calls": 2}})
+            _ = Imputation.MatrixCompletion.CDRec(None).impute(user_def=False, params={"input_data":input_data, "optimizer": "test-bayesian", "options":{"n_calls": 2}})
 
     def test_bench_exc(self):
         """
         The goal is to test the exception raised when input_data (raw_data) is None
         """
-        from imputegap.recovery.benchmark import Benchmark
+        from imputegap.recovery.benchmark import BenchGAP
 
-        bench = Benchmark()
+        bench = BenchGAP()
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms="test", datasets=None, patterns=None, x_axis=None, metrics=None, optimizer=None)
+            bench.eval(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test", optimizer=3)
         print(f"\nCaught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=None, patterns=None, x_axis=None, metrics=None, optimizer=None)
+            bench.eval(algorithms=["CDRec"], datasets="test", patterns="test", x_axis="test", metrics="test", optimizer=2)
         print(f"Caught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=None, x_axis=None, metrics=None, optimizer=None)
+            bench.eval(algorithms=["CDRec"], datasets=["chlorine"],  patterns="test", x_axis="test", metrics="test", optimizer=2)
         print(f"Caught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis=None, metrics=None, optimizer=None)
-        print(f"Caught TypeError: {excinfo.value}")
-
-        with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics=None, optimizer=None)
-        print(f"Caught TypeError: {excinfo.value}")
-
-        with pytest.raises(TypeError) as excinfo:
-            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis=[0.5], metrics=None, optimizer="ray-tune")
+            bench.eval(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis="test", metrics="test", optimizer=2)
         print(f"Caught TypeError: {excinfo.value}")
 
         with pytest.raises(TypeError) as excinfo:
@@ -134,23 +114,98 @@ class TestException(unittest.TestCase):
             bench.eval(algorithms=["CDRec"], datasets=["eeg-reading"], patterns=["mcar"], x_axis=[0.5], metrics="*", optimizer=10, nbr_series=10, nbr_vals=10)
 
 
+    def test_bench_exc_plus(self):
+        """
+        The goal is to test the exception raised when input_data (raw_data) is None
+        """
+        from imputegap.recovery.benchmark import BenchGAP
+
+        bench = BenchGAP()
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_imputation(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"\nCaught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_imputation(algorithms=["CDRec"], datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_imputation(algorithms=["CDRec"], datasets=["chlorine"],  patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_imputation(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+
+
+    def test_bench_exc_forecasting(self):
+        """
+        The goal is to test the exception raised when input_data (raw_data) is None
+        """
+        from imputegap.recovery.benchmark import BenchGAP
+
+        bench = BenchGAP()
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_forecasting(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"\nCaught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_forecasting(algorithms=["CDRec"], datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_forecasting(algorithms=["CDRec"], datasets=["chlorine"],  patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_forecasting(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+
+
+    def test_bench_exc_classification(self):
+        """
+        The goal is to test the exception raised when input_data (raw_data) is None
+        """
+        from imputegap.recovery.benchmark import BenchGAP
+
+        bench = BenchGAP()
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_classification(algorithms="test", datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"\nCaught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_classification(algorithms=["CDRec"], datasets="test", patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_classification(algorithms=["CDRec"], datasets=["chlorine"],  patterns="test", x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+        with pytest.raises(TypeError) as excinfo:
+            bench.eval_downstream_classification(algorithms=["CDRec"], datasets=["chlorine"], patterns=["mcar"], x_axis="test", metrics="test")
+        print(f"Caught TypeError: {excinfo.value}")
+
+
+
     def test_score_raises(self):
         """
         The goal is to test exceptions
         """
-        from imputegap.algorithms.test import zero_impute
+        from imputegap.algorithms.zero_impute import zero_impute
         from imputegap.algorithms.cpp_integration import your_algo
 
         # initialize the time series object
         ts = TimeSeries()
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None)
+        ts.load_series("eeg-alcohol", normalizer=None)
         print(f"{ts.data.shape = }")
 
-        ts_m = GenGap.mcar(ts.data, offset=10, seed=False)
+        ts_m = GenGAP.mcar(ts.data, offset=10, seed=False)
         imputer = Imputation.MatrixCompletion.CDRec(ts_m)
         imputer.impute()
-        ts.plot(ts.data, style="mono")
-        ts.plot(ts.data, legends=False, nbr_series=1)
+        ts.plot(ts.data, style="mono", display=False)
+        ts.plot(ts.data, legends=False, nbr_series=1, display=False)
 
 
         imputer.recov_data = imputer.recov_data *1000
@@ -184,7 +239,7 @@ class TestException(unittest.TestCase):
         ts.range(3,4)
 
         ts = TimeSeries()
-        ts.load_series(utils.search_path("eeg-alcohol"), normalizer=None, replace_nan=True)
+        ts.load_series("eeg-alcohol", normalizer=None, replace_nan=True)
         self.assertTrue(ts.data.shape == (256,64))
 
         ts.print(nbr_val=-1, nbr_series=-1)
@@ -194,7 +249,7 @@ class TestException(unittest.TestCase):
         ts.normalize()
         ts.normalize(normalizer="dsfds", verbose=True)
 
-        ts_m = GenGap.mcar(ts.data, offset=10, seed=False)
+        ts_m = GenGAP.mcar(ts.data, offset=10, seed=False)
         imputer = Imputation.Statistics.MeanImputeBySeries(ts_m)
         imputer.logs=False
         imputer.impute()
@@ -219,10 +274,10 @@ class TestException(unittest.TestCase):
 
         MM = ts.data
         MM[1, :] = np.nan
-        ts.plot(ts.data,incomp_data=MM, style="mono")
-        ts.plot(ts.data,incomp_data=MM, style="mono", subplot=False)
-        ts.plot(ts.data,incomp_data=MM, subplot=False)
-        ts.plot(ts.data,incomp_data=MM, subplot=False, nbr_series=0)
+        ts.plot(ts.data,incomp_data=MM, style="mono", display=False)
+        ts.plot(ts.data,incomp_data=MM, style="mono", subplot=False, display=False)
+        ts.plot(ts.data,incomp_data=MM, subplot=False, display=False)
+        ts.plot(ts.data,incomp_data=MM, subplot=False, nbr_series=0, display=False)
 
         ts.shift(1,2)
         ts.range(1,2)
@@ -231,7 +286,7 @@ class TestException(unittest.TestCase):
 
     def test_paths_raises(self):
         import os
-        expected = (3, 1e-06, 100)
+        expected = {'rank': 2, 'epsilon': 1e-06, 'iteration': 100}
 
         optimal_params = utils.load_parameters(query="default", algorithm="cdrec")
         print(f"{optimal_params = }")
@@ -252,7 +307,7 @@ class TestException(unittest.TestCase):
         with pytest.raises(ValueError):
             _ = utils.load_parameters(query="error", algorithm="cdrec", path=filepath)
 
-        expected = (3, 0.0004596525401418828, 209)
+        expected = {'epsilon': 0.0004596525401418828, 'iteration': 209, 'rank': 3}
         here = os.path.dirname(os.path.abspath(__file__))
         s = "optimal_parameters_" + str("b") + "_" + str("chlorine") + "_" + str("cdrec") + ".toml"
         filepath = os.path.join(here, "imputegap_assets/params", s)
@@ -381,7 +436,7 @@ class TestException(unittest.TestCase):
     def test_patters_raises(self):
         alpha=True
 
-        _ = GenGap(verbose=True)
+        _ = GenGAP(verbose=True)
 
         s = ["mcar", "aligned", "disjoint", "overlap", "scatter", "gaussian", "blackout", "distribution"]
         ts = TimeSeries()
@@ -396,14 +451,14 @@ class TestException(unittest.TestCase):
                     _ = utils.config_contamination(ts=ts, pattern=pattern, offset=(ts.data.shape[0] + 10), verbose=True)
                     print(f"{excinfo = }")
 
-        _ = GenGap.mcar(ts.data, rate_dataset=0.5, rate_series=0.5, logic_by_series=False, block_size=1, offset=0)
+        _ = GenGAP.mcar(ts.data, rate_dataset=0.5, rate_series=0.5, logic_by_series=False, block_size=1, offset=0)
         self.assertTrue(alpha, True)
 
         with pytest.raises(ValueError) as excinfo:
             _ = utils.config_contamination(ts=ts, pattern="dfds", offset=100)
 
         with pytest.raises(ValueError) as excinfo:
-            _ = GenGap.distribution(ts.data, probabilities_list=[1])
+            _ = GenGAP.distribution(ts.data, probabilities_list=[1])
 
         for pattern in s:
             if pattern != "distribution":
@@ -411,19 +466,19 @@ class TestException(unittest.TestCase):
                     utils.config_contamination(ts=ts, pattern=pattern, offset=100)
                 print(f"Caught TypeError: {excinfo.value} for {s}")
 
-        _ = GenGap.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
-        _ = GenGap.aligned(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
-        _ = GenGap.gaussian(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
-        _ = GenGap.scattered(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        _ = GenGAP.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
+        _ = GenGAP.aligned(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        _ = GenGAP.gaussian(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
+        _ = GenGAP.scattered(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True)
         with pytest.raises(ValueError):
-            _ = GenGap.distribution(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True, probabilities_list=[1])
+            _ = GenGAP.distribution(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, offset=0, explainer=True, probabilities_list=[1])
 
         ts.data[1, 3] = np.nan
-        _ = GenGap.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
+        _ = GenGAP.mcar(ts.data, rate_dataset=1, rate_series=1, logic_by_series=False, block_size=1, offset=0, explainer=True)
 
         for pattern in s:
             ts = TimeSeries()
-            ts.load_series(utils.search_path("chlorine"), normalizer="min_max")
+            ts.load_series("chlorine", normalizer="min_max")
             _ = utils.config_contamination(ts=ts, pattern=pattern, logic_by_series=False)
 
 
@@ -489,7 +544,7 @@ class TestException(unittest.TestCase):
         default_iim = utils.load_parameters(query="default", algorithm="iim")
         default_stmvl = utils.load_parameters(query="default", algorithm="stmvl")
         default_greedy = utils.load_parameters(query="default", algorithm="greedy")
-        default_bayesian = utils.load_parameters(query="default", algorithm="bayesian")
+        default_bayesian = utils.load_parameters(query="default", algorithm="test-bayesian")
         default_pso = utils.load_parameters(query="default", algorithm="pso")
         default_color = utils.load_parameters(query="default", algorithm="colors")
         default_false = utils.load_parameters(query="default", algorithm="test-wrong")
@@ -524,7 +579,7 @@ class TestException(unittest.TestCase):
         x = ts.datasets
         x = ts.optimizers
         x = ts.extractors
-        x = ts.forecasting_models
+        x = ts.forecasters
         x = ts.families
         x = ts.algorithms_with_families
         x = utils.list_of_metrics()
@@ -548,10 +603,10 @@ class TestException(unittest.TestCase):
         print(f"\nImputation algorithms : {ts.algorithms}")
 
         # load and normalize the dataset
-        ts.load_series(utils.search_path("chlorine"), normalizer="z_score")
+        ts.load_series("chlorine", normalizer="z_score")
 
         # contaminate the time series
-        ts_m = GenGap.mcar(ts.data)
+        ts_m = GenGAP.mcar(ts.data)
 
         cont_data_matrix, mask_train, mask_test, mask_valid, error = utils.dl_integration_transformation(ts_m,
                                                                                                          tr_ratio=0.6,

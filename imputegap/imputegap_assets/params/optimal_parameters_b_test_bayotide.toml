@@ -1,0 +1,10 @@
+[bayotide]
+K_trend = 1
+K_season = 1
+n_season = 12
+K_bias = 1
+time_scale = 1
+a0 = 0.1
+b0 = 0.1
+v = 0.1
+num_fold = 5

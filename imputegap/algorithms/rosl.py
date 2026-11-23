@@ -1,13 +1,10 @@
-import ctypes
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
-import numpy as __numpy_import;
-import numpy as np
 
 from imputegap.tools import utils
 
 
-def native_rosl(__py_matrix, __py_rank, __py_regularization, __verbose=True):
+def native_rosl(__py_matrix, __py_rank, __py_regularization, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the ROSL algorithm with native C++ support.
 
@@ -60,7 +57,7 @@ def native_rosl(__py_matrix, __py_rank, __py_regularization, __verbose=True):
     return __py_imputed_matrix;
 
 
-def rosl(incomp_data, rank, regularization, logs=True, verbose=True, lib_path=None):
+def rosl(incomp_data, rank=3, regularization=0.6, logs=True, verbose=True, lib_path=None):
     """
     ROSL algorithm for matrix imputation.
 

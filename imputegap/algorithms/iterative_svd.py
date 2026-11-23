@@ -1,10 +1,11 @@
+import ctypes as __native_c_types_import
 import time
-import ctypes as __native_c_types_import;
 
+from imputegap.wrapper.AlgoPython.SVD.iterative_svd import IterativeSVD
 from imputegap.tools import utils
 
 
-def native_iterative_svd(__py_matrix, __py_rank, __verbose=True):
+def native_iterative_svd(__py_matrix, __py_rank, __verbose=True):  # noqa: PYI063
     """
     Perform matrix imputation using the Iterative SVD algorithm with native C++ support.
 
@@ -50,7 +51,7 @@ def native_iterative_svd(__py_matrix, __py_rank, __verbose=True):
     return __py_imputed_matrix;
 
 
-def iterative_svd(incomp_data, truncation_rank, logs=True, verbose=True, lib_path=None):
+def iterative_svd(incomp_data, rank=3, logs=True, verbose=True, language="python", lib_path=None):
     """
     Iterative SVD algorithm for matrix imputation.
 
@@ -58,12 +59,19 @@ def iterative_svd(incomp_data, truncation_rank, logs=True, verbose=True, lib_pat
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
-    truncation_rank : int
+
+    rank : int
         The truncation rank for matrix decomposition (must be greater than 1 and smaller than the number of series).
+
     logs : bool, optional
         Whether to log the execution time (default is True).
+
     lib_path : str, optional
         Custom path to the shared library file (default is None).
+
+    language : str, optional
+         Set the language version of the code, C++ or Python, default "python"
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
 
@@ -80,8 +88,11 @@ def iterative_svd(incomp_data, truncation_rank, logs=True, verbose=True, lib_pat
     """
     start_time = time.time()  # Record start time
 
-    # Call the C++ function to perform recovery
-    recov_data = native_iterative_svd(incomp_data, truncation_rank, verbose)
+    if language == "python":
+        recov_data = IterativeSVD(rank=rank).fit_transform(incomp_data)
+    else:
+        # Call the C++ function to perform recovery
+        recov_data = native_iterative_svd(incomp_data, rank, verbose)
 
     end_time = time.time()
 

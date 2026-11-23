@@ -131,7 +131,7 @@ def handle_parser(argv=None):
 
 
 
-def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, seed=2023, tr_ratio=0.7, verbose=True, deep_verbose=False, replicat=False, normalization=True, scaling=True, shuffle=True, strat="seq"):
+def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_layers=6, num_workers=0, seed=2023, tr_ratio=0.7, verbose=True, deep_verbose=False, replicat=False, normalization=True, scaling=True, shuffle=True, use_cuda=0, strat="seq"):
 
     if seq_len == -2:
         return np.nan_to_num(ts_m, nan=0.0)
@@ -146,7 +146,8 @@ def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_la
     np.random.seed(fix_seed)
 
     args = handle_parser()
-    args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
+    args.use_gpu = bool(use_cuda)
+    #args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
     args.ts_m = ts_m
 
     args.is_training = 1
@@ -181,10 +182,22 @@ def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_la
     args.enc_in = ts_m.shape[1]
     args.dec_in = ts_m.shape[1]
     args.c_out = ts_m.shape[1]
+    size_limitation=False
+
 
     if seq_len ==-1 or batch_size==-1:
         args.seq_len, args.batch_size = utils_imp.auto_seq_llms(data_x=ts_m, goal=strat, subset=False, high_limit=32, verbose=verbose)
         args.patch_size = args.seq_len
+
+    taux_nans = int(np.isnan(ts_m).sum(axis=0).max())
+    if args.seq_len < taux_nans:
+        limitation = int((ts_m.shape[0] * (1 - 0.05) * tr_ratio))
+        if verbose:
+            print(
+                f"\n\n(INFO) Imputation adaptation with {model}, the number of NaNs values injected with ImputeGAP filled all the sequence, please change the seq_len or the contamination percentage. \n\tCurrently, the number of NaNs might reach {taux_nans} for a sequence and the size of seq_len is {args.seq_len}. Available data {limitation}\n")
+        args.seq_len, args.batch_size = utils_imp.auto_seq_llms(data_x=ts_m, goal=strat, subset=True,high_limit=limitation, low_limit=int(taux_nans * 1.05), exception=True, verbose=verbose)
+        size_limitation = True
+
     if args.use_gpu and args.use_multi_gpu:
         args.devices = args.devices.replace(' ', '')
         device_ids = args.devices.split(',')
@@ -221,6 +234,7 @@ def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_la
         # setting record of experiments
         exp = Exp(args)  # set experiments
         setting = 'imputegap_settings'
+        #print(f"NuwaTS > Device: {next(exp.model.parameters()).device}")
 
         if args.verbose:
             print(f'\n\n>>>>>>>training>>>>>>>>>>>>>>>>>>>>>>>>>>')
@@ -230,7 +244,8 @@ def recovLLMs(ts_m, model="NuwaTS", seq_len=-1, batch_size=-1, epochs=10, gpt_la
         if args.verbose:
             print(f'\n\n>>>>>>>testing<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
 
-        _ = exp.test(setting, test=0, verbose=args.verbose, normalization=args.normalization, scaling=args.scaling, replicat=replicat, checkpoint=path)
+        if not size_limitation:
+            _ = exp.test(setting, test=0, verbose=args.verbose, normalization=args.normalization, scaling=args.scaling, replicat=replicat, checkpoint=path)
         if args.verbose:
             print(f'\n\n>>>>>>>reconstruction<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         reconstruction = exp.test(setting, test=0, reconstruction=True, normalization=args.normalization, scaling=args.scaling, replicat=replicat, original_shape=ts_m.shape, verbose=args.verbose, checkpoint=path)

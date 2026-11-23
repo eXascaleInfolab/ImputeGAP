@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 
@@ -15,7 +15,7 @@ class TestContaminationMCAR(unittest.TestCase):
         the goal is to test if only the selected values are contaminated
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test-logic-llm.txt"))
+        ts_1.load_series("test-logic-llm.txt")
 
         series_impacted = [0.4]
         missing_rates = [40]
@@ -27,7 +27,7 @@ class TestContaminationMCAR(unittest.TestCase):
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, block_size=block_size, offset=offset, seed=True)
+                ts_contaminate = GenGAP.mcar(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, block_size=block_size, offset=offset, seed=True)
                 print(f"{ts_contaminate}\n")
 
                 for series in range(ts_contaminate.shape[1]):
@@ -45,7 +45,7 @@ class TestContaminationMCAR(unittest.TestCase):
         the goal is to test if the starting position is always guaranteed
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("test.txt"))
+        ts_1.load_series("test.txt")
 
         series_impacted = [0.4, 1]
         missing_rates = [0.1, 0.4, 0.6]
@@ -54,11 +54,11 @@ class TestContaminationMCAR(unittest.TestCase):
         for series_sel in series_impacted:
             for missing_rate in missing_rates:
 
-                ts_contaminate = GenGap.mcar(input_data=ts_1.data,
-                                                         rate_dataset=series_sel,
-                                                         rate_series=missing_rate,
-                                                         block_size=2, offset=0.1,
-                                                         seed=True)
+                ts_contaminate = GenGAP.mcar(input_data=ts_1.data,
+                                             rate_dataset=series_sel,
+                                             rate_series=missing_rate,
+                                             block_size=2, offset=0.1,
+                                             seed=True)
 
                 self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_dataset={series_sel}, rate_series={missing_rate})")
 
@@ -74,11 +74,11 @@ class TestContaminationMCAR(unittest.TestCase):
 
         for dataset in datasets:
             ts_1 = TimeSeries()
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
 
             for S in series_impacted:
                 for R in missing_rates:
-                    ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_series=R, rate_dataset=S, block_size=block_size, offset=offset, seed=True)
+                    ts_contaminate = GenGAP.mcar(input_data=ts_1.data, rate_series=R, rate_dataset=S, block_size=block_size, offset=offset, seed=True)
                     ts_contaminate = ts_contaminate.T
 
                     # 1) Check if the number of NaN values is correct
@@ -115,13 +115,13 @@ class TestContaminationMCAR(unittest.TestCase):
 
         for dataset in datasets:
             ts_1 = TimeSeries()
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
             ten_percent_index = int(ts_1.data.shape[1] * 0.1)
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
 
-                    ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, block_size=block_size, offset=offset, seed=True)
+                    ts_contaminate = GenGAP.mcar(input_data=ts_1.data, rate_dataset=series_sel, rate_series=missing_rate, block_size=block_size, offset=offset, seed=True)
 
                     self.assertFalse(np.isnan(ts_contaminate[:ten_percent_index, :]).any(), msg=f"NaNs found in first {ten_percent_index} rows (rate_dataset={series_sel}, rate_series={missing_rate})")
 
@@ -132,10 +132,10 @@ class TestContaminationMCAR(unittest.TestCase):
         Verify if the manager of a dataset is working
         """
         ts_1 = TimeSeries()
-        ts_1.load_series(utils.search_path("chlorine"))
+        ts_1.load_series("chlorine")
 
         ts_2 = TimeSeries()
-        ts_2.import_matrix(GenGap.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.1, block_size=10, offset=0.1, seed=True))
+        ts_2.import_matrix(GenGAP.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.1, block_size=10, offset=0.1, seed=True))
 
         ts_1.print()
         filepath = ts_1.plot(input_data=ts_1.data, incomp_data=ts_2.data, nbr_series=10, nbr_val=100, save_path="./assets/", display=False)
@@ -155,17 +155,17 @@ class TestContaminationMCAR(unittest.TestCase):
         for dataset in datasets:
             ts_1 = TimeSeries()
             if dataset == "eeg-reading":
-                ts_1.load_series(utils.search_path(dataset), header=True)
+                ts_1.load_series(dataset, header=True)
             else:
-                ts_1.load_series(utils.search_path(dataset))
+                ts_1.load_series(dataset)
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = GenGap.mcar(input_data=ts_1.data,
-                                                             rate_series=missing_rate,
-                                                             rate_dataset=series_sel,
-                                                             block_size=block_size, offset=offset,
-                                                             seed=True)
+                    ts_contaminate = GenGAP.mcar(input_data=ts_1.data,
+                                                 rate_series=missing_rate,
+                                                 rate_dataset=series_sel,
+                                                 block_size=block_size, offset=offset,
+                                                 seed=True)
 
                     ts_contaminate = ts_contaminate.T
 
@@ -212,12 +212,12 @@ class TestContaminationMCAR(unittest.TestCase):
 
         for dataset in datasets:
             ts_1 = TimeSeries()
-            ts_1.load_series(utils.search_path(dataset))
+            ts_1.load_series(dataset)
             N, M = ts_1.data.shape
 
             for series_sel in series_impacted:
                 for missing_rate in missing_rates:
-                    ts_contaminate = GenGap.mcar(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, block_size=block_size, offset=offset, seed=True)
+                    ts_contaminate = GenGAP.mcar(input_data=ts_1.data, rate_series=missing_rate, rate_dataset=series_sel, block_size=block_size, offset=offset, seed=True)
 
                     #print(*[f"({indc} {se})" for indc, se in enumerate(ts_contaminate)], sep=" ")  # debug
 

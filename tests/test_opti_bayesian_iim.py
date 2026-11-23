@@ -2,7 +2,7 @@ import unittest
 from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 
@@ -17,17 +17,17 @@ class TestOptiIMM(unittest.TestCase):
         dataset = "chlorine"
 
         ts_1 = TimeSeries()
-        ts_1.load_series(data=utils.search_path(dataset), nbr_val=100)
+        ts_1.load_series(data=dataset, nbr_val=100)
 
 
-        incomp_data = GenGap.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)
+        incomp_data = GenGAP.mcar(input_data=ts_1.data, rate_dataset=0.4, rate_series=0.36, block_size=2, offset=0.1, seed=True)
 
         params = utils.load_parameters(query="default", algorithm=algorithm)
         params_optimal_load = utils.load_parameters(query="optimal", algorithm=algorithm, dataset=dataset, optimizer="b")
 
 
         algo_opti = Imputation.MachineLearning.IIM(incomp_data)
-        algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "bayesian", "options": {"n_calls": 2}})
+        algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "test-bayesian", "options": {"n_calls": 2}})
         algo_opti.score(input_data=ts_1.data)
         metrics_optimal = algo_opti.metrics
 

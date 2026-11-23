@@ -1,4 +1,5 @@
 import time
+
 import numpy as np
 from scipy.interpolate import interp1d
 
@@ -40,7 +41,7 @@ def interpolation(incomp_data, method="linear", poly_order=2, logs=True, verbose
     recov_data = np.copy(incomp_data)  # Copy data to avoid modifying original
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)
-    num_rows, num_cols = recov_data.shape
+    _, num_cols = recov_data.shape
 
     for j in range(num_cols):  # Process row-wise (like pyts)
         col = recov_data[:, j]

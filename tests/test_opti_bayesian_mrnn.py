@@ -2,7 +2,7 @@ import unittest
 from imputegap.recovery.imputation import Imputation
 from imputegap.tools import utils
 from imputegap.recovery.manager import TimeSeries
-from imputegap.recovery.contamination import GenGap
+from imputegap.recovery.contamination import GenGAP
 
 
 
@@ -15,9 +15,9 @@ class TestOptiMRNN(unittest.TestCase):
         dataset, algorithm = "chlorine", "mrnn"
 
         ts_1 = TimeSeries()
-        ts_1.load_series(data=utils.search_path(dataset), nbr_val=200)
+        ts_1.load_series(data=dataset, nbr_val=200)
 
-        incomp_data = GenGap.mcar(input_data=ts_1.data)
+        incomp_data = GenGAP.mcar(input_data=ts_1.data)
 
         params = utils.load_parameters(query="default", algorithm=algorithm)
 
@@ -28,4 +28,4 @@ class TestOptiMRNN(unittest.TestCase):
         )
 
         with self.assertRaisesRegex(ValueError, expected):
-            algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "bayesian", "options": {"n_calls": 2}})
+            algo_opti.impute(user_def=False, params={"input_data": ts_1.data, "optimizer": "test-bayesian", "options": {"n_calls": 2}})

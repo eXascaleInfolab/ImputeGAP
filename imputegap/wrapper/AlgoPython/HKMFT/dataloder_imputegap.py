@@ -136,7 +136,7 @@ class DataLoaderImputeGAP(object):
                 data_flat = df.to_numpy().ravel(order='F')  # column-major: [col0, col1, ..., col49]
 
                 # 2) Create the tag_0 column: series index repeated 1000 times each
-                if tags is None:
+                if tags is None or tags == []:
                     if verbose:
                         print(f"\ngenerating the tags meta-information based on the seq_len {seq_len}\n")
                     tags = (np.arange(n_rows) % seq_len).astype(str)
@@ -214,17 +214,17 @@ class DataLoaderImputeGAP(object):
 
 if __name__ == '__main__':
     from imputegap.recovery.manager import TimeSeries
-    from imputegap.recovery.contamination import GenGap
+    from imputegap.recovery.contamination import GenGAP
     from imputegap.tools import utils
 
     # initialize the time series object
     ts = TimeSeries()
 
     # load and normalize the dataset
-    # ts.load_series(utils.search_path("test-logic-dl-xl.txt"))
-    ts.load_series(utils.search_path("chlorine"))
+    # ts.load_series("test-logic-dl-xl.txt")
+    ts.load_series("chlorine")
     ts.normalize(normalizer="z_score")
-    ts_m = GenGap.aligned(ts.data)
+    ts_m = GenGAP.aligned(ts.data)
     b = DataLoaderImputeGAP(ts_m, None)
     b.generate_mask(100, 200)
     data, mask, tag, gt = b.get_data()

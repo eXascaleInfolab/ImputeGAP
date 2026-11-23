@@ -42,7 +42,7 @@ import h5py
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.utils.tensorboard import SummaryWriter
+# from torch.utils.tensorboard import SummaryWriter  # LLVM conflict
 from imputegap.wrapper.AlgoPython.SAITS.dataset_generating_scripts.gene_imputegap_dataset import sait_loader_imputegap
 from imputegap.wrapper.AlgoPython.SAITS.dataset_generating_scripts.gene_imputegap_w_dataset import sait_loader_w_imputegap
 
@@ -51,6 +51,7 @@ try:
 except ImportError:
     pass
 
+import datetime
 from imputegap.wrapper.AlgoPython.SAITS.modeling.saits import SAITS
 from imputegap.wrapper.AlgoPython.SAITS.modeling.unified_dataloader import UnifiedDataLoader
 from imputegap.wrapper.AlgoPython.SAITS.modeling.utils import (
@@ -85,21 +86,22 @@ def read_arguments(arg_parser, cfg_parser):
     arg_parser.model_type = cfg_parser.get("model", "model_type")
     return arg_parser
 
-def summary_write_into_tb(summary_writer, info_dict, step, stage):
-    """write summary into tensorboard file"""
-    summary_writer.add_scalar(f"total_loss/{stage}", info_dict["total_loss"], step)
-    summary_writer.add_scalar(
-        f"imputation_loss/{stage}", info_dict["imputation_loss"], step
-    )
-    summary_writer.add_scalar(
-        f"imputation_MAE/{stage}", info_dict["imputation_MAE"], step
-    )
-    summary_writer.add_scalar(
-        f"reconstruction_loss/{stage}", info_dict["reconstruction_loss"], step
-    )
-    summary_writer.add_scalar(
-        f"reconstruction_MAE/{stage}", info_dict["reconstruction_MAE"], step
-    )
+# # LLVM conflict
+#def summary_write_into_tb(summary_writer, info_dict, step, stage):
+#    """write summary into tensorboard file"""
+    #    summary_writer.add_scalar(f"total_loss/{stage}", info_dict["total_loss"], step)
+    #summary_writer.add_scalar(
+    #    f"imputation_loss/{stage}", info_dict["imputation_loss"], step
+    #)
+    #summary_writer.add_scalar(
+    #    f"imputation_MAE/{stage}", info_dict["imputation_MAE"], step
+    #)
+    #summary_writer.add_scalar(
+    #    f"reconstruction_loss/{stage}", info_dict["reconstruction_loss"], step
+    #)
+    #summary_writer.add_scalar(
+    #    f"reconstruction_MAE/{stage}", info_dict["reconstruction_MAE"], step
+    #)
 
 
 def result_processing(results, args=None):
@@ -122,7 +124,8 @@ def result_processing(results, args=None):
     return results
 
 
-def process_each_training_step(results, optimizer, val_dataloader, training_controller, summary_writer, logger, model=None, args=None, verbose=True):
+#def process_each_training_step(results, optimizer, val_dataloader, training_controller, summary_writer, logger, model=None, args=None, verbose=True): # LLVM conflict
+def process_each_training_step(results, optimizer, val_dataloader, training_controller, logger, model=None, args=None, verbose=True):
 
     """process each training step and return whether to early stop"""
     state_dict = training_controller(stage="train")
@@ -132,9 +135,12 @@ def process_each_training_step(results, optimizer, val_dataloader, training_cont
     results["total_loss"].backward()
     optimizer.step()
 
-    summary_write_into_tb(summary_writer, results, state_dict["train_step"], "train")
+    # # LLVM conflict
+    #summary_write_into_tb(summary_writer, results, state_dict["train_step"], "train")
+
     if state_dict["train_step"] % args.eval_every_n_steps == 0:
-        state_dict_from_val = validate(model, val_dataloader, summary_writer, training_controller, logger, optimizer=optimizer, args=args, verbose=verbose)
+        #state_dict_from_val = validate(model, val_dataloader, summary_writer, training_controller, logger, optimizer=optimizer, args=args, verbose=verbose) # LLVM conflict
+        state_dict_from_val = validate(model, val_dataloader, training_controller, logger, optimizer=optimizer, args=args, verbose=verbose)
         if state_dict_from_val["should_stop"]:
             if verbose:
                 logger.info(f"Early stopping worked, stop now...")
@@ -142,14 +148,17 @@ def process_each_training_step(results, optimizer, val_dataloader, training_cont
     return False
 
 
-def model_processing(data, model, stage, optimizer=None, val_dataloader=None, summary_writer=None, training_controller=None, logger=None, args=None, verbose=True):
+#def model_processing(data, model, stage, optimizer=None, val_dataloader=None, summary_writer=None, training_controller=None, logger=None, args=None, verbose=True):  # LLVM conflict
+def model_processing(data, model, stage, optimizer=None, val_dataloader=None, training_controller=None, logger=None, args=None, verbose=True):
     if stage == "train":
         optimizer.zero_grad()
         if not args.MIT:
             indices, X, missing_mask = map(lambda x: x.to(args.device), data)
             inputs = {"indices": indices, "X": X, "missing_mask": missing_mask}
             results = result_processing(model(inputs, stage), args=args)
-            early_stopping = process_each_training_step(results, optimizer, val_dataloader, training_controller, summary_writer, logger, model, args=args, verbose=verbose)
+
+            #early_stopping = process_each_training_step(results, optimizer, val_dataloader, training_controller, summary_writer, logger, model, args=args, verbose=verbose) # LLVM conflict
+            early_stopping = process_each_training_step(results, optimizer, val_dataloader, training_controller, logger, model, args=args, verbose=verbose)
         else:
             indices, X, missing_mask, X_holdout, indicating_mask = map(
                 lambda x: x.to(args.device), data
@@ -162,7 +171,8 @@ def model_processing(data, model, stage, optimizer=None, val_dataloader=None, su
                 "indicating_mask": indicating_mask,
             }
             results = result_processing(model(inputs, stage), args=args)
-            early_stopping = process_each_training_step(results, optimizer, val_dataloader, training_controller, summary_writer, logger, model, args=args, verbose=verbose)
+            #early_stopping = process_each_training_step(results, optimizer, val_dataloader, training_controller, summary_writer, logger, model, args=args, verbose=verbose) # LLVM conflict
+            early_stopping = process_each_training_step(results, optimizer, val_dataloader, training_controller, logger, model, args=args, verbose=verbose)
         return early_stopping
     else:  # in val/test stage
         indices, X, missing_mask, X_holdout, indicating_mask = map(
@@ -180,13 +190,15 @@ def model_processing(data, model, stage, optimizer=None, val_dataloader=None, su
         return inputs, results
 
 
-def train(model, optimizer, train_dataloader, test_dataloader, summary_writer, training_controller, logger, args=None, verbose=True):
+# def train(model, optimizer, train_dataloader, test_dataloader, summary_writer, training_controller, logger, args=None, verbose=True):   # LLVM conflict
+def train(model, optimizer, train_dataloader, test_dataloader, training_controller, logger, args=None, verbose=True):
     for epoch in range(args.epochs):
         early_stopping = False
         args.final_epoch = True if epoch == args.epochs - 1 else False
         for idx, data in enumerate(train_dataloader):
             model.train()
-            early_stopping = model_processing(data, model, "train", optimizer, test_dataloader, summary_writer, training_controller, logger, args=args, verbose=verbose)
+            # early_stopping = model_processing(data, model, "train", optimizer, test_dataloader, summary_writer, training_controller, logger, args=args, verbose=verbose) # LLVM conflict
+            early_stopping = model_processing(data, model, "train", optimizer, test_dataloader, training_controller, logger, args=args, verbose=verbose)
             if early_stopping:
                 break
         if early_stopping:
@@ -196,7 +208,8 @@ def train(model, optimizer, train_dataloader, test_dataloader, summary_writer, t
         logger.info("Finished all epochs. Stop training now.")
 
 
-def validate(model, val_iter, summary_writer, training_controller, logger, optimizer=None, args=None, verbose=True):
+#def validate(model, val_iter, summary_writer, training_controller, logger, optimizer=None, args=None, verbose=True):  # LLVM conflict
+def validate(model, val_iter, training_controller, logger, optimizer=None, args=None, verbose=True):
     model.eval()
     evalX_collector, evalMask_collector, imputations_collector = [], [], []
     (
@@ -238,7 +251,7 @@ def validate(model, val_iter, summary_writer, training_controller, logger, optim
         "imputation_MAE": imputation_MAE.cpu().numpy().mean(),
     }
     state_dict = training_controller("val", info_dict, logger, verbose=verbose)
-    summary_write_into_tb(summary_writer, info_dict, state_dict["val_step"], "val")
+    # summary_write_into_tb(summary_writer, info_dict, state_dict["val_step"], "val")
     if args.param_searching_mode:
         nni.report_intermediate_result(info_dict["imputation_MAE"])
         if args.final_epoch or state_dict["should_stop"]:
@@ -254,7 +267,7 @@ def validate(model, val_iter, summary_writer, training_controller, logger, optim
             ),
         )
         # save_model(model, optimizer, state_dict, args, saving_path)
-        save_model(model, optimizer, state_dict, args, os.path.join(args.model_saving, "saits_model"))
+        save_model(model, optimizer, state_dict, args, os.path.join(args.model_saving, args.save_p_model_name)) # LLVM conflict
     return state_dict
 
 
@@ -343,16 +356,17 @@ def impute_all_missing_data(model, train_data, val_data, test_data, args=None, l
 
     return np.array(imputed_matrix)
 
-def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, n_head=8, num_workers=0, shuffle=True, seed=26, tr_ratio=0.7, verbose=False, replicat=False):
+def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windows=1, n_head=8, num_workers=0, shuffle=True, seed=26, tr_ratio=0.7, verbose=False, use_cuda=0, replicat=False):
 
     recov = np.copy(incomp_data)
     m_mask = np.isnan(incomp_data)
 
-    multivariate, seq_len, batch_size, sliding_windows, error = utils_imp.prepare_deep_learning_params(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
+    multivariate, seq_len, batch_size, sliding_windows, error = utils_imp.compute_variables_saitslike(incomp_data=incomp_data, seq_len=seq_len, batch_size=batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
 
     if error:
         return incomp_data
 
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     np.random.seed(seed)
     torch.manual_seed(seed)
     feature_num = incomp_data.shape[1]
@@ -376,6 +390,7 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     parser = argparse.ArgumentParser()
     args, _ = parser.parse_known_args()
     args.config_path = os.path.join(here, "configs", conf)
+    args.save_p_model_name = timestamp + "saits_model"
 
     # load settings from config file
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
@@ -392,18 +407,22 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     args.model_name = ""
     args.feature_num = feature_num
     args.batch_size = batch_size
-    args.device = "cuda" if torch.cuda.is_available() else "cpu"
+    args.device = "cuda" if use_cuda else "cpu"
     args.n_head = n_head
     dshere = os.path.join(dshere, args.result_saving_base_dir)
+
+    args.seq_len, args.batch_size, sliding_windows, tr_ratio = utils_imp.patch_classifiers_saits(incomp_data=incomp_data,  seq_len=args.seq_len, batch_size=args.batch_size, sliding_windows=sliding_windows, tr_ratio=tr_ratio, verbose=verbose)
+
+    if multivariate:
+        dataset_saving_dir, origins = sait_loader_imputegap(incomp_data, args.seq_len, dshere, tr_ratio=tr_ratio, shuffle=shuffle, verbose=verbose, replicat=replicat)
+    else:
+        dataset_saving_dir, origins = sait_loader_w_imputegap(incomp_data, args.seq_len, features=incomp_data.shape[1], here=dshere, sliding_windows=sliding_windows, tr_ratio=tr_ratio, shuffle=shuffle, verbose=verbose)
+
 
     if verbose:
         print(f"(IMPUTATION) SAITS\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\tseq_len: {args.seq_len}\n\tepoch: {args.epochs}\n\tbatch_size: {args.batch_size}\n\tsliding_windows: {sliding_windows}\n\tmultivariate: {multivariate}\n\tn_head: {args.n_head}\n\tnum_workers: {args.num_workers}\n\tseed: {seed}\n\tconfig_path: {args.config_path}\n\ttr_ratio: {tr_ratio}\n\tverbose: {verbose}\n\tdevice: {args.device}\n")
         print(f"\ncall: saits.impute(params={{'seq_len': {args.seq_len}, 'batch_size': {args.batch_size}, 'epochs': {args.epochs}, 'sliding_windows': {sliding_windows}, 'n_head': {args.n_head}, 'num_workers': {args.num_workers}}})\n\n")
 
-    if multivariate:
-        dataset_saving_dir, origins = sait_loader_imputegap(incomp_data, seq_len, dshere, tr_ratio=tr_ratio, shuffle=shuffle, verbose=verbose, replicat=replicat)
-    else:
-        dataset_saving_dir, origins = sait_loader_w_imputegap(incomp_data, seq_len, features=incomp_data.shape[1], here=dshere, sliding_windows=sliding_windows, tr_ratio=tr_ratio, shuffle=shuffle, verbose=verbose)
 
     args.dataset_path = dataset_saving_dir
 
@@ -451,10 +470,10 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     assert args.model_saving_strategy.lower() in ["all", "best", "none", ], "model saving strategy must be all/best/none"
     if args.model_saving_strategy.lower() == "none":
         args.model_saving_strategy = False
-    assert (args.optimizer_type in OPTIMIZER.keys()), f"optimizer type should be in {OPTIMIZER.keys()}, but get{args.optimizer_type}"
-    assert args.device in ["cpu", "cuda"], "device should be cpu or cuda"
+    #assert (args.optimizer_type in OPTIMIZER.keys()), f"optimizer type should be in {OPTIMIZER.keys()}, but get{args.optimizer_type}"
+    #assert args.device in ["cpu", "cuda"], "device should be cpu or cuda"
 
-    time_now = "imp_saits_imputegap"  # datetime.now().__format__("%Y-%m-%d_T%H_%M_%S")
+    time_now = args.save_p_model_name #"imp_saits_imputegap"  # datetime.now().__format__("%Y-%m-%d_T%H_%M_%S")
     args.model_saving, args.log_saving = check_saving_dir_for_model(args, time_now, dshere)
 
 
@@ -480,9 +499,8 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
     if verbose:
         logger.info(f"Num of total trainable params is: {args.total_params}")
 
-    # if utilize GPU and GPU available, then move
-    if "cuda" in args.device and torch.cuda.is_available():
-        model = model.to(args.device)
+    model = model.to(args.device)
+    #print(f"SAITS > Device: {next(model.parameters()).device}")
 
     if verbose:
         logger.info(f"Creating {args.optimizer_type} optimizer...")
@@ -499,14 +517,15 @@ def recov_saits(incomp_data, seq_len=-1, batch_size=-1, epochs=10, sliding_windo
         logger.info(f"train set len is {train_set_size}, batch size is {args.batch_size}," f"so each epoch has {math.ceil(train_set_size / args.batch_size)} steps")
         logger.info(f"with seq_len :{unified_dataloader.seq_len = }, and feature num: {unified_dataloader.feature_num}")
 
-    tb_summary_writer = SummaryWriter(os.path.join(args.log_saving, "tensorboard"))
-    train(model, optimizer, train_dataloader, val_dataloader, tb_summary_writer, training_controller, logger, args=args, verbose=verbose)
+    # tb_summary_writer = SummaryWriter(os.path.join(args.log_saving, "tensorboard")) # LLVM conflict
+    # train(model, optimizer, train_dataloader, val_dataloader, tb_summary_writer, training_controller, logger, args=args, verbose=verbose) # LLVM conflict
+    train(model, optimizer, train_dataloader, val_dataloader, training_controller, logger, args=args, verbose=verbose)
 
     # TEST ============================================================================================================
     if verbose:
         logger.info("Entering testing mode...")
 
-    args.step_313 = "saits_model"
+    args.step_313 = args.save_p_model_name
     args.model_path = os.path.join(args.model_saving, args.step_313)
 
     args.result_saving_path = os.path.join(dshere, "models/saits")
