@@ -11,7 +11,7 @@ In detail, the package provides:
   - Several imputation univariate time series datasets and utilities to handle multivariate ones ([Datasets](https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets))
   - Configurable contamination module that simulates real-world missingness patterns ([Patterns](https://imputegap.readthedocs.io/en/latest/gapgeneration.html))
   - AutoML techniques to parameterize the imputation algorithms ([AutoML](#Parameter-Tuning))
-  - Unified benchmarking pipeline to evaluate the performance of imputation algorithms ([Benchmark](#benchmark))
+  - Unified benchmarking pipeline to evaluate the performance of imputation algorithms ([Benchmark](#Benchmarking))
   - Modular analysis tools to assess the impact of imputation on time series downstream tasks ([Downstream](#downstream))
   - Expainability module to understand the impact of time series features on the imputation results ([Explainer](#explainer))
   - Adjustable wrappers to integrate new algorithms in different languages ([Integration](https://imputegap.readthedocs.io/en/latest/integration.html))
@@ -97,8 +97,7 @@ In detail, the package provides:
 ### **Quick Navigation**
 
 - **Getting Started**  
-  - [System Requirements](#system-requirements)  
-  - [Installation](#installation)  
+  - [System Requirements and Installation](#system-requirements)
 
 - **Code Snippets**  
   - [Dataset Loading](#dataset-loading)  
@@ -191,7 +190,7 @@ docker run -p 8888:8888 qnater/imputegap:1.1.21
 
 ## Dataset Loading
 
-ImputeGAP comes with several time series datasets. The list of datasets is described [here](https://imputegap.readthedocs.io/en/latest/datasets.html).
+ImputeGAP comes with several time series datasets. The list of datasets is described [here](https://imputegap.readthedocs.io/en/latest/gapgeneration.html).
 
 As an example, we use the eeg-alcohol dataset, composed of individuals with a genetic predisposition to alcoholism. The dataset contains measurements from 64 electrodes placed on subject’s scalps, sampled at 256 Hz. The dimensions of the dataset are 64 series, each containing 256 values.
 
@@ -227,7 +226,7 @@ print(f"ImputeGAP datasets : {ts.datasets}")
 
 ---
 
-## Gap Generatiion
+## Gap Generation
 GenGAP is a module to generate realistic missing gaps in sensor data. It allows users to fully customize all the properties of the missing gaps: start, size, position, frequency, etc., and can be easily imported inside any project.
 <br></br>
 

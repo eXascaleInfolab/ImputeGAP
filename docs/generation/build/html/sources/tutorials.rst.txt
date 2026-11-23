@@ -8,7 +8,7 @@ Tutorials
 Dataset Loading
 ---------------
 
-ImputeGAP comes with several time series datasets. The datasets are listed here: `datasets.html <datasets.html>`_.
+ImputeGAP comes with several time series datasets. The datasets are listed here: `data_loading.html <data_loading.html>`_.
 
 As an example, we use the eeg-alcohol dataset, composed of individuals with a genetic predisposition to alcoholism. The dataset contains measurements from 64 electrodes placed on subject’s scalps, sampled at 256 Hz. The dimensions of the dataset are 64 series, each containing 256 values.
 
@@ -130,7 +130,7 @@ Imputation
 ----------
 
 In this section, we will illustrate how to impute the contaminated time series. Our library implements six families of imputation algorithms: Statistical, Machine Learning, Matrix Completion, Deep Learning, Pattern Search, and Large Language Models.
-The list of algorithms is described here: `algorithms.html <algorithms.html>`_.
+The list of algorithms is described here: `index.html#algorithms <index.html#algorithms>`_.
 
 
 Let's illustrate the imputation using the CDRec algorithm from the Matrix Completion family.
