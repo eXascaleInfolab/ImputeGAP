@@ -59,19 +59,19 @@ build_script.txt
 # Root-level runner scripts, except those forbidden above
 !/runner_*.py
 /runner_efeatures.py
-/imputegap/_cleanimp_classifiers_bench_1_upstream.py
-/imputegap/_cleanimp_classifiers_bench_2_downstream.py
-/imputegap/_cleanimp_forecasters_bench_3_upstream.py
-/imputegap/_cleanimp_forecasters_bench_4_downstream.py
-/imputegap/_runner_benchmark_downstream.py
-/imputegap/_runner_down_classifier.py
-/imputegap/_runner_down_forecasting.py
-/imputegap/_runner_efeatures.py
-/imputegap/_cleanimp_bench.py
-/imputegap/_script_180.py
-/imputegap/_script_181.py
-/imputegap/_script_182.py
-/imputegap/_script_lan.py
+/imputegap/_runners/_cleanimp_classifiers_bench_1_upstream.py
+/imputegap/_runners/_cleanimp_classifiers_bench_2_downstream.py
+/imputegap/_runners/_cleanimp_forecasters_bench_3_upstream.py
+/imputegap/_runners/_cleanimp_forecasters_bench_4_downstream.py
+/imputegap/_runners/_runner_benchmark_downstream.py
+/imputegap/_runners/_runner_down_classifier.py
+/imputegap/_runners/_runner_down_forecasting.py
+/imputegap/_runners/_runner_efeatures.py
+/imputegap/_runners/_cleanimp_bench.py
+/imputegap/_runners/_script_180.py
+/imputegap/_runners/_script_181.py
+/imputegap/_runners/_script_182.py
+/imputegap/_runners/_script_lan.py
 
 # Allowed classification datasets
 !/imputegap/datasets/classify/Strawberry/
