@@ -1,0 +1,13 @@
+# ImputeGAP imports
+from imputegap.recovery.manager import TimeSeries
+
+# initialize the time series object
+ts = TimeSeries()
+print(f"\nImputeGAP datasets : {ts.datasets}")
+
+# load and normalize the dataset
+ts.load_series(data="eeg-alcohol", normalizer=None, nbr_series=32, nbr_val=128)
+
+# plot and print a subset of time series
+ts.print(nbr_series=4, nbr_val=4)
+ts.plot(input_data=ts.data, nbr_series=9, nbr_val=100, save_path="./imputegap_assets")

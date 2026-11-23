@@ -1,4 +1,4 @@
-<img align="right" width="140" height="140" src="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/logo_imputegab.png">
+<img align="right" width="140" height="140" src="https://raw.githubusercontent.com/eXascaleInfolab/ImputeGAP/main/assets/logo_imputegap.png">
 <br /> <br />
 
 # Welcome to ImputeGAP

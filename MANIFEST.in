@@ -1,7 +1,13 @@
 graft imputegap
+
+prune imputegap/slides
+prune imputegap/datasets/_old
+
 include pyproject.toml
 include setup.py
 include README.md
 include requirements.txt
 include .pypirc
+
 global-exclude *.py[cod]
+global-exclude __pycache__
