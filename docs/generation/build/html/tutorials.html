@@ -312,7 +312,7 @@
 <h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
 <section id="dataset-loading">
 <span id="loading"></span><h2>Dataset Loading<a class="headerlink" href="#dataset-loading" title="Link to this heading">¶</a></h2>
-<p>ImputeGAP comes with several time series datasets. The datasets are listed here: <a class="reference external" href="datasets.html">datasets.html</a>.</p>
+<p>ImputeGAP comes with several time series datasets. The datasets are listed here: <a class="reference external" href="data_loading.html">data_loading.html</a>.</p>
 <p>As an example, we use the eeg-alcohol dataset, composed of individuals with a genetic predisposition to alcoholism. The dataset contains measurements from 64 electrodes placed on subject’s scalps, sampled at 256 Hz. The dimensions of the dataset are 64 series, each containing 256 values.</p>
 <p>To load and plot the eeg-alcohol dataset from the library:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
@@ -384,7 +384,7 @@
 <section id="imputation">
 <span id="id1"></span><h2>Imputation<a class="headerlink" href="#imputation" title="Link to this heading">¶</a></h2>
 <p>In this section, we will illustrate how to impute the contaminated time series. Our library implements six families of imputation algorithms: Statistical, Machine Learning, Matrix Completion, Deep Learning, Pattern Search, and Large Language Models.
-The list of algorithms is described here: <a class="reference external" href="algorithms.html">algorithms.html</a>.</p>
+The list of algorithms is described here: <a class="reference external" href="index.html#algorithms">index.html#algorithms</a>.</p>
 <p>Let’s illustrate the imputation using the CDRec algorithm from the Matrix Completion family.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
