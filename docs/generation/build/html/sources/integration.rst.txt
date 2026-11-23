@@ -70,6 +70,31 @@ We will use the ``mean_impute`` algorithm as a template for integration. Through
 
 
 
+8. The integration is complete. You can now test it by running an imputation call:
+
+.. code-block:: python
+
+    # ImputeGAP imports
+    from imputegap.recovery.imputation import Imputation
+    from imputegap.recovery.contamination import GenGAP
+    from imputegap.recovery.manager import TimeSeries
+
+    # initialize the time series object
+    ts = TimeSeries()
+    print(f"\nImputation algorithms : {ts.algorithms}")
+
+    # load and normalize the dataset
+    ts.load_series(data="eeg-alcohol", normalizer="z_score", nbr_series=32, nbr_val=128)
+
+    # contaminate the time series
+    ts_m = GenGAP.mcar(input_data=ts.data)
+
+    # impute the contaminated series
+    imputer = Imputation.YourFamily.NewAlg(incomp_data=ts_m, use_cuda=0)
+    imputer.impute()
+
+    # compute and print the imputation metrics
+    imputer.score(input_data=ts.data, recov_data=imputer.recov_data)
 
 
 .. raw:: html

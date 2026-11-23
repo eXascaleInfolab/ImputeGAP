@@ -96,8 +96,10 @@ def cdrec(incomp_data, rank=3, iteration=100, epsilon=0.000001, logs=True, verbo
 
     Example
     -------
-        >>> recov_data = cdrec(incomp_data=incomp_data, rank=2, iterations=100, epsilon=0.000001, logs=True)
-        >>> print(recov_data)
+    .. code-block:: python
+
+        recov_data = cdrec(incomp_data=incomp_data, rank=2, iterations=100, epsilon=0.000001, logs=True)
+        print(recov_data)
 
     """
 

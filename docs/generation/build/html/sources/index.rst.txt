@@ -3,7 +3,7 @@ ImputeGAP Documentation
 
 .. admonition:: 📢 News !
 
-        - [11-20-2026] Version 1.1.3 is out! The new release includes the following major updates:
+        - [11-23-2026] Version 1.1.3 is out! The new release includes the following major updates:
             - New LLMs algorithms
             - CPU/GPU knob
             - New downstream impact evaluator

@@ -37,7 +37,7 @@ class TestSVT(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(params={'tau': 2})
+        algo.impute(params={'tau': 2}, language="c++")
         algo.score(ts.data)
         metrics = algo.metrics
 

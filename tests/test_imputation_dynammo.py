@@ -37,7 +37,7 @@ class TestDynammo(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(params={'h': 3, 'max_iteration': 100, 'approximation': True})
+        algo.impute(params={'h': 3, 'max_iteration': 100, 'approximation': True}, language="c++")
         algo.score(ts.data)
         metrics = algo.metrics
 

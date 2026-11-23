@@ -1554,7 +1554,7 @@
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SVT class to impute missing values using Singular Value Thresholding algorithm.</span>
 
-<span class="sd">            C++ implementation.</span>
+<span class="sd">            Python and C++ implementations.</span>
 
 
 <span class="sd">            Methods</span>
@@ -1574,11 +1574,11 @@
 
 <div class="viewcode-block" id="Imputation.MatrixCompletion.SVT.impute">
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.MatrixCompletion.SVT.impute">[docs]</a>
-            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the SVT algorithm.</span>
 
-<span class="sd">                C++ implementation.</span>
+<span class="sd">                Python and C++ implementations.</span>
 
 
 <span class="sd">                Parameters</span>
@@ -1588,6 +1588,9 @@
 
 <span class="sd">                params : dict, optional</span>
 <span class="sd">                    Parameters of the SVT algorithm or Auto-ML configuration, if None, default ones are loaded.</span>
+
+<span class="sd">                language : str, optional</span>
+<span class="sd">                    Set the language version of the code, C++ or Python, default &quot;python&quot;</span>
 
 <span class="sd">                    **Algorithm parameters:**</span>
 
@@ -1621,7 +1624,7 @@
 
                 <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_parameters_imputers</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="n">user_def</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">svt</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">svt</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
                 <span class="k">return</span> <span class="bp">self</span></div>
 </div>
@@ -2114,7 +2117,7 @@
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            STMVL class to impute missing values using Spatio-Temporal Matrix Variational Learning (STMVL).</span>
 
-<span class="sd">            C++ implementation.</span>
+<span class="sd">            Python and C++ implementations.</span>
 
 
 <span class="sd">            Methods</span>
@@ -2133,19 +2136,23 @@
 
 <div class="viewcode-block" id="Imputation.PatternSearch.STMVL.impute">
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.PatternSearch.STMVL.impute">[docs]</a>
-            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the STMVL algorithm.</span>
 
-<span class="sd">                C++ implementation.</span>
+<span class="sd">                Python and C++ implementations.</span>
 
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
 <span class="sd">                user_def : bool, optional</span>
 <span class="sd">                    Whether to use user-defined or default parameters (default is True).</span>
+
 <span class="sd">                params : dict, optional</span>
 <span class="sd">                    Parameters of the STMVL algorithm, if None, default ones are loaded.</span>
+
+<span class="sd">                language : str, optional</span>
+<span class="sd">                    Set the language version of the code, C++ or Python, default &quot;python&quot;</span>
 
 <span class="sd">                    - window_size : int</span>
 <span class="sd">                        The size of the temporal window for imputation.</span>
@@ -2181,7 +2188,7 @@
 
                 <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_parameters_imputers</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="n">user_def</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">stmvl</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">stmvl</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
                 <span class="k">return</span> <span class="bp">self</span></div>
 </div>
@@ -2193,7 +2200,7 @@
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            DynaMMo class to impute missing values using Dynamic Multi-Mode modeling with Missing Observations algorithm.</span>
 
-<span class="sd">            C++ implementation.</span>
+<span class="sd">            Python and C++ implementations.</span>
 
 
 <span class="sd">            Methods</span>
@@ -2213,19 +2220,23 @@
 
 <div class="viewcode-block" id="Imputation.PatternSearch.DynaMMo.impute">
 <a class="viewcode-back" href="../../../imputegap.imputation.html#imputegap.recovery.imputation.Imputation.PatternSearch.DynaMMo.impute">[docs]</a>
-            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                Perform imputation using the DynaMMo algorithm.</span>
 
-<span class="sd">                C++ implementation.</span>
+<span class="sd">                Python and C++ implementations.</span>
 
 
 <span class="sd">                Parameters</span>
 <span class="sd">                ----------</span>
 <span class="sd">                user_def : bool, optional</span>
 <span class="sd">                    Whether to use user-defined or default parameters (default is True).</span>
+
 <span class="sd">                params : dict, optional</span>
 <span class="sd">                    Parameters of the DynaMMo algorithm or Auto-ML configuration, if None, default ones are loaded.</span>
+
+<span class="sd">                language : str, optional</span>
+<span class="sd">                    Set the language version of the code, C++ or Python, default &quot;python&quot;</span>
 
 <span class="sd">                    **Algorithm parameters:**</span>
 
@@ -2262,7 +2273,7 @@
 
                 <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_parameters_imputers</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user_def</span><span class="o">=</span><span class="n">user_def</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">dynammo</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recov_data</span> <span class="o">=</span> <span class="n">dynammo</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">incomp_data</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
                 <span class="k">return</span> <span class="bp">self</span></div>
 </div>
@@ -3630,7 +3641,6 @@
 
 <span class="sd">            Python implementation.</span>
 
-
 <span class="sd">            Methods</span>
 <span class="sd">            -------</span>
 <span class="sd">            impute(self, user_def=True, params=None):</span>
@@ -3654,9 +3664,15 @@
 
 <span class="sd">            - Computation of seq_len and batch_size based on the dataset shape.</span>
 
-<span class="sd">            Patches</span>
-<span class="sd">            -------</span>
-<span class="sd">            - We noticed some problems with triton and llvmlite with some version of the environment. If the problem appears, please install those version of the requirements: (torch==2.9.1 / triton==3.5.1 / tensorflow==2.20.0 / llvmlite==0.46.0).</span>
+<span class="sd">            Notes</span>
+<span class="sd">            -----</span>
+<span class="sd">            If an LLVM error occurs indicating that the option</span>
+<span class="sd">            &#39;bitcode-mdindex-threshold&#39; has been registered more than once,</span>
+<span class="sd">            it may be caused by a conflict involving the Triton library.</span>
+<span class="sd">            To resolve this issue, uninstall Triton using:</span>
+
+<span class="sd">                python -m pip uninstall -y triton</span>
+
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;saits&quot;</span>
@@ -3726,6 +3742,15 @@
 <span class="sd">                ----------</span>
 <span class="sd">                Wenjie Du, David Coté, Yan Liu. SAITS: Self-attention-based imputation for time series. arXiv, 2023</span>
 <span class="sd">                https://github.com/WenjieDu/SAITS</span>
+
+<span class="sd">                Notes</span>
+<span class="sd">                -----</span>
+<span class="sd">                If an LLVM error occurs indicating that the option</span>
+<span class="sd">                &#39;bitcode-mdindex-threshold&#39; has been registered more than once,</span>
+<span class="sd">                it may be caused by a conflict involving the Triton library.</span>
+<span class="sd">                To resolve this issue, uninstall Triton using:</span>
+
+<span class="sd">                    python -m pip uninstall -y triton</span>
 <span class="sd">                &quot;&quot;&quot;</span>
 
                 <span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.algorithms.saits</span><span class="w"> </span><span class="kn">import</span> <span class="n">saits</span>

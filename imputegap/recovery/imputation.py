@@ -1154,7 +1154,7 @@ class Imputation:
             """
             SVT class to impute missing values using Singular Value Thresholding algorithm.
 
-            C++ implementation.
+            Python and C++ implementations.
 
 
             Methods
@@ -1172,11 +1172,11 @@ class Imputation:
 
             algorithm = "svt"
 
-            def impute(self, user_def=True, params=None):
+            def impute(self, user_def=True, params=None, language="python"):
                 """
                 Perform imputation using the SVT algorithm.
 
-                C++ implementation.
+                Python and C++ implementations.
 
 
                 Parameters
@@ -1186,6 +1186,9 @@ class Imputation:
 
                 params : dict, optional
                     Parameters of the SVT algorithm or Auto-ML configuration, if None, default ones are loaded.
+
+                language : str, optional
+                    Set the language version of the code, C++ or Python, default "python"
 
                     **Algorithm parameters:**
 
@@ -1219,7 +1222,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = svt(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = svt(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, language=language, **params)
 
                 return self
 
@@ -1672,7 +1675,7 @@ class Imputation:
             """
             STMVL class to impute missing values using Spatio-Temporal Matrix Variational Learning (STMVL).
 
-            C++ implementation.
+            Python and C++ implementations.
 
 
             Methods
@@ -1689,19 +1692,23 @@ class Imputation:
             """
             algorithm = "stmvl"
 
-            def impute(self, user_def=True, params=None):
+            def impute(self, user_def=True, params=None, language="python"):
                 """
                 Perform imputation using the STMVL algorithm.
 
-                C++ implementation.
+                Python and C++ implementations.
 
 
                 Parameters
                 ----------
                 user_def : bool, optional
                     Whether to use user-defined or default parameters (default is True).
+
                 params : dict, optional
                     Parameters of the STMVL algorithm, if None, default ones are loaded.
+
+                language : str, optional
+                    Set the language version of the code, C++ or Python, default "python"
 
                     - window_size : int
                         The size of the temporal window for imputation.
@@ -1737,7 +1744,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = stmvl(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = stmvl(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, language=language, **params)
 
                 return self
 
@@ -1745,7 +1752,7 @@ class Imputation:
             """
             DynaMMo class to impute missing values using Dynamic Multi-Mode modeling with Missing Observations algorithm.
 
-            C++ implementation.
+            Python and C++ implementations.
 
 
             Methods
@@ -1763,19 +1770,23 @@ class Imputation:
 
             algorithm = "dynammo"
 
-            def impute(self, user_def=True, params=None):
+            def impute(self, user_def=True, params=None, language="python"):
                 """
                 Perform imputation using the DynaMMo algorithm.
 
-                C++ implementation.
+                Python and C++ implementations.
 
 
                 Parameters
                 ----------
                 user_def : bool, optional
                     Whether to use user-defined or default parameters (default is True).
+
                 params : dict, optional
                     Parameters of the DynaMMo algorithm or Auto-ML configuration, if None, default ones are loaded.
+
+                language : str, optional
+                    Set the language version of the code, C++ or Python, default "python"
 
                     **Algorithm parameters:**
 
@@ -1812,7 +1823,7 @@ class Imputation:
 
                 params = self._define_parameters_imputers(params=params, user_def=user_def, task=self.task)
 
-                self.recov_data = dynammo(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, **params)
+                self.recov_data = dynammo(incomp_data=self.incomp_data, logs=self.logs, verbose=self.verbose, language=language, **params)
 
                 return self
 
@@ -3101,7 +3112,6 @@ class Imputation:
 
             Python implementation.
 
-
             Methods
             -------
             impute(self, user_def=True, params=None):
@@ -3125,9 +3135,15 @@ class Imputation:
 
             - Computation of seq_len and batch_size based on the dataset shape.
 
-            Patches
-            -------
-            - We noticed some problems with triton and llvmlite with some version of the environment. If the problem appears, please install those version of the requirements: (torch==2.9.1 / triton==3.5.1 / tensorflow==2.20.0 / llvmlite==0.46.0).
+            Notes
+            -----
+            If an LLVM error occurs indicating that the option
+            'bitcode-mdindex-threshold' has been registered more than once,
+            it may be caused by a conflict involving the Triton library.
+            To resolve this issue, uninstall Triton using:
+
+                python -m pip uninstall -y triton
+
             """
 
             algorithm = "saits"
@@ -3195,6 +3211,15 @@ class Imputation:
                 ----------
                 Wenjie Du, David Coté, Yan Liu. SAITS: Self-attention-based imputation for time series. arXiv, 2023
                 https://github.com/WenjieDu/SAITS
+
+                Notes
+                -----
+                If an LLVM error occurs indicating that the option
+                'bitcode-mdindex-threshold' has been registered more than once,
+                it may be caused by a conflict involving the Triton library.
+                To resolve this issue, uninstall Triton using:
+
+                    python -m pip uninstall -y triton
                 """
 
                 from imputegap.algorithms.saits import saits

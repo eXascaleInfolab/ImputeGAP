@@ -364,6 +364,32 @@
     <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">YourFamily</span><span class="o">.</span><span class="n">NewAlg</span><span class="p">(</span><span class="n">incomp_data</span><span class="p">)</span>
 </pre></div>
 </div>
+<ol class="arabic simple" start="8">
+<li><p>The integration is complete. You can now test it by running an imputation call:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ImputeGAP imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.imputation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Imputation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.contamination</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenGAP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">imputegap.recovery.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeries</span>
+
+<span class="c1"># initialize the time series object</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Imputation algorithms : </span><span class="si">{</span><span class="n">ts</span><span class="o">.</span><span class="n">algorithms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># load and normalize the dataset</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">load_series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;eeg-alcohol&quot;</span><span class="p">,</span> <span class="n">normalizer</span><span class="o">=</span><span class="s2">&quot;z_score&quot;</span><span class="p">,</span> <span class="n">nbr_series</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">nbr_val</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+
+<span class="c1"># contaminate the time series</span>
+<span class="n">ts_m</span> <span class="o">=</span> <span class="n">GenGAP</span><span class="o">.</span><span class="n">mcar</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># impute the contaminated series</span>
+<span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputation</span><span class="o">.</span><span class="n">YourFamily</span><span class="o">.</span><span class="n">NewAlg</span><span class="p">(</span><span class="n">incomp_data</span><span class="o">=</span><span class="n">ts_m</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">imputer</span><span class="o">.</span><span class="n">impute</span><span class="p">()</span>
+
+<span class="c1"># compute and print the imputation metrics</span>
+<span class="n">imputer</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">recov_data</span><span class="o">=</span><span class="n">imputer</span><span class="o">.</span><span class="n">recov_data</span><span class="p">)</span>
+</pre></div>
+</div>
 <br><section id="optimizer">
 <h3>Optimizer<a class="headerlink" href="#optimizer" title="Link to this heading">¶</a></h3>
 <p>To enable the optimization module, please update <code class="docutils literal notranslate"><span class="pre">./imputegap/tools/algorithm_parameters.py</span></code>.</p>

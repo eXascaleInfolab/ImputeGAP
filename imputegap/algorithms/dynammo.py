@@ -4,6 +4,8 @@ import time
 import numpy as np
 
 from imputegap.tools import utils
+from imputegap.wrapper.AlgoPython.DynaMMo.recovDynammo import recoveryDynaMMo
+
 
 def native_dynammo(__py_matrix, __py_h, __py_maxIter, __py_fast, __verbose=True):  # noqa: PYI063
     """
@@ -58,7 +60,7 @@ def native_dynammo(__py_matrix, __py_h, __py_maxIter, __py_fast, __verbose=True)
     return __py_imputed_matrix;
 
 
-def dynammo(incomp_data, h=3, max_iteration=100, approximation=True, logs=True, verbose=True, lib_path=None):
+def dynammo(incomp_data, h=3, max_iteration=100, approximation=True, logs=True, verbose=True, language="python", lib_path=None):
     """
     DynaMMo algorithm for matrix imputation.
 
@@ -66,16 +68,25 @@ def dynammo(incomp_data, h=3, max_iteration=100, approximation=True, logs=True, 
     ----------
     incomp_data : numpy.ndarray
         The input matrix with contamination (missing values represented as NaNs).
+
     h : int
         The time window (H) parameter for modeling temporal dynamics.
+
     max_iteration : int
         The maximum number of iterations for the imputation process.
+
     approximation : bool
         If True, enables faster approximate processing.
+
     logs : bool, optional
         Whether to log the execution time (default is True).
+
+    language : str, optional
+         Set the language version of the code, C++ or Python, default "python"
+
     verbose : bool, optional
         Whether to display the contamination information (default is True).
+
     lib_path : str, optional
         Custom path to the shared library file (default is None).
 
@@ -86,9 +97,14 @@ def dynammo(incomp_data, h=3, max_iteration=100, approximation=True, logs=True, 
 
     Example
     -------
-        >>> recov_data = dynammo(incomp_data=incomp_data, h=5, max_iteration=100, approximation=True, logs=True)
-        >>> print(recov_data)
+    .. code-block:: python
 
+        recov_data = dynammo(incomp_data=incomp_data, h=5, max_iteration=100, approximation=True, logs=True)
+        print(recov_data)
+
+    References
+    ----------
+    L. Li, J. McCann, N. S. Pollard, and C. Faloutsos. Dynammo: mining and summarization of coevolving sequences with missing values. In Proceedings of the 15th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, Paris, France, June 28 - July 1, 2009, pages 507–516, 2009.
     """
     start_time = time.time()  # Record start time
 
@@ -101,8 +117,14 @@ def dynammo(incomp_data, h=3, max_iteration=100, approximation=True, logs=True, 
     if logs and verbose:
         print(f"\n> logs: imputation DynaMMo - Data requires transposition to be effective. New shape: {incomp_data.T.shape}\n")
 
-    # Call the C++ function to perform recovery
-    recov_data = native_dynammo(incomp_data.T, h, max_iteration, approximation, verbose)
+    if language == "python":
+        if verbose:
+            print(f"\n(IMPUTATION) DynaMMo ({language})\n\tMatrix: {incomp_data.shape[0]}, {incomp_data.shape[1]}\n\th: {h}\n\tmax_iteration: {max_iteration}\n\tapproximation: {approximation}\n")
+            print(f"call: DynaMMo.impute(params={{'h': {h}, 'max_iteration': {max_iteration}, 'approximation': {approximation}}})\n")
+        recov_data =  recoveryDynaMMo(matrix=incomp_data.T, H=h, maxIter=max_iteration, fast=approximation)
+    else:
+        # Call the C++ function to perform recovery
+        recov_data = native_dynammo(incomp_data.T, h, max_iteration, approximation, verbose)
 
     end_time = time.time()
 

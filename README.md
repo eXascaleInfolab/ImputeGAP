@@ -9,12 +9,12 @@ In detail, the package provides:
 
   - Over 40 state-of-the-art time series imputation algorithms from six different families ([Algorithms](#Available-Imputation-Algorithms))
   - Several imputation univariate time series datasets and utilities to handle multivariate ones ([Datasets](https://github.com/eXascaleInfolab/ImputeGAP/tree/main/imputegap/datasets))
-  - Configurable contamination module that simulates real-world missingness patterns ([Patterns](https://imputegap.readthedocs.io/en/latest/missingness_patterns.html))
+  - Configurable contamination module that simulates real-world missingness patterns ([Patterns](https://imputegap.readthedocs.io/en/latest/gapgeneration.html))
   - AutoML techniques to parameterize the imputation algorithms ([AutoML](#Parameter-Tuning))
   - Unified benchmarking pipeline to evaluate the performance of imputation algorithms ([Benchmark](#benchmark))
   - Modular analysis tools to assess the impact of imputation on time series downstream tasks ([Downstream](#downstream))
   - Expainability module to understand the impact of time series features on the imputation results ([Explainer](#explainer))
-  - Adjustable wrappers to integrate new algorithms in different languages ([Integration](https://imputegap.readthedocs.io/en/latest/contributing.html))
+  - Adjustable wrappers to integrate new algorithms in different languages ([Integration](https://imputegap.readthedocs.io/en/latest/integration.html))
 
 <br>
 
