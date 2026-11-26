@@ -79,12 +79,13 @@ class Forecaster:
         self.referential = referential
         self.bypass_error = bypass_error
         self.s_exception = s_exception
+
         self.y_test = None
         self.y_pred = None
 
 
 class Artifact:
-    def __init__(self, dataset="", model="chronos", algorithm="", pattern="", x=0.2, fixed_x=0.2, offset=0.05, contamination_by_class=True, imputation_by_class=True, horizon=0.2, season=24, verbose=True):
+    def __init__(self, dataset="", model="chronos", algorithm="", pattern="", x=0.2, fixed_x=0.2, offset=0.05, contamination_by_class=True, imputation_by_class=True, horizon=0.2, season=24, use_cuda=0, verbose=True):
         """
         Container for experiment metadata / configuration.
         """
@@ -99,6 +100,7 @@ class Artifact:
         self.imputation_by_class = imputation_by_class
         self.horizon = horizon
         self.season = season
+        self.use_cuda = use_cuda
         self.verbose = verbose
 
 
@@ -903,7 +905,7 @@ class Downstream:
                 from imputegap.recovery.imputation import Imputation
 
                 if baseline is not None:
-                    impt = utils.config_impute_algorithm(self.incomp_data, algorithm=baseline)
+                    impt = utils.config_impute_algorithm(self.incomp_data, algorithm=baseline, use_cuda=self.downstream.artifact.use_cuda)
                     impt.impute()
                     data = impt.recov_data
                 else:

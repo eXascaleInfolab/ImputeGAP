@@ -120,6 +120,48 @@ class TimeSeries:
         if verbose:
             print("\nImputeGAP Library has been invoked (https://github.com/eXascaleInfolab/ImputeGAP)\n")
 
+    def help(self):
+        """
+        Display the ImputeGAP library information and available options
+        in a human-readable console format.
+
+        The output includes the library version, documentation links,
+        available datasets, imputation algorithms grouped by family,
+        contamination patterns, and forecasting models.
+        """
+        from imputegap import __version__
+        from textwrap import fill
+        width = 80
+
+        def print_section(title, items):
+            print(f"\n{title.upper()} ({len(items)})")
+            print("-" * width)
+            print(fill(", ".join(items), width=width, initial_indent="  ", subsequent_indent="  "))
+
+        print("\n" + "=" * width)
+        print(f"ImputeGAP v{__version__} | Help".center(width))
+        print("=" * width)
+
+        print("\nDocumentation : https://imputegap.readthedocs.io/en/latest/")
+        print("GitHub        : https://github.com/eXascaleInfolab/ImputeGAP")
+        print("PyPI          : https://pypi.org/project/imputegap/")
+
+        print_section("Datasets", self.datasets)
+
+        print(f"\nIMPUTATION ALGORITHMS ({len(self.algorithms_with_families)})")
+        print("-" * width)
+
+        for family in self.families:
+            algorithms = [algo.split(".", 1)[1] for algo in self.algorithms_with_families if algo.startswith(f"{family}.") ]
+            print(f"\n{family}")
+            print(fill(", ".join(algorithms), width=width, initial_indent="    ", subsequent_indent="    " ))
+
+        print_section("Contamination patterns", self.patterns)
+        print_section("Forecasters", self.forecasters)
+
+        print("\n" + "=" * width + "\n")
+
+
     def import_matrix(self, data=None):
         """
         Imports a matrix of time series data.

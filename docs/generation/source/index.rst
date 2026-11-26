@@ -84,7 +84,7 @@ Getting Started
 Imputation Algorithms
 ---------------------
 
-ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum of imputation method families:
+ImputeGAP implements performant, well-established or nascent algorithms, spanning the full spectrum of time series imputation families:
 
 🚧 = under integration
 
@@ -95,14 +95,11 @@ ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum o
    :class: algs-left
 
    * - **Algorithms**
-     - **Families**
-     - **Venues -- Years**
+     - **Family**
+     - **Venue -- Year**
    * - MOMENT [37]_
      - LLMs
      - ICML -- 2024
-   * - NuwaTS [33]_
-     - LLMs
-     - Arxiv -- 2024
    * - GPT4TS [34]_
      - LLMs
      - NeurIPS -- 2023
@@ -202,9 +199,6 @@ ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum o
    * - ROSL [4]_
      - Matrix Completion
      - CVPR -- 2014
-   * - GROUSE [3]_
-     - Matrix Completion
-     - Arxiv -- 2010
    * - SoftImpute [6]_
      - Matrix Completion
      - JMLR -- 2010
@@ -235,9 +229,6 @@ ImputeGAP integrates over 35 imputation algorithms, spanning the full spectrum o
    * - IIM [12]_
      - Machine Learning
      - ICDE -- 2019
-   * - XGBOOST [13]_
-     - Machine Learning
-     - KDD -- 2016
    * - MICE [14]_
      - Machine Learning
      - Statistical Software -- 2011
@@ -319,8 +310,6 @@ References
 
 .. [2] Olga G. Troyanskaya, Michael N. Cantor, Gavin Sherlock, Patrick O. Brown, Trevor Hastie, Robert Tibshirani, David Botstein, Russ B. Altman: Missing value estimation methods for DNA microarrays. Bioinform. 17(6): 520-525 (2001)
 
-.. [3] Laura Balzano, Robert D. Nowak, and Benjamin Recht. "Online Identification and Tracking of Subspaces from Highly Incomplete Information." CoRR abs/1006.4046, 2010.
-
 .. [4] Xianbiao Shu, Fatih Porikli, Narendra Ahuja: Robust Orthonormal Subspace Learning: Efficient Recovery of Corrupted Low-Rank Matrices. CVPR 2014: 3874-3881
 
 .. [5] Spiros Papadimitriou, Jimeng Sun, Christos Faloutsos: Streaming Pattern Discovery in Multiple Time-Series. VLDB 2005: 697-708
@@ -338,8 +327,6 @@ References
 .. [11] Kevin Wellenzohn, Michael H. Böhlen, Anton Dignös, Johann Gamper, Hannes Mitterer: Continuous Imputation of Missing Values in Streams of Pattern-Determining Time Series. EDBT 2017: 330-341
 
 .. [12] Aoqian Zhang, Shaoxu Song, Yu Sun, Jianmin Wang: Learning Individual Models for Imputation. ICDE (2019)
-
-.. [13] Tianqi Chen, Carlos Guestrin: XGBoost: A Scalable Tree Boosting System. KDD 2016: 785-794
 
 .. [14] Royston Patrick , White Ian R.: Multiple Imputation by Chained Equations (MICE): Implementation in Stata. Journal of Statistical Software 2011: 45(4), 1–20.
 
@@ -366,8 +353,6 @@ References
 .. [31] Liang Wang, Simeng Wu, Tianheng Wu, Xianping Tao, Jian Lu: HKMF-T: Recover From Blackouts in Tagged Time Series With Hankel Matrix Factorization. IEEE Trans. Knowl. Data Eng. 33(11): 3582-3593 (2021)
 
 .. [32] Xiaodan Chen, Xiucheng Li, Bo Liu, Zhijun Li: Biased Temporal Convolution Graph Network for Time Series Forecasting with Missing Values. ICLR 2024
-
-.. [33] Jinguo Cheng, Chunwei Yang, Wanlin Cai, Yuxuan Liang, Qingsong Wen, Yuankai Wu: NuwaTS: a Foundation Model Mending Every Incomplete Time Series. Arxiv 2024
 
 .. [34] Tian Zhou, Peisong Niu, Xue Wang, Liang Sun, Rong Jin: One fits all: power general time series analysis by pretrained LM. NeurIPS 2023
 

@@ -17,7 +17,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python packages system-wide
-RUN pip install --no-cache-dir imputegap==1.1.2 jupyter ipywidgets
+RUN pip install --no-cache-dir imputegap==1.1.3 jupyter ipywidgets
 
 # Copy current project files into container
 COPY ./ /root/

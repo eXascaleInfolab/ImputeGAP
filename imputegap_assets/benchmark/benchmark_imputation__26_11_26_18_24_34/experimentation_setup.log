@@ -1,0 +1,16 @@
+
+The benchmark has been called (imputation):
+	algorithms: ['MeanImpute', 'SoftImpute']
+	datasets: ['eeg-alcohol']
+	patterns: ['mcar']
+	missing_percentages: [0.1, 0.2, 0.4, 0.6, 0.8]
+	metrics: ['RMSE', 'MAE', 'MI', 'CORRELATION', 'RUNTIME', 'RUNTIME_LOG']
+	normalizer: z_score
+	fixed_rate: 0.2
+	to_cache: True
+	use_cache: False
+	bypass_error: False
+	number max series: 1000
+	number max values: 1000
+	use_cuda: 0
+

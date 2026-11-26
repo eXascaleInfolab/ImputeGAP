@@ -2,7 +2,6 @@
 # FORBIDDEN: Configuration, local files, and generated outputs
 # ============================================================
 .pypirc
-.coveragerc
 build_script.txt
 /old_requirements.txt
 

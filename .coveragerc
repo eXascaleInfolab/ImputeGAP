@@ -1,0 +1,21 @@
+[run]
+source =
+    imputegap
+
+relative_files = True
+
+omit =
+    */tests/*
+    */imputegap/wrapper/*
+    */imputegap/datasets/*
+    */imputegap/env/*
+    */__init__.py
+    *runner_*.py
+    *_runner_*.py
+
+[report]
+show_missing = True
+skip_empty = True
+
+[xml]
+output = coverage.xml

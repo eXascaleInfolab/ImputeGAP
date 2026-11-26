@@ -11,7 +11,7 @@ logic = "mean"
 
 # ALGORITHM DEFAULT VALUES : MATRIX COMPLETION
 [cdrec]
-rank = 2  # 2: default  |  3:opti_f   |
+rank = 3  # 2: default  |  3:opti_f   |
 epsilon = 0.000001
 epsilon_str = "E-6"
 iteration = 100

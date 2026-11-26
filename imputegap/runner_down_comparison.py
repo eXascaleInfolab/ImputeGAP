@@ -17,7 +17,7 @@ ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.4, offset=0, reverse=True)
 downstream = Downstream(input_data=ts.data, incomp_data=ts_m)
 
 # launch the analysis
-comparison = downstream.eval(imp_algs=["MissNet", "ZeroImpute"],
+comparison = downstream.eval(imp_algs=["SAITS", "MeanImpute"],
                              model="chronos",
                              horizons=[128],
                              season=24,
