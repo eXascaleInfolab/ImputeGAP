@@ -78,7 +78,7 @@ All algorithms developed in ImputeGAP are available in the ``ts.algorithms`` mod
 Imputation of raw missing data
 ------------------------------
 
-To impute a dataset that already contains missing values (NaNs), pass the raw data directly to the imputer and bypass the contamination step. Note that the module cannot produce evaluation metrics since the ground truth is not present.
+To impute a dataset that already contains missing values (NaNs), pass the raw data directly to the imputer and skip the contamination step. Note that the module cannot produce evaluation metrics since the ground truth is not present.
 
 .. code-block:: python
 

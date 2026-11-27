@@ -15,8 +15,8 @@ mae = 0.10
 
 [cdrec]
 dataset = "chlorine"
-rmse = 0.489
-mae = 0.337
+rmse = 0.389
+mae = 0.271
 
 [dynammo]
 dataset = "chlorine"

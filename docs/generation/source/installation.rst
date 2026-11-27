@@ -46,103 +46,51 @@ ImputeGAP is compatible with Python>=3.11 and Unix/WSL environment.
                 pip install -e . # local installation
 
 
+    .. tab:: docker
+
+        .. tabs::
+
+            .. tab:: Linux/Windows
+
+                Pull the ImputeGAP Docker image:
+
+                .. code-block:: powershell
+
+                     docker pull qnater/imputegap:1.1.3
+
+                Run the Docker container:
+
+                .. code-block:: powershell
+
+                    docker run -p 8888:8888 qnater/imputegap:1.1.3
+
+                Open the following link:
+
+                .. code-block:: powershell
+
+                    http://127.0.0.1:8888
 
 
-    .. .. tab:: source
-
-      ..      If you would like to extend the library, you can install from source:
-
-        ..    .. code-block:: bash
-
-          ..      git init
-          ..      git clone https://github.com/eXascaleInfolab/ImputeGAP
-          ..      cd ./ImputeGAP
-          ..      pip install -e .
+            .. tab:: MacOS
 
 
-    .. .. tab:: docker
+                Pull the ImputeGAP Docker image:
 
-        .. .. tabs::
+                .. code-block:: powershell
 
-        ..    .. tab:: Windows
+                    docker pull --platform linux/x86_64 qnater/imputegap:1.1.3
 
-        ..        Launch Docker from desktop of terminal. To make sure it is running:
+                Run the Docker container:
 
-        ..        .. code-block:: powershell
+                .. code-block:: powershell
 
-        ..             docker version
+                    docker run -p 8888:8888 qnater/imputegap:1.1.3
 
-        ..       Pull the ImputeGAP Docker image:
+                Open the following link:
 
-        ..        .. code-block:: powershell
+                .. code-block:: powershell
 
-        ..             docker pull qnater/imputegap:1.1.21
-
-        ..        Run the Docker container:
-
-        ..        .. code-block:: powershell
-
-        ..            docker run -p 8888:8888 qnater/imputegap:1.1.21
-
-        ..        Open the following link:
-
-        ..        .. code-block:: powershell
-
-        ..            http://127.0.0.1:8888
-
-
-        ..    .. tab:: Linux
-
-        ..        Launch Docker from desktop of terminal. To make sure it is running:
-
-        ..        .. code-block:: powershell
-
-        ..             docker version
-
-        ..        Pull the ImputeGAP Docker image:
-
-        ..        .. code-block:: powershell
-
-        ..            docker pull qnater/imputegap:1.1.21
-
-        ..        Run the Docker container:
-
-        ..        .. code-block:: powershell
-
-        ..             docker run -p 8888:8888 qnater/imputegap:1.1.21
-
-        ..        Open the following link:
-
-        ..        .. code-block:: powershell
-
-        ..           http://127.0.0.1:8888
-
-
-        ..    .. tab:: MacOS
-
-        ..        Launch Docker from desktop of terminal. To make sure it is running:
-
-        ..        .. code-block:: powershell
-
-        ..             docker version
-
-       ..         Pull the ImputeGAP Docker image:
-
-       ..         .. code-block:: powershell
-
-       ..             docker pull --platform linux/x86_64 qnater/imputegap:1.1.21
-
-       ..         Run the Docker container:
-
-      ..          .. code-block:: powershell
-
-       ..             docker run -p 8888:8888 qnater/imputegap:1.1.21
-
-       ..         Open the following link:
-
-      ..          .. code-block:: powershell
-
-      ..             http://127.0.0.1:8888
+                   http://127.0.0.1:8888
 
 
 

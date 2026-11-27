@@ -520,9 +520,8 @@ class Downstream:
         # generate combined downstream comparator plot
         if saved_pipelines:
             fig = self._plot_comparator_downstream(pipelines=saved_pipelines, series_index=self.downstream.selected_series[0], title=titles, display=display_plot, save_path=save_path, verbose=verbose)
-            plt.close(fig)
 
-        return saved_pipelines
+        return saved_pipelines, fig
 
     def classify(self, model, params, baseline, plots=True, save_path="./imputegap_assets/downstream", verbose=True):
         """

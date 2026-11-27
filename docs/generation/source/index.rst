@@ -9,9 +9,9 @@ ImputeGAP Documentation
             - New downstream impact evaluator
         - [04-06-2025] ImputeGAP was be presented as a Tutorial at KDD 2025 in Toronto! `[Link] <https://imputegap-tutorials.github.io/KDD-2025/>`_
 
+A GitHub star ⭐ helps others discover ImputeGAP: `GitHub repo <https://github.com/eXascaleInfolab/ImputeGAP/>`_.
 
 ImputeGAP is a comprehensive Python library for imputation of missing values in  time series data. It implements user-friendly APIs to easily visualize, analyze, and repair incomplete time series datasets. The library supports a diverse range of imputation algorithms and modular missing data simulation catering to datasets with varying characteristics. ImputeGAP includes extensive customization options, such as automated hyperparameter tuning, benchmarking, explainability, and downstream evaluation.
-
 
 In detail, the library provides:
     - Over 40 state-of-the-art time series imputation algorithms from six different families
@@ -266,8 +266,6 @@ ImputeGAP implements performant, well-established or nascent algorithms, spannin
 
 Cite
 ----
-
-If you like our library, please add a ⭐ in our `GitHub repository <https://github.com/eXascaleInfolab/ImputeGAP/>`_.
 
 If you use ImputeGAP in your research, please cite the following papers:
 
