@@ -40,7 +40,6 @@ class TestCDREC(unittest.TestCase):
         algo.impute(params={'rank': 3, 'epsilon': 1e-06, 'iteration': 100})
         algo.score(ts.data)
         metrics = algo.metrics
-
         print(f"{name}:{metrics = }\n")
 
         utils.print_results(algo.metrics, algo.algorithm)
