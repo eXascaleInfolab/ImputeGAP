@@ -37,10 +37,9 @@ class TestCDREC(unittest.TestCase):
         # ==============================================================================================================
 
         algo = utils.config_impute_algorithm(incomp_data=incomp_data, algorithm=name, verbose=True)
-        algo.impute(params={'rank': 2, 'epsilon': 1e-06, 'iteration': 100})
+        algo.impute(params={'rank': 3, 'epsilon': 1e-06, 'iteration': 100})
         algo.score(ts.data)
         metrics = algo.metrics
-
         print(f"{name}:{metrics = }\n")
 
         utils.print_results(algo.metrics, algo.algorithm)

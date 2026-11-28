@@ -1988,6 +1988,7 @@ def config_forecaster(model, params, pred_len=None, s_exception=False):
 
         If ``None``, no horizon adaptation is performed.
 
+
     s_exception : bool, default=False
         Whether to activate the ARIMA-specific configuration patch.
 
@@ -1996,6 +1997,10 @@ def config_forecaster(model, params, pred_len=None, s_exception=False):
             - ``sp = 24``
             - ``max_p = 2``
             - ``max_q = 2``
+
+    use_cuda: int, optional, default 0
+        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.
+
 
     Returns
     -------
@@ -4455,7 +4460,7 @@ def list_of_algorithms():
     return sorted([
         "CDRec",
         "IterativeSVD",
-        "GROUSE",
+        #"GROUSE",
         "ROSL",
         "SPIRIT", # temp_to_put_back
         "SoftImpute",
@@ -4465,7 +4470,7 @@ def list_of_algorithms():
         "DynaMMo",
         "TKCM", # temp_to_put_back
         "IIM",
-        "XGBOOST",
+        #"XGBOOST",
         "MICE",
         "MissForest",
         "KNNImpute",
@@ -4486,7 +4491,7 @@ def list_of_algorithms():
         "HKMFT",
         "BitGraph",
         "SAITS",
-        "NuwaTS",
+        #"NuwaTS",
         "GPT4TS",
         "TimesNet",
         "CSDI",
@@ -4591,10 +4596,10 @@ def list_of_optimizers():
     """
     return sorted([
         "ray_tune",
-        "bayesian",
-        "particle_swarm",
-        "successive_halving",
-        "greedy"
+        #"bayesian",
+        #"particle_swarm",
+        #"successive_halving",
+        #"greedy"
     ])
 
 def list_of_classifiers():
@@ -4809,7 +4814,7 @@ def list_of_algorithms_with_families(specify_family=None):
     my_list = [
         "MatrixCompletion.CDRec",
         "MatrixCompletion.IterativeSVD",
-        "MatrixCompletion.GROUSE",
+        #"MatrixCompletion.GROUSE",
         "MatrixCompletion.ROSL",
         "MatrixCompletion.SPIRIT",
         "MatrixCompletion.SoftImpute",
@@ -4819,7 +4824,7 @@ def list_of_algorithms_with_families(specify_family=None):
         "PatternSearch.DynaMMo",
         "PatternSearch.TKCM",
         "MachineLearning.IIM",
-        "MachineLearning.XGBOOST",
+        #"MachineLearning.XGBOOST",
         "MachineLearning.MICE",
         "MachineLearning.MissForest",
         "Statistics.KNNImpute",
@@ -4842,7 +4847,7 @@ def list_of_algorithms_with_families(specify_family=None):
         "DeepLearning.SAITS",
         "DeepLearning.CSDI",
         "DeepLearning.TimesNet",
-        "LLMs.NuwaTS",
+        # "LLMs.NuwaTS",
         "LLMs.GPT4TS",
         "LLMs.Moment"
     ]

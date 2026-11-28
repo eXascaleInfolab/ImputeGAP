@@ -1,0 +1,4 @@
+[run]
+omit =
+    *runner_*.py
+    *wrapper/*.py

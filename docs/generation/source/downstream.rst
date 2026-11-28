@@ -73,7 +73,7 @@ To evaluate and compare the impact of multiple imputation algorithms on downstre
     downstream = Downstream(input_data=ts.data, incomp_data=ts_m)
 
     # launch the analysis
-    comparison = downstream.eval(imp_algs=["SAITS", "ZeroImpute"],
+    comparison = downstream.eval(imp_algs=["SAITS", "MeanImpute"],
                                  model="chronos",
                                  horizons=[128],
                                  season=24,

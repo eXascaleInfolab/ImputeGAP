@@ -1,0 +1,4 @@
+[cdrec]
+rank = 15
+epsilon = 0.1
+iteration = 50

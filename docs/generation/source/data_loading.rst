@@ -108,7 +108,7 @@ The datasets follow this format:
 
 .. raw:: html
 
-   <table class="benchmark-table docutils align-default">
+   <table class="benchmark-table dataset-table docutils align-default">
      <thead>
        <tr><th>Categories</th><th>Datasets</th></tr>
      </thead>

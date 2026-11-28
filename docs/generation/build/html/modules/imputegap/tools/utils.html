@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="../../../static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../../../static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="../../../static/page_s_gobal.css?v=8b8c9d16" />
+    <link rel="stylesheet" type="text/css" href="../../../static/page_s_gobal.css?v=e25f4e6a" />
     
     
 
@@ -2321,6 +2321,7 @@
 
 <span class="sd">        If ``None``, no horizon adaptation is performed.</span>
 
+
 <span class="sd">    s_exception : bool, default=False</span>
 <span class="sd">        Whether to activate the ARIMA-specific configuration patch.</span>
 
@@ -2329,6 +2330,10 @@
 <span class="sd">            - ``sp = 24``</span>
 <span class="sd">            - ``max_p = 2``</span>
 <span class="sd">            - ``max_q = 2``</span>
+
+<span class="sd">    use_cuda: int, optional, default 0</span>
+<span class="sd">        CUDA usage mode: - 0: Force CPU. - 1: Use CUDA if available, otherwise fall back to CPU. - 2: Automatically detect CUDA availability.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -4884,7 +4889,7 @@
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">([</span>
         <span class="s2">&quot;CDRec&quot;</span><span class="p">,</span>
         <span class="s2">&quot;IterativeSVD&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;GROUSE&quot;</span><span class="p">,</span>
+        <span class="c1">#&quot;GROUSE&quot;,</span>
         <span class="s2">&quot;ROSL&quot;</span><span class="p">,</span>
         <span class="s2">&quot;SPIRIT&quot;</span><span class="p">,</span> <span class="c1"># temp_to_put_back</span>
         <span class="s2">&quot;SoftImpute&quot;</span><span class="p">,</span>
@@ -4894,7 +4899,7 @@
         <span class="s2">&quot;DynaMMo&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TKCM&quot;</span><span class="p">,</span> <span class="c1"># temp_to_put_back</span>
         <span class="s2">&quot;IIM&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;XGBOOST&quot;</span><span class="p">,</span>
+        <span class="c1">#&quot;XGBOOST&quot;,</span>
         <span class="s2">&quot;MICE&quot;</span><span class="p">,</span>
         <span class="s2">&quot;MissForest&quot;</span><span class="p">,</span>
         <span class="s2">&quot;KNNImpute&quot;</span><span class="p">,</span>
@@ -4915,7 +4920,7 @@
         <span class="s2">&quot;HKMFT&quot;</span><span class="p">,</span>
         <span class="s2">&quot;BitGraph&quot;</span><span class="p">,</span>
         <span class="s2">&quot;SAITS&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;NuwaTS&quot;</span><span class="p">,</span>
+        <span class="c1">#&quot;NuwaTS&quot;,</span>
         <span class="s2">&quot;GPT4TS&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TimesNet&quot;</span><span class="p">,</span>
         <span class="s2">&quot;CSDI&quot;</span><span class="p">,</span>
@@ -5035,10 +5040,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">([</span>
         <span class="s2">&quot;ray_tune&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;bayesian&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;particle_swarm&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;successive_halving&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;greedy&quot;</span>
+        <span class="c1">#&quot;bayesian&quot;,</span>
+        <span class="c1">#&quot;particle_swarm&quot;,</span>
+        <span class="c1">#&quot;successive_halving&quot;,</span>
+        <span class="c1">#&quot;greedy&quot;</span>
     <span class="p">])</span></div>
 
 
@@ -5295,7 +5300,7 @@
     <span class="n">my_list</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;MatrixCompletion.CDRec&quot;</span><span class="p">,</span>
         <span class="s2">&quot;MatrixCompletion.IterativeSVD&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;MatrixCompletion.GROUSE&quot;</span><span class="p">,</span>
+        <span class="c1">#&quot;MatrixCompletion.GROUSE&quot;,</span>
         <span class="s2">&quot;MatrixCompletion.ROSL&quot;</span><span class="p">,</span>
         <span class="s2">&quot;MatrixCompletion.SPIRIT&quot;</span><span class="p">,</span>
         <span class="s2">&quot;MatrixCompletion.SoftImpute&quot;</span><span class="p">,</span>
@@ -5305,7 +5310,7 @@
         <span class="s2">&quot;PatternSearch.DynaMMo&quot;</span><span class="p">,</span>
         <span class="s2">&quot;PatternSearch.TKCM&quot;</span><span class="p">,</span>
         <span class="s2">&quot;MachineLearning.IIM&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;MachineLearning.XGBOOST&quot;</span><span class="p">,</span>
+        <span class="c1">#&quot;MachineLearning.XGBOOST&quot;,</span>
         <span class="s2">&quot;MachineLearning.MICE&quot;</span><span class="p">,</span>
         <span class="s2">&quot;MachineLearning.MissForest&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Statistics.KNNImpute&quot;</span><span class="p">,</span>
@@ -5328,7 +5333,7 @@
         <span class="s2">&quot;DeepLearning.SAITS&quot;</span><span class="p">,</span>
         <span class="s2">&quot;DeepLearning.CSDI&quot;</span><span class="p">,</span>
         <span class="s2">&quot;DeepLearning.TimesNet&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;LLMs.NuwaTS&quot;</span><span class="p">,</span>
+        <span class="c1"># &quot;LLMs.NuwaTS&quot;,</span>
         <span class="s2">&quot;LLMs.GPT4TS&quot;</span><span class="p">,</span>
         <span class="s2">&quot;LLMs.Moment&quot;</span>
     <span class="p">]</span>

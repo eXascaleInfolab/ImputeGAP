@@ -286,7 +286,7 @@ class TestException(unittest.TestCase):
 
     def test_paths_raises(self):
         import os
-        expected = {'rank': 2, 'epsilon': 1e-06, 'iteration': 100}
+        expected = {'rank': 3, 'epsilon': 1e-06, 'iteration': 100}
 
         optimal_params = utils.load_parameters(query="default", algorithm="cdrec")
         print(f"{optimal_params = }")
@@ -315,8 +315,8 @@ class TestException(unittest.TestCase):
         print(f"{opti = }")
         assert opti == expected
 
-        utils.save_optimization(optimal_params={"rank": 2}, algorithm="iterative_svd", dataset="", optimizer="b", file_name=None, verbose=True)
-        utils.save_optimization(optimal_params={"rank": 2}, algorithm="iterative_svd", dataset="", optimizer="b", file_name=None, verbose=False)
+        utils.save_optimization(optimal_params={"rank": 3}, algorithm="iterative_svd", dataset="", optimizer="b", file_name=None, verbose=True)
+        utils.save_optimization(optimal_params={"rank": 3}, algorithm="iterative_svd", dataset="", optimizer="b", file_name=None, verbose=False)
 
         with pytest.raises(ValueError):
             _, _ = utils.sets_splitter_based_on_training(tr=1.1, verbose=True)

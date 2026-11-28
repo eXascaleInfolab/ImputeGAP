@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   imputegap:
+    image: imputegap:latest
     container_name: imputegap-docker
     build:
       context: .

@@ -35,63 +35,63 @@ In detail, the package provides:
 
 
 # Available Imputation Algorithms
-| **Algorithm**               | **Family**           | **Venue -- Year**            |
-|-----------------------------|----------------------|------------------------------|
-| MOMENT [[39]](#ref39)       | LLMs                 | ICML -- 2024                 |
-| NuwaTS [[35]](#ref35)       | LLMs                 | Arxiv -- 2024                |
-| GPT4TS [[36]](#ref36)       | LLMs                 | NeurIPS -- 2023              |
-| 🚧 LLM4HRS [[46]](#ref46)   | LLMs                 | IEEE Tr Geo RS -- 2025       |
-| 🚧 UniTS [[44]](#ref44)     | LLMs                 | NeurIPS -- 2024              |
-| 🚧 Timer [[45]](#ref45)     | LLMs                 | ICML -- 2024                 |
-| MissNet [[27]](#ref27)      | Deep Learning        | KDD -- 2024                  |
-| BayOTIDE [[30]](#ref30)     | Deep Learning        | ICML -- 2024                 |
-| BitGraph [[32]](#ref32)     | Deep Learning        | ICLR -- 2024                 |
-| MPIN [[25]](#ref25)         | Deep Learning        | PVLDB -- 2023                |
-| TimesNet [[37]](#ref37)     | Deep Learning        | ICLR -- 2023                 |
-| SAITS [[41]](#ref41)        | Deep Learning        | ESWA -- 2023                 |
-| PRISTI [[26]](#ref26)       | Deep Learning        | ICDE -- 2023                 |
-| GRIN [[29]](#ref29)         | Deep Learning        | ICLR -- 2022                 |
-| CSDI [[38]](#ref38)         | Deep Learning        | NeurIPS -- 2021              |
-| HKMFT [[31]](#ref31)        | Deep Learning        | TKDE -- 2021                 |
-| DeepMVI [[24]](#ref24)      | Deep Learning        | PVLDB -- 2021                |
-| MRNN [[22]](#ref22)         | Deep Learning        | IEEE Trans on BE -- 2019     |
-| BRITS [[23]](#ref23)        | Deep Learning        | NeurIPS -- 2018              |
-| GAIN [[28]](#ref28)         | Deep Learning        | ICML -- 2018                 |
-| 🚧 T1 [[47]](#ref47)        | Deep Learning        | ICLR -- 2026                 |
-| 🚧 FIM-ℓ [[48]](#ref48)     | Deep Learning        | ICLR -- 2025                 |
-| 🚧 SSD-TS [[49]](#ref49)    | Deep Learning        | KDD -- 2025                  |
-| 🚧 ImputeINR [[50]](#ref50) | Deep Learning        | IJCAI -- 2025                |
-| 🚧 CoFill [[51]](#ref51)    | Deep Learning        | IJCAI -- 2025                |
-| 🚧 SADI [[52]](#ref52)      | Deep Learning        | AAAI -- 2025                 |
-| 🚧 LSCD [[53]](#ref53)      | Deep Learning        | ICML -- 2025                 |
-| 🚧 FGTI [[54]](#ref54)      | Deep Learning        | NeurIPS -- 2024              |
-| 🚧 SSSD [[55]](#ref55)      | Deep Learning        | TMLR -- 2023                 |
-| 🚧 MTSIT [[56]](#ref56)     | Deep Learning        | IEEE SPL -- 2022             |
-| 🚧 SSGAN [[57]](#ref57)     | Deep Learning        | AAAI -- 2021                 |
-| 🚧 PoGeVon [[58]](#ref58)   | Deep Learning        | KDD -- 2023                  |
-| CDRec [[1]](#ref1)          | Matrix Completion    | KAIS -- 2020                 |
-| TRMF [[8]](#ref8)           | Matrix Completion    | NeurIPS -- 2016              |
-| ROSL [[4]](#ref4)           | Matrix Completion    | CVPR -- 2014                 |
-| GROUSE [[3]](#ref3)         | Matrix Completion    | Arxiv -- 2010                |
-| SoftImpute [[6]](#ref6)     | Matrix Completion    | JMLR -- 2010                 |
-| SVT [[7]](#ref7)            | Matrix Completion    | SIAM J. OPTIM -- 2010        |
-| SPIRIT [[5]](#ref5)         | Matrix Completion    | VLDB -- 2005                 |
-| IterativeSVD [[2]](#ref2)   | Matrix Completion    | BIOINFORMATICS -- 2001       |
-| 🚧 TIDER [[59]](#ref59)     | Matrix Completion    | ICLR -- 2023                 |
-| TKCM [[11]](#ref11)         | Pattern Search       | EDBT -- 2017                 |
-| STMVL [[9]](#ref9)          | Pattern Search       | IJCAI -- 2016                |
-| DynaMMo [[10]](#ref10)      | Pattern Search       | KDD -- 2009                  |
-| 🚧 PSW-I [[60]](#ref60)     | Pattern Search       | ICLR -- 2025                 |
-| IIM [[12]](#ref12)          | Machine Learning     | ICDE -- 2019                 |
-| XGBOOST [[13]](#ref13)      | Machine Learning     | KDD -- 2016                  |
-| MissForest [[15]](#ref15)   | Machine Learning     | BioInformatics -- 2012       |
-| MICE [[14]](#ref14)         | Machine Learning     | Statistical Software -- 2011 |
-| KNNImpute                   | Statistics           | -                            |
-| Interpolation               | Statistics           | -                            |
-| MinImpute                   | Statistics           | -                            |
-| ZeroImpute                  | Statistics           | -                            |
-| MeanImpute                  | Statistics           | -                            |
-| MeanImputeBySeries          | Statistics           | -                            |
+
+ImputeGAP implements performant, well-established or nascent algorithms, spanning the full spectrum of time series imputation families:
+
+| **Algorithms**             | **Family**           | **Venue -- Year**            |
+|----------------------------|----------------------|------------------------------|
+| MOMENT [[39]](#ref39)      | LLMs                 | ICML -- 2024                 |
+| GPT4TS [[36]](#ref36)      | LLMs                 | NeurIPS -- 2023              |
+| LLM4HRS [[46]](#ref46) 🚧  | LLMs                 | IEEE Tr Geo RS -- 2025       |
+| UniTS [[44]](#ref44) 🚧    | LLMs                 | NeurIPS -- 2024              |
+| Timer [[45]](#ref45) 🚧    | LLMs                 | ICML -- 2024                 |
+| MissNet [[27]](#ref27)     | Deep Learning        | KDD -- 2024                  |
+| BayOTIDE [[30]](#ref30)    | Deep Learning        | ICML -- 2024                 |
+| BitGraph [[32]](#ref32)    | Deep Learning        | ICLR -- 2024                 |
+| MPIN [[25]](#ref25)        | Deep Learning        | PVLDB -- 2023                |
+| TimesNet [[37]](#ref37)    | Deep Learning        | ICLR -- 2023                 |
+| SAITS [[41]](#ref41)       | Deep Learning        | ESWA -- 2023                 |
+| PRISTI [[26]](#ref26)      | Deep Learning        | ICDE -- 2023                 |
+| GRIN [[29]](#ref29)        | Deep Learning        | ICLR -- 2022                 |
+| CSDI [[38]](#ref38)        | Deep Learning        | NeurIPS -- 2021              |
+| HKMFT [[31]](#ref31)       | Deep Learning        | TKDE -- 2021                 |
+| DeepMVI [[24]](#ref24)     | Deep Learning        | PVLDB -- 2021                |
+| MRNN [[22]](#ref22)        | Deep Learning        | IEEE Trans on BE -- 2019     |
+| BRITS [[23]](#ref23)       | Deep Learning        | NeurIPS -- 2018              |
+| GAIN [[28]](#ref28)        | Deep Learning        | ICML -- 2018                 |
+| T1 [[47]](#ref47) 🚧       | Deep Learning        | ICLR -- 2026                 |
+| FIM-ℓ [[48]](#ref48) 🚧    | Deep Learning        | ICLR -- 2025                 |
+| SSD-TS [[49]](#ref49) 🚧   | Deep Learning        | KDD -- 2025                  |
+| ImputeINR [[50]](#ref50) 🚧 | Deep Learning        | IJCAI -- 2025                |
+| CoFill [[51]](#ref51) 🚧   | Deep Learning        | IJCAI -- 2025                |
+| SADI [[52]](#ref52) 🚧     | Deep Learning        | AAAI -- 2025                 |
+| LSCD [[53]](#ref53) 🚧     | Deep Learning        | ICML -- 2025                 |
+| FGTI [[54]](#ref54) 🚧     | Deep Learning        | NeurIPS -- 2024              |
+| SSSD [[55]](#ref55) 🚧     | Deep Learning        | TMLR -- 2023                 |
+| MTSIT [[56]](#ref56) 🚧    | Deep Learning        | IEEE SPL -- 2022             |
+| SSGAN [[57]](#ref57) 🚧    | Deep Learning        | AAAI -- 2021                 |
+| PoGeVon [[58]](#ref58) 🚧  | Deep Learning        | KDD -- 2023                  |
+| CDRec [[1]](#ref1)         | Matrix Completion    | KAIS -- 2020                 |
+| TRMF [[8]](#ref8)          | Matrix Completion    | NeurIPS -- 2016              |
+| ROSL [[4]](#ref4)          | Matrix Completion    | CVPR -- 2014                 |
+| SoftImpute [[6]](#ref6)    | Matrix Completion    | JMLR -- 2010                 |
+| SVT [[7]](#ref7)           | Matrix Completion    | SIAM J. OPTIM -- 2010        |
+| SPIRIT [[5]](#ref5)        | Matrix Completion    | VLDB -- 2005                 |
+| IterativeSVD [[2]](#ref2)  | Matrix Completion    | BIOINFORMATICS -- 2001       |
+| TIDER [[59]](#ref59) 🚧    | Matrix Completion    | ICLR -- 2023                 |
+| TKCM [[11]](#ref11)        | Pattern Search       | EDBT -- 2017                 |
+| STMVL [[9]](#ref9)         | Pattern Search       | IJCAI -- 2016                |
+| DynaMMo [[10]](#ref10)     | Pattern Search       | KDD -- 2009                  |
+| PSW-I [[60]](#ref60) 🚧    | Pattern Search       | ICLR -- 2025                 |
+| IIM [[12]](#ref12)         | Machine Learning     | ICDE -- 2019                 |
+| MissForest [[15]](#ref15)  | Machine Learning     | BioInformatics -- 2012       |
+| MICE [[14]](#ref14)        | Machine Learning     | Statistical Software -- 2011 |
+| KNNImpute                  | Statistics           | -                            |
+| Interpolation              | Statistics           | -                            |
+| MinImpute                  | Statistics           | -                            |
+| ZeroImpute                 | Statistics           | -                            |
+| MeanImpute                 | Statistics           | -                            |
+| MeanImputeBySeries         | Statistics           | -                            |
 ---
 
 ### **Quick Navigation**
@@ -474,7 +474,7 @@ ts_m = GenGAP.mcar(input_data=ts.data, rate_series=0.4, offset=0, reverse=True)
 downstream = Downstream(input_data=ts.data, incomp_data=ts_m)
 
 # launch the analysis
-comparison = downstream.eval(imp_algs=["SAITS", "ZeroImpute"],
+comparison = downstream.eval(imp_algs=["SAITS", "MeanImpute"],
                              model="chronos",
                              horizons=[128],
                              season=24,
@@ -655,9 +655,6 @@ If you use ImputeGAP in your research, please cite these papers:
 <a name="ref2"></a>
 [2] Olga G. Troyanskaya, Michael N. Cantor, Gavin Sherlock, Patrick O. Brown, Trevor Hastie, Robert Tibshirani, David Botstein, Russ B. Altman: Missing value estimation methods for DNA microarrays. Bioinform. 17(6): 520-525 (2001)
 
-<a name="ref3"></a>
-[3] Laura Balzano, Robert D. Nowak, and Benjamin Recht. "Online Identification and Tracking of Subspaces from Highly Incomplete Information." CoRR abs/1006.4046, 2010.
-
 <a name="ref4"></a>
 [4] Xianbiao Shu, Fatih Porikli, Narendra Ahuja: Robust Orthonormal Subspace Learning: Efficient Recovery of Corrupted Low-Rank Matrices. CVPR 2014: 3874-3881
 
@@ -684,9 +681,6 @@ If you use ImputeGAP in your research, please cite these papers:
 
 <a name="ref12"></a>
 [12] Aoqian Zhang, Shaoxu Song, Yu Sun, Jianmin Wang: Learning Individual Models for Imputation. ICDE (2019)
-
-<a name="ref13"></a>
-[13] Tianqi Chen, Carlos Guestrin: XGBoost: A Scalable Tree Boosting System. KDD 2016: 785-794
 
 <a name="ref14"></a>
 [14] Royston Patrick , White Ian R.: Multiple Imputation by Chained Equations (MICE): Implementation in Stata. Journal of Statistical Software 2011: 45(4), 1–20.
@@ -732,9 +726,6 @@ If you use ImputeGAP in your research, please cite these papers:
 
 <a name="ref34"></a>
 [34] Mourad Khayati, Quentin Nater, Jacques Pasquier: ImputeVIS: An Interactive Evaluator to Benchmark Imputation Techniques for Time Series Data. Proc. VLDB Endow. 17(12): 4329-4332 (2024)
-
-<a name="ref35"></a>
-[35] Jinguo Cheng, Chunwei Yang, Wanlin Cai, Yuxuan Liang, Qingsong Wen, Yuankai Wu: NuwaTS: a Foundation Model Mending Every Incomplete Time Series. Arxiv 2024
 
 <a name="ref36"></a>
 [36] Tian Zhou, Peisong Niu, Xue Wang, Liang Sun, Rong Jin: One fits all: power general time series analysis by pretrained LM. NeurIPS 2023

@@ -140,7 +140,7 @@ To enable the optimization module, please update ``./imputegap/tools/algorithm_p
 Contribution
 ------------
 
-ImputeGAP endorses well-established algorithms for integration. The visibility conditions need to be met
+ImputeGAP endorses performant, well-established or nascent algorithms. The visibility conditions need to be met
 
     -   The paper must be published in a peer-review venue
     -   The results must be fully reproducible

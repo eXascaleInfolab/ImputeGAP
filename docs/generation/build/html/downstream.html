@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="static/custom.css?v=29d0bcd9" />
     <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="static/custom.css?v=29d0bcd9" />
-    <link rel="stylesheet" type="text/css" href="static/page_s_gobal.css?v=8b8c9d16" />
+    <link rel="stylesheet" type="text/css" href="static/page_s_gobal.css?v=e25f4e6a" />
     
     
 
@@ -364,7 +364,7 @@
 <span class="n">downstream</span> <span class="o">=</span> <span class="n">Downstream</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">incomp_data</span><span class="o">=</span><span class="n">ts_m</span><span class="p">)</span>
 
 <span class="c1"># launch the analysis</span>
-<span class="n">comparison</span> <span class="o">=</span> <span class="n">downstream</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">imp_algs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SAITS&quot;</span><span class="p">,</span> <span class="s2">&quot;ZeroImpute&quot;</span><span class="p">],</span>
+<span class="n">comparison</span> <span class="o">=</span> <span class="n">downstream</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">imp_algs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SAITS&quot;</span><span class="p">,</span> <span class="s2">&quot;MeanImpute&quot;</span><span class="p">],</span>
                              <span class="n">model</span><span class="o">=</span><span class="s2">&quot;chronos&quot;</span><span class="p">,</span>
                              <span class="n">horizons</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">],</span>
                              <span class="n">season</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
